@@ -1,0 +1,300 @@
+{
+  "regular": {
+    "K": 5,
+    "lower_bound_states": 5,
+    "distinguished_pairs": [
+      {
+        "prefix_a": "",
+        "prefix_b": "0",
+        "separating_suffix": "1$",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "",
+        "prefix_b": "01",
+        "separating_suffix": "$",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "",
+        "prefix_b": "01$",
+        "separating_suffix": "",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "",
+        "prefix_b": "1",
+        "separating_suffix": "01$",
+        "answer_a": true,
+        "answer_b": false
+      },
+      {
+        "prefix_a": "0",
+        "prefix_b": "01",
+        "separating_suffix": "$",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "0",
+        "prefix_b": "01$",
+        "separating_suffix": "",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "0",
+        "prefix_b": "1",
+        "separating_suffix": "1$",
+        "answer_a": true,
+        "answer_b": false
+      },
+      {
+        "prefix_a": "01",
+        "prefix_b": "01$",
+        "separating_suffix": "",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "01",
+        "prefix_b": "1",
+        "separating_suffix": "$",
+        "answer_a": true,
+        "answer_b": false
+      },
+      {
+        "prefix_a": "01$",
+        "prefix_b": "1",
+        "separating_suffix": "",
+        "answer_a": true,
+        "answer_b": false
+      }
+    ]
+  },
+  "balance": {
+    "K": 2,
+    "lower_bound_states": 6,
+    "distinguished_pairs": [
+      {
+        "prefix_a": "",
+        "prefix_b": "0",
+        "separating_suffix": "1$",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "",
+        "prefix_b": "00",
+        "separating_suffix": "11$",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "",
+        "prefix_b": "01",
+        "separating_suffix": "$",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "",
+        "prefix_b": "01$",
+        "separating_suffix": "",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "",
+        "prefix_b": "1",
+        "separating_suffix": "01$",
+        "answer_a": true,
+        "answer_b": false
+      },
+      {
+        "prefix_a": "0",
+        "prefix_b": "00",
+        "separating_suffix": "1$",
+        "answer_a": true,
+        "answer_b": false
+      },
+      {
+        "prefix_a": "0",
+        "prefix_b": "01",
+        "separating_suffix": "$",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "0",
+        "prefix_b": "01$",
+        "separating_suffix": "",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "0",
+        "prefix_b": "1",
+        "separating_suffix": "1$",
+        "answer_a": true,
+        "answer_b": false
+      },
+      {
+        "prefix_a": "00",
+        "prefix_b": "01",
+        "separating_suffix": "$",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "00",
+        "prefix_b": "01$",
+        "separating_suffix": "",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "00",
+        "prefix_b": "1",
+        "separating_suffix": "11$",
+        "answer_a": true,
+        "answer_b": false
+      },
+      {
+        "prefix_a": "01",
+        "prefix_b": "01$",
+        "separating_suffix": "",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "01",
+        "prefix_b": "1",
+        "separating_suffix": "$",
+        "answer_a": true,
+        "answer_b": false
+      },
+      {
+        "prefix_a": "01$",
+        "prefix_b": "1",
+        "separating_suffix": "",
+        "answer_a": true,
+        "answer_b": false
+      }
+    ]
+  },
+  "offset": {
+    "K": 5,
+    "lower_bound_states": 6,
+    "distinguished_pairs": [
+      {
+        "prefix_a": "",
+        "prefix_b": "0",
+        "separating_suffix": "11$",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "",
+        "prefix_b": "00",
+        "separating_suffix": "111$",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "",
+        "prefix_b": "000",
+        "separating_suffix": "1111$",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "",
+        "prefix_b": "0000",
+        "separating_suffix": "11111$",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "",
+        "prefix_b": "01",
+        "separating_suffix": "1$",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "0",
+        "prefix_b": "00",
+        "separating_suffix": "11$",
+        "answer_a": true,
+        "answer_b": false
+      },
+      {
+        "prefix_a": "0",
+        "prefix_b": "000",
+        "separating_suffix": "11$",
+        "answer_a": true,
+        "answer_b": false
+      },
+      {
+        "prefix_a": "0",
+        "prefix_b": "0000",
+        "separating_suffix": "11$",
+        "answer_a": true,
+        "answer_b": false
+      },
+      {
+        "prefix_a": "0",
+        "prefix_b": "01",
+        "separating_suffix": "1$",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "00",
+        "prefix_b": "000",
+        "separating_suffix": "111$",
+        "answer_a": true,
+        "answer_b": false
+      },
+      {
+        "prefix_a": "00",
+        "prefix_b": "0000",
+        "separating_suffix": "111$",
+        "answer_a": true,
+        "answer_b": false
+      },
+      {
+        "prefix_a": "00",
+        "prefix_b": "01",
+        "separating_suffix": "1$",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "000",
+        "prefix_b": "0000",
+        "separating_suffix": "1111$",
+        "answer_a": true,
+        "answer_b": false
+      },
+      {
+        "prefix_a": "000",
+        "prefix_b": "01",
+        "separating_suffix": "1$",
+        "answer_a": false,
+        "answer_b": true
+      },
+      {
+        "prefix_a": "0000",
+        "prefix_b": "01",
+        "separating_suffix": "1$",
+        "answer_a": false,
+        "answer_b": true
+      }
+    ]
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "status": "PASS for byte integrity and declared finite computations; release-level causal and global claims require scoped correction",
+  "hashes": 4,
+  "reruns": {
+    "abc_shapley_v1": {
+      "deterministic_readback": true,
+      "runtime_fields_differ": true
+    },
+    "dfa_to_1dca_v1": {
+      "deterministic_readback": true,
+      "runtime_fields_differ": true
+    }
+  },
+  "abc_verified_gate_witnesses": 16,
+  "dfa_exhaustive": {
+    "regular": 9841,
+    "balance": 9841,
+    "offset_without": 9841,
+    "offset_with": 9841
+  },
+  "mn_pairs": {
+    "regular": 10,
+    "balance": 15,
+    "offset": 15
+  },
+  "finite_oracle_counterexamples": {
+    "regular": {
+      "queries_observed": 132,
+      "finite_teacher_agrees_on_all_queries": true,
+      "returned_program_unchanged": true,
+      "unqueried_counterexample": "000000111111$",
+      "hypothesis_answer": true,
+      "finite_teacher_answer": false
+    },
+    "balance": {
+      "queries_observed": 64,
+      "finite_teacher_agrees_on_all_queries": true,
+      "returned_program_unchanged": true,
+      "unqueried_counterexample": "000000111111$",
+      "hypothesis_answer": true,
+      "finite_teacher_answer": false
+    }
+  },
+  "wrong_law": {
+    "slope": [
+      1,
+      1
+    ],
+    "found_solution": false,
+    "nodes": 205,
+    "fallback_to_unconstrained_search": false
+  }
+}

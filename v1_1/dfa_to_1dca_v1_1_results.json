@@ -1,0 +1,1285 @@
+{
+  "meta": {
+    "python_version": "3.12.14",
+    "platform": "Linux-6.18.57-x86_64-with-glibc2.41",
+    "S_max": 5,
+    "K_max": 5,
+    "release": "1.1.1",
+    "scope": "bounded DFA lower bound; known formal teacher families; phase-linear invariant template"
+  },
+  "T_neg_0plus1plus": {
+    "task": "T_neg_0plus1plus",
+    "S_max": 5,
+    "mn_trace": [
+      {
+        "K": 1,
+        "N_K": 5,
+        "representatives": [
+          "",
+          "0",
+          "01",
+          "01$",
+          "1"
+        ]
+      },
+      {
+        "K": 2,
+        "N_K": 5,
+        "representatives": [
+          "",
+          "0",
+          "01",
+          "01$",
+          "1"
+        ]
+      },
+      {
+        "K": 3,
+        "N_K": 5,
+        "representatives": [
+          "",
+          "0",
+          "01",
+          "01$",
+          "1"
+        ]
+      },
+      {
+        "K": 4,
+        "N_K": 5,
+        "representatives": [
+          "",
+          "0",
+          "01",
+          "01$",
+          "1"
+        ]
+      },
+      {
+        "K": 5,
+        "N_K": 5,
+        "representatives": [
+          "",
+          "0",
+          "01",
+          "01$",
+          "1"
+        ]
+      }
+    ],
+    "escalated_to_1dca": false,
+    "resolved_tier": "Tier-0 (DFA)",
+    "dfa_solution": {
+      "num_states": 5,
+      "start": 0,
+      "accept": [
+        3
+      ],
+      "transitions": {
+        "0,$": 4,
+        "0,0": 1,
+        "0,1": 4,
+        "1,$": 4,
+        "1,0": 1,
+        "1,1": 2,
+        "2,$": 3,
+        "2,0": 4,
+        "2,1": 2,
+        "3,$": 4,
+        "3,0": 4,
+        "3,1": 4,
+        "4,$": 4,
+        "4,0": 4,
+        "4,1": 4
+      },
+      "finite_observation_closed_and_consistent": true,
+      "teacher_global_equivalence": "UNKNOWN unless verified against a known formal reference"
+    },
+    "formal_reference_equivalence": {
+      "equivalent": true,
+      "checked_product_pairs": 5,
+      "scope": "finite reference DFA for the declared 0+1+$ regex; not an arbitrary oracle"
+    },
+    "oracle_global_equivalence": "PROVED_RELATIVE_TO_PROMISED_REGEX",
+    "ood_check_up_to_500_incl_end_markers": {
+      "passed": 23,
+      "total": 23
+    }
+  },
+  "T1_0n1n": {
+    "task": "T1_0n1n",
+    "S_max": 5,
+    "mn_trace": [
+      {
+        "K": 1,
+        "N_K": 5,
+        "representatives": [
+          "",
+          "0",
+          "01",
+          "01$",
+          "1"
+        ]
+      },
+      {
+        "K": 2,
+        "N_K": 6,
+        "representatives": [
+          "",
+          "0",
+          "00",
+          "01",
+          "01$",
+          "1"
+        ]
+      }
+    ],
+    "escalated_to_1dca": true,
+    "escalation_certificate": {
+      "K": 2,
+      "N_K": 6,
+      "max_dfa_states": 5,
+      "scope": "DFA with <= S_max states; NOT all DFAs"
+    },
+    "pair_witnesses": [
+      {
+        "p": "",
+        "q": "0",
+        "suffix": "1$",
+        "p_answer": false,
+        "q_answer": true
+      },
+      {
+        "p": "",
+        "q": "00",
+        "suffix": "11$",
+        "p_answer": false,
+        "q_answer": true
+      },
+      {
+        "p": "",
+        "q": "01",
+        "suffix": "$",
+        "p_answer": false,
+        "q_answer": true
+      },
+      {
+        "p": "",
+        "q": "01$",
+        "suffix": "",
+        "p_answer": false,
+        "q_answer": true
+      },
+      {
+        "p": "",
+        "q": "1",
+        "suffix": "01$",
+        "p_answer": true,
+        "q_answer": false
+      },
+      {
+        "p": "0",
+        "q": "00",
+        "suffix": "1$",
+        "p_answer": true,
+        "q_answer": false
+      },
+      {
+        "p": "0",
+        "q": "01",
+        "suffix": "$",
+        "p_answer": false,
+        "q_answer": true
+      },
+      {
+        "p": "0",
+        "q": "01$",
+        "suffix": "",
+        "p_answer": false,
+        "q_answer": true
+      },
+      {
+        "p": "0",
+        "q": "1",
+        "suffix": "1$",
+        "p_answer": true,
+        "q_answer": false
+      },
+      {
+        "p": "00",
+        "q": "01",
+        "suffix": "$",
+        "p_answer": false,
+        "q_answer": true
+      },
+      {
+        "p": "00",
+        "q": "01$",
+        "suffix": "",
+        "p_answer": false,
+        "q_answer": true
+      },
+      {
+        "p": "00",
+        "q": "1",
+        "suffix": "11$",
+        "p_answer": true,
+        "q_answer": false
+      },
+      {
+        "p": "01",
+        "q": "01$",
+        "suffix": "",
+        "p_answer": false,
+        "q_answer": true
+      },
+      {
+        "p": "01",
+        "q": "1",
+        "suffix": "$",
+        "p_answer": true,
+        "q_answer": false
+      },
+      {
+        "p": "01$",
+        "q": "1",
+        "suffix": "",
+        "p_answer": true,
+        "q_answer": false
+      }
+    ],
+    "resolved_tier": "Tier-1 (1-DCA)",
+    "used_slope_law": null,
+    "transfer_policy": "provisional hard pruning; on no certified result rerun unrestricted",
+    "fallback_used": false,
+    "attempts": [
+      {
+        "mode": "unrestricted",
+        "nodes": 26,
+        "found": true,
+        "certificate_status": "PROVED_RELATIVE_TO_KNOWN_OFFSET_FAMILY"
+      }
+    ],
+    "dca_synthesis": {
+      "found": true,
+      "nodes": 26,
+      "time_s": 0.00038,
+      "table": {
+        "q0,$,0": [
+          "rej",
+          0
+        ],
+        "q0,$,1": [
+          "rej",
+          0
+        ],
+        "q0,0,0": [
+          "q0",
+          1
+        ],
+        "q0,0,1": [
+          "q0",
+          1
+        ],
+        "q0,1,0": [
+          "rej",
+          0
+        ],
+        "q0,1,1": [
+          "q1",
+          -1
+        ],
+        "q1,$,0": [
+          "acc",
+          0
+        ],
+        "q1,$,1": [
+          "rej",
+          0
+        ],
+        "q1,0,0": [
+          "rej",
+          0
+        ],
+        "q1,0,1": [
+          "rej",
+          0
+        ],
+        "q1,1,0": [
+          "rej",
+          0
+        ],
+        "q1,1,1": [
+          "q1",
+          -1
+        ]
+      }
+    },
+    "inferred_invariant": {
+      "found": true,
+      "method": "direct_equation_inference_no_offset_hint",
+      "inv": {
+        "q0_phase": "c = 1*m + 0",
+        "q1_phase": "c = 1*m + (-1)*k + (0)",
+        "a0": 1,
+        "b0": 0,
+        "d0": 0,
+        "a1": 1,
+        "b1": -1,
+        "d1": 0,
+        "inferred_acceptance_relation": "1*m + (-1)*k + (0) = 0"
+      },
+      "obligations_verified": {
+        "q0_s1_z0_rej": true,
+        "q0_end_z0_rej": true,
+        "q0_end_z1_rej": true,
+        "q1_s0_z0_rej": true,
+        "q1_s0_z1_rej": true,
+        "q1_s1_z0_rej": true,
+        "q1_end_z0_acc": true,
+        "q1_end_z1_rej": true
+      }
+    },
+    "phase_certificate": {
+      "status": "PROVED_RELATIVE_TO_KNOWN_OFFSET_FAMILY",
+      "semantic": {
+        "coefficients": [
+          1,
+          -1,
+          0
+        ],
+        "variables": [
+          "m",
+          "k",
+          "one"
+        ],
+        "relation": "1*m + (-1)*k + (0) = 0",
+        "domain": "0^m1^k$ with m>=1,k>=1; strict complete-input framing",
+        "phases": {
+          "q0": "c=1*m",
+          "q1": "c=1*m+(-1)*k+(0)"
+        }
+      },
+      "proof": {
+        "init": "q0 begins c=m=0",
+        "q0_step": "reading a zero increases c and m by a0 and 1 respectively",
+        "bridge": "the first one sends q0 to q1, preserving the computed affine equality",
+        "q1_step": "each further one with c>0 adds b1 to c and 1 to k; c=0 rejects further ones",
+        "order_rejection": "q1 rejects any zero; q0 rejects early end and missing zeros",
+        "accept": "at terminal $ exactly q1,c=0 accepts; negative counter transitions reject"
+      },
+      "semantic_sha256": "e9361dd480d27575c3d0be4ca01f03d29f78437ff3a3f258ccdfa249b02d4e13"
+    },
+    "oracle_global_equivalence": "PROVED_RELATIVE_TO_KNOWN_FAMILY",
+    "ood_check_up_to_500_incl_end_markers": {
+      "passed": 23,
+      "total": 23
+    }
+  },
+  "T2_0n1n_plus_1": {
+    "without_I1": {
+      "task": "T2_0n1n_plus_1_no_I1",
+      "S_max": 5,
+      "mn_trace": [
+        {
+          "K": 1,
+          "N_K": 2,
+          "representatives": [
+            "",
+            "01"
+          ]
+        },
+        {
+          "K": 2,
+          "N_K": 3,
+          "representatives": [
+            "",
+            "0",
+            "01"
+          ]
+        },
+        {
+          "K": 3,
+          "N_K": 4,
+          "representatives": [
+            "",
+            "0",
+            "00",
+            "01"
+          ]
+        },
+        {
+          "K": 4,
+          "N_K": 5,
+          "representatives": [
+            "",
+            "0",
+            "00",
+            "000",
+            "01"
+          ]
+        },
+        {
+          "K": 5,
+          "N_K": 6,
+          "representatives": [
+            "",
+            "0",
+            "00",
+            "000",
+            "0000",
+            "01"
+          ]
+        }
+      ],
+      "escalated_to_1dca": true,
+      "escalation_certificate": {
+        "K": 5,
+        "N_K": 6,
+        "max_dfa_states": 5,
+        "scope": "DFA with <= S_max states; NOT all DFAs"
+      },
+      "pair_witnesses": [
+        {
+          "p": "",
+          "q": "0",
+          "suffix": "11$",
+          "p_answer": false,
+          "q_answer": true
+        },
+        {
+          "p": "",
+          "q": "00",
+          "suffix": "111$",
+          "p_answer": false,
+          "q_answer": true
+        },
+        {
+          "p": "",
+          "q": "000",
+          "suffix": "1111$",
+          "p_answer": false,
+          "q_answer": true
+        },
+        {
+          "p": "",
+          "q": "0000",
+          "suffix": "11111$",
+          "p_answer": false,
+          "q_answer": true
+        },
+        {
+          "p": "",
+          "q": "01",
+          "suffix": "1$",
+          "p_answer": false,
+          "q_answer": true
+        },
+        {
+          "p": "0",
+          "q": "00",
+          "suffix": "11$",
+          "p_answer": true,
+          "q_answer": false
+        },
+        {
+          "p": "0",
+          "q": "000",
+          "suffix": "11$",
+          "p_answer": true,
+          "q_answer": false
+        },
+        {
+          "p": "0",
+          "q": "0000",
+          "suffix": "11$",
+          "p_answer": true,
+          "q_answer": false
+        },
+        {
+          "p": "0",
+          "q": "01",
+          "suffix": "1$",
+          "p_answer": false,
+          "q_answer": true
+        },
+        {
+          "p": "00",
+          "q": "000",
+          "suffix": "111$",
+          "p_answer": true,
+          "q_answer": false
+        },
+        {
+          "p": "00",
+          "q": "0000",
+          "suffix": "111$",
+          "p_answer": true,
+          "q_answer": false
+        },
+        {
+          "p": "00",
+          "q": "01",
+          "suffix": "1$",
+          "p_answer": false,
+          "q_answer": true
+        },
+        {
+          "p": "000",
+          "q": "0000",
+          "suffix": "1111$",
+          "p_answer": true,
+          "q_answer": false
+        },
+        {
+          "p": "000",
+          "q": "01",
+          "suffix": "1$",
+          "p_answer": false,
+          "q_answer": true
+        },
+        {
+          "p": "0000",
+          "q": "01",
+          "suffix": "1$",
+          "p_answer": false,
+          "q_answer": true
+        }
+      ],
+      "resolved_tier": "Tier-1 (1-DCA)",
+      "used_slope_law": null,
+      "transfer_policy": "provisional hard pruning; on no certified result rerun unrestricted",
+      "fallback_used": false,
+      "attempts": [
+        {
+          "mode": "unrestricted",
+          "nodes": 57,
+          "found": true,
+          "certificate_status": "PROVED_RELATIVE_TO_KNOWN_OFFSET_FAMILY"
+        }
+      ],
+      "dca_synthesis": {
+        "found": true,
+        "nodes": 57,
+        "time_s": 0.000672,
+        "table": {
+          "q0,$,0": [
+            "rej",
+            0
+          ],
+          "q0,$,1": [
+            "rej",
+            0
+          ],
+          "q0,0,0": [
+            "q0",
+            1
+          ],
+          "q0,0,1": [
+            "q0",
+            1
+          ],
+          "q0,1,0": [
+            "rej",
+            0
+          ],
+          "q0,1,1": [
+            "q1",
+            0
+          ],
+          "q1,$,0": [
+            "acc",
+            0
+          ],
+          "q1,$,1": [
+            "rej",
+            0
+          ],
+          "q1,0,0": [
+            "rej",
+            0
+          ],
+          "q1,0,1": [
+            "rej",
+            0
+          ],
+          "q1,1,0": [
+            "rej",
+            0
+          ],
+          "q1,1,1": [
+            "q1",
+            -1
+          ]
+        }
+      },
+      "inferred_invariant": {
+        "found": true,
+        "method": "direct_equation_inference_no_offset_hint",
+        "inv": {
+          "q0_phase": "c = 1*m + 0",
+          "q1_phase": "c = 1*m + (-1)*k + (1)",
+          "a0": 1,
+          "b0": 0,
+          "d0": 0,
+          "a1": 1,
+          "b1": -1,
+          "d1": 1,
+          "inferred_acceptance_relation": "1*m + (-1)*k + (1) = 0"
+        },
+        "obligations_verified": {
+          "q0_s1_z0_rej": true,
+          "q0_end_z0_rej": true,
+          "q0_end_z1_rej": true,
+          "q1_s0_z0_rej": true,
+          "q1_s0_z1_rej": true,
+          "q1_s1_z0_rej": true,
+          "q1_end_z0_acc": true,
+          "q1_end_z1_rej": true
+        }
+      },
+      "phase_certificate": {
+        "status": "PROVED_RELATIVE_TO_KNOWN_OFFSET_FAMILY",
+        "semantic": {
+          "coefficients": [
+            1,
+            -1,
+            1
+          ],
+          "variables": [
+            "m",
+            "k",
+            "one"
+          ],
+          "relation": "1*m + (-1)*k + (1) = 0",
+          "domain": "0^m1^k$ with m>=1,k>=1; strict complete-input framing",
+          "phases": {
+            "q0": "c=1*m",
+            "q1": "c=1*m+(-1)*k+(1)"
+          }
+        },
+        "proof": {
+          "init": "q0 begins c=m=0",
+          "q0_step": "reading a zero increases c and m by a0 and 1 respectively",
+          "bridge": "the first one sends q0 to q1, preserving the computed affine equality",
+          "q1_step": "each further one with c>0 adds b1 to c and 1 to k; c=0 rejects further ones",
+          "order_rejection": "q1 rejects any zero; q0 rejects early end and missing zeros",
+          "accept": "at terminal $ exactly q1,c=0 accepts; negative counter transitions reject"
+        },
+        "semantic_sha256": "c9aa03398d518db776b6666125d7ddee7eeca1691c520c74f5a5c8d80698200a"
+      },
+      "oracle_global_equivalence": "PROVED_RELATIVE_TO_KNOWN_FAMILY",
+      "ood_check_up_to_500_incl_end_markers": {
+        "passed": 23,
+        "total": 23
+      }
+    },
+    "with_I1": {
+      "task": "T2_0n1n_plus_1_with_I1",
+      "S_max": 5,
+      "mn_trace": [
+        {
+          "K": 1,
+          "N_K": 2,
+          "representatives": [
+            "",
+            "01"
+          ]
+        },
+        {
+          "K": 2,
+          "N_K": 3,
+          "representatives": [
+            "",
+            "0",
+            "01"
+          ]
+        },
+        {
+          "K": 3,
+          "N_K": 4,
+          "representatives": [
+            "",
+            "0",
+            "00",
+            "01"
+          ]
+        },
+        {
+          "K": 4,
+          "N_K": 5,
+          "representatives": [
+            "",
+            "0",
+            "00",
+            "000",
+            "01"
+          ]
+        },
+        {
+          "K": 5,
+          "N_K": 6,
+          "representatives": [
+            "",
+            "0",
+            "00",
+            "000",
+            "0000",
+            "01"
+          ]
+        }
+      ],
+      "escalated_to_1dca": true,
+      "escalation_certificate": {
+        "K": 5,
+        "N_K": 6,
+        "max_dfa_states": 5,
+        "scope": "DFA with <= S_max states; NOT all DFAs"
+      },
+      "pair_witnesses": [
+        {
+          "p": "",
+          "q": "0",
+          "suffix": "11$",
+          "p_answer": false,
+          "q_answer": true
+        },
+        {
+          "p": "",
+          "q": "00",
+          "suffix": "111$",
+          "p_answer": false,
+          "q_answer": true
+        },
+        {
+          "p": "",
+          "q": "000",
+          "suffix": "1111$",
+          "p_answer": false,
+          "q_answer": true
+        },
+        {
+          "p": "",
+          "q": "0000",
+          "suffix": "11111$",
+          "p_answer": false,
+          "q_answer": true
+        },
+        {
+          "p": "",
+          "q": "01",
+          "suffix": "1$",
+          "p_answer": false,
+          "q_answer": true
+        },
+        {
+          "p": "0",
+          "q": "00",
+          "suffix": "11$",
+          "p_answer": true,
+          "q_answer": false
+        },
+        {
+          "p": "0",
+          "q": "000",
+          "suffix": "11$",
+          "p_answer": true,
+          "q_answer": false
+        },
+        {
+          "p": "0",
+          "q": "0000",
+          "suffix": "11$",
+          "p_answer": true,
+          "q_answer": false
+        },
+        {
+          "p": "0",
+          "q": "01",
+          "suffix": "1$",
+          "p_answer": false,
+          "q_answer": true
+        },
+        {
+          "p": "00",
+          "q": "000",
+          "suffix": "111$",
+          "p_answer": true,
+          "q_answer": false
+        },
+        {
+          "p": "00",
+          "q": "0000",
+          "suffix": "111$",
+          "p_answer": true,
+          "q_answer": false
+        },
+        {
+          "p": "00",
+          "q": "01",
+          "suffix": "1$",
+          "p_answer": false,
+          "q_answer": true
+        },
+        {
+          "p": "000",
+          "q": "0000",
+          "suffix": "1111$",
+          "p_answer": true,
+          "q_answer": false
+        },
+        {
+          "p": "000",
+          "q": "01",
+          "suffix": "1$",
+          "p_answer": false,
+          "q_answer": true
+        },
+        {
+          "p": "0000",
+          "q": "01",
+          "suffix": "1$",
+          "p_answer": false,
+          "q_answer": true
+        }
+      ],
+      "resolved_tier": "Tier-1 (1-DCA)",
+      "used_slope_law": [
+        1,
+        -1
+      ],
+      "transfer_policy": "provisional hard pruning; on no certified result rerun unrestricted",
+      "fallback_used": false,
+      "attempts": [
+        {
+          "mode": "guarded_transfer",
+          "nodes": 28,
+          "found": true,
+          "certificate_status": "PROVED_RELATIVE_TO_KNOWN_OFFSET_FAMILY"
+        }
+      ],
+      "dca_synthesis": {
+        "found": true,
+        "nodes": 28,
+        "time_s": 0.000324,
+        "table": {
+          "q0,$,0": [
+            "rej",
+            0
+          ],
+          "q0,$,1": [
+            "rej",
+            0
+          ],
+          "q0,0,0": [
+            "q0",
+            1
+          ],
+          "q0,0,1": [
+            "q0",
+            1
+          ],
+          "q0,1,0": [
+            "rej",
+            0
+          ],
+          "q0,1,1": [
+            "q1",
+            0
+          ],
+          "q1,$,0": [
+            "acc",
+            0
+          ],
+          "q1,$,1": [
+            "rej",
+            0
+          ],
+          "q1,0,0": [
+            "rej",
+            0
+          ],
+          "q1,0,1": [
+            "rej",
+            0
+          ],
+          "q1,1,0": [
+            "rej",
+            0
+          ],
+          "q1,1,1": [
+            "q1",
+            -1
+          ]
+        }
+      },
+      "inferred_invariant": {
+        "found": true,
+        "method": "direct_equation_inference_no_offset_hint",
+        "inv": {
+          "q0_phase": "c = 1*m + 0",
+          "q1_phase": "c = 1*m + (-1)*k + (1)",
+          "a0": 1,
+          "b0": 0,
+          "d0": 0,
+          "a1": 1,
+          "b1": -1,
+          "d1": 1,
+          "inferred_acceptance_relation": "1*m + (-1)*k + (1) = 0"
+        },
+        "obligations_verified": {
+          "q0_s1_z0_rej": true,
+          "q0_end_z0_rej": true,
+          "q0_end_z1_rej": true,
+          "q1_s0_z0_rej": true,
+          "q1_s0_z1_rej": true,
+          "q1_s1_z0_rej": true,
+          "q1_end_z0_acc": true,
+          "q1_end_z1_rej": true
+        }
+      },
+      "phase_certificate": {
+        "status": "PROVED_RELATIVE_TO_KNOWN_OFFSET_FAMILY",
+        "semantic": {
+          "coefficients": [
+            1,
+            -1,
+            1
+          ],
+          "variables": [
+            "m",
+            "k",
+            "one"
+          ],
+          "relation": "1*m + (-1)*k + (1) = 0",
+          "domain": "0^m1^k$ with m>=1,k>=1; strict complete-input framing",
+          "phases": {
+            "q0": "c=1*m",
+            "q1": "c=1*m+(-1)*k+(1)"
+          }
+        },
+        "proof": {
+          "init": "q0 begins c=m=0",
+          "q0_step": "reading a zero increases c and m by a0 and 1 respectively",
+          "bridge": "the first one sends q0 to q1, preserving the computed affine equality",
+          "q1_step": "each further one with c>0 adds b1 to c and 1 to k; c=0 rejects further ones",
+          "order_rejection": "q1 rejects any zero; q0 rejects early end and missing zeros",
+          "accept": "at terminal $ exactly q1,c=0 accepts; negative counter transitions reject"
+        },
+        "semantic_sha256": "c9aa03398d518db776b6666125d7ddee7eeca1691c520c74f5a5c8d80698200a"
+      },
+      "oracle_global_equivalence": "PROVED_RELATIVE_TO_KNOWN_FAMILY",
+      "ood_check_up_to_500_incl_end_markers": {
+        "passed": 23,
+        "total": 23
+      }
+    },
+    "transfer_node_speedup": 2.035714
+  },
+  "wrong_transfer_control": {
+    "task": "T2_wrong_law_control",
+    "S_max": 5,
+    "mn_trace": [
+      {
+        "K": 1,
+        "N_K": 2,
+        "representatives": [
+          "",
+          "01"
+        ]
+      },
+      {
+        "K": 2,
+        "N_K": 3,
+        "representatives": [
+          "",
+          "0",
+          "01"
+        ]
+      },
+      {
+        "K": 3,
+        "N_K": 4,
+        "representatives": [
+          "",
+          "0",
+          "00",
+          "01"
+        ]
+      },
+      {
+        "K": 4,
+        "N_K": 5,
+        "representatives": [
+          "",
+          "0",
+          "00",
+          "000",
+          "01"
+        ]
+      },
+      {
+        "K": 5,
+        "N_K": 6,
+        "representatives": [
+          "",
+          "0",
+          "00",
+          "000",
+          "0000",
+          "01"
+        ]
+      }
+    ],
+    "escalated_to_1dca": true,
+    "escalation_certificate": {
+      "K": 5,
+      "N_K": 6,
+      "max_dfa_states": 5,
+      "scope": "DFA with <= S_max states; NOT all DFAs"
+    },
+    "pair_witnesses": [
+      {
+        "p": "",
+        "q": "0",
+        "suffix": "11$",
+        "p_answer": false,
+        "q_answer": true
+      },
+      {
+        "p": "",
+        "q": "00",
+        "suffix": "111$",
+        "p_answer": false,
+        "q_answer": true
+      },
+      {
+        "p": "",
+        "q": "000",
+        "suffix": "1111$",
+        "p_answer": false,
+        "q_answer": true
+      },
+      {
+        "p": "",
+        "q": "0000",
+        "suffix": "11111$",
+        "p_answer": false,
+        "q_answer": true
+      },
+      {
+        "p": "",
+        "q": "01",
+        "suffix": "1$",
+        "p_answer": false,
+        "q_answer": true
+      },
+      {
+        "p": "0",
+        "q": "00",
+        "suffix": "11$",
+        "p_answer": true,
+        "q_answer": false
+      },
+      {
+        "p": "0",
+        "q": "000",
+        "suffix": "11$",
+        "p_answer": true,
+        "q_answer": false
+      },
+      {
+        "p": "0",
+        "q": "0000",
+        "suffix": "11$",
+        "p_answer": true,
+        "q_answer": false
+      },
+      {
+        "p": "0",
+        "q": "01",
+        "suffix": "1$",
+        "p_answer": false,
+        "q_answer": true
+      },
+      {
+        "p": "00",
+        "q": "000",
+        "suffix": "111$",
+        "p_answer": true,
+        "q_answer": false
+      },
+      {
+        "p": "00",
+        "q": "0000",
+        "suffix": "111$",
+        "p_answer": true,
+        "q_answer": false
+      },
+      {
+        "p": "00",
+        "q": "01",
+        "suffix": "1$",
+        "p_answer": false,
+        "q_answer": true
+      },
+      {
+        "p": "000",
+        "q": "0000",
+        "suffix": "1111$",
+        "p_answer": true,
+        "q_answer": false
+      },
+      {
+        "p": "000",
+        "q": "01",
+        "suffix": "1$",
+        "p_answer": false,
+        "q_answer": true
+      },
+      {
+        "p": "0000",
+        "q": "01",
+        "suffix": "1$",
+        "p_answer": false,
+        "q_answer": true
+      }
+    ],
+    "resolved_tier": "Tier-1 (1-DCA)",
+    "used_slope_law": [
+      1,
+      1
+    ],
+    "transfer_policy": "provisional hard pruning; on no certified result rerun unrestricted",
+    "fallback_used": true,
+    "attempts": [
+      {
+        "mode": "guarded_transfer",
+        "nodes": 205,
+        "found": false,
+        "certificate_status": "NO_PROGRAM"
+      },
+      {
+        "mode": "unrestricted_fallback",
+        "nodes": 57,
+        "found": true,
+        "certificate_status": "PROVED_RELATIVE_TO_KNOWN_OFFSET_FAMILY"
+      }
+    ],
+    "dca_synthesis": {
+      "found": true,
+      "nodes": 57,
+      "time_s": 0.000644,
+      "table": {
+        "q0,$,0": [
+          "rej",
+          0
+        ],
+        "q0,$,1": [
+          "rej",
+          0
+        ],
+        "q0,0,0": [
+          "q0",
+          1
+        ],
+        "q0,0,1": [
+          "q0",
+          1
+        ],
+        "q0,1,0": [
+          "rej",
+          0
+        ],
+        "q0,1,1": [
+          "q1",
+          0
+        ],
+        "q1,$,0": [
+          "acc",
+          0
+        ],
+        "q1,$,1": [
+          "rej",
+          0
+        ],
+        "q1,0,0": [
+          "rej",
+          0
+        ],
+        "q1,0,1": [
+          "rej",
+          0
+        ],
+        "q1,1,0": [
+          "rej",
+          0
+        ],
+        "q1,1,1": [
+          "q1",
+          -1
+        ]
+      }
+    },
+    "inferred_invariant": {
+      "found": true,
+      "method": "direct_equation_inference_no_offset_hint",
+      "inv": {
+        "q0_phase": "c = 1*m + 0",
+        "q1_phase": "c = 1*m + (-1)*k + (1)",
+        "a0": 1,
+        "b0": 0,
+        "d0": 0,
+        "a1": 1,
+        "b1": -1,
+        "d1": 1,
+        "inferred_acceptance_relation": "1*m + (-1)*k + (1) = 0"
+      },
+      "obligations_verified": {
+        "q0_s1_z0_rej": true,
+        "q0_end_z0_rej": true,
+        "q0_end_z1_rej": true,
+        "q1_s0_z0_rej": true,
+        "q1_s0_z1_rej": true,
+        "q1_s1_z0_rej": true,
+        "q1_end_z0_acc": true,
+        "q1_end_z1_rej": true
+      }
+    },
+    "phase_certificate": {
+      "status": "PROVED_RELATIVE_TO_KNOWN_OFFSET_FAMILY",
+      "semantic": {
+        "coefficients": [
+          1,
+          -1,
+          1
+        ],
+        "variables": [
+          "m",
+          "k",
+          "one"
+        ],
+        "relation": "1*m + (-1)*k + (1) = 0",
+        "domain": "0^m1^k$ with m>=1,k>=1; strict complete-input framing",
+        "phases": {
+          "q0": "c=1*m",
+          "q1": "c=1*m+(-1)*k+(1)"
+        }
+      },
+      "proof": {
+        "init": "q0 begins c=m=0",
+        "q0_step": "reading a zero increases c and m by a0 and 1 respectively",
+        "bridge": "the first one sends q0 to q1, preserving the computed affine equality",
+        "q1_step": "each further one with c>0 adds b1 to c and 1 to k; c=0 rejects further ones",
+        "order_rejection": "q1 rejects any zero; q0 rejects early end and missing zeros",
+        "accept": "at terminal $ exactly q1,c=0 accepts; negative counter transitions reject"
+      },
+      "semantic_sha256": "c9aa03398d518db776b6666125d7ddee7eeca1691c520c74f5a5c8d80698200a"
+    },
+    "oracle_global_equivalence": "PROVED_RELATIVE_TO_KNOWN_FAMILY",
+    "ood_check_up_to_500_incl_end_markers": {
+      "passed": 23,
+      "total": 23
+    }
+  }
+}

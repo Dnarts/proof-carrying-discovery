@@ -1,0 +1,191 @@
+{
+  "hashes": {
+    "abc_shapley_v1.py": {
+      "sha256": "90edaa1d3e9b9ddbccee07bd3893562054aabf5ae899013388a5419c6bf828fc",
+      "matches_user_claim": true
+    },
+    "abc_shapley_v1_results.json": {
+      "sha256": "13d3eedccdfe6df9ec8ec4a0e0eb1734a0a8559627d10b69ee7d6475025c4958",
+      "matches_user_claim": true
+    },
+    "dfa_to_1dca_v1.py": {
+      "sha256": "4975381c4ed98e8db13be24029fb6c6d21a49dffea1851b258a00d9066b8d9ba",
+      "matches_user_claim": true
+    },
+    "dfa_to_1dca_v1_results.json": {
+      "sha256": "6b4bac1a9937cae3e0e5f1d8791f0af07cac5346e2712618099f86976ccae459",
+      "matches_user_claim": true
+    }
+  },
+  "rerun": {
+    "abc_shapley_v1": {
+      "deterministic_readback": true,
+      "runtime_fields_differ": true
+    },
+    "dfa_to_1dca_v1": {
+      "deterministic_readback": true,
+      "runtime_fields_differ": true
+    }
+  },
+  "abc": {
+    "xor_acquisition_nodes_without_nand_law": 1535,
+    "xor_acquisition_nodes_with_nand_law": 341,
+    "law_checks": {
+      "NAND": 13,
+      "XOR": 20
+    },
+    "unrounded_shapley": {
+      "T2_parity3": {
+        "e1_NAND_law": 0.2887291231045377,
+        "e2_XOR_macro": 7.006410752024737,
+        "e3_XOR_laws": 0.25697242024337497,
+        "total_full": 7.55211229537265,
+        "sum_minus_total": 0.0
+      },
+      "T3_parity4": {
+        "e1_NAND_law": 0.5001507202442825,
+        "e2_XOR_macro": 2.7599540341605415,
+        "e3_XOR_laws": 0.5024212398774107,
+        "total_full": 3.762525994282235,
+        "sum_minus_total": 0.0
+      },
+      "T_neg_and3": {
+        "e1_NAND_law": 1.25879804195008,
+        "e2_XOR_macro": -0.80818762020244,
+        "e3_XOR_laws": 0.5596024164604099,
+        "total_full": 1.01021283820805,
+        "sum_minus_total": -2.220446049250313e-16
+      }
+    },
+    "coalition_gate_witnesses_independently_checked": 16,
+    "coalition_count": 24,
+    "reported_W_is_rounded": true,
+    "acquisition_sensitivity": {
+      "T2_parity3": {
+        "published_search_only_shapley_nats": {
+          "e1_NAND_law": 0.288729,
+          "e2_XOR_macro": 7.006411,
+          "e3_XOR_laws": 0.256972
+        },
+        "alternative_acquisition_plus_search_shapley_nats": {
+          "e1_NAND_law": 0.6366904341655159,
+          "e2_XOR_macro": 5.3516776659925736,
+          "e3_XOR_laws": 0.04600394796116817
+        },
+        "alternative_total_nats": 6.034372048119258,
+        "cost_policy_note": "alternative counts 13/20 law checks and 1535/341 XOR acquisition nodes; still excludes normalization and wall-clock cost"
+      },
+      "T3_parity4": {
+        "published_search_only_shapley_nats": {
+          "e1_NAND_law": 0.500151,
+          "e2_XOR_macro": 2.759954,
+          "e3_XOR_laws": 0.502421
+        },
+        "alternative_acquisition_plus_search_shapley_nats": {
+          "e1_NAND_law": 0.5135712294625562,
+          "e2_XOR_macro": 2.6963363964240274,
+          "e3_XOR_laws": 0.4751790299886563
+        },
+        "alternative_total_nats": 3.68508665587524,
+        "cost_policy_note": "alternative counts 13/20 law checks and 1535/341 XOR acquisition nodes; still excludes normalization and wall-clock cost"
+      },
+      "T_neg_and3": {
+        "published_search_only_shapley_nats": {
+          "e1_NAND_law": 1.258798,
+          "e2_XOR_macro": -0.808188,
+          "e3_XOR_laws": 0.559602
+        },
+        "alternative_acquisition_plus_search_shapley_nats": {
+          "e1_NAND_law": 1.2788530593291214,
+          "e2_XOR_macro": -0.8924323436105898,
+          "e3_XOR_laws": 0.5196647612203219
+        },
+        "alternative_total_nats": 0.9060854769388537,
+        "cost_policy_note": "alternative counts 13/20 law checks and 1535/341 XOR acquisition nodes; still excludes normalization and wall-clock cost"
+      }
+    }
+  },
+  "dfa": {
+    "independent_ternary_strings_checked": {
+      "regular": 9841,
+      "balance": 9841,
+      "offset_without": 9841,
+      "offset_with": 9841
+    },
+    "independent_phase_certificates": {
+      "balance": {
+        "initial_phase": "q0: c=a*m",
+        "second_phase": "q1: c=a*m-b*k+offset",
+        "a": 1,
+        "b": 1,
+        "bridge_delta": -1,
+        "offset": 0,
+        "phase_transition_valid_at_m_1": true,
+        "acceptance_formula": "a*m-b*k+offset=0 under domain 0+1+$",
+        "proof_status": "all local checks pass; soundness/completeness by ordinary induction, not kernel checked"
+      },
+      "offset_without": {
+        "initial_phase": "q0: c=a*m",
+        "second_phase": "q1: c=a*m-b*k+offset",
+        "a": 1,
+        "b": 1,
+        "bridge_delta": 0,
+        "offset": 1,
+        "phase_transition_valid_at_m_1": true,
+        "acceptance_formula": "a*m-b*k+offset=0 under domain 0+1+$",
+        "proof_status": "all local checks pass; soundness/completeness by ordinary induction, not kernel checked"
+      },
+      "offset_with": {
+        "initial_phase": "q0: c=a*m",
+        "second_phase": "q1: c=a*m-b*k+offset",
+        "a": 1,
+        "b": 1,
+        "bridge_delta": 0,
+        "offset": 1,
+        "phase_transition_valid_at_m_1": true,
+        "acceptance_formula": "a*m-b*k+offset=0 under domain 0+1+$",
+        "proof_status": "all local checks pass; soundness/completeness by ordinary induction, not kernel checked"
+      }
+    },
+    "published_node_counts_confirmed": true,
+    "wrong_transferred_slope": {
+      "slope": [
+        1,
+        1
+      ],
+      "found_solution": false,
+      "nodes": 205,
+      "fallback_to_unconstrained_search": false
+    },
+    "mn_distinguishers_by_language": {
+      "regular": 10,
+      "balance": 15,
+      "offset": 15
+    }
+  },
+  "bounds": {
+    "finite_oracle_counterexamples": {
+      "regular": {
+        "queries_observed": 132,
+        "finite_teacher_agrees_on_all_queries": true,
+        "returned_program_unchanged": true,
+        "unqueried_counterexample": "000000111111$",
+        "hypothesis_answer": true,
+        "finite_teacher_answer": false
+      },
+      "balance": {
+        "queries_observed": 64,
+        "finite_teacher_agrees_on_all_queries": true,
+        "returned_program_unchanged": true,
+        "unqueried_counterexample": "000000111111$",
+        "hypothesis_answer": true,
+        "finite_teacher_answer": false
+      }
+    },
+    "mn_certificate_scope": "N_K is only a lower bound on DFA states; finite tables do not prove nonregularity or global teacher equivalence",
+    "invariant_inference_scope": "phase-linear template and accept/reject structure hard-coded; coefficients computed from selected transition increments; no proof object or general invariant language search",
+    "shapley_scope": "eight coalitions toggle pre-acquired component availability, not full replay of discovery/history; scoring excludes macro acquisition, law checks, normalization work and wall time"
+  },
+  "issues": [],
+  "status": "PASS for byte integrity and declared finite computations; release-level causal and global claims require scoped correction"
+}

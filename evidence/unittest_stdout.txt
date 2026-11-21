@@ -1,0 +1,14 @@
+test_abc_coalition_replays_cost_and_circuits (test_release.IndependentReleaseTests.test_abc_coalition_replays_cost_and_circuits) ... ok
+test_dca_full_short_language (test_release.IndependentReleaseTests.test_dca_full_short_language) ... ok
+test_finite_teacher_indistinguishability_is_not_a_global_certificate (test_release.IndependentReleaseTests.test_finite_teacher_indistinguishability_is_not_a_global_certificate) ... ok
+test_no_global_equivalence_claim_for_unknown_offset_teacher (test_release.IndependentReleaseTests.test_no_global_equivalence_claim_for_unknown_offset_teacher) ... ok
+test_nondegenerate_mn_witnesses (test_release.IndependentReleaseTests.test_nondegenerate_mn_witnesses) ... ok
+test_original_legacy_sources_immutable (test_release.IndependentReleaseTests.test_original_legacy_sources_immutable) ... ok
+test_regex_dfa_is_proved_against_explicit_reference (test_release.IndependentReleaseTests.test_regex_dfa_is_proved_against_explicit_reference) ... ok
+test_semantic_invariant_certificate_and_mutation (test_release.IndependentReleaseTests.test_semantic_invariant_certificate_and_mutation) ... ok
+test_wrong_law_fallback_is_certified (test_release.IndependentReleaseTests.test_wrong_law_fallback_is_certified) ... ok
+
+----------------------------------------------------------------------
+Ran 9 tests in 0.043s
+
+OK

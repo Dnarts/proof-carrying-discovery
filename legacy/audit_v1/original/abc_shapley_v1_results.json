@@ -1,0 +1,213 @@
+{
+  "meta": {
+    "python_version": "3.10.16",
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.36",
+    "B_max": 200000
+  },
+  "discovered_laws": {
+    "NAND": {
+      "op": "NAND",
+      "tt": 7,
+      "commutative": true,
+      "associative": false,
+      "idempotent": false,
+      "self_const": null,
+      "identity": null,
+      "law_checks": 13,
+      "counterexamples": {
+        "associative": {
+          "a": 0,
+          "b": 0,
+          "c": 1,
+          "lhs": 0,
+          "rhs": 1
+        },
+        "idempotent": {
+          "a": 0,
+          "val": 1
+        },
+        "self_const": {
+          "op(0,0)": 1,
+          "op(1,1)": 0
+        },
+        "identity": "neither 0 nor 1 is a two-sided identity"
+      }
+    },
+    "XOR": {
+      "op": "XOR",
+      "tt": 6,
+      "commutative": true,
+      "associative": true,
+      "idempotent": false,
+      "self_const": 0,
+      "identity": 0,
+      "law_checks": 20,
+      "counterexamples": {
+        "idempotent": {
+          "a": 1,
+          "val": 0
+        }
+      }
+    }
+  },
+  "shapley_8_coalitions": {
+    "T2_parity3": {
+      "coalitions": {
+        "EMPTY": {
+          "found": false,
+          "capped_cost": 200000,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law": {
+          "found": false,
+          "capped_cost": 200000,
+          "v_nats": 0.0
+        },
+        "e2_XOR_macro": {
+          "found": true,
+          "capped_cost": 300,
+          "v_nats": 6.50229
+        },
+        "e3_XOR_laws": {
+          "found": false,
+          "capped_cost": 200000,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law,e2_XOR_macro": {
+          "found": true,
+          "capped_cost": 183,
+          "v_nats": 6.996586
+        },
+        "e1_NAND_law,e3_XOR_laws": {
+          "found": false,
+          "capped_cost": 200000,
+          "v_nats": 0.0
+        },
+        "e2_XOR_macro,e3_XOR_laws": {
+          "found": true,
+          "capped_cost": 195,
+          "v_nats": 6.933073
+        },
+        "e1_NAND_law,e2_XOR_macro,e3_XOR_laws": {
+          "found": true,
+          "capped_cost": 105,
+          "v_nats": 7.552112
+        }
+      },
+      "shapley_W_nats": {
+        "e1_NAND_law": 0.288729,
+        "e2_XOR_macro": 7.006411,
+        "e3_XOR_laws": 0.256972
+      },
+      "efficiency_check_sum_W": 7.552112,
+      "v_full_nats": 7.552112
+    },
+    "T3_parity4": {
+      "coalitions": {
+        "EMPTY": {
+          "found": false,
+          "capped_cost": 200000,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law": {
+          "found": false,
+          "capped_cost": 200000,
+          "v_nats": 0.0
+        },
+        "e2_XOR_macro": {
+          "found": true,
+          "capped_cost": 31479,
+          "v_nats": 1.848997
+        },
+        "e3_XOR_laws": {
+          "found": false,
+          "capped_cost": 200000,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law,e2_XOR_macro": {
+          "found": true,
+          "capped_cost": 13905,
+          "v_nats": 2.666069
+        },
+        "e1_NAND_law,e3_XOR_laws": {
+          "found": false,
+          "capped_cost": 200000,
+          "v_nats": 0.0
+        },
+        "e2_XOR_macro,e3_XOR_laws": {
+          "found": true,
+          "capped_cost": 13842,
+          "v_nats": 2.67061
+        },
+        "e1_NAND_law,e2_XOR_macro,e3_XOR_laws": {
+          "found": true,
+          "capped_cost": 4645,
+          "v_nats": 3.762526
+        }
+      },
+      "shapley_W_nats": {
+        "e1_NAND_law": 0.500151,
+        "e2_XOR_macro": 2.759954,
+        "e3_XOR_laws": 0.502421
+      },
+      "efficiency_check_sum_W": 3.762526,
+      "v_full_nats": 3.762526
+    },
+    "T_neg_and3": {
+      "coalitions": {
+        "EMPTY": {
+          "found": true,
+          "capped_cost": 9359,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law": {
+          "found": true,
+          "capped_cost": 1819,
+          "v_nats": 1.638052
+        },
+        "e2_XOR_macro": {
+          "found": true,
+          "capped_cost": 22601,
+          "v_nats": -0.881656
+        },
+        "e3_XOR_laws": {
+          "found": true,
+          "capped_cost": 9359,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law,e2_XOR_macro": {
+          "found": true,
+          "capped_cost": 11614,
+          "v_nats": -0.215873
+        },
+        "e1_NAND_law,e3_XOR_laws": {
+          "found": true,
+          "capped_cost": 1819,
+          "v_nats": 1.638052
+        },
+        "e2_XOR_macro,e3_XOR_laws": {
+          "found": true,
+          "capped_cost": 9139,
+          "v_nats": 0.023787
+        },
+        "e1_NAND_law,e2_XOR_macro,e3_XOR_laws": {
+          "found": true,
+          "capped_cost": 3408,
+          "v_nats": 1.010213
+        }
+      },
+      "shapley_W_nats": {
+        "e1_NAND_law": 1.258798,
+        "e2_XOR_macro": -0.808188,
+        "e3_XOR_laws": 0.559602
+      },
+      "efficiency_check_sum_W": 1.010212,
+      "v_full_nats": 1.010213
+    }
+  },
+  "uniform_mixture_W_nats": {
+    "e1_NAND_law": 0.682559,
+    "e2_XOR_macro": 2.986059,
+    "e3_XOR_laws": 0.439665
+  }
+}

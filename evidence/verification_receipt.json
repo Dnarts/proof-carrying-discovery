@@ -1,0 +1,21 @@
+{
+  "status": "PASS",
+  "python_version": "3.12.14",
+  "original_legacy_hashes": "PASS",
+  "independent_unittests": "9/9 PASS",
+  "fresh_deterministic_reexecution": {
+    "v1_1/dfa_to_1dca_v1_1.py": {
+      "status": "PASS",
+      "source_sha256": "5bd9619969a0b292bc8f53be219cf4052af7236659cfb6ab335257a00e63d4a8",
+      "receipt_sha256": "0dbb57ad3c1f9810ee23db555b7bec806655c94ce1170110624b713d57a53456"
+    },
+    "v1_1/abc_historical_v1_1.py": {
+      "status": "PASS",
+      "source_sha256": "5c8a33a11466326d6eeca28136a78704cfa0f4f4719090376e8c457ffc300b01",
+      "receipt_sha256": "d381cc5aac6479f401ba183e0ffb745312535763ed159249f4675352de748089"
+    }
+  },
+  "manifest": "PASS",
+  "global_unknown_teacher_equivalence": "NOT_CLAIMED",
+  "proof_assistant": "NOT_CLAIMED"
+}

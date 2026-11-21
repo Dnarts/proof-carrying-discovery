@@ -1,0 +1,1507 @@
+{
+  "release": "1.1.1",
+  "engine": "legacy frozen BFS + instrumentation",
+  "cost_contract": {
+    "default": "candidate evaluations + discovered-law property probes + independent total law certificate comparisons + successful gate replay checks + normalizer calls; acquisition once per coalition history",
+    "not_in_default": "physical time, garbage collection, state allocation overhead and library/curriculum encoding excluded; normalizer calls included as one proxy unit and sensitivity varied",
+    "B_MAX": 200000,
+    "ceiling_is_right_censoring_not_observed_solution_time": true
+  },
+  "players": [
+    "e1_NAND_law",
+    "e2_XOR_macro",
+    "e3_XOR_laws"
+  ],
+  "tasks": {
+    "T2_parity3": {
+      "target": 150,
+      "n_inputs": 3,
+      "max_gates": 4
+    },
+    "T3_parity4": {
+      "target": 27030,
+      "n_inputs": 4,
+      "max_gates": 3
+    },
+    "Tneg_AND3": {
+      "target": 128,
+      "n_inputs": 3,
+      "max_gates": 4
+    }
+  },
+  "replays": {
+    "EMPTY": {
+      "coalition": [],
+      "history": [
+        {
+          "event": "e1_NAND_law",
+          "status": "DISABLED",
+          "witness": null,
+          "library_sha256_after": "af8bd9e1236d4a41e3a4c0eb20d881601ae0e672bdf61ab2203d42667c1f297d"
+        },
+        {
+          "event": "e2_XOR_macro",
+          "status": "DISABLED",
+          "witness": null,
+          "library_sha256_after": "af8bd9e1236d4a41e3a4c0eb20d881601ae0e672bdf61ab2203d42667c1f297d"
+        },
+        {
+          "event": "e3_XOR_laws",
+          "status": "DISABLED",
+          "witness": null,
+          "library_sha256_after": "af8bd9e1236d4a41e3a4c0eb20d881601ae0e672bdf61ab2203d42667c1f297d"
+        }
+      ],
+      "history_sha256": "d530731db91fdbe99e11fcc31c7d219525582b058b901a763ff0d765782765b6",
+      "acquisition": {
+        "candidate_evals": 0,
+        "law_probes": 0,
+        "law_verification_probes": 0,
+        "normalizer_calls": 0,
+        "gate_replay_checks": 0
+      },
+      "tasks": {
+        "T2_parity3": {
+          "found": false,
+          "evals": 27174,
+          "normalizer_calls": 53604,
+          "gate_replay_checks": 0,
+          "max_gates": 4,
+          "gates": null,
+          "bounded_grammar": true
+        },
+        "T3_parity4": {
+          "found": false,
+          "evals": 5400,
+          "normalizer_calls": 9920,
+          "gate_replay_checks": 0,
+          "max_gates": 3,
+          "gates": null,
+          "bounded_grammar": true
+        },
+        "Tneg_AND3": {
+          "found": true,
+          "evals": 9359,
+          "normalizer_calls": 17208,
+          "gate_replay_checks": 4,
+          "max_gates": 4,
+          "gates": [
+            [
+              "NAND",
+              0,
+              1
+            ],
+            [
+              "NAND",
+              2,
+              3
+            ],
+            [
+              "NAND",
+              2,
+              4
+            ],
+            [
+              "NAND",
+              5,
+              5
+            ]
+          ],
+          "bounded_grammar": true
+        }
+      },
+      "acquired_library_sha256": "af8bd9e1236d4a41e3a4c0eb20d881601ae0e672bdf61ab2203d42667c1f297d"
+    },
+    "e1_NAND_law": {
+      "coalition": [
+        "e1_NAND_law"
+      ],
+      "history": [
+        {
+          "event": "e1_NAND_law",
+          "status": "CERTIFIED",
+          "witness": {
+            "laws": {
+              "op": "NAND",
+              "tt": 7,
+              "commutative": true,
+              "associative": false,
+              "idempotent": false,
+              "self_const": null,
+              "identity": null,
+              "law_checks": 13
+            },
+            "proof": {
+              "truth_table": 7,
+              "claims": {
+                "commutative": true,
+                "associative": false,
+                "idempotent": false,
+                "self_const": null,
+                "identity": null
+              },
+              "proof_comparisons": 19
+            }
+          },
+          "library_sha256_after": "b4d41819559e8e3759f88adadfc6dd8b2a256ee540aec0dc79f66c36bb65be48"
+        },
+        {
+          "event": "e2_XOR_macro",
+          "status": "DISABLED",
+          "witness": null,
+          "library_sha256_after": "b4d41819559e8e3759f88adadfc6dd8b2a256ee540aec0dc79f66c36bb65be48"
+        },
+        {
+          "event": "e3_XOR_laws",
+          "status": "DISABLED",
+          "witness": null,
+          "library_sha256_after": "b4d41819559e8e3759f88adadfc6dd8b2a256ee540aec0dc79f66c36bb65be48"
+        }
+      ],
+      "history_sha256": "dec7c3a7be5185e6908ce8ec3d61b853e77c5bcd280cee0e2d49dcc2f266707a",
+      "acquisition": {
+        "candidate_evals": 0,
+        "law_probes": 13,
+        "law_verification_probes": 19,
+        "normalizer_calls": 0,
+        "gate_replay_checks": 0
+      },
+      "tasks": {
+        "T2_parity3": {
+          "found": false,
+          "evals": 3401,
+          "normalizer_calls": 7182,
+          "gate_replay_checks": 0,
+          "max_gates": 4,
+          "gates": null,
+          "bounded_grammar": true
+        },
+        "T3_parity4": {
+          "found": false,
+          "evals": 1120,
+          "normalizer_calls": 2155,
+          "gate_replay_checks": 0,
+          "max_gates": 3,
+          "gates": null,
+          "bounded_grammar": true
+        },
+        "Tneg_AND3": {
+          "found": true,
+          "evals": 1819,
+          "normalizer_calls": 3612,
+          "gate_replay_checks": 4,
+          "max_gates": 4,
+          "gates": [
+            [
+              "NAND",
+              0,
+              1
+            ],
+            [
+              "NAND",
+              2,
+              3
+            ],
+            [
+              "NAND",
+              2,
+              4
+            ],
+            [
+              "NAND",
+              5,
+              5
+            ]
+          ],
+          "bounded_grammar": true
+        }
+      },
+      "acquired_library_sha256": "b4d41819559e8e3759f88adadfc6dd8b2a256ee540aec0dc79f66c36bb65be48"
+    },
+    "e2_XOR_macro": {
+      "coalition": [
+        "e2_XOR_macro"
+      ],
+      "history": [
+        {
+          "event": "e1_NAND_law",
+          "status": "DISABLED",
+          "witness": null,
+          "library_sha256_after": "af8bd9e1236d4a41e3a4c0eb20d881601ae0e672bdf61ab2203d42667c1f297d"
+        },
+        {
+          "event": "e2_XOR_macro",
+          "status": "CERTIFIED",
+          "witness": {
+            "program": {
+              "truth_table": 6,
+              "dag": [
+                [
+                  "NAND",
+                  0,
+                  1
+                ],
+                [
+                  "NAND",
+                  0,
+                  2
+                ],
+                [
+                  "NAND",
+                  1,
+                  2
+                ],
+                [
+                  "NAND",
+                  3,
+                  4
+                ]
+              ],
+              "origin": "T1 target table + NAND synthesis",
+              "depends_on": [
+                "NAND"
+              ]
+            },
+            "candidate_evals": 1535
+          },
+          "library_sha256_after": "3db30af67a6f3d8dda1470b2829d93d17c6c89738551ba518e020d4a3ec46fa3"
+        },
+        {
+          "event": "e3_XOR_laws",
+          "status": "DISABLED",
+          "witness": null,
+          "library_sha256_after": "3db30af67a6f3d8dda1470b2829d93d17c6c89738551ba518e020d4a3ec46fa3"
+        }
+      ],
+      "history_sha256": "0614b69a46138b1d9c12c0c27386ea90877a4a2daada86a394614e7642ee77d4",
+      "acquisition": {
+        "candidate_evals": 1535,
+        "law_probes": 0,
+        "law_verification_probes": 0,
+        "normalizer_calls": 2651,
+        "gate_replay_checks": 8
+      },
+      "tasks": {
+        "T2_parity3": {
+          "found": true,
+          "evals": 300,
+          "normalizer_calls": 366,
+          "gate_replay_checks": 2,
+          "max_gates": 4,
+          "gates": [
+            [
+              "XOR",
+              0,
+              1
+            ],
+            [
+              "XOR",
+              2,
+              3
+            ]
+          ],
+          "bounded_grammar": true
+        },
+        "T3_parity4": {
+          "found": true,
+          "evals": 31479,
+          "normalizer_calls": 53322,
+          "gate_replay_checks": 3,
+          "max_gates": 3,
+          "gates": [
+            [
+              "XOR",
+              0,
+              1
+            ],
+            [
+              "XOR",
+              2,
+              3
+            ],
+            [
+              "XOR",
+              4,
+              5
+            ]
+          ],
+          "bounded_grammar": true
+        },
+        "Tneg_AND3": {
+          "found": true,
+          "evals": 22601,
+          "normalizer_calls": 37464,
+          "gate_replay_checks": 4,
+          "max_gates": 4,
+          "gates": [
+            [
+              "NAND",
+              0,
+              0
+            ],
+            [
+              "NAND",
+              1,
+              2
+            ],
+            [
+              "NAND",
+              0,
+              4
+            ],
+            [
+              "XOR",
+              3,
+              5
+            ]
+          ],
+          "bounded_grammar": true
+        }
+      },
+      "acquired_library_sha256": "3db30af67a6f3d8dda1470b2829d93d17c6c89738551ba518e020d4a3ec46fa3"
+    },
+    "e3_XOR_laws": {
+      "coalition": [
+        "e3_XOR_laws"
+      ],
+      "history": [
+        {
+          "event": "e1_NAND_law",
+          "status": "DISABLED",
+          "witness": null,
+          "library_sha256_after": "af8bd9e1236d4a41e3a4c0eb20d881601ae0e672bdf61ab2203d42667c1f297d"
+        },
+        {
+          "event": "e2_XOR_macro",
+          "status": "DISABLED",
+          "witness": null,
+          "library_sha256_after": "af8bd9e1236d4a41e3a4c0eb20d881601ae0e672bdf61ab2203d42667c1f297d"
+        },
+        {
+          "event": "e3_XOR_laws",
+          "status": "BLOCKED_BY_MISSING_MACRO",
+          "witness": null,
+          "library_sha256_after": "af8bd9e1236d4a41e3a4c0eb20d881601ae0e672bdf61ab2203d42667c1f297d"
+        }
+      ],
+      "history_sha256": "3d0fb62982bc7d8995e395afc40a30064d083c996775bda4eb95c4ef832c58b6",
+      "acquisition": {
+        "candidate_evals": 0,
+        "law_probes": 0,
+        "law_verification_probes": 0,
+        "normalizer_calls": 0,
+        "gate_replay_checks": 0
+      },
+      "tasks": {
+        "T2_parity3": {
+          "found": false,
+          "evals": 27174,
+          "normalizer_calls": 53604,
+          "gate_replay_checks": 0,
+          "max_gates": 4,
+          "gates": null,
+          "bounded_grammar": true
+        },
+        "T3_parity4": {
+          "found": false,
+          "evals": 5400,
+          "normalizer_calls": 9920,
+          "gate_replay_checks": 0,
+          "max_gates": 3,
+          "gates": null,
+          "bounded_grammar": true
+        },
+        "Tneg_AND3": {
+          "found": true,
+          "evals": 9359,
+          "normalizer_calls": 17208,
+          "gate_replay_checks": 4,
+          "max_gates": 4,
+          "gates": [
+            [
+              "NAND",
+              0,
+              1
+            ],
+            [
+              "NAND",
+              2,
+              3
+            ],
+            [
+              "NAND",
+              2,
+              4
+            ],
+            [
+              "NAND",
+              5,
+              5
+            ]
+          ],
+          "bounded_grammar": true
+        }
+      },
+      "acquired_library_sha256": "af8bd9e1236d4a41e3a4c0eb20d881601ae0e672bdf61ab2203d42667c1f297d"
+    },
+    "e1_NAND_law,e2_XOR_macro": {
+      "coalition": [
+        "e1_NAND_law",
+        "e2_XOR_macro"
+      ],
+      "history": [
+        {
+          "event": "e1_NAND_law",
+          "status": "CERTIFIED",
+          "witness": {
+            "laws": {
+              "op": "NAND",
+              "tt": 7,
+              "commutative": true,
+              "associative": false,
+              "idempotent": false,
+              "self_const": null,
+              "identity": null,
+              "law_checks": 13
+            },
+            "proof": {
+              "truth_table": 7,
+              "claims": {
+                "commutative": true,
+                "associative": false,
+                "idempotent": false,
+                "self_const": null,
+                "identity": null
+              },
+              "proof_comparisons": 19
+            }
+          },
+          "library_sha256_after": "b4d41819559e8e3759f88adadfc6dd8b2a256ee540aec0dc79f66c36bb65be48"
+        },
+        {
+          "event": "e2_XOR_macro",
+          "status": "CERTIFIED",
+          "witness": {
+            "program": {
+              "truth_table": 6,
+              "dag": [
+                [
+                  "NAND",
+                  0,
+                  1
+                ],
+                [
+                  "NAND",
+                  0,
+                  2
+                ],
+                [
+                  "NAND",
+                  1,
+                  2
+                ],
+                [
+                  "NAND",
+                  3,
+                  4
+                ]
+              ],
+              "origin": "T1 target table + NAND synthesis",
+              "depends_on": [
+                "NAND"
+              ]
+            },
+            "candidate_evals": 341
+          },
+          "library_sha256_after": "7f805b295f5632ee08d6977934a55159458948ed9feaecacce8575232f06e767"
+        },
+        {
+          "event": "e3_XOR_laws",
+          "status": "DISABLED",
+          "witness": null,
+          "library_sha256_after": "7f805b295f5632ee08d6977934a55159458948ed9feaecacce8575232f06e767"
+        }
+      ],
+      "history_sha256": "a56c9f3b739a371918e9d5ab13dfb404eaa524cc08f7fe6fab49f4e72ca9df0a",
+      "acquisition": {
+        "candidate_evals": 341,
+        "law_probes": 13,
+        "law_verification_probes": 19,
+        "normalizer_calls": 635,
+        "gate_replay_checks": 8
+      },
+      "tasks": {
+        "T2_parity3": {
+          "found": true,
+          "evals": 183,
+          "normalizer_calls": 219,
+          "gate_replay_checks": 2,
+          "max_gates": 4,
+          "gates": [
+            [
+              "XOR",
+              0,
+              1
+            ],
+            [
+              "XOR",
+              2,
+              3
+            ]
+          ],
+          "bounded_grammar": true
+        },
+        "T3_parity4": {
+          "found": true,
+          "evals": 13905,
+          "normalizer_calls": 23347,
+          "gate_replay_checks": 3,
+          "max_gates": 3,
+          "gates": [
+            [
+              "XOR",
+              0,
+              1
+            ],
+            [
+              "XOR",
+              2,
+              3
+            ],
+            [
+              "XOR",
+              4,
+              5
+            ]
+          ],
+          "bounded_grammar": true
+        },
+        "Tneg_AND3": {
+          "found": true,
+          "evals": 11614,
+          "normalizer_calls": 19572,
+          "gate_replay_checks": 4,
+          "max_gates": 4,
+          "gates": [
+            [
+              "NAND",
+              0,
+              0
+            ],
+            [
+              "NAND",
+              1,
+              2
+            ],
+            [
+              "NAND",
+              0,
+              4
+            ],
+            [
+              "XOR",
+              3,
+              5
+            ]
+          ],
+          "bounded_grammar": true
+        }
+      },
+      "acquired_library_sha256": "7f805b295f5632ee08d6977934a55159458948ed9feaecacce8575232f06e767"
+    },
+    "e1_NAND_law,e3_XOR_laws": {
+      "coalition": [
+        "e1_NAND_law",
+        "e3_XOR_laws"
+      ],
+      "history": [
+        {
+          "event": "e1_NAND_law",
+          "status": "CERTIFIED",
+          "witness": {
+            "laws": {
+              "op": "NAND",
+              "tt": 7,
+              "commutative": true,
+              "associative": false,
+              "idempotent": false,
+              "self_const": null,
+              "identity": null,
+              "law_checks": 13
+            },
+            "proof": {
+              "truth_table": 7,
+              "claims": {
+                "commutative": true,
+                "associative": false,
+                "idempotent": false,
+                "self_const": null,
+                "identity": null
+              },
+              "proof_comparisons": 19
+            }
+          },
+          "library_sha256_after": "b4d41819559e8e3759f88adadfc6dd8b2a256ee540aec0dc79f66c36bb65be48"
+        },
+        {
+          "event": "e2_XOR_macro",
+          "status": "DISABLED",
+          "witness": null,
+          "library_sha256_after": "b4d41819559e8e3759f88adadfc6dd8b2a256ee540aec0dc79f66c36bb65be48"
+        },
+        {
+          "event": "e3_XOR_laws",
+          "status": "BLOCKED_BY_MISSING_MACRO",
+          "witness": null,
+          "library_sha256_after": "b4d41819559e8e3759f88adadfc6dd8b2a256ee540aec0dc79f66c36bb65be48"
+        }
+      ],
+      "history_sha256": "5ae86ba8f7ea6d084d9901b2b46fbf785e0e8aa8d5168716c87bd1f1015868f6",
+      "acquisition": {
+        "candidate_evals": 0,
+        "law_probes": 13,
+        "law_verification_probes": 19,
+        "normalizer_calls": 0,
+        "gate_replay_checks": 0
+      },
+      "tasks": {
+        "T2_parity3": {
+          "found": false,
+          "evals": 3401,
+          "normalizer_calls": 7182,
+          "gate_replay_checks": 0,
+          "max_gates": 4,
+          "gates": null,
+          "bounded_grammar": true
+        },
+        "T3_parity4": {
+          "found": false,
+          "evals": 1120,
+          "normalizer_calls": 2155,
+          "gate_replay_checks": 0,
+          "max_gates": 3,
+          "gates": null,
+          "bounded_grammar": true
+        },
+        "Tneg_AND3": {
+          "found": true,
+          "evals": 1819,
+          "normalizer_calls": 3612,
+          "gate_replay_checks": 4,
+          "max_gates": 4,
+          "gates": [
+            [
+              "NAND",
+              0,
+              1
+            ],
+            [
+              "NAND",
+              2,
+              3
+            ],
+            [
+              "NAND",
+              2,
+              4
+            ],
+            [
+              "NAND",
+              5,
+              5
+            ]
+          ],
+          "bounded_grammar": true
+        }
+      },
+      "acquired_library_sha256": "b4d41819559e8e3759f88adadfc6dd8b2a256ee540aec0dc79f66c36bb65be48"
+    },
+    "e2_XOR_macro,e3_XOR_laws": {
+      "coalition": [
+        "e2_XOR_macro",
+        "e3_XOR_laws"
+      ],
+      "history": [
+        {
+          "event": "e1_NAND_law",
+          "status": "DISABLED",
+          "witness": null,
+          "library_sha256_after": "af8bd9e1236d4a41e3a4c0eb20d881601ae0e672bdf61ab2203d42667c1f297d"
+        },
+        {
+          "event": "e2_XOR_macro",
+          "status": "CERTIFIED",
+          "witness": {
+            "program": {
+              "truth_table": 6,
+              "dag": [
+                [
+                  "NAND",
+                  0,
+                  1
+                ],
+                [
+                  "NAND",
+                  0,
+                  2
+                ],
+                [
+                  "NAND",
+                  1,
+                  2
+                ],
+                [
+                  "NAND",
+                  3,
+                  4
+                ]
+              ],
+              "origin": "T1 target table + NAND synthesis",
+              "depends_on": [
+                "NAND"
+              ]
+            },
+            "candidate_evals": 1535
+          },
+          "library_sha256_after": "3db30af67a6f3d8dda1470b2829d93d17c6c89738551ba518e020d4a3ec46fa3"
+        },
+        {
+          "event": "e3_XOR_laws",
+          "status": "CERTIFIED",
+          "witness": {
+            "laws": {
+              "op": "XOR",
+              "tt": 6,
+              "commutative": true,
+              "associative": true,
+              "idempotent": false,
+              "self_const": 0,
+              "identity": 0,
+              "law_checks": 20
+            },
+            "proof": {
+              "truth_table": 6,
+              "claims": {
+                "commutative": true,
+                "associative": true,
+                "idempotent": false,
+                "self_const": 0,
+                "identity": 0
+              },
+              "proof_comparisons": 19
+            },
+            "depends_on": [
+              "XOR_macro"
+            ]
+          },
+          "library_sha256_after": "1898ea9d0ea1694be3e114488187be636d5ff5a1a90bf23d5600e5d37c95b2fb"
+        }
+      ],
+      "history_sha256": "6f7689d462a98e2e0f69a2e5d80d7808d7d39c00f21232cc4653ebe9c6c838ec",
+      "acquisition": {
+        "candidate_evals": 1535,
+        "law_probes": 20,
+        "law_verification_probes": 19,
+        "normalizer_calls": 2651,
+        "gate_replay_checks": 8
+      },
+      "tasks": {
+        "T2_parity3": {
+          "found": true,
+          "evals": 195,
+          "normalizer_calls": 300,
+          "gate_replay_checks": 2,
+          "max_gates": 4,
+          "gates": [
+            [
+              "XOR",
+              0,
+              1
+            ],
+            [
+              "XOR",
+              2,
+              3
+            ]
+          ],
+          "bounded_grammar": true
+        },
+        "T3_parity4": {
+          "found": true,
+          "evals": 13842,
+          "normalizer_calls": 27678,
+          "gate_replay_checks": 3,
+          "max_gates": 3,
+          "gates": [
+            [
+              "XOR",
+              0,
+              1
+            ],
+            [
+              "XOR",
+              2,
+              3
+            ],
+            [
+              "XOR",
+              4,
+              5
+            ]
+          ],
+          "bounded_grammar": true
+        },
+        "Tneg_AND3": {
+          "found": true,
+          "evals": 9139,
+          "normalizer_calls": 17487,
+          "gate_replay_checks": 4,
+          "max_gates": 4,
+          "gates": [
+            [
+              "NAND",
+              0,
+              0
+            ],
+            [
+              "NAND",
+              1,
+              2
+            ],
+            [
+              "NAND",
+              0,
+              4
+            ],
+            [
+              "XOR",
+              3,
+              5
+            ]
+          ],
+          "bounded_grammar": true
+        }
+      },
+      "acquired_library_sha256": "1898ea9d0ea1694be3e114488187be636d5ff5a1a90bf23d5600e5d37c95b2fb"
+    },
+    "e1_NAND_law,e2_XOR_macro,e3_XOR_laws": {
+      "coalition": [
+        "e1_NAND_law",
+        "e2_XOR_macro",
+        "e3_XOR_laws"
+      ],
+      "history": [
+        {
+          "event": "e1_NAND_law",
+          "status": "CERTIFIED",
+          "witness": {
+            "laws": {
+              "op": "NAND",
+              "tt": 7,
+              "commutative": true,
+              "associative": false,
+              "idempotent": false,
+              "self_const": null,
+              "identity": null,
+              "law_checks": 13
+            },
+            "proof": {
+              "truth_table": 7,
+              "claims": {
+                "commutative": true,
+                "associative": false,
+                "idempotent": false,
+                "self_const": null,
+                "identity": null
+              },
+              "proof_comparisons": 19
+            }
+          },
+          "library_sha256_after": "b4d41819559e8e3759f88adadfc6dd8b2a256ee540aec0dc79f66c36bb65be48"
+        },
+        {
+          "event": "e2_XOR_macro",
+          "status": "CERTIFIED",
+          "witness": {
+            "program": {
+              "truth_table": 6,
+              "dag": [
+                [
+                  "NAND",
+                  0,
+                  1
+                ],
+                [
+                  "NAND",
+                  0,
+                  2
+                ],
+                [
+                  "NAND",
+                  1,
+                  2
+                ],
+                [
+                  "NAND",
+                  3,
+                  4
+                ]
+              ],
+              "origin": "T1 target table + NAND synthesis",
+              "depends_on": [
+                "NAND"
+              ]
+            },
+            "candidate_evals": 341
+          },
+          "library_sha256_after": "7f805b295f5632ee08d6977934a55159458948ed9feaecacce8575232f06e767"
+        },
+        {
+          "event": "e3_XOR_laws",
+          "status": "CERTIFIED",
+          "witness": {
+            "laws": {
+              "op": "XOR",
+              "tt": 6,
+              "commutative": true,
+              "associative": true,
+              "idempotent": false,
+              "self_const": 0,
+              "identity": 0,
+              "law_checks": 20
+            },
+            "proof": {
+              "truth_table": 6,
+              "claims": {
+                "commutative": true,
+                "associative": true,
+                "idempotent": false,
+                "self_const": 0,
+                "identity": 0
+              },
+              "proof_comparisons": 19
+            },
+            "depends_on": [
+              "XOR_macro"
+            ]
+          },
+          "library_sha256_after": "7b9c41398929282affc069a452c2332d6456e14c54a75af7f1a9c50d55e31778"
+        }
+      ],
+      "history_sha256": "423f5f4e6b7f16e43ce86c0a66eb3fd20d376e6e557b1cdfbf418344afdd459e",
+      "acquisition": {
+        "candidate_evals": 341,
+        "law_probes": 33,
+        "law_verification_probes": 38,
+        "normalizer_calls": 635,
+        "gate_replay_checks": 8
+      },
+      "tasks": {
+        "T2_parity3": {
+          "found": true,
+          "evals": 105,
+          "normalizer_calls": 171,
+          "gate_replay_checks": 2,
+          "max_gates": 4,
+          "gates": [
+            [
+              "XOR",
+              0,
+              1
+            ],
+            [
+              "XOR",
+              2,
+              3
+            ]
+          ],
+          "bounded_grammar": true
+        },
+        "T3_parity4": {
+          "found": true,
+          "evals": 4645,
+          "normalizer_calls": 10021,
+          "gate_replay_checks": 3,
+          "max_gates": 3,
+          "gates": [
+            [
+              "XOR",
+              0,
+              1
+            ],
+            [
+              "XOR",
+              2,
+              3
+            ],
+            [
+              "XOR",
+              4,
+              5
+            ]
+          ],
+          "bounded_grammar": true
+        },
+        "Tneg_AND3": {
+          "found": true,
+          "evals": 3408,
+          "normalizer_calls": 7211,
+          "gate_replay_checks": 4,
+          "max_gates": 4,
+          "gates": [
+            [
+              "NAND",
+              0,
+              0
+            ],
+            [
+              "NAND",
+              1,
+              2
+            ],
+            [
+              "NAND",
+              0,
+              4
+            ],
+            [
+              "XOR",
+              3,
+              5
+            ]
+          ],
+          "bounded_grammar": true
+        }
+      },
+      "acquired_library_sha256": "7b9c41398929282affc069a452c2332d6456e14c54a75af7f1a9c50d55e31778"
+    }
+  },
+  "shapley_replayed_histories": {
+    "T2_parity3": {
+      "coalition_values": {
+        "EMPTY": {
+          "work_units": 253604,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law": {
+          "work_units": 207214,
+          "v_nats": 0.20202191963903182
+        },
+        "e2_XOR_macro": {
+          "work_units": 4862,
+          "v_nats": 3.9543241194154106
+        },
+        "e3_XOR_laws": {
+          "work_units": 253604,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law,e2_XOR_macro": {
+          "work_units": 1420,
+          "v_nats": 5.185117123696173
+        },
+        "e1_NAND_law,e3_XOR_laws": {
+          "work_units": 207214,
+          "v_nats": 0.20202191963903182
+        },
+        "e2_XOR_macro,e3_XOR_laws": {
+          "work_units": 4730,
+          "v_nats": 3.9818487928055006
+        },
+        "e1_NAND_law,e2_XOR_macro,e3_XOR_laws": {
+          "work_units": 1333,
+          "v_nats": 5.248341954112771
+        }
+      },
+      "shapley": {
+        "e1_NAND_law": 0.7283075143020665,
+        "e2_XOR_macro": 4.494372050773491,
+        "e3_XOR_laws": 0.02566238903721422
+      },
+      "sum_W": 5.248341954112771,
+      "v_full": 5.248341954112771,
+      "unit": "surrogate units, not time",
+      "normalization_weight": 1,
+      "acquisition_paid_once": true,
+      "failure_censored_at": "B_MAX per task if no solution under gate bound"
+    },
+    "T3_parity4": {
+      "coalition_values": {
+        "EMPTY": {
+          "work_units": 209920,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law": {
+          "work_units": 202187,
+          "v_nats": 0.03753349401564776
+        },
+        "e2_XOR_macro": {
+          "work_units": 88998,
+          "v_nats": 0.8581126081861932
+        },
+        "e3_XOR_laws": {
+          "work_units": 209920,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law,e2_XOR_macro": {
+          "work_units": 38271,
+          "v_nats": 1.7020340765314614
+        },
+        "e1_NAND_law,e3_XOR_laws": {
+          "work_units": 202187,
+          "v_nats": 0.03753349401564776
+        },
+        "e2_XOR_macro,e3_XOR_laws": {
+          "work_units": 45756,
+          "v_nats": 1.5234035750922974
+        },
+        "e1_NAND_law,e2_XOR_macro,e3_XOR_laws": {
+          "work_units": 15724,
+          "v_nats": 2.5915382981961095
+        }
+      },
+      "shapley": {
+        "e1_NAND_law": 0.5154652327666392,
+        "e2_XOR_macro": 1.6686898303902367,
+        "e3_XOR_laws": 0.40738323503923335
+      },
+      "sum_W": 2.5915382981961095,
+      "v_full": 2.5915382981961095,
+      "unit": "surrogate units, not time",
+      "normalization_weight": 1,
+      "acquisition_paid_once": true,
+      "failure_censored_at": "B_MAX per task if no solution under gate bound"
+    },
+    "Tneg_AND3": {
+      "coalition_values": {
+        "EMPTY": {
+          "work_units": 26571,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law": {
+          "work_units": 5467,
+          "v_nats": 1.5810903755826935
+        },
+        "e2_XOR_macro": {
+          "work_units": 64263,
+          "v_nats": -0.8831636424432343
+        },
+        "e3_XOR_laws": {
+          "work_units": 26571,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law,e2_XOR_macro": {
+          "work_units": 32206,
+          "v_nats": -0.19233237510024992
+        },
+        "e1_NAND_law,e3_XOR_laws": {
+          "work_units": 5467,
+          "v_nats": 1.5810903755826935
+        },
+        "e2_XOR_macro,e3_XOR_laws": {
+          "work_units": 30863,
+          "v_nats": -0.14973765993555865
+        },
+        "e1_NAND_law,e2_XOR_macro,e3_XOR_laws": {
+          "work_units": 11678,
+          "v_nats": 0.822113665634209
+        }
+      },
+      "shapley": {
+        "e1_NAND_law": 1.2296341742051,
+        "e2_XOR_macro": -0.86790685256699,
+        "e3_XOR_laws": 0.46038634399609885
+      },
+      "sum_W": 0.822113665634209,
+      "v_full": 0.822113665634209,
+      "unit": "surrogate units, not time",
+      "normalization_weight": 1,
+      "acquisition_paid_once": true,
+      "failure_censored_at": "B_MAX per task if no solution under gate bound"
+    },
+    "SUITE_ACQUISITION_ONCE": {
+      "coalition_values": {
+        "EMPTY": {
+          "work_units": 490095,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law": {
+          "work_units": 414804,
+          "v_nats": 0.1667931303534509
+        },
+        "e2_XOR_macro": {
+          "work_units": 149735,
+          "v_nats": 1.1857321848302629
+        },
+        "e3_XOR_laws": {
+          "work_units": 490095,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law,e2_XOR_macro": {
+          "work_units": 69865,
+          "v_nats": 1.9480344413314583
+        },
+        "e1_NAND_law,e3_XOR_laws": {
+          "work_units": 414804,
+          "v_nats": 0.1667931303534509
+        },
+        "e2_XOR_macro,e3_XOR_laws": {
+          "work_units": 72883,
+          "v_nats": 1.9057438342028323
+        },
+        "e1_NAND_law,e2_XOR_macro,e3_XOR_laws": {
+          "work_units": 26625,
+          "v_nats": 2.912748625834281
+        }
+      },
+      "shapley": {
+        "e1_NAND_law": 0.5461152051374075,
+        "e2_XOR_macro": 1.9250600843005041,
+        "e3_XOR_laws": 0.4415733363963691
+      },
+      "sum_W": 2.912748625834281,
+      "v_full": 2.912748625834281,
+      "unit": "surrogate units, not time",
+      "normalization_weight": 1,
+      "acquisition_paid_once": true,
+      "failure_censored_at": "B_MAX per task if no solution under gate bound"
+    }
+  },
+  "sensitivity_suite": {
+    "0": {
+      "coalition_values": {
+        "EMPTY": {
+          "work_units": 409363,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law": {
+          "work_units": 401855,
+          "v_nats": 0.018510965947809765
+        },
+        "e2_XOR_macro": {
+          "work_units": 55932,
+          "v_nats": 1.9904656258041786
+        },
+        "e3_XOR_laws": {
+          "work_units": 409363,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law,e2_XOR_macro": {
+          "work_units": 26092,
+          "v_nats": 2.7529735390489325
+        },
+        "e1_NAND_law,e3_XOR_laws": {
+          "work_units": 401855,
+          "v_nats": 0.018510965947809765
+        },
+        "e2_XOR_macro,e3_XOR_laws": {
+          "work_units": 24767,
+          "v_nats": 2.8050901710675475
+        },
+        "e1_NAND_law,e2_XOR_macro,e3_XOR_laws": {
+          "work_units": 8587,
+          "v_nats": 3.864352861292435
+        }
+      },
+      "shapley": {
+        "e1_NAND_law": 0.4894276985896596,
+        "e2_XOR_macro": 2.868694631077713,
+        "e3_XOR_laws": 0.5062305316250623
+      },
+      "sum_W": 3.864352861292435,
+      "v_full": 3.864352861292435,
+      "unit": "surrogate units, not time",
+      "normalization_weight": 0,
+      "acquisition_paid_once": true,
+      "failure_censored_at": "B_MAX per task if no solution under gate bound"
+    },
+    "0.05": {
+      "coalition_values": {
+        "EMPTY": {
+          "work_units": 413399.6,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law": {
+          "work_units": 402502.45,
+          "v_nats": 0.026713495864711945
+        },
+        "e2_XOR_macro": {
+          "work_units": 60622.15,
+          "v_nats": 1.9197543418179759
+        },
+        "e3_XOR_laws": {
+          "work_units": 413399.6,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law,e2_XOR_macro": {
+          "work_units": 28280.65,
+          "v_nats": 2.682236854455791
+        },
+        "e1_NAND_law,e3_XOR_laws": {
+          "work_units": 402502.45,
+          "v_nats": 0.026713495864711945
+        },
+        "e2_XOR_macro,e3_XOR_laws": {
+          "work_units": 27172.8,
+          "v_nats": 2.7221982066929584
+        },
+        "e1_NAND_law,e2_XOR_macro,e3_XOR_laws": {
+          "work_units": 9488.9,
+          "v_nats": 3.7742919852435204
+        }
+      },
+      "shapley": {
+        "e1_NAND_law": 0.4911350928888458,
+        "e2_XOR_macro": 2.785397871279601,
+        "e3_XOR_laws": 0.4977590210750735
+      },
+      "sum_W": 3.7742919852435204,
+      "v_full": 3.7742919852435204,
+      "unit": "surrogate units, not time",
+      "normalization_weight": 0.05,
+      "acquisition_paid_once": true,
+      "failure_censored_at": "B_MAX per task if no solution under gate bound"
+    },
+    "0.2": {
+      "coalition_values": {
+        "EMPTY": {
+          "work_units": 425509.4,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law": {
+          "work_units": 404444.8,
+          "v_nats": 0.050771777011227925
+        },
+        "e2_XOR_macro": {
+          "work_units": 74692.6,
+          "v_nats": 1.7399060151129095
+        },
+        "e3_XOR_laws": {
+          "work_units": 425509.4,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law,e2_XOR_macro": {
+          "work_units": 34846.6,
+          "v_nats": 2.502331467954745
+        },
+        "e1_NAND_law,e3_XOR_laws": {
+          "work_units": 404444.8,
+          "v_nats": 0.050771777011227925
+        },
+        "e2_XOR_macro,e3_XOR_laws": {
+          "work_units": 34390.2,
+          "v_nats": 2.515515399354941
+        },
+        "e1_NAND_law,e2_XOR_macro,e3_XOR_laws": {
+          "work_units": 12194.6,
+          "v_nats": 3.5522938086243485
+        }
+      },
+      "shapley": {
+        "e1_NAND_law": 0.4980496004023891,
+        "e2_XOR_macro": 2.5749885306250864,
+        "e3_XOR_laws": 0.47925567759687304
+      },
+      "sum_W": 3.5522938086243485,
+      "v_full": 3.5522938086243485,
+      "unit": "surrogate units, not time",
+      "normalization_weight": 0.2,
+      "acquisition_paid_once": true,
+      "failure_censored_at": "B_MAX per task if no solution under gate bound"
+    },
+    "1": {
+      "coalition_values": {
+        "EMPTY": {
+          "work_units": 490095,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law": {
+          "work_units": 414804,
+          "v_nats": 0.1667931303534509
+        },
+        "e2_XOR_macro": {
+          "work_units": 149735,
+          "v_nats": 1.1857321848302629
+        },
+        "e3_XOR_laws": {
+          "work_units": 490095,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law,e2_XOR_macro": {
+          "work_units": 69865,
+          "v_nats": 1.9480344413314583
+        },
+        "e1_NAND_law,e3_XOR_laws": {
+          "work_units": 414804,
+          "v_nats": 0.1667931303534509
+        },
+        "e2_XOR_macro,e3_XOR_laws": {
+          "work_units": 72883,
+          "v_nats": 1.9057438342028323
+        },
+        "e1_NAND_law,e2_XOR_macro,e3_XOR_laws": {
+          "work_units": 26625,
+          "v_nats": 2.912748625834281
+        }
+      },
+      "shapley": {
+        "e1_NAND_law": 0.5461152051374075,
+        "e2_XOR_macro": 1.9250600843005041,
+        "e3_XOR_laws": 0.4415733363963691
+      },
+      "sum_W": 2.912748625834281,
+      "v_full": 2.912748625834281,
+      "unit": "surrogate units, not time",
+      "normalization_weight": 1,
+      "acquisition_paid_once": true,
+      "failure_censored_at": "B_MAX per task if no solution under gate bound"
+    },
+    "5": {
+      "coalition_values": {
+        "EMPTY": {
+          "work_units": 813023,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law": {
+          "work_units": 466600,
+          "v_nats": 0.5552870398432201
+        },
+        "e2_XOR_macro": {
+          "work_units": 524947,
+          "v_nats": 0.4374620943159133
+        },
+        "e3_XOR_laws": {
+          "work_units": 813023,
+          "v_nats": 0.0
+        },
+        "e1_NAND_law,e2_XOR_macro": {
+          "work_units": 244957,
+          "v_nats": 1.1996767144936236
+        },
+        "e1_NAND_law,e3_XOR_laws": {
+          "work_units": 466600,
+          "v_nats": 0.5552870398432201
+        },
+        "e2_XOR_macro,e3_XOR_laws": {
+          "work_units": 265347,
+          "v_nats": 1.119720996043057
+        },
+        "e1_NAND_law,e2_XOR_macro,e3_XOR_laws": {
+          "work_units": 98777,
+          "v_nats": 2.107894615299614
+        }
+      },
+      "shapley": {
+        "e1_NAND_law": 0.7340704963700807,
+        "e2_XOR_macro": 0.9573750017063457,
+        "e3_XOR_laws": 0.41644911722318734
+      },
+      "sum_W": 2.107894615299614,
+      "v_full": 2.107894615299614,
+      "unit": "surrogate units, not time",
+      "normalization_weight": 5,
+      "acquisition_paid_once": true,
+      "failure_censored_at": "B_MAX per task if no solution under gate bound"
+    }
+  },
+  "wall_seconds": 0.6166456139981165
+}

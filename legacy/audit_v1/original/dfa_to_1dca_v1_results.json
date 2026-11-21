@@ -1,0 +1,522 @@
+{
+  "meta": {
+    "python_version": "3.10.16",
+    "platform": "Linux-4.19.0-gvisor-x86_64-with-glibc2.36",
+    "S_max": 5,
+    "K_max": 5
+  },
+  "T_neg_0plus1plus": {
+    "task": "T_neg_0plus1plus",
+    "S_max": 5,
+    "mn_trace": [
+      {
+        "K": 1,
+        "N_K": 5,
+        "representatives": [
+          "",
+          "0",
+          "01",
+          "01$",
+          "1"
+        ]
+      },
+      {
+        "K": 2,
+        "N_K": 5,
+        "representatives": [
+          "",
+          "0",
+          "01",
+          "01$",
+          "1"
+        ]
+      },
+      {
+        "K": 3,
+        "N_K": 5,
+        "representatives": [
+          "",
+          "0",
+          "01",
+          "01$",
+          "1"
+        ]
+      },
+      {
+        "K": 4,
+        "N_K": 5,
+        "representatives": [
+          "",
+          "0",
+          "01",
+          "01$",
+          "1"
+        ]
+      },
+      {
+        "K": 5,
+        "N_K": 5,
+        "representatives": [
+          "",
+          "0",
+          "01",
+          "01$",
+          "1"
+        ]
+      }
+    ],
+    "escalated_to_1dca": false,
+    "resolved_tier": "Tier-0 (DFA)",
+    "dfa_solution": {
+      "num_states": 5,
+      "start": 0,
+      "accept": [
+        3
+      ],
+      "transitions": {
+        "0,$": 4,
+        "0,0": 1,
+        "0,1": 4,
+        "1,$": 4,
+        "1,0": 1,
+        "1,1": 2,
+        "2,$": 3,
+        "2,0": 4,
+        "2,1": 2,
+        "3,$": 4,
+        "3,0": 4,
+        "3,1": 4,
+        "4,$": 4,
+        "4,0": 4,
+        "4,1": 4
+      }
+    },
+    "ood_check_up_to_500_incl_end_markers": {
+      "passed": 23,
+      "total": 23
+    }
+  },
+  "T1_0n1n": {
+    "task": "T1_0n1n",
+    "S_max": 5,
+    "mn_trace": [
+      {
+        "K": 1,
+        "N_K": 5,
+        "representatives": [
+          "",
+          "0",
+          "01",
+          "01$",
+          "1"
+        ]
+      },
+      {
+        "K": 2,
+        "N_K": 6,
+        "representatives": [
+          "",
+          "0",
+          "00",
+          "01",
+          "01$",
+          "1"
+        ]
+      }
+    ],
+    "escalated_to_1dca": true,
+    "escalation_certificate": {
+      "trigger_K": 2,
+      "observed_classes_N_K": 6,
+      "exceeds_S_max": "6 > 5"
+    },
+    "resolved_tier": "Tier-1 (1-DCA)",
+    "used_slope_law": null,
+    "dca_synthesis": {
+      "found": true,
+      "nodes": 26,
+      "time_s": 0.000799,
+      "table": {
+        "q0,$,0": [
+          "rej",
+          0
+        ],
+        "q0,$,1": [
+          "rej",
+          0
+        ],
+        "q0,0,0": [
+          "q0",
+          1
+        ],
+        "q0,0,1": [
+          "q0",
+          1
+        ],
+        "q0,1,0": [
+          "rej",
+          0
+        ],
+        "q0,1,1": [
+          "q1",
+          -1
+        ],
+        "q1,$,0": [
+          "acc",
+          0
+        ],
+        "q1,$,1": [
+          "rej",
+          0
+        ],
+        "q1,0,0": [
+          "rej",
+          0
+        ],
+        "q1,0,1": [
+          "rej",
+          0
+        ],
+        "q1,1,0": [
+          "rej",
+          0
+        ],
+        "q1,1,1": [
+          "q1",
+          -1
+        ]
+      }
+    },
+    "inferred_invariant": {
+      "found": true,
+      "method": "direct_equation_inference_no_offset_hint",
+      "inv": {
+        "q0_phase": "c = 1*m + 0",
+        "q1_phase": "c = 1*m + (-1)*k + (0)",
+        "a0": 1,
+        "b0": 0,
+        "d0": 0,
+        "a1": 1,
+        "b1": -1,
+        "d1": 0,
+        "inferred_acceptance_relation": "1*m + (-1)*k + (0) = 0"
+      },
+      "obligations_verified": {
+        "q0_s1_z0_rej": true,
+        "q0_end_z0_rej": true,
+        "q0_end_z1_rej": true,
+        "q1_s0_z0_rej": true,
+        "q1_s0_z1_rej": true,
+        "q1_s1_z0_rej": true,
+        "q1_end_z0_acc": true,
+        "q1_end_z1_rej": true
+      }
+    },
+    "ood_check_up_to_500_incl_end_markers": {
+      "passed": 23,
+      "total": 23
+    }
+  },
+  "T2_0n1n_plus_1": {
+    "without_I1": {
+      "task": "T2_0n1n_plus_1_no_I1",
+      "S_max": 5,
+      "mn_trace": [
+        {
+          "K": 1,
+          "N_K": 2,
+          "representatives": [
+            "",
+            "01"
+          ]
+        },
+        {
+          "K": 2,
+          "N_K": 3,
+          "representatives": [
+            "",
+            "0",
+            "01"
+          ]
+        },
+        {
+          "K": 3,
+          "N_K": 4,
+          "representatives": [
+            "",
+            "0",
+            "00",
+            "01"
+          ]
+        },
+        {
+          "K": 4,
+          "N_K": 5,
+          "representatives": [
+            "",
+            "0",
+            "00",
+            "000",
+            "01"
+          ]
+        },
+        {
+          "K": 5,
+          "N_K": 6,
+          "representatives": [
+            "",
+            "0",
+            "00",
+            "000",
+            "0000",
+            "01"
+          ]
+        }
+      ],
+      "escalated_to_1dca": true,
+      "escalation_certificate": {
+        "trigger_K": 5,
+        "observed_classes_N_K": 6,
+        "exceeds_S_max": "6 > 5"
+      },
+      "resolved_tier": "Tier-1 (1-DCA)",
+      "used_slope_law": null,
+      "dca_synthesis": {
+        "found": true,
+        "nodes": 57,
+        "time_s": 0.001545,
+        "table": {
+          "q0,$,0": [
+            "rej",
+            0
+          ],
+          "q0,$,1": [
+            "rej",
+            0
+          ],
+          "q0,0,0": [
+            "q0",
+            1
+          ],
+          "q0,0,1": [
+            "q0",
+            1
+          ],
+          "q0,1,0": [
+            "rej",
+            0
+          ],
+          "q0,1,1": [
+            "q1",
+            0
+          ],
+          "q1,$,0": [
+            "acc",
+            0
+          ],
+          "q1,$,1": [
+            "rej",
+            0
+          ],
+          "q1,0,0": [
+            "rej",
+            0
+          ],
+          "q1,0,1": [
+            "rej",
+            0
+          ],
+          "q1,1,0": [
+            "rej",
+            0
+          ],
+          "q1,1,1": [
+            "q1",
+            -1
+          ]
+        }
+      },
+      "inferred_invariant": {
+        "found": true,
+        "method": "direct_equation_inference_no_offset_hint",
+        "inv": {
+          "q0_phase": "c = 1*m + 0",
+          "q1_phase": "c = 1*m + (-1)*k + (1)",
+          "a0": 1,
+          "b0": 0,
+          "d0": 0,
+          "a1": 1,
+          "b1": -1,
+          "d1": 1,
+          "inferred_acceptance_relation": "1*m + (-1)*k + (1) = 0"
+        },
+        "obligations_verified": {
+          "q0_s1_z0_rej": true,
+          "q0_end_z0_rej": true,
+          "q0_end_z1_rej": true,
+          "q1_s0_z0_rej": true,
+          "q1_s0_z1_rej": true,
+          "q1_s1_z0_rej": true,
+          "q1_end_z0_acc": true,
+          "q1_end_z1_rej": true
+        }
+      },
+      "ood_check_up_to_500_incl_end_markers": {
+        "passed": 23,
+        "total": 23
+      }
+    },
+    "with_I1": {
+      "task": "T2_0n1n_plus_1_with_I1",
+      "S_max": 5,
+      "mn_trace": [
+        {
+          "K": 1,
+          "N_K": 2,
+          "representatives": [
+            "",
+            "01"
+          ]
+        },
+        {
+          "K": 2,
+          "N_K": 3,
+          "representatives": [
+            "",
+            "0",
+            "01"
+          ]
+        },
+        {
+          "K": 3,
+          "N_K": 4,
+          "representatives": [
+            "",
+            "0",
+            "00",
+            "01"
+          ]
+        },
+        {
+          "K": 4,
+          "N_K": 5,
+          "representatives": [
+            "",
+            "0",
+            "00",
+            "000",
+            "01"
+          ]
+        },
+        {
+          "K": 5,
+          "N_K": 6,
+          "representatives": [
+            "",
+            "0",
+            "00",
+            "000",
+            "0000",
+            "01"
+          ]
+        }
+      ],
+      "escalated_to_1dca": true,
+      "escalation_certificate": {
+        "trigger_K": 5,
+        "observed_classes_N_K": 6,
+        "exceeds_S_max": "6 > 5"
+      },
+      "resolved_tier": "Tier-1 (1-DCA)",
+      "used_slope_law": [
+        1,
+        -1
+      ],
+      "dca_synthesis": {
+        "found": true,
+        "nodes": 28,
+        "time_s": 0.000722,
+        "table": {
+          "q0,$,0": [
+            "rej",
+            0
+          ],
+          "q0,$,1": [
+            "rej",
+            0
+          ],
+          "q0,0,0": [
+            "q0",
+            1
+          ],
+          "q0,0,1": [
+            "q0",
+            1
+          ],
+          "q0,1,0": [
+            "rej",
+            0
+          ],
+          "q0,1,1": [
+            "q1",
+            0
+          ],
+          "q1,$,0": [
+            "acc",
+            0
+          ],
+          "q1,$,1": [
+            "rej",
+            0
+          ],
+          "q1,0,0": [
+            "rej",
+            0
+          ],
+          "q1,0,1": [
+            "rej",
+            0
+          ],
+          "q1,1,0": [
+            "rej",
+            0
+          ],
+          "q1,1,1": [
+            "q1",
+            -1
+          ]
+        }
+      },
+      "inferred_invariant": {
+        "found": true,
+        "method": "direct_equation_inference_no_offset_hint",
+        "inv": {
+          "q0_phase": "c = 1*m + 0",
+          "q1_phase": "c = 1*m + (-1)*k + (1)",
+          "a0": 1,
+          "b0": 0,
+          "d0": 0,
+          "a1": 1,
+          "b1": -1,
+          "d1": 1,
+          "inferred_acceptance_relation": "1*m + (-1)*k + (1) = 0"
+        },
+        "obligations_verified": {
+          "q0_s1_z0_rej": true,
+          "q0_end_z0_rej": true,
+          "q0_end_z1_rej": true,
+          "q1_s0_z0_rej": true,
+          "q1_s0_z1_rej": true,
+          "q1_s1_z0_rej": true,
+          "q1_end_z0_acc": true,
+          "q1_end_z1_rej": true
+        }
+      },
+      "ood_check_up_to_500_incl_end_markers": {
+        "passed": 23,
+        "total": 23
+      }
+    },
+    "transfer_node_speedup": 2.0357
+  }
+}

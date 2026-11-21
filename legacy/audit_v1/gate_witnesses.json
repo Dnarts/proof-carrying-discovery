@@ -1,0 +1,428 @@
+{
+  "T2_parity3": {
+    "EMPTY": {
+      "found": false,
+      "evaluated_nodes": 27174,
+      "output_gates": null,
+      "independent_truth_table": "not_applicable"
+    },
+    "e1_NAND_law": {
+      "found": false,
+      "evaluated_nodes": 3401,
+      "output_gates": null,
+      "independent_truth_table": "not_applicable"
+    },
+    "e2_XOR_macro": {
+      "found": true,
+      "evaluated_nodes": 300,
+      "output_gates": [
+        [
+          "XOR",
+          0,
+          1
+        ],
+        [
+          "XOR",
+          2,
+          3
+        ]
+      ],
+      "independent_truth_table": "PASS"
+    },
+    "e1_NAND_law,e2_XOR_macro": {
+      "found": true,
+      "evaluated_nodes": 183,
+      "output_gates": [
+        [
+          "XOR",
+          0,
+          1
+        ],
+        [
+          "XOR",
+          2,
+          3
+        ]
+      ],
+      "independent_truth_table": "PASS"
+    },
+    "e3_XOR_laws": {
+      "found": false,
+      "evaluated_nodes": 27174,
+      "output_gates": null,
+      "independent_truth_table": "not_applicable"
+    },
+    "e1_NAND_law,e3_XOR_laws": {
+      "found": false,
+      "evaluated_nodes": 3401,
+      "output_gates": null,
+      "independent_truth_table": "not_applicable"
+    },
+    "e2_XOR_macro,e3_XOR_laws": {
+      "found": true,
+      "evaluated_nodes": 195,
+      "output_gates": [
+        [
+          "XOR",
+          0,
+          1
+        ],
+        [
+          "XOR",
+          2,
+          3
+        ]
+      ],
+      "independent_truth_table": "PASS"
+    },
+    "e1_NAND_law,e2_XOR_macro,e3_XOR_laws": {
+      "found": true,
+      "evaluated_nodes": 105,
+      "output_gates": [
+        [
+          "XOR",
+          0,
+          1
+        ],
+        [
+          "XOR",
+          2,
+          3
+        ]
+      ],
+      "independent_truth_table": "PASS"
+    }
+  },
+  "T3_parity4": {
+    "EMPTY": {
+      "found": false,
+      "evaluated_nodes": 5400,
+      "output_gates": null,
+      "independent_truth_table": "not_applicable"
+    },
+    "e1_NAND_law": {
+      "found": false,
+      "evaluated_nodes": 1120,
+      "output_gates": null,
+      "independent_truth_table": "not_applicable"
+    },
+    "e2_XOR_macro": {
+      "found": true,
+      "evaluated_nodes": 31479,
+      "output_gates": [
+        [
+          "XOR",
+          0,
+          1
+        ],
+        [
+          "XOR",
+          2,
+          3
+        ],
+        [
+          "XOR",
+          4,
+          5
+        ]
+      ],
+      "independent_truth_table": "PASS"
+    },
+    "e1_NAND_law,e2_XOR_macro": {
+      "found": true,
+      "evaluated_nodes": 13905,
+      "output_gates": [
+        [
+          "XOR",
+          0,
+          1
+        ],
+        [
+          "XOR",
+          2,
+          3
+        ],
+        [
+          "XOR",
+          4,
+          5
+        ]
+      ],
+      "independent_truth_table": "PASS"
+    },
+    "e3_XOR_laws": {
+      "found": false,
+      "evaluated_nodes": 5400,
+      "output_gates": null,
+      "independent_truth_table": "not_applicable"
+    },
+    "e1_NAND_law,e3_XOR_laws": {
+      "found": false,
+      "evaluated_nodes": 1120,
+      "output_gates": null,
+      "independent_truth_table": "not_applicable"
+    },
+    "e2_XOR_macro,e3_XOR_laws": {
+      "found": true,
+      "evaluated_nodes": 13842,
+      "output_gates": [
+        [
+          "XOR",
+          0,
+          1
+        ],
+        [
+          "XOR",
+          2,
+          3
+        ],
+        [
+          "XOR",
+          4,
+          5
+        ]
+      ],
+      "independent_truth_table": "PASS"
+    },
+    "e1_NAND_law,e2_XOR_macro,e3_XOR_laws": {
+      "found": true,
+      "evaluated_nodes": 4645,
+      "output_gates": [
+        [
+          "XOR",
+          0,
+          1
+        ],
+        [
+          "XOR",
+          2,
+          3
+        ],
+        [
+          "XOR",
+          4,
+          5
+        ]
+      ],
+      "independent_truth_table": "PASS"
+    }
+  },
+  "T_neg_and3": {
+    "EMPTY": {
+      "found": true,
+      "evaluated_nodes": 9359,
+      "output_gates": [
+        [
+          "NAND",
+          0,
+          1
+        ],
+        [
+          "NAND",
+          2,
+          3
+        ],
+        [
+          "NAND",
+          2,
+          4
+        ],
+        [
+          "NAND",
+          5,
+          5
+        ]
+      ],
+      "independent_truth_table": "PASS"
+    },
+    "e1_NAND_law": {
+      "found": true,
+      "evaluated_nodes": 1819,
+      "output_gates": [
+        [
+          "NAND",
+          0,
+          1
+        ],
+        [
+          "NAND",
+          2,
+          3
+        ],
+        [
+          "NAND",
+          2,
+          4
+        ],
+        [
+          "NAND",
+          5,
+          5
+        ]
+      ],
+      "independent_truth_table": "PASS"
+    },
+    "e2_XOR_macro": {
+      "found": true,
+      "evaluated_nodes": 22601,
+      "output_gates": [
+        [
+          "NAND",
+          0,
+          0
+        ],
+        [
+          "NAND",
+          1,
+          2
+        ],
+        [
+          "NAND",
+          0,
+          4
+        ],
+        [
+          "XOR",
+          3,
+          5
+        ]
+      ],
+      "independent_truth_table": "PASS"
+    },
+    "e1_NAND_law,e2_XOR_macro": {
+      "found": true,
+      "evaluated_nodes": 11614,
+      "output_gates": [
+        [
+          "NAND",
+          0,
+          0
+        ],
+        [
+          "NAND",
+          1,
+          2
+        ],
+        [
+          "NAND",
+          0,
+          4
+        ],
+        [
+          "XOR",
+          3,
+          5
+        ]
+      ],
+      "independent_truth_table": "PASS"
+    },
+    "e3_XOR_laws": {
+      "found": true,
+      "evaluated_nodes": 9359,
+      "output_gates": [
+        [
+          "NAND",
+          0,
+          1
+        ],
+        [
+          "NAND",
+          2,
+          3
+        ],
+        [
+          "NAND",
+          2,
+          4
+        ],
+        [
+          "NAND",
+          5,
+          5
+        ]
+      ],
+      "independent_truth_table": "PASS"
+    },
+    "e1_NAND_law,e3_XOR_laws": {
+      "found": true,
+      "evaluated_nodes": 1819,
+      "output_gates": [
+        [
+          "NAND",
+          0,
+          1
+        ],
+        [
+          "NAND",
+          2,
+          3
+        ],
+        [
+          "NAND",
+          2,
+          4
+        ],
+        [
+          "NAND",
+          5,
+          5
+        ]
+      ],
+      "independent_truth_table": "PASS"
+    },
+    "e2_XOR_macro,e3_XOR_laws": {
+      "found": true,
+      "evaluated_nodes": 9139,
+      "output_gates": [
+        [
+          "NAND",
+          0,
+          0
+        ],
+        [
+          "NAND",
+          1,
+          2
+        ],
+        [
+          "NAND",
+          0,
+          4
+        ],
+        [
+          "XOR",
+          3,
+          5
+        ]
+      ],
+      "independent_truth_table": "PASS"
+    },
+    "e1_NAND_law,e2_XOR_macro,e3_XOR_laws": {
+      "found": true,
+      "evaluated_nodes": 3408,
+      "output_gates": [
+        [
+          "NAND",
+          0,
+          0
+        ],
+        [
+          "NAND",
+          1,
+          2
+        ],
+        [
+          "NAND",
+          0,
+          4
+        ],
+        [
+          "XOR",
+          3,
+          5
+        ]
+      ],
+      "independent_truth_table": "PASS"
+    }
+  }
+}

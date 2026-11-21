@@ -1,0 +1,108 @@
+{
+  "publication_version": "1.1.1",
+  "predecessor_archive_sha256": "84b821fad73954d642fc91b1eb690ec93d88b8fc9f9b8dd02835d2812735877e",
+  "phase_checker_before_sha256": "8d3e79e78c5d492df4965a69aa1ec1567ef1f349e53230fa5b49c521c920fe29",
+  "phase_checker_after_sha256": "5bd9619969a0b292bc8f53be219cf4052af7236659cfb6ab335257a00e63d4a8",
+  "issue": "A stale invariant could certify a transition table after its active-state destinations changed.",
+  "before_fix_counterexamples": [
+    {
+      "mutated_transition": [
+        "q0",
+        "0",
+        0
+      ],
+      "old": [
+        "q0",
+        1
+      ],
+      "new": [
+        "rej",
+        1
+      ],
+      "certificate_status": "PROVED_RELATIVE_TO_KNOWN_OFFSET_FAMILY",
+      "new_inference_status": false,
+      "witness_word": "01$",
+      "bad_run_accepts": false
+    },
+    {
+      "mutated_transition": [
+        "q0",
+        "0",
+        1
+      ],
+      "old": [
+        "q0",
+        1
+      ],
+      "new": [
+        "rej",
+        1
+      ],
+      "certificate_status": "PROVED_RELATIVE_TO_KNOWN_OFFSET_FAMILY",
+      "new_inference_status": false,
+      "witness_word": "0011$",
+      "bad_run_accepts": false
+    },
+    {
+      "mutated_transition": [
+        "q0",
+        "1",
+        1
+      ],
+      "old": [
+        "q1",
+        -1
+      ],
+      "new": [
+        "rej",
+        -1
+      ],
+      "certificate_status": "PROVED_RELATIVE_TO_KNOWN_OFFSET_FAMILY",
+      "new_inference_status": false,
+      "witness_word": "01$",
+      "bad_run_accepts": false
+    },
+    {
+      "mutated_transition": [
+        "q1",
+        "1",
+        1
+      ],
+      "old": [
+        "q1",
+        -1
+      ],
+      "new": [
+        "rej",
+        -1
+      ],
+      "certificate_status": "PROVED_RELATIVE_TO_KNOWN_OFFSET_FAMILY",
+      "new_inference_status": false,
+      "witness_word": "0011$",
+      "bad_run_accepts": false
+    }
+  ],
+  "regression_coverage": {
+    "phase_destination_mutations": 8,
+    "unequal_zero_increment_mutations": 2,
+    "status": "PASS"
+  },
+  "result_comparison": {
+    "publication_version": "1.1.1",
+    "python_version": "3.12.14",
+    "experiments": {
+      "v1_1/dfa_to_1dca_v1_1.py": {
+        "deterministic_values_unchanged": "PASS",
+        "previous_result_sha256": "f9d8e269816b8a7770dc42a2e9a11bc15ddbc3f3704ac3f3f4a884b14b684067",
+        "new_result_sha256": "0dbb57ad3c1f9810ee23db555b7bec806655c94ce1170110624b713d57a53456"
+      },
+      "v1_1/abc_historical_v1_1.py": {
+        "deterministic_values_unchanged": "PASS",
+        "previous_result_sha256": "98ef18fb5af699ec1addc8681de5e1b9f463f497c286919284e4f0873f2dd0ef",
+        "new_result_sha256": "d381cc5aac6479f401ba183e0ffb745312535763ed159249f4675352de748089"
+      }
+    },
+    "generator_matches_published_source": "PASS"
+  },
+  "scope": "Local Python checks of the declared phase template. This receipt is not an external attestation or a proof-assistant certificate."
+}
