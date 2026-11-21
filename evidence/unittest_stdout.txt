@@ -9,6 +9,6 @@ test_semantic_invariant_certificate_and_mutation (test_release.IndependentReleas
 test_wrong_law_fallback_is_certified (test_release.IndependentReleaseTests.test_wrong_law_fallback_is_certified) ... ok
 
 ----------------------------------------------------------------------
-Ran 9 tests in 0.043s
+Ran 9 tests in 0.739s
 
 OK

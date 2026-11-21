@@ -20,8 +20,8 @@
       "sha256": "396e2e61a3b006b57a8d7fc82a016e4aaafcb1fc55ee4a111e9eb067972de606"
     },
     "FIXES.md": {
-      "bytes": 6906,
-      "sha256": "34883ba91f159c898e0ac3ea2cdeed98d664181a36a5a39446be0e072f256404"
+      "bytes": 7547,
+      "sha256": "91714ab9c7299cd97128bdb41ba8b2a0188a2ebaa144baa75979582d3f920916"
     },
     "LICENSE": {
       "bytes": 1061,
@@ -56,8 +56,12 @@
       "sha256": "4a156decd0dfcbcb078a578f1c3892e4f2eaffc0171d63a899ce1bd773f09094"
     },
     "evidence/README.md": {
-      "bytes": 782,
-      "sha256": "7316787ae891e3587f02f501d53ded4522800708740ef6fa81c04f893949de42"
+      "bytes": 963,
+      "sha256": "348b36c83e4dc8722e3c48049cdfe6226e65a35c8eea10ae19221108643ed082"
+    },
+    "evidence/numerical_portability.json": {
+      "bytes": 2021,
+      "sha256": "9eda37f697761b8ca12e79039faa480b126de5eb7b588ef5d19c5f9f0abbb288"
     },
     "evidence/publication_patch.json": {
       "bytes": 2948,
@@ -65,11 +69,11 @@
     },
     "evidence/unittest_stdout.txt": {
       "bytes": 1336,
-      "sha256": "9b72ca0a39665fb234361e9e3e9128f524fa9232d3bd51802cc51a483837cefe"
+      "sha256": "28a2eba684a656ed7b47eb3096566c2e2f3df1e88ca578fcc8cfa9b0a3ca69d3"
     },
     "evidence/verification_receipt.json": {
       "bytes": 782,
-      "sha256": "b09b6afbb43ac4ba3d13687e55008998c9933ee3325c13beda4e4588c4e5fc59"
+      "sha256": "e9abd371d5a0117f8e177790b9d026a4d920dec8c14edf4398790f667fdeb693"
     },
     "history/README.md": {
       "bytes": 587,
@@ -164,12 +168,12 @@
       "sha256": "6ff94729ab18db6a1be91c0538433bcb8eb29e0e381f29e4e9f281331b77fbb9"
     },
     "tests/test_release.py": {
-      "bytes": 10553,
-      "sha256": "84e752313ebee05edd454b499ba573db1e948c8c883084aaa8a8baad811675a6"
+      "bytes": 11228,
+      "sha256": "734808e08ae258dbeeba6c888bb033196a9473b059cc561171d98dbe42a47ecb"
     },
     "v1_1/abc_historical_v1_1.py": {
-      "bytes": 11925,
-      "sha256": "5c8a33a11466326d6eeca28136a78704cfa0f4f4719090376e8c457ffc300b01"
+      "bytes": 11937,
+      "sha256": "2c0d37b4a234d6831094b8f1f17ed4b7862bb20180568c60b09219e81f216d13"
     },
     "v1_1/abc_historical_v1_1_results.json": {
       "bytes": 39790,

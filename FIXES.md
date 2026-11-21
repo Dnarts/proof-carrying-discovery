@@ -7,6 +7,7 @@
 - The wrong-transfer control reports **205 + 57 = 262** attempted branches, including the failed restricted attempt.
 - Added a complete English preprint and an accessible English-first, Russian-second README. Both papers describe the same results and limits.
 - The exact v1.1.0 source archive is retained in `history/`; v1.0 sources remain unchanged in `legacy/`. The MIT license already present in the publication repository is preserved.
+- The publication CI exposed a Python-version difference in floating-point `sum`: five `sum_W` values differed by at most `8.89e-16` on the older summation behavior, although programs, costs, individual Shapley values, and history hashes matched. The two aggregations now use `math.fsum`. A regression replay emulates sequential summation and still requires exact equality of the complete deterministic report; no comparison tolerance was added. The saved numerical results are unchanged. See [Python's 3.12 summation change](https://docs.python.org/3.12/whatsnew/3.12.html#other-language-changes) and `evidence/numerical_portability.json`.
 
 ## Earlier audit: v1.0 → v1.1
 

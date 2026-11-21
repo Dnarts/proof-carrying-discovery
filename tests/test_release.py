@@ -7,6 +7,8 @@ import math
 import pathlib
 import sys
 import unittest
+from audit_release import stable
+from unittest.mock import patch
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT/'v1_1'))
@@ -183,6 +185,18 @@ class IndependentReleaseTests(unittest.TestCase):
         self.assertEqual(a['replays']['e1_NAND_law,e2_XOR_macro']['acquisition']['candidate_evals'],341)
         for lam,metric in a['sensitivity_suite'].items():
             self.assertAlmostEqual(sum(metric['shapley'].values()),metric['v_full'],places=10)
+        # Pre-3.12 sequential sum must not change the complete deterministic
+        # receipt. Re-execute all coalitions, including integer counts and
+        # history hashes, with that implementation selected in the module.
+        import abc_historical_v1_1 as history_module
+        def sequential_sum(values,start=0):
+            total=start
+            for value in values:
+                total+=value
+            return total
+        with patch.object(history_module,'sum',sequential_sum,create=True):
+            replayed=history_module.run_all()
+        self.assertEqual(stable(replayed),stable(a))
 
     def test_no_global_equivalence_claim_for_unknown_offset_teacher(self):
         oracle=oracle_0n1n_offset(0)

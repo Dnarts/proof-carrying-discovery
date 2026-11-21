@@ -224,10 +224,10 @@ def exact_shapley(replays, selected_tasks, lambda_nf=0):
                 before=tuple(sorted(subset)); after=tuple(sorted(subset+(player,)))
                 contrib += weight*(v[after]-v[before])
         w[player]=contrib
-    assert abs(sum(w.values())-v[tuple(sorted(players))]) < 1e-10
+    assert abs(math.fsum(w.values())-v[tuple(sorted(players))]) < 1e-10
     return {"coalition_values":{"EMPTY" if not c else ",".join(c):{
                  "work_units": costs[c],"v_nats":v[c]} for c in replays},
-            "shapley":w,"sum_W":sum(w.values()),
+            "shapley":w,"sum_W":math.fsum(w.values()),
             "v_full":v[tuple(sorted(players))], "unit":"surrogate units, not time",
             "normalization_weight":lambda_nf,
             "acquisition_paid_once":True,

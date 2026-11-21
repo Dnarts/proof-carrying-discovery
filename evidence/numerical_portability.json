@@ -1,0 +1,54 @@
+{
+  "diagnosis_before_fix": {
+    "cause": "Only module-local sum changed to sequential float addition, emulating pre-3.12 behavior",
+    "emulation_runtime": "3.12.14",
+    "diffs": [
+      {
+        "path": "shapley_replayed_histories.T2_parity3.sum_W",
+        "shipped_3_12": 5.248341954112771,
+        "sequential_sum_emulation": 5.248341954112772,
+        "absolute_difference": 8.881784197001252e-16
+      },
+      {
+        "path": "shapley_replayed_histories.T3_parity4.sum_W",
+        "shipped_3_12": 2.5915382981961095,
+        "sequential_sum_emulation": 2.591538298196109,
+        "absolute_difference": 4.440892098500626e-16
+      },
+      {
+        "path": "shapley_replayed_histories.SUITE_ACQUISITION_ONCE.sum_W",
+        "shipped_3_12": 2.912748625834281,
+        "sequential_sum_emulation": 2.9127486258342805,
+        "absolute_difference": 4.440892098500626e-16
+      },
+      {
+        "path": "sensitivity_suite.0.sum_W",
+        "shipped_3_12": 3.864352861292435,
+        "sequential_sum_emulation": 3.8643528612924345,
+        "absolute_difference": 4.440892098500626e-16
+      },
+      {
+        "path": "sensitivity_suite.1.sum_W",
+        "shipped_3_12": 2.912748625834281,
+        "sequential_sum_emulation": 2.9127486258342805,
+        "absolute_difference": 4.440892098500626e-16
+      }
+    ],
+    "count": 5
+  },
+  "verification_after_fix": {
+    "fix": "math.fsum for both sum_W aggregation and efficiency check",
+    "changed_files": [
+      "v1_1/abc_historical_v1_1.py",
+      "tests/test_release.py"
+    ],
+    "strict_deterministic_equality": "PRESERVED",
+    "fresh_ABC_matches_published_receipt": "PASS",
+    "all_9_aggregation_results_match_saved_values": "PASS",
+    "full_replay_with_sequential_sum_emulation": "PASS",
+    "test_methods": "9/9 PASS",
+    "runtime": "3.12.14"
+  },
+  "first_ci_run": "https://github.com/Dnarts/proof-carrying-discovery/actions/runs/44961591964",
+  "comparison_policy": "Exact deterministic equality retained; no numeric tolerance introduced."
+}
