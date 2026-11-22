@@ -1,0 +1,24 @@
+cff-version: 1.2.0
+message: 'Cite this working manuscript, its scoped claims, and the specific repository commit used.'
+title: 'Hypothesis Languages and Evidence-Scoped Identification: Agreement Queries and Finite Cellular-Automaton Witnesses'
+authors:
+  - family-names: Strand
+    given-names: Aleksandr
+type: article
+date-released: 2026-11-23
+version: 0.2-editorial
+repository-code: 'https://github.com/Dnarts/proof-carrying-discovery'
+url: 'https://github.com/Dnarts/proof-carrying-discovery/tree/main/papers/hypothesis-language'
+abstract: >-
+  A working preprint on language-relative semantic identification,
+  agreement queries, finite-dimensional Boolean-algebra criteria,
+  and finite augmented-cellular-automaton evidence checks.
+  The included Lean source proves finite coding and certificate-predicate
+  statements, not the complete 64-cell dynamical construction.
+keywords:
+  - hypothesis languages
+  - semantic identification
+  - version spaces
+  - active queries
+  - runtime certificates
+  - Rule 110
