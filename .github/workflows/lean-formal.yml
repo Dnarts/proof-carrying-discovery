@@ -10,6 +10,7 @@ on:
     paths:
       - "formal/**"
       - ".github/workflows/lean-formal.yml"
+      - "papers/hypothesis-language/formal/**"
   workflow_dispatch:
 
 jobs:
