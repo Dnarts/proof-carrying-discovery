@@ -2,8 +2,7 @@
 
 **Agreement queries, bounded algebraic criteria, and a finite cellular-automaton case study**
 
-**Aleksandr Strand** · Working preprint, editorially revised 23 November 2026  
-**Status:** research preprint; mathematical statements, reported computational observations, and open questions are distinguished below. This is a companion to the cumulative-discovery preprint v1.1, not its replacement.
+**Aleksandr Strand · 23 November 2026**
 
 ## Abstract
 
@@ -113,7 +112,7 @@ The sequence of constructions addresses separate defects:
 | Gate 5 v3.1 | Direct version-register and codeword consistency check | A latched certificate can become stale after memory modification |
 | Gate 5 v3.2 | Re-evaluation of a stored evidence tuple before use | Two-bit correlated faults and unknown origin remain outside the guarantee |
 
-The manuscript reports that checksum and data arrive by states $t=13$ and $t=19$, respectively, and that the historical output is committed at $t=28$. These are **reported finite implementation facts**, not statements formally established by the attached Lean module. The full v3.2 Python implementation and its complete run bundle were not included with the present source upload; independent end-to-end replication of v3.2 remains outstanding.
+In the reported finite fixture, checksum and data reach the observer at states $t=13$ and $t=19$, and the output is published at $t=28$. These are simulation-level statements, not theorems of the attached Lean module. Full end-to-end verification of the 64-site transition system is not established here.
 
 ## 5. Local error-detecting code and live evidence predicate
 
@@ -169,15 +168,7 @@ The mathematical ingredients draw on established areas: machine identification a
 
 The defensible contribution of this research line is: (a) an explicit joint contract for language-scoped semantic uniqueness, model consistency, syndrome evidence and origin uncertainty; (b) an exact finite-dimensional algebraic explanation of where identification fails under language growth; (c) a constructive finite augmented-CA development in which failures of overly strong certificate claims lead to successively narrower operational claims; and (d) a small, inspectable Lean proof artifact verifying selected finite subclaims.
 
-Any assertion of broader novelty requires a prior-art comparison, an independent replication of the complete augmented-CA model and, ideally, a formally checked connection between the live predicate and every reachable relevant transition. Those are **open tasks**, not outcomes of this note.
-
-## 8. Open questions
-
-* Can an augmented CA internally synthesize a new hypothesis representation after a falsifying agreement query, rather than choosing only from a preconfigured four-case table?
-* Can the entire 64-cell evolution, query timing, certification and intervention semantics be formalized in Lean against the actual Python implementation?
-* Under a fixed observation deadline and allowed interventions, what is the minimum retained information needed for a justified answer? The five-state memory argument in the historical manuscript is conditional on five jointly distinguishable outcomes under an identical externally available context; the demonstrated two-at-a-time coalescence **does not establish** that lower bound for the entire presented device.
-* How do false acceptance rates and total resource costs compare under new, frozen task families and explicit fault distributions?
-* Which aspects transfer to another computationally universal, unbounded automaton without reusing the same hard-coded observation table?
+The resulting case study is limited to an explicitly specified hypothesis family and a finite augmented-automaton fixture. Its Lean artifact formalizes selected finite Boolean and coding properties, not a general theorem about adaptive scientific discovery.
 
 ## References
 
@@ -189,7 +180,3 @@ Any assertion of broader novelty requires a prior-art comparison, an independent
 6. M. Leucker and C. Schallhart, *A Brief Account of Runtime Verification*, *J. Logic and Algebraic Programming* 78 (2009), 293–303. https://doi.org/10.1016/j.jlap.2008.08.004
 7. Dnarts, *Rule 110 dependency fronts* (domain-specific companion): https://github.com/Dnarts/rule110-dependency-fronts
 8. Dnarts, *Proof-Carrying Discovery*, v1.1 (cumulative search and bounded representation escalation): https://github.com/Dnarts/proof-carrying-discovery
-
-### Provenance note
-
-This editorially scoped version is based on the user-supplied seven-page Russian PDF of 22 November 2026. The source PDF SHA-256 is **aa3b995113bfec3313a30f9824f8da27a1d670558ec8a7dc06d92adf70f235fb**. The attached formal artifact is reproduced verbatim with SHA-256 **2baaffcb0b30bea445917b3dfbf7c75823cff4213d0ab53b955eb0fbe6b49d78**. The original PDF is retained as a historical source by the author and has not been silently overwritten by this Markdown edition.
