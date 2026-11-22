@@ -8,7 +8,7 @@
 
 The earlier [Cumulative Search preprint v1.1](../../PREPRINT_v1.1.en.md) studies fixed-engine search, acquisition of program macros, inferred invariants, and bounded representation escalation. This companion asks a different question: **what does it take to justify calling a hypothesis uniquely identified, when the language, observation channel and evidence state can change?**
 
-The paper is structured around (1) language-scoped semantic version spaces, (2) an exact two-sided window in finite-dimensional \(\mathbb F_2\)-linear languages, (3) distinguishing versus model-falsifying agreement queries, and (4) a finite augmented Rule 110 observer as a constructive case study.
+The paper is structured around (1) language-scoped semantic version spaces, (2) an exact two-sided window in finite-dimensional $\mathbb F_2$-linear languages, (3) distinguishing versus model-falsifying agreement queries, and (4) a finite augmented Rule 110 observer as a constructive case study.
 
 This is **not** a theorem that the binary Rule 110 automaton learns a new language or that it can fully certify its own origin. It does **not** replace the three Rule 110 papers or claim novelty for Hamming codes, OGIS or runtime verification.
 

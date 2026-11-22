@@ -11,11 +11,11 @@ An observation can identify a unique semantic hypothesis relative to a selected 
 
 ## 1. Claims, semantic identity, and evidence
 
-A proposed invariant is recorded as \(I=\langle\Phi,D,\mathcal T,E\rangle\): a precise claim \(\Phi\), assumptions and scope \(D\), a class of transformations \(\mathcal T\), and evidence status \(E\). The status must cite an actual proof, certificate, executable trace or explicit counterexample; it is not a property conferred merely by assigning a label. A code location or document page is an address to the evidence, not the identity of the mathematical claim.
+A proposed invariant is recorded as $I=\langle\Phi,D,\mathcal T,E\rangle$: a precise claim $\Phi$, assumptions and scope $D$, a class of transformations $\mathcal T$, and evidence status $E$. The status must cite an actual proof, certificate, executable trace or explicit counterexample; it is not a property conferred merely by assigning a label. A code location or document page is an address to the evidence, not the identity of the mathematical claim.
 
-Let \(Q\) be a set of possible queries, \(A\) the answer set, and \(L_i\) nested symbolic hypothesis languages with embeddings \(L_i\hookrightarrow L_j\) for \(i\le j\). Assume the semantic map \(\llbracket\cdot\rrbracket_i:L_i\to A^Q\) respects the embeddings. It need not be injective: different programs can express the same total behavior.
+Let $Q$ be a set of possible queries, $A$ the answer set, and $L_i$ nested symbolic hypothesis languages with embeddings $L_i\hookrightarrow L_j$ for $i\le j$. Assume the semantic map $\llbracket\cdot\rrbracket_i:L_i\to A^Q$ respects the embeddings. It need not be injective: different programs can express the same total behavior.
 
-For a finite observation set \(D\subseteq Q\times A\), define the **semantic** version space
+For a finite observation set $D\subseteq Q\times A$, define the **semantic** version space
 
 $$
 \widetilde V(L_i,D)=
@@ -23,15 +23,15 @@ $$
 h\in L_i,\ \forall(q,a)\in D,\ \llbracket h\rrbracket_i(q)=a\right\}.
 $$
 
-Identification means **exactly one semantic function**, not exactly one program syntax. In particular, any certificate must specify \(L_i\), the query domain \(Q\), semantic equality, observations, and the trusted observation assumptions.
+Identification means **exactly one semantic function**, not exactly one program syntax. In particular, any certificate must specify $L_i$, the query domain $Q$, semantic equality, observations, and the trusted observation assumptions.
 
-For \(D\subseteq D'\) with a fixed language and coherent interpretation,
+For $D\subseteq D'$ with a fixed language and coherent interpretation,
 
 $$
 \widetilde V(L_i,D')\subseteq\widetilde V(L_i,D).
 $$
 
-For a semantics-preserving inclusion \(L_i\hookrightarrow L_j\), with fixed observations,
+For a semantics-preserving inclusion $L_i\hookrightarrow L_j$, with fixed observations,
 
 $$
 \widetilde V(L_i,D)\subseteq\widetilde V(L_j,D).
@@ -45,26 +45,26 @@ The quantifier distinction is essential: establishing an identifying finite data
 
 Here we present the algebraic claim in the precise domain where it holds.
 
-Identify Boolean functions \(Q=\mathbb F_2^n\to\mathbb F_2\) with the multilinear quotient algebra
+Identify Boolean functions $Q=\mathbb F_2^n\to\mathbb F_2$ with the multilinear quotient algebra
 
 $$
 R=\mathbb F_2[x_1,\ldots,x_n]/(x_1^2-x_1,\ldots,x_n^2-x_n).
 $$
 
-Let \(U_0\subseteq U_1\subseteq\cdots\subseteq U_k\subseteq R\) be a filtration of finite-dimensional \(\mathbb F_2\)-linear subspaces, \(Z\subseteq Q\) the support of observed queries, and \(y\in\mathbb F_2^Z\) their **consistent** answers. Write
+Let $U_0\subseteq U_1\subseteq\cdots\subseteq U_k\subseteq R$ be a filtration of finite-dimensional $\mathbb F_2$-linear subspaces, $Z\subseteq Q$ the support of observed queries, and $y\in\mathbb F_2^Z$ their **consistent** answers. Write
 
 $$
 \rho_Z:U_i\to\mathbb F_2^Z,\qquad
 K_i=\ker(\rho_Z|_{U_i})=U_i\cap I(Z),
 $$
 
-where \(I(Z)=\{f:f|_Z=0\}\). If \(\rho_Z(f)=y\) has no solution in \(U_i\), the version space is empty. Otherwise it is an affine coset \(f+K_i\) with
+where $I(Z)=\{f:f|_Z=0\}$. If $\rho_Z(f)=y$ has no solution in $U_i$, the version space is empty. Otherwise it is an affine coset $f+K_i$ with
 
 $$
 |\widetilde V(U_i,D)|=2^{\dim U_i-\operatorname{rank}(\rho_Z|_{U_i})}.
 $$
 
-Define \(i_*(D)\) as the first index at which a solution exists and \(k_{\mathrm{break}}(Z)\) as the first index at which \(K_i\ne\{0\}\), taking either index to be \(+\infty\) when no such index exists. Under the stated nesting and consistency assumptions,
+Define $i_*(D)$ as the first index at which a solution exists and $k_{\mathrm{break}}(Z)$ as the first index at which $K_i\ne\{0\}$, taking either index to be $+\infty$ when no such index exists. Under the stated nesting and consistency assumptions,
 
 $$
 |\widetilde V(U_i,D)|=1
@@ -74,13 +74,13 @@ $$
 
 The window can be empty. The condition is not a theorem for arbitrary nonlinear grammars, nonnested classes, noisy observations, or language changes that alter the meaning of existing programs.
 
-For an \(i\) with a nonempty affine version space and \(q\notin Z\), the evaluation map on \(K_i\) is a linear functional. If it is nonzero at \(q\), exactly half of the remaining semantic functions predict 0 and half predict 1. Equivalently, outside the common zero set \(B(K_i)\), a binary oracle query bisects that finite affine version space. This **exact halving property is special to the linear case**.
+For an $i$ with a nonempty affine version space and $q\notin Z$, the evaluation map on $K_i$ is a linear functional. If it is nonzero at $q$, exactly half of the remaining semantic functions predict 0 and half predict 1. Equivalently, outside the common zero set $B(K_i)$, a binary oracle query bisects that finite affine version space. This **exact halving property is special to the linear case**.
 
-A small language illustration: on \(Q=\mathbb F_2^2\), the observations \(f(0,0)=0\) and \(f(1,0)=1\) identify \(f(x_1,x_2)=x_1\) among functions dependent only on \(x_1\). Allowing all Boolean functions leaves four semantic functions agreeing on the same data. The original bounded certificate was correct; its extrapolation to the enlarged language was not.
+A small language illustration: on $Q=\mathbb F_2^2$, the observations $f(0,0)=0$ and $f(1,0)=1$ identify $f(x_1,x_2)=x_1$ among functions dependent only on $x_1$. Allowing all Boolean functions leaves four semantic functions agreeing on the same data. The original bounded certificate was correct; its extrapolation to the enlarged language was not.
 
 ## 3. Agreement queries: discrimination versus potential falsification
 
-For a **nonempty** semantic version space \(V\subseteq A^Q\), define
+For a **nonempty** semantic version space $V\subseteq A^Q$, define
 
 $$
 \operatorname{Agree}(V)=
@@ -89,12 +89,12 @@ $$
 
 Two different experimental purposes follow.
 
-* If \(q\notin\operatorname{Agree}(V)\), surviving models disagree at \(q\). An admissible answer can remove at least one existing semantic prediction class. An answer not predicted by any survivor would instead refute them all.
-* If \(q\in\operatorname{Agree}(V)\), survivors have one common predicted answer. A **different** observed answer empties the version space and falsifies the present language-and-observation model. A **matching** answer shows compatibility for that query, **not** global truth, origin membership or unique identity.
+* If $q\notin\operatorname{Agree}(V)$, surviving models disagree at $q$. An admissible answer can remove at least one existing semantic prediction class. An answer not predicted by any survivor would instead refute them all.
+* If $q\in\operatorname{Agree}(V)$, survivors have one common predicted answer. A **different** observed answer empties the version space and falsifies the present language-and-observation model. A **matching** answer shows compatibility for that query, **not** global truth, origin membership or unique identity.
 
-When \(V=\varnothing\), the universal formula above is vacuous: the system must mark the model already inconsistent, not infer a meaningful agreement test.
+When $V=\varnothing$, the universal formula above is vacuous: the system must mark the model already inconsistent, not infer a meaningful agreement test.
 
-For the linear setting, \(\operatorname{Agree}(f+K_i)=B(K_i)\). For a general nonlinear grammar, equal-split conclusions do not follow from nonagreement. Operationally, the distinction between *finding which candidate* and *testing whether the candidate family applies* is a useful research-controller contract, even though counterexample-guided learning and falsification are established prior practices.
+For the linear setting, $\operatorname{Agree}(f+K_i)=B(K_i)$. For a general nonlinear grammar, equal-split conclusions do not follow from nonagreement. Operationally, the distinction between *finding which candidate* and *testing whether the candidate family applies* is a useful research-controller contract, even though counterexample-guided learning and falsification are established prior practices.
 
 ## 4. Finite cellular-automaton witness, not pure binary Rule 110
 
@@ -113,7 +113,7 @@ The sequence of constructions addresses separate defects:
 | Gate 5 v3.1 | Direct version-register and codeword consistency check | A latched certificate can become stale after memory modification |
 | Gate 5 v3.2 | Re-evaluation of a stored evidence tuple before use | Two-bit correlated faults and unknown origin remain outside the guarantee |
 
-The manuscript reports that checksum and data arrive by states \(t=13\) and \(t=19\), respectively, and that the historical output is committed at \(t=28\). These are **reported finite implementation facts**, not statements formally established by the attached Lean module. The full v3.2 Python implementation and its complete run bundle were not included with the present source upload; independent end-to-end replication of v3.2 remains outstanding.
+The manuscript reports that checksum and data arrive by states $t=13$ and $t=19$, respectively, and that the historical output is committed at $t=28$. These are **reported finite implementation facts**, not statements formally established by the attached Lean module. The full v3.2 Python implementation and its complete run bundle were not included with the present source upload; independent end-to-end replication of v3.2 remains outstanding.
 
 ## 5. Local error-detecting code and live evidence predicate
 
@@ -123,7 +123,7 @@ $$
 C_3=\{000,010,110,111\}.
 $$
 
-With an extra parity coordinate \(p=z_1\oplus z_A\oplus z_B\), the resulting code is
+With an extra parity coordinate $p=z_1\oplus z_A\oplus z_B$, the resulting code is
 
 $$
 C_4=\{0000,0101,1100,1111\},\quad d_{\min}(C_4)=2.
@@ -139,11 +139,11 @@ $$
 \land[w_0\oplus w_1\oplus w_2\oplus w_3=0].
 $$
 
-Its ten declared theorems establish: Rule 110 truth-table equivalence with its algebraic normal form; \(d_{\min}=2\); all 16 single-bit flips rejected; exactly 10/24 undetected two-bit flips; four nominal live predicates accepted; incorrect version-space masks, answer IDs and single receipt-bit flips rejected; and the impossibility of a length-two, four-word binary code with distance at least two.
+Its ten declared theorems establish: Rule 110 truth-table equivalence with its algebraic normal form; $d_{\min}=2$; all 16 single-bit flips rejected; exactly 10/24 undetected two-bit flips; four nominal live predicates accepted; incorrect version-space masks, answer IDs and single receipt-bit flips rejected; and the impossibility of a length-two, four-word binary code with distance at least two.
 
 **These are properties of the declared finite functions and the live predicate.** The Lean source does *not* prove that all reachable CA states compute this predicate correctly, that it is re-evaluated at every reachable step, or that no fault alters state fields outside the receipt. The supplied Lean 4.36.0 verification log records exit code 0 and standard axioms only; it was not independently recompiled in this editorial review.
 
-There is an important separation between two code-length claims: four abstract messages with binary distance at least two need **at least three** code bits, whereas *extending this specific three-bit code \(C_3\)* to detect every single-bit corruption requires at least one additional parity bit. Neither proves that the entire physical CA needs only three or four bits of memory.
+There is an important separation between two code-length claims: four abstract messages with binary distance at least two need **at least three** code bits, whereas *extending this specific three-bit code $C_3$* to detect every single-bit corruption requires at least one additional parity bit. Neither proves that the entire physical CA needs only three or four bits of memory.
 
 The original manuscript reports 23,014,938,240 formal product states per site (35 bits with dense fixed-width encoding), compared with 207,134,444,160 for v3.1, and an observed set of 505 local states across four nominal trajectories. These figures should remain explicitly labeled **reported state-accounting and finite trajectory observations**, not a global minimum or a proof of reachable-state closure.
 

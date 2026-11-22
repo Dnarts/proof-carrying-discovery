@@ -6,12 +6,12 @@ This is an **append-only editorial statement** distinguishing original claims fr
 |---|---|---|---|
 | Semantic version spaces shrink under added consistent observations | Mathematical set inclusion for fixed language and semantics | Manuscript §1 | No guarantee that the world belongs to the language |
 | Version spaces may expand under nested language enlargement | Mathematical set inclusion under semantics-preserving embeddings | Manuscript §1 | A certificate for a small language is not a universal certificate |
-| Two-sided window of identification | Finite-dimensional nested \(\mathbb F_2\)-linear spaces, consistent labels | Manuscript §2 / linear algebra proof | Not for arbitrary nonlinear syntax or noisy data |
+| Two-sided window of identification | Finite-dimensional nested $\mathbb F_2$-linear spaces, consistent labels | Manuscript §2 / linear algebra proof | Not for arbitrary nonlinear syntax or noisy data |
 | Distinguish vs. agreement query | Exact logical distinction for **nonempty** semantic version space | Manuscript §3 | Agreement is not confirmation of origin; singleton-model compatibility does not prove truth |
 | Rule 110 post-merger historical recovery | Reported finite fixture in **augmented** CA | Original 7-page PDF §4 | Not a complete-state reversal, not pure two-symbol Rule 110 |
 | Gate 5 v3.2 64-site dynamics and 505 nominal local states | **Reported finite observations** from original PDF, not replayed from v3.2 Python here | Historical PDF §§4–5 | Not Lean-proved dynamics and not a minimal alphabet |
 | Wolfram Rule 110 table equals its algebraic normal form | Lean declaration and supplied successful verification log | formal/gate5_invariants.lean | Not a proof of all Gate 5 source transitions |
-| \(C_4\) minimum distance exactly 2 | Lean declarations: lower bound and attained pair | Source and verification receipt | Not a new coding-theory theorem |
+| $C_4$ minimum distance exactly 2 | Lean declarations: lower bound and attained pair | Source and verification receipt | Not a new coding-theory theorem |
 | 16/16 single-bit flips detected | Lean theorem for the **defined four codewords** | Lean source | Not proof against physical common-mode or correlated faults |
 | 10/24 double flips map back into the code | Lean finite enumeration | Lean source | Not an error-correction guarantee |
 | Static liveCert accepts nominal inputs and rejects specified single changes | Lean finite theorem about **an explicit Boolean function** | Lean source | Not a temporal invariant of the whole CA |
