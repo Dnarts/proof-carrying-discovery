@@ -5,6 +5,7 @@ on:
     paths:
       - "formal/**"
       - ".github/workflows/lean-formal.yml"
+      - "papers/hypothesis-language/formal/**"
   pull_request:
     paths:
       - "formal/**"
@@ -32,3 +33,8 @@ jobs:
           lean --version
           lean ControlledRepChange.lean
           lean DFAto1DCASeparation.lean
+      - name: Verify hypothesis-language finite Lean theorems
+        run: |
+          cd ../papers/hypothesis-language/formal
+          echo "2baaffcb0b30bea445917b3dfbf7c75823cff4213d0ab53b955eb0fbe6b49d78  gate5_invariants.lean" | sha256sum --check
+          lean gate5_invariants.lean
