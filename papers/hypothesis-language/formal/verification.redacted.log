@@ -1,0 +1,27 @@
+=== GATE 5 v3.2 LEAN 4 VERIFICATION LOG ===
+TIMESTAMP_UTC: 2026-11-22T22:01:06Z
+HOST: Darwin 25.6.0 arm64
+
+--- 1. TOOLCHAIN & SHA-256 ---
+Lean (version 4.36.0, arm64-apple-darwin24.6.0, commit 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9, Release)
+2baaffcb0b30bea445917b3dfbf7c75823cff4213d0ab53b955eb0fbe6b49d78  gate5_invariants.lean
+
+--- 2. SORRY / AXIOM SCAN ---
+SCAN_STATUS: CLEAN (0 sorry/admit/axiom)
+
+--- 3. LEAN 4 TYPECHECK ---
+LEAN_EXIT_CODE: 0
+
+--- 4. #print axioms AUDIT ---
+'Gate5V32.rule110_eq_anf' does not depend on any axioms
+'Gate5V32.c4_dmin_ge_2' depends on axioms: [propext]
+'Gate5V32.c4_dmin_attained' depends on axioms: [propext]
+'Gate5V32.c4_detects_all_16_single_bit_flips' depends on axioms: [propext]
+'Gate5V32.c4_two_bit_boundary_eq_10' depends on axioms: [propext]
+'Gate5V32.liveCert_nominal_all_4' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Gate5V32.liveCert_blocks_all_vs_mask_mismatches' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Gate5V32.liveCert_blocks_ans_corruption' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Gate5V32.liveCert_blocks_single_receipt_bit_flip' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Gate5V32.no_len2_code_size4_dmin2' does not depend on any axioms
+AXIOMS_EXIT_CODE: 0
+=== END ===

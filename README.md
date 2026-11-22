@@ -11,6 +11,8 @@ Small, reproducible experiments in **program synthesis, invariant inference, and
 **New formal supplement (22 Nov 2026):** [English — Lean theorems and verification](docs/FORMAL_RESULTS.en.md) · [Русский — формальные результаты](docs/FORMAL_RESULTS.ru.md) · [Lean source](formal/) · [verification receipts](formal/verification/). The original v1.1 preprints and Python results are preserved unchanged. The formal supplement proves a bounded-DFA witness theorem and a concrete three-control-state 1-DCA separation, not automatic invention of a new memory architecture.
 
 
+**Companion working preprint (23 Nov 2026):** **Hypothesis Languages and Evidence-Scoped Identification** — [English](papers/hypothesis-language/HYPOTHESIS_LANGUAGE.en.md) · [Русский](papers/hypothesis-language/HYPOTHESIS_LANGUAGE.ru.md) · [Scope and formal evidence](papers/hypothesis-language/README.md). This is a **separate methodological paper** on language-relative semantic uniqueness, agreement queries and live observation certificates, using an **augmented** Rule 110 cellular automaton as a finite witness. Its supplied Lean formalization proves selected finite predicates and coding properties, **not the full 64-site automaton dynamics**. The original v1.1 manuscripts remain unchanged.
+
 **Aleksandr Strand · Software v1.1.1 · 22 November 2026**
 
 ## The idea in plain language
