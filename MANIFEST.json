@@ -44,8 +44,8 @@
       "sha256": "f1a454a630b4488950e04c04c40b7f84cf9e3847c7392f5788e813fadc66b4f5"
     },
     "README.md": {
-      "bytes": 27816,
-      "sha256": "211c4314ab876e774ee70d5d1fd70138de893caa6cb83630716bd0c6089f67d5"
+      "bytes": 29050,
+      "sha256": "dc19dd869efe22ce0b67ce7110ba0c782440cc875c12e9d5b53b4a7332b3cfa4"
     },
     "build_preprints.py": {
       "bytes": 15444,
@@ -191,5 +191,6 @@
       "bytes": 27939,
       "sha256": "0dbb57ad3c1f9810ee23db555b7bec806655c94ce1170110624b713d57a53456"
     }
-  }
+  },
+  "publication_addendum": "23 November 2026: mutable root README navigation updated to cite hypothesis-language companion; v1.1.1 source/preprint content hashes unchanged. The companion papers are a separate edition and are not folded into the historical v1.1.1 manifest."
 }
