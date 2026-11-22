@@ -35,4 +35,4 @@ The theorem names and reported axiom dependencies are documented in [the claim l
 - [Rule 110 Dependency Fronts](https://github.com/Dnarts/rule110-dependency-fronts): exact causal fronts, observability and dynamics; reference the present paper as a related *methodological* companion when accessible.
 - [Channel Topology and Memory](https://github.com/Dnarts/channel-topology-and-memory): a distinct line on stochastic channels and retained memory.
 
-The repository is private at the time of this editorial commit. Publishing the paper publicly also requires changing repository visibility or placing a public release elsewhere; neither is implicitly changed by adding these files.
+This repository is publicly accessible at the time of the 23 November 2026 readback. No DOI, peer review, or independent end-to-end Gate 5 v3.2 replication is claimed. Repository visibility is a separate owner-controlled setting and was not changed by these file commits.
