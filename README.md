@@ -8,6 +8,9 @@ Small, reproducible experiments in **program synthesis, invariant inference, and
 
 **Read the preprint:** [English PDF](PREPRINT_v1.1.en.pdf) · [English Markdown](PREPRINT_v1.1.en.md) · [Русский PDF](PREPRINT_v1.1.ru.pdf) · [Русский Markdown](PREPRINT_v1.1.ru.md)
 
+**New formal supplement (22 Nov 2026):** [English — Lean theorems and verification](docs/FORMAL_RESULTS.en.md) · [Русский — формальные результаты](docs/FORMAL_RESULTS.ru.md) · [Lean source](formal/) · [verification receipts](formal/verification/). The original v1.1 preprints and Python results are preserved unchanged. The formal supplement proves a bounded-DFA witness theorem and a concrete three-control-state 1-DCA separation, not automatic invention of a new memory architecture.
+
+
 **Aleksandr Strand · Software v1.1.1 · 22 November 2026**
 
 ## The idea in plain language

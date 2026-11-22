@@ -1,0 +1,10 @@
+=== LEAN 4 VERIFICATION LOG ===
+Timestamp: 2026-11-22T08:05:13Z
+Toolchain: Lean (version 4.36.0, arm64-apple-darwin24.6.0, commit 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9, Release)
+SHA-256:   7c5d80eb3f78d5e616f74c0c4c2b83d41d417c948f32899fc8413733d38ef7ee  /Users/alyx/Downloads/DFAto1DCASeparation.lean
+=== AXIOM & KERNEL CHECK ===
+'DFAto1DCASeparation.T1_dfa_no_false_escalation' depends on axioms: [propext, Quot.sound]
+'DFAto1DCASeparation.anbn_not_dfa' depends on axioms: [propext, Classical.choice, Quot.sound]
+'DFAto1DCASeparation.anbn1DCA_accepts' depends on axioms: [propext, Quot.sound]
+'DFAto1DCASeparation.anbn_tier_separation' depends on axioms: [propext, Classical.choice, Quot.sound]
+Exit code: 0

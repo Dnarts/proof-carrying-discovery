@@ -1,0 +1,12 @@
+=== LEAN 4 VERIFICATION LOG ===
+Timestamp: 2026-11-22T07:12:33Z
+Toolchain: Lean (version 4.36.0, arm64-apple-darwin24.6.0, commit 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9, Release)
+SHA-256:   fcdcb52c6407b726a93cb804388dbf38fd239ef2798cb8ccd7ebb4c14dc2be90  /Users/alyx/Downloads/ControlledRepChange.lean
+=== AXIOM & KERNEL CHECK ===
+'ControlledRepChange.T1_no_false_escalation' does not depend on any axioms
+'ControlledRepChange.T2_modeE_dominates_modeA' depends on axioms: [propext, Quot.sound]
+'ControlledRepChange.T2_modeE_strict_separation' depends on axioms: [propext, Quot.sound]
+'ControlledRepChange.T3_break_even' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ControlledRepChange.T3_break_even_savings' depends on axioms: [propext, Classical.choice, Quot.sound]
+'ControlledRepChange.T4_static_lt_closure' depends on axioms: [propext]
+Exit code: 0
