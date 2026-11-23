@@ -1,0 +1,22 @@
+=== GATE 12 CHOMSKY ESCALATION LEAN 4 LOG ===
+TIMESTAMP_UTC: 2026-11-23T07:29:53Z
+HOST: Darwin 25.6.0 arm64
+Lean (version 4.36.0, arm64-apple-darwin24.6.0, commit 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9, Release)
+763f59d7812883668c380f0ee2460c5661e36f41c6b3f5ae32f7962af724647d  /Users/alyx/Downloads/gate12_exported_pal_mid.lean
+
+SCAN_STATUS: CLEAN (0 sorry/admit/axiom)
+
+'Gate12Hierarchy.checkMNCert_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Gate12Hierarchy.check1DCACert_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Gate12Hierarchy.checkCausalEscalation_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Gate12Hierarchy.canonicalMidDPDA_eval_eq_true_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Gate12Hierarchy.canonicalMidDPDA_not_1DCA' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Gate12Hierarchy.canonicalMidDPDA_not_DFA' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Gate12Hierarchy.checkFullChomskyProtocol_sound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Gate12ExportedPalMid.exported_pal_mid_corollary' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Gate12ExportedPalMid.exportedStackProg_eval_eq_true_iff' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Gate12ExportedPalMid.exportedStackProg_not_1DCA' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Gate12ExportedPalMid.exportedStackProg_not_DFA' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Gate12ExportedPalMid.exported_antipal_mid_full_protocol_corollary' depends on axioms: [propext, Classical.choice, Quot.sound]
+LEAN_EXIT_CODE: 0
+=== END ===

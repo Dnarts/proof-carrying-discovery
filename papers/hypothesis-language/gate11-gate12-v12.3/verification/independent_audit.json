@@ -1,0 +1,119 @@
+{
+  "abi": "gate12-v12.3-independent-finite-audit/1",
+  "source_archive": "gate12_final_verified_bundle(2).zip",
+  "manifest_hashes_matched": 9,
+  "manifest_hashes_all_pass": true,
+  "export_exact_byte_match": true,
+  "lean_recompiled_here": false,
+  "declared_formal_toolchain": "Lean 4.36.0, as supplied in included verification log",
+  "pal": {
+    "label": "pal",
+    "checked_all_words_length_0_through_9": 29524,
+    "errors": 0,
+    "all_actual_oracle_calls": 88,
+    "stored_witness_observations": 60,
+    "t1_stored_prefix_index": 9,
+    "t2_stored_prefix_index": 54,
+    "oracle_queries_before_witness_recording": [
+      {
+        "stage": "MN_witness_discovery",
+        "oracle_queries_seen_so_far": 9
+      },
+      {
+        "stage": "MN_witness_discovery",
+        "oracle_queries_seen_so_far": 82
+      },
+      {
+        "stage": "DCA_witness_discovery",
+        "oracle_queries_seen_so_far": 82
+      }
+    ],
+    "program_transition_table": [
+      [
+        [
+          0,
+          "push"
+        ],
+        [
+          0,
+          "push"
+        ],
+        [
+          1,
+          "keep"
+        ]
+      ],
+      [
+        [
+          1,
+          "popMatch"
+        ],
+        [
+          1,
+          "popMatch"
+        ],
+        null
+      ]
+    ],
+    "retained_observations_not_proof_of_original_oracle_time_order": true
+  },
+  "antipal": {
+    "label": "antipal",
+    "checked_all_words_length_0_through_9": 29524,
+    "errors": 0,
+    "all_actual_oracle_calls": 107,
+    "stored_witness_observations": 61,
+    "t1_stored_prefix_index": 9,
+    "t2_stored_prefix_index": 54,
+    "oracle_queries_before_witness_recording": [
+      {
+        "stage": "MN_witness_discovery",
+        "oracle_queries_seen_so_far": 9
+      },
+      {
+        "stage": "MN_witness_discovery",
+        "oracle_queries_seen_so_far": 100
+      },
+      {
+        "stage": "DCA_witness_discovery",
+        "oracle_queries_seen_so_far": 100
+      }
+    ],
+    "program_transition_table": [
+      [
+        [
+          0,
+          "pushFlip"
+        ],
+        [
+          0,
+          "pushFlip"
+        ],
+        [
+          1,
+          "keep"
+        ]
+      ],
+      [
+        [
+          1,
+          "popMatch"
+        ],
+        [
+          1,
+          "popMatch"
+        ],
+        null
+      ]
+    ],
+    "retained_observations_not_proof_of_original_oracle_time_order": true
+  },
+  "limitations": [
+    "The theorem is relative to Gate12Hierarchy.CounterProgram and the canonical StackProgram family; not arbitrary machine implementations.",
+    "The master checker proves selected evidence prefix order and refutability; it does not validate actual oracle call timestamps or prevent lookahead in Python.",
+    "The canonical recognizer accepts a fixed two-phase push-then-pop grammar with a binary f; it is not synthesis of arbitrary DPDA semantics.",
+    "The archive includes a Lean log, but the local environment lacks lean. No fresh Lean kernel run was performed.",
+    "The archive does not contain run_gate12_verification.sh; that script was uploaded separately.",
+    "Finite oracle sample compatibility does not itself prove the oracle equals the formal target on all words."
+  ]
+}

@@ -1,0 +1,71 @@
+name: Gate 11-12 scientific preprint (XeLaTeX + evidence bundle)
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'papers/hypothesis-language/gate11-gate12-v12.3/**'
+      - '.github/workflows/gate12-publication.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install pinned Lean 4.36.0
+        run: |
+          set -euo pipefail
+          curl -sSfL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain leanprover/lean4:v4.36.0
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Check Gate 11-12 exported theorem sources in Lean
+        run: |
+          set -euo pipefail
+          cd papers/hypothesis-language/gate11-gate12-v12.3/gate12
+          lean --version
+          lean gate11_soundness.lean
+          lean gate11_trace_checker.lean
+          lean gate12_exported_pal_mid.lean
+      - name: Install XeLaTeX and fonts
+        run: |
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends texlive-xetex texlive-latex-extra texlive-lang-cyrillic texlive-science texlive-pictures fonts-noto-core fonts-dejavu-core
+      - name: Verify original Gate 12 source manifest and regenerate paper
+        run: |
+          set -euo pipefail
+          cd papers/hypothesis-language/gate11-gate12-v12.3
+          python3 - <<'PY'
+          import hashlib,json,pathlib
+          root=pathlib.Path('gate12'); manifest=json.loads((root/'gate12_final_manifest.json').read_text())
+          for name,exp in manifest['output_files_sha256'].items():
+              assert hashlib.sha256((root/name).read_bytes()).hexdigest()==exp, name
+          print('SOURCE_SHA256_PASS: 9/9')
+          PY
+          python3 src/build_revision.py
+          cd src
+          xelatex -halt-on-error -interaction=nonstopmode hypothesis_language_gate12_ru.tex > ../verification/latex_build_final1.log 2>&1
+          xelatex -halt-on-error -interaction=nonstopmode hypothesis_language_gate12_ru.tex > ../verification/latex_build_final.log 2>&1
+          if grep -E 'Overfull|Undefined control sequence|There were undefined' ../verification/latex_build_final.log; then exit 1; fi
+          cp hypothesis_language_gate12_ru.pdf ../hypothesis_language_gate12_ru.pdf
+      - name: Finite independent checks and ZIP packaging
+        run: |
+          set -euo pipefail
+          cd papers/hypothesis-language/gate11-gate12-v12.3
+          python3 gate12/gate12_blind_chomsky_escalation.py --test
+          python3 verification/independent_gate12_audit.py
+          python3 build_release.py
+      - name: Commit immutable release binaries (no recursion)
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf
+          git add papers/hypothesis-language/gate11-gate12-v12.3/gate12_reproducible_bundle.zip
+          git add papers/hypothesis-language/gate11-gate12-v12.3/RELEASE_SHA256.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publish compiled Gate 11-12 preprint and reproducible ZIP'
+            git push origin HEAD:main
+          fi

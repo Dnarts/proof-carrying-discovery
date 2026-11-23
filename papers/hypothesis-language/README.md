@@ -1,5 +1,7 @@
 # Hypothesis Languages and Evidence-Scoped Identification
 
+**Latest Russian working preprint (Gate 11–12 v12.3):** [read the article](gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [XeLaTeX source](gate11-gate12-v12.3/src/hypothesis_language_gate12_ru.tex) · [reproducible source bundle](gate11-gate12-v12.3/gate12_reproducible_bundle.zip) · [verification scope](gate11-gate12-v12.3/README.md). This new edition adds parametric soundness for two-phase stack programs and global DFA/1-DCA class separation *within the declared Lean machine models*. The checker validates selected witness-list prefixes, not the chronology of every oracle call.
+
 **Canonical location:** this directory in **Proof-Carrying Discovery**. The Rule 110 repository remains the *domain-specific experimental companion*, not the canonical home for this language-and-certification argument.
 
 **Working preprint, editorial revision 23 November 2026:** [English manuscript](HYPOTHESIS_LANGUAGE.en.md) · [Русская редакция](HYPOTHESIS_LANGUAGE.ru.md) · [Claim/evidence audit](CLAIMS_AND_PROVENANCE.md).

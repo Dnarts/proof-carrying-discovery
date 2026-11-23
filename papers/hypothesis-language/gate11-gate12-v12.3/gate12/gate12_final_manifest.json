@@ -1,0 +1,44 @@
+{
+  "artifact": "Gate 11-12 Final Verified Bundle v12.3 (Pure Lean 4.36.0 + Causal Chomsky Escalation + Universal ∀m 1-DCA Separation & Parametric DPDA Meta-Theorem)",
+  "version": "12.3.0-final",
+  "status": "LEAN4_VERIFIED_CHOMSKY_ESCALATION_PASS",
+  "lean_toolchain": "Lean 4.36.0 (arm64-apple-darwin24.6.0)",
+  "verified_modules": {
+    "gate11_soundness.lean": {
+      "exit_code": 0,
+      "theorems": 5,
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    "gate11_trace_checker.lean": {
+      "exit_code": 0,
+      "theorems": 5,
+      "axioms": [
+        "propext",
+        "Quot.sound"
+      ]
+    },
+    "gate12_exported_pal_mid.lean": {
+      "exit_code": 0,
+      "theorems": 12,
+      "axioms": [
+        "propext",
+        "Classical.choice",
+        "Quot.sound"
+      ]
+    }
+  },
+  "output_files_sha256": {
+    "gate11_soundness.lean": "07e63d799528ed5e992d34c901103eb09ad3f03fa50f451fb4fb17f0de861df9",
+    "gate11_lean_verification.log": "293cf77f3aca30d781fb76a3262d2636ac979679444b1abdad4111e772f99712",
+    "gate11_trace_checker.lean": "e15610c93d6ca07022b60b4a2cc0c6ac37f1fceb2123d7c23b57be52d957eb21",
+    "gate11_trace_checker_verification.log": "542c3425feb341d3546aa0e89b79e5cf6fea1c87ca8add9e8bf306005ddce5bb",
+    "gate12_hierarchy_checker.lean": "977a177144fc7b3ba78a97936a243b9e5d1c33915566a0a7bf90eb47d3421e0b",
+    "gate12_blind_chomsky_escalation.py": "790cdf2882e07ffc382f1555274d3410beecad6b4d93981abbd2ba27508355b9",
+    "gate12_exported_pal_mid.lean": "763f59d7812883668c380f0ee2460c5661e36f41c6b3f5ae32f7962af724647d",
+    "gate12_lean_verification.log": "45f177b0fc3c05f58144424034eaa6a275d709f04c2f89c14f02d3429333bf1a",
+    "gate12_README.ru.md": "27ef6e9b18ae991ae58baef754f46559cdb0440b1baa475c2d942f62fb86beb6"
+  }
+}

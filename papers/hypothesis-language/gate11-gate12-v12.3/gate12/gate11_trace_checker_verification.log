@@ -1,0 +1,15 @@
+=== GATE 11 TRACE CHECKER LEAN 4 LOG ===
+TIMESTAMP_UTC: 2026-11-23T06:31:10Z
+HOST: Darwin 25.6.0 arm64
+Lean (version 4.36.0, arm64-apple-darwin24.6.0, commit 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9, Release)
+e15610c93d6ca07022b60b4a2cc0c6ac37f1fceb2123d7c23b57be52d957eb21  /Users/alyx/Downloads/gate11_trace_checker.lean
+
+SCAN_STATUS: CLEAN (0 sorry/admit/axiom)
+
+'Gate11TraceChecker.checkMNCert_sound' depends on axioms: [propext, Quot.sound]
+'Gate11TraceChecker.checkDFATrace_sound' does not depend on any axioms
+'Gate11TraceChecker.checkCounterTrace_sound' does not depend on any axioms
+'Gate11TraceChecker.checkEscalatedTrace_sound' depends on axioms: [propext, Quot.sound]
+'Gate11TraceChecker.sample_0n1n_certified_corollary' depends on axioms: [propext, Quot.sound]
+LEAN_EXIT_CODE: 0
+=== END ===

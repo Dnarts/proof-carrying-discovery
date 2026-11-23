@@ -1,0 +1,15 @@
+=== GATE 11 SOUNDNESS LEAN 4 LOG ===
+TIMESTAMP_UTC: 2026-11-23T06:06:13Z
+HOST: Darwin 25.6.0 arm64
+Lean (version 4.36.0, arm64-apple-darwin24.6.0, commit 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9, Release)
+07e63d799528ed5e992d34c901103eb09ad3f03fa50f451fb4fb17f0de861df9  /Users/alyx/Downloads/gate11_soundness.lean
+
+SCAN_STATUS: CLEAN (0 sorry/admit/axiom)
+
+'Gate11Soundness.dfa_runFrom_append' does not depend on any axioms
+'Gate11Soundness.pigeonhole_fin' depends on axioms: [propext, Quot.sound]
+'Gate11Soundness.myhill_nerode_impossibility' depends on axioms: [propext, Quot.sound]
+'Gate11Soundness.oneDCA_0n1n_not_regular' depends on axioms: [propext, Quot.sound]
+'Gate11Soundness.oneDCA_0n1n_eq_true_iff' depends on axioms: [propext, Quot.sound]
+LEAN_EXIT_CODE: 0
+=== END ===
