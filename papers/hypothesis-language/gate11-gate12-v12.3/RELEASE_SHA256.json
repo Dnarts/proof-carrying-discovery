@@ -1,0 +1,87 @@
+{
+  "abi": "proof-carrying-discovery/hypothesis-language-gate11-12/1",
+  "edition": "2026-11-23-v12.3",
+  "files": {
+    "README.md": {
+      "bytes": 3649,
+      "sha256": "230f751077afc8eeee0a27ad1f68d78c9da0b8d64c5f8edd2552923f59f59d3f"
+    },
+    "gate12/gate11_lean_verification.log": {
+      "bytes": 782,
+      "sha256": "293cf77f3aca30d781fb76a3262d2636ac979679444b1abdad4111e772f99712"
+    },
+    "gate12/gate11_soundness.lean": {
+      "bytes": 13353,
+      "sha256": "07e63d799528ed5e992d34c901103eb09ad3f03fa50f451fb4fb17f0de861df9"
+    },
+    "gate12/gate11_trace_checker.lean": {
+      "bytes": 14257,
+      "sha256": "e15610c93d6ca07022b60b4a2cc0c6ac37f1fceb2123d7c23b57be52d957eb21"
+    },
+    "gate12/gate11_trace_checker_verification.log": {
+      "bytes": 804,
+      "sha256": "542c3425feb341d3546aa0e89b79e5cf6fea1c87ca8add9e8bf306005ddce5bb"
+    },
+    "gate12/gate12_README.ru.md": {
+      "bytes": 5032,
+      "sha256": "27ef6e9b18ae991ae58baef754f46559cdb0440b1baa475c2d942f62fb86beb6"
+    },
+    "gate12/gate12_blind_chomsky_escalation.py": {
+      "bytes": 27135,
+      "sha256": "790cdf2882e07ffc382f1555274d3410beecad6b4d93981abbd2ba27508355b9"
+    },
+    "gate12/gate12_exported_pal_mid.lean": {
+      "bytes": 90713,
+      "sha256": "763f59d7812883668c380f0ee2460c5661e36f41c6b3f5ae32f7962af724647d"
+    },
+    "gate12/gate12_final_manifest.json": {
+      "bytes": 1789,
+      "sha256": "3177fc5b6b446eb497a8640bfed09783d39ef527e95ce16a29c923010c746341"
+    },
+    "gate12/gate12_hierarchy_checker.lean": {
+      "bytes": 52810,
+      "sha256": "977a177144fc7b3ba78a97936a243b9e5d1c33915566a0a7bf90eb47d3421e0b"
+    },
+    "gate12/gate12_lean_verification.log": {
+      "bytes": 1695,
+      "sha256": "45f177b0fc3c05f58144424034eaa6a275d709f04c2f89c14f02d3429333bf1a"
+    },
+    "hypothesis_language_gate12_ru.pdf": {
+      "bytes": 144525,
+      "sha256": "cd2a1bed30d993eff1265afc4c5c5caffbd9eeadd84af4dbb8e6c4cae836ffcb"
+    },
+    "src/build_revision.py": {
+      "bytes": 19765,
+      "sha256": "80489b18e74fd8ad5322a7e02bf001a1dbe18c8db1ab39ad5011f55bc993c63d"
+    },
+    "src/hypothesis_language_gate11_ru.original.tex": {
+      "bytes": 35205,
+      "sha256": "c041511ff89960bace72b0da223a450c01c37175a069040394aeb322062b793e"
+    },
+    "src/hypothesis_language_gate12_ru.tex": {
+      "bytes": 46960,
+      "sha256": "493a969798afec0f9084dfe8d351f7af881a35e238fa60a9ce616d140f1e9262"
+    },
+    "verification/GATE12_REVIEW_RU.md": {
+      "bytes": 12842,
+      "sha256": "7968d62cbe7f91a3b2bd1c0ba19c4857dea5c700b8c436f1ce7d55a8c7f2d075"
+    },
+    "verification/independent_audit.json": {
+      "bytes": 3207,
+      "sha256": "19cee2d618dcdc0a092923be6a9edb94b1a011c739bad4e2c5c6ff400e5192fa"
+    },
+    "verification/independent_gate12_audit.py": {
+      "bytes": 5866,
+      "sha256": "5331039c2b501f9b1d3bf26844a0180c0a039e17fac0ec716c0427a4002cef84"
+    },
+    "verification/latex_build_final.log": {
+      "bytes": 15749,
+      "sha256": "e34f60d979da5a1c25f62346cf4315884eb3cbf189955b3019dc5bca77071d5c"
+    }
+  },
+  "formal_verification": "Lean 4.36.0 success as reported by upstream logs; not independently recompiled in the original local audit",
+  "independent_audit": "3/3 Python fixture tests; 59048 direct finite word comparisons; 9/9 source checksums; exported Lean byte-identical",
+  "original_gate12_archive_sha256": "dbe2bcee9602e5039c45d30c9677e8822c37c3b9762c7ab9a8da136e5097a1a9",
+  "paper_title": "Языки гипотез и доказательная эскалация представления",
+  "provenance_limit": "Selected observation prefixes are not a verified chronological oracle-call trace"
+}
