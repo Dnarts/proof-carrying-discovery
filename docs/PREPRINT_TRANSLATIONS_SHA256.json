@@ -1,0 +1,95 @@
+{
+  "abi": "proof-carrying-discovery/preprint-translations/1",
+  "checks": [
+    {
+      "cite_count": 3,
+      "file": "papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.tex",
+      "label_count": 27,
+      "structure": "MATCH"
+    },
+    {
+      "cite_count": 3,
+      "file": "papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.tex",
+      "label_count": 27,
+      "structure": "MATCH"
+    },
+    {
+      "check": "PASS",
+      "file": "papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf",
+      "pdf_text_chars": 27542
+    },
+    {
+      "check": "PASS",
+      "file": "papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.pdf",
+      "pdf_text_chars": 14020
+    },
+    {
+      "check": "PASS",
+      "file": "papers/hypothesis-language/HYPOTHESIS_LANGUAGE.zh.pdf",
+      "pdf_text_chars": 7201
+    },
+    {
+      "check": "PASS",
+      "file": "papers/cumulative-search/CUMULATIVE_SEARCH.zh.pdf",
+      "pdf_text_chars": 7851
+    }
+  ],
+  "edition": "2026-11-23",
+  "notes": {
+    "earlier": "Historical EN and RU versions already existed; only missing ZH translations were added",
+    "main": "Gate 11-12 (RU original, EN and ZH translations)",
+    "proof": "Formal Lean evidence remains unchanged in its original versioned package"
+  },
+  "source_russian_gate11_12_sha256": "493a969798afec0f9084dfe8d351f7af881a35e238fa60a9ce616d140f1e9262",
+  "sources": {
+    "docs/PREPRINT_LANGUAGES.md": {
+      "bytes": 4532,
+      "sha256": "56df2312e1d115168f04e201190f7d3c242bdbe1038dc3b7162a7542795851d3"
+    },
+    "docs/translation_release.py": {
+      "bytes": 4807,
+      "sha256": "b9fddc3c2c6aac3c2902788f93888b0479637756acde3ec5b950f38f077bba03"
+    },
+    "docs/zh_pdf_header.tex": {
+      "bytes": 45,
+      "sha256": "e4f27818466ec9be806a5237ae8ab45930acfd0433f59e7c64cf90ca0ec3bb5b"
+    },
+    "papers/cumulative-search/CUMULATIVE_SEARCH.zh.md": {
+      "bytes": 15261,
+      "sha256": "234d4b08e4b4072ecacc093f2b0feed8763a5fbe48648990df726b22e12f4247"
+    },
+    "papers/cumulative-search/CUMULATIVE_SEARCH.zh.pdf": {
+      "bytes": 253901,
+      "sha256": "127e51ab09093c963bc55d7bbd4c78134b336b6f66839812445f3f5f74f7eedc"
+    },
+    "papers/hypothesis-language/HYPOTHESIS_LANGUAGE.zh.md": {
+      "bytes": 13306,
+      "sha256": "80cc7937c6d039c92d659ff7dc23c2e4c86c3e82ff08ff69a41efe89c7ed691b"
+    },
+    "papers/hypothesis-language/HYPOTHESIS_LANGUAGE.zh.pdf": {
+      "bytes": 234882,
+      "sha256": "d5dc4c32db2171e97730b2b43485b036546cc6a35900ab8c119ac66110ee1b23"
+    },
+    "papers/hypothesis-language/translations/gate11-gate12-v12.3/README.md": {
+      "bytes": 1782,
+      "sha256": "43e2f6dbb1b58549a2ee8e802debca993fb81c99d80de3898b3298060a91262a"
+    },
+    "papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf": {
+      "bytes": 132646,
+      "sha256": "18a6b1e211f162463413479dd7ebdb73326de819244c7ac1f09f1ff8c50c8dc4"
+    },
+    "papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.tex": {
+      "bytes": 29595,
+      "sha256": "95f8574ece0743f07381aa4a6ec185f9baa20b6db36d13bf316eddb14cc5102b"
+    },
+    "papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.pdf": {
+      "bytes": 289002,
+      "sha256": "c9866f206253b11439fc1e7a50b2d1e67f2e8cf825bd3044b6d79e5ff745ce7f"
+    },
+    "papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.tex": {
+      "bytes": 26631,
+      "sha256": "3868c515f7fe71602ce5d702652ecce05535e60f68c96df0e97ca06ca2c77475"
+    }
+  },
+  "status": "translation-typesetting-checked; natural-language equivalence not formally proved"
+}
