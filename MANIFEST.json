@@ -16,8 +16,8 @@
       "sha256": "3de0e13c82fe04ee16d678bff57d1011c82fc0545d110f7a2451fda3b531c8fb"
     },
     "CITATION.cff": {
-      "bytes": 1045,
-      "sha256": "286903842c0e2220675649885a889b86d6eed7ca879231bd2e7917c20bbab7d3"
+      "bytes": 1067,
+      "sha256": "5421b8ab40ee76e02b3356b9661271bcc8e59e77627f33ecce9471153b425d2d"
     },
     "FIXES.md": {
       "bytes": 7547,
@@ -44,8 +44,8 @@
       "sha256": "f1a454a630b4488950e04c04c40b7f84cf9e3847c7392f5788e813fadc66b4f5"
     },
     "README.md": {
-      "bytes": 12331,
-      "sha256": "7ccadbc094ccf88b841ef6141746882d38cf016f8b14324ebfd56810855c58f1"
+      "bytes": 14572,
+      "sha256": "26ae5131d3ab5a0e74b93fe9b4a4a6a44c84164c9c2d2961fcb9c24d6dc47a41"
     },
     "build_preprints.py": {
       "bytes": 15444,
@@ -192,5 +192,5 @@
       "sha256": "0dbb57ad3c1f9810ee23db555b7bec806655c94ce1170110624b713d57a53456"
     }
   },
-  "publication_addendum": "23 November 2026: mutable root README navigation updated to cite hypothesis-language companion; v1.1.1 source/preprint content hashes unchanged. The companion papers are a separate edition and are not folded into the historical v1.1.1 manifest. 23 November 2026 Gate 11–12 root-navigation and preferred-citation update: only mutable README.md and CITATION.cff digest records are changed; earlier v1.1.1 experiment data and proofs retain original SHA-256. Prior manifests and entrypoints preserved in history/; later papers retain independent release manifests."
+  "publication_addendum": "23 November 2026: mutable root README navigation updated to cite hypothesis-language companion; v1.1.1 source/preprint content hashes unchanged. The companion papers are a separate edition and are not folded into the historical v1.1.1 manifest. 23 November 2026 Gate 11–12 root-navigation and preferred-citation update: only mutable README.md and CITATION.cff digest records are changed; earlier v1.1.1 experiment data and proofs retain original SHA-256. Prior manifests and entrypoints preserved in history/; later papers retain independent release manifests. 23 Nov 2026: added Chinese and English translation navigation and updated preferred citation to the English Gate 11–12 edition; only README/CITATION mutable hashes changed. Historical source files and evidence retain their indexed hashes, translation PDFs have a separate manifest."
 }

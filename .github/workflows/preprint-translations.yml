@@ -1,0 +1,75 @@
+name: Multilingual preprints (English and Chinese)
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'papers/hypothesis-language/translations/**/*.tex'
+      - 'papers/hypothesis-language/HYPOTHESIS_LANGUAGE.zh.md'
+      - 'papers/cumulative-search/CUMULATIVE_SEARCH.zh.md'
+      - 'docs/zh_pdf_header.tex'
+      - 'docs/translation_release.py'
+      - '.github/workflows/preprint-translations.yml'
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  translate-typeset-and-publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Install XeLaTeX, Pandoc, Chinese fonts and math packages
+        run: |
+          sudo apt-get update -qq
+          sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+            texlive-xetex texlive-latex-extra texlive-lang-chinese texlive-science \
+            texlive-pictures fonts-noto-core fonts-noto-cjk fonts-dejavu-core \
+            pandoc poppler-utils
+      - name: Compile full Gate 11-12 English and Chinese manuscripts
+        run: |
+          set -euo pipefail
+          cd papers/hypothesis-language/translations/gate11-gate12-v12.3
+          for lang in en zh; do
+            tex="hypothesis_language_gate12_${lang}.tex"
+            xelatex -halt-on-error -interaction=nonstopmode "$tex" > "${lang}-pass1.log" 2>&1
+            xelatex -halt-on-error -interaction=nonstopmode "$tex" > "${lang}-pass2.log" 2>&1
+            if grep -E 'Overfull|Missing character|There were undefined|Undefined control sequence' "${lang}-pass2.log"; then
+              echo "[FAIL] TeX preflight $lang"
+              exit 1
+            fi
+          done
+      - name: Typeset the two historical Chinese translations
+        run: |
+          set -euo pipefail
+          pandoc papers/hypothesis-language/HYPOTHESIS_LANGUAGE.zh.md --pdf-engine=xelatex \
+            -H docs/zh_pdf_header.tex -V mainfont='Noto Serif' -V CJKmainfont='Noto Serif CJK SC' \
+            -V sansfont='Noto Sans' -V monofont='DejaVu Sans Mono' -V geometry:margin=22mm \
+            -V fontsize=11pt -V colorlinks -o papers/hypothesis-language/HYPOTHESIS_LANGUAGE.zh.pdf 2>&1 | tee /tmp/hypothesis-zh-pandoc.log
+          pandoc papers/cumulative-search/CUMULATIVE_SEARCH.zh.md --pdf-engine=xelatex \
+            -H docs/zh_pdf_header.tex -V mainfont='Noto Serif' -V CJKmainfont='Noto Serif CJK SC' \
+            -V sansfont='Noto Sans' -V monofont='DejaVu Sans Mono' -V geometry:margin=22mm \
+            -V fontsize=11pt -V colorlinks -o papers/cumulative-search/CUMULATIVE_SEARCH.zh.pdf 2>&1 | tee /tmp/cumulative-zh-pandoc.log
+          if grep -E 'Missing character|Error producing PDF|Undefined control sequence' /tmp/{hypothesis,cumulative}-zh-pandoc.log; then
+            echo '[FAIL] Pandoc TeX font check'
+            exit 1
+          fi
+      - name: Check mathematical identifiers, Unicode and create translation ZIP
+        run: |
+          set -euo pipefail
+          python3 docs/translation_release.py
+      - name: Publish translated PDFs and digest manifest (no recursive trigger)
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf
+          git add papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.pdf
+          git add papers/hypothesis-language/HYPOTHESIS_LANGUAGE.zh.pdf
+          git add papers/cumulative-search/CUMULATIVE_SEARCH.zh.pdf
+          git add docs/PREPRINT_TRANSLATIONS_SHA256.json docs/preprint_translations_bundle.zip
+          if ! git diff --cached --quiet; then
+            git commit -m 'Publish checked English and Chinese preprint translations'
+            git push origin HEAD:main
+          fi

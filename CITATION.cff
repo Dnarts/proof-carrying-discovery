@@ -1,5 +1,5 @@
 cff-version: 1.2.0
-message: 'Cite the specific paper and commit. The preferred citation is the current Gate 11-12 working preprint; the original v1.1.1 software experiment remains separately citable.'
+message: 'Cite the specific paper and commit. The preferred citation is the current Gate 11-12 working preprint (English and Chinese translations available); the original v1.1.1 software experiment remains separately citable.'
 title: 'Proof-Carrying Discovery: Evidence-Scoped Representation Change'
 authors:
   - family-names: Strand
@@ -18,9 +18,9 @@ keywords:
   - Myhill-Nerode
 preferred-citation:
   type: article
-  title: 'Языки гипотез и доказательная эскалация представления'
+  title: 'Hypothesis Languages and Proof-Carrying Representation Escalation'
   authors:
     - family-names: Strand
       given-names: Aleksandr
   year: 2026
-  url: 'https://github.com/Dnarts/proof-carrying-discovery/blob/main/papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf'
+  url: 'https://github.com/Dnarts/proof-carrying-discovery/blob/main/papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf'

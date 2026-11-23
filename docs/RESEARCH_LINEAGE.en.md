@@ -1,6 +1,6 @@
 # Research lineage: from acquired rules to certified representation change
 
-[Main README](../README.md) · [Русская версия](RESEARCH_LINEAGE.ru.md)
+[Main README](../README.md) · [Русская версия](RESEARCH_LINEAGE.ru.md) · [English / Russian / Chinese preprints](PREPRINT_LANGUAGES.md)
 
 The scientific unit of the project is not just a discovered program. It is a **claim with its domain, the rejected alternative classes, the synthesized representation, and independently checkable evidence**. These do not merge into a single “verified” flag.
 

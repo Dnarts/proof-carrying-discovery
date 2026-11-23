@@ -1,0 +1,350 @@
+\documentclass[11pt,a4paper,UTF8,fontset=none]{ctexart}
+\setmainfont{Noto Serif}
+\setsansfont{Noto Sans}
+\setmonofont{DejaVu Sans Mono}
+\setCJKmainfont{Noto Serif CJK SC}
+\setCJKsansfont{Noto Sans CJK SC}
+\setCJKmonofont{Noto Sans Mono CJK SC}
+\usepackage[a4paper,margin=23mm,headheight=14pt,headsep=8mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools,stmaryrd}
+\usepackage{booktabs,tabularx,array,enumitem,microtype,xcolor,fancyhdr,hyperref,tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\definecolor{ink}{RGB}{29,53,80}
+\definecolor{muted}{RGB}{92,100,110}
+\hypersetup{colorlinks=true,linkcolor=ink,citecolor=ink,urlcolor=ink,
+  pdftitle={假设语言与携证表征升级},pdfauthor={Aleksandr Strand}}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{5pt plus 1.3pt minus .7pt}
+\setlength{\emergencystretch}{3em}
+\setlist[enumerate]{leftmargin=1.7em,topsep=3pt,itemsep=2pt}
+\setlist[itemize]{leftmargin=1.7em,topsep=3pt,itemsep=2pt}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\footnotesize\color{muted}假设语言与携证表征升级}
+\fancyhead[R]{\footnotesize\color{muted}A. Strand}
+\fancyfoot[C]{\footnotesize\color{muted}\thepage}
+\renewcommand{\headrulewidth}{.3pt}
+\newtheorem{definition}{定义}[section]
+\newtheorem{theorem}{定理}[section]
+\newtheorem{proposition}{命题}[section]
+\newtheorem{remark}{注}[section]
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\sem}[1]{\llbracket #1\rrbracket}
+\newcommand{\VS}{\widetilde V}
+\newcommand{\Agree}{\operatorname{Agree}}
+\newcommand{\Bs}{\operatorname{Bs}}
+\newcommand{\DFA}{\operatorname{DFA}}
+\newcommand{\oneDCA}{\operatorname{1\text{-}DCA}}
+\newcommand{\vstatus}[1]{\textsf{#1}}
+\title{\bfseries\color{ink}假设语言与携证表征升级\\[4pt]
+\large\normalfont 从有限不可能性证书到计数器自动机与栈自动机的参数化定理}
+\author{Aleksandr Strand（亚历山大·斯特兰德）}
+\date{2026年11月23日}
+\begin{document}
+\maketitle
+\vspace{-1.0em}
+\begin{abstract}
+本文将假设语言的选择视为可识别性及合理表征变更的显式条件。对于语义版本空间，本文给出增加观测时的单调性、扩大语言时唯一性可能丧失的现象，以及布尔线性假设族中精确的双侧可识别窗口。在有限自动机情形，区分性前缀与后缀组成的矩阵可给出有限证书，证明未知目标函数不可能由状态数受指定上界限制的 DFA 实现；但它不能证明任意黑箱语言的非正则性。更强的 Gate~12 结果将受限的双阶段栈自动机自动合成与 Lean~4 参数化定理连接起来：当候选程序 $P$ 满足可判定的规范结构谓词，且二元映射 $f$ 能区分两个比特时，程序在整个 $\Sigma^*$ 上满足其规格，并与\emph{所声明形式模型中任意有限控制状态数}的 DFA 和单计数器自动机分离。$u\#u^R$ 与 $u\#\overline{u}^R$ 两个实例共用同一检查器。对导出观测列表中的选定前缀进行次序检查，并不能证明 Python 控制器实际调用预言机的历史中不存在提前窥视。全文区分形式定理、有限实验和外部预言机真实性的假设。
+\end{abstract}
+
+\section{语义识别与语言变更}
+
+我们以 $\mathcal I=\langle\Phi,\mathcal D,\mathcal T,\mathcal E\rangle$ 表示一个候选不变量：精确断言、适用域及前提、允许的变换类别，以及可检查证据的类型。仅有这样的记录，并不能提升断言的证明地位。
+
+\begin{definition}[语义版本空间]
+设 $Q$ 为允许的查询集合，$A$ 为响应集合，$\mathcal L$ 为程序语言，$\sem\cdot:\mathcal L\to A^Q$ 为其解释，$D\subseteq Q\times A$ 为有限观测集。定义
+\begin{equation}\label{eq:version}
+\VS(\mathcal L,D)=\{\sem h:h\in\mathcal L,\ \forall(q,a)\in D\ \sem h(q)=a\}\subseteq A^Q.
+\end{equation}
+两个程序即使源代码不同，只要在完整的声明域 $Q$ 上行为相同，就表示同一语义假设。
+\end{definition}
+
+在语义固定时，增加一致的观测只会缩小版本空间；保持语义的语言嵌入只会扩大它：
+\begin{equation}\label{eq:monotonic}
+\begin{aligned}
+D\subseteq D'&\Longrightarrow\VS(\mathcal L,D')\subseteq\VS(\mathcal L,D),\\
+\mathcal L_i\hookrightarrow\mathcal L_j&\Longrightarrow\VS(\mathcal L_i,D)\subseteq\VS(\mathcal L_j,D).
+\end{aligned}
+\end{equation}
+因此，$|\VS(\mathcal L_i,D)|=1$ 不一定在更丰富的 $\mathcal L_j$ 中保持成立。状态 $\vstatus{IDENTIFIED}$ 必须同时指明语言和语义域。
+
+两种不同的识别要求具有不同的量词次序：
+\begin{align}\label{eq:quantifiers}
+&\forall i\ \forall f^\star\in\sem{\mathcal L_i}\ \exists D_i\text{ 有限}:\quad
+ \VS(\mathcal L_i,D_i)=\{f^\star\};\\
+&\exists D\text{ 有限}\ \forall i\ (f^\star\in\sem{\mathcal L_i})\Rightarrow
+ \VS(\mathcal L_i,D)=\{f^\star\}.
+\end{align}
+本文\emph{不预设}它们对任意无限层级都成立。第一项可能在每个有限有界语言中分别成立，却不推出存在统一的 $D$ 的第二项。
+
+例如，在 $Q=\F_2^2$ 上，$f(0,0)=0$ 和 $f(1,0)=1$ 在仅依赖 $x_1$ 的函数族内唯一确定 $f=x_1$；若扩展为全部 $f:Q\to\F_2$，则仍有\emph{四个}完整布尔函数与数据一致。语法树数量不等于 $Q$ 上不同语义行为的数量。
+
+\section{布尔线性语言中的双侧识别窗口}
+
+令 $Q=\F_2^n$，$R=\F_2[x_1,\ldots,x_n]/(x_1^2-x_1,\ldots,x_n^2-x_n)$ 为多重线性多项式表示的布尔函数代数。考虑嵌套有限维线性空间 $U_0\subseteq\cdots\subseteq U_m\subseteq R$、观测位置集合 $Z\subseteq Q$ 以及一致标签 $y\in\F_2^Z$。
+
+记限制映射为 $\rho_Z:U_i\to\F_2^Z$，其核为 $K_i=\ker(\rho_Z|_{U_i})=U_i\cap I(Z)$；其中 $I(Z)$ 是在 $Z$ 上恒为零的函数的消失理想。
+
+\begin{theorem}[识别窗口]\label{thm:window}
+若 $\rho_Z(f)=y$ 在 $U_i$ 中有解，则全部解构成仿射陪集 $f_i+K_i$，且
+\begin{equation}\label{eq:affine}
+|\VS(U_i,D)|=2^{\dim U_i-\operatorname{rank}(\rho_Z|_{U_i})}.
+\end{equation}
+设 $i_*(D)$ 为首次有解的层级，$k_{\rm break}(Z)$ 为首次满足 $K_i\ne\{0\}$ 的层级；不存在时取 $+\infty$。则
+\begin{equation}\label{eq:window}
+|\VS(U_i,D)|=1\quad\Longleftrightarrow\quad i_*(D)\le i<k_{\rm break}(Z).
+\end{equation}
+\end{theorem}
+\begin{proof}
+若有解，线性映射 $\rho_Z$ 对 $y$ 的逆像就是其核的平移。空间嵌套保证可解性随 $i$ 单调，且核相互包含。恰好一个解只会出现在首次可解之后、首次出现非零核之前。
+\end{proof}
+
+对于非空仿射版本空间，查询 $q\in Q\setminus Z$ 将余下函数\emph{等分}为输出 $0$ 和 $1$ 的两组，当且仅当取值映射 $p\mapsto p(q)$ 是 $K_i$ 上的非零线性泛函。这个精确二分性质属于线性情形，不能无条件推广到任意语法。
+
+\section{区分假设与检验模型}
+
+\begin{definition}[一致预测集合]
+对\emph{非空}集合 $V\subseteq A^Q$，定义
+\begin{equation}\label{eq:agree}
+\Agree(V)=\{q\in Q:\forall f,g\in V\ \ f(q)=g(q)\}.
+\end{equation}
+\end{definition}
+
+若 $q\notin\Agree(V)$，存活假设对该查询给出不同预测，实验可以区分候选者。若 $q\in\Agree(V)$，所有候选者都预测同一答案；若获得相反且真实、有效的观测，则 $\VS(\mathcal L,D\cup\{(q,a)\})=\varnothing$，这否定的是\emph{当前语言及其前提}。当 $|A|>2$ 时，即使是区分性查询，也可能收到所有候选者都未预测的响应。
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[>=Latex,font=\footnotesize,node distance=6mm]
+\node[draw=ink,rounded corners,align=center,text width=4.4cm,minimum height=1.15cm] (v) {非空版本空间\\$V=\VS(\mathcal L,D)$};
+\node[draw=ink!65,rounded corners,align=center,text width=4.15cm,minimum height=1.30cm,right=1.2cm of v,yshift=9mm] (d) {$q\notin\Agree(V)$\\区分候选假设};
+\node[draw=ink!65,rounded corners,align=center,text width=4.15cm,minimum height=1.30cm,right=1.2cm of v,yshift=-9mm] (f) {$q\in\Agree(V)$\\检验共同模型};
+\draw[->,thick,ink] (v.east) -- ++(5mm,0) |- (d.west);
+\draw[->,thick,ink] (v.east) -- ++(5mm,0) |- (f.west);
+\end{tikzpicture}
+\caption{同一查询接口具有两个逻辑不同的实验目的。只剩一个假设并不等于检验了语言是否适用。}\label{fig:query}
+\end{figure}
+
+当 $V=\varnothing$ 时，式~\eqref{eq:agree} 中的全称量词真值为真空真，不能据此声称成功达成一致。无解可能意味着语言不适用、测量受损或上下文绑定错误。$|V|=0$ 本身不能确定失败原因。
+
+\subsection{将语言扩展作为可检查的动作}
+
+对变换 $T_i:\mathcal L\mapsto\mathcal L_i$，定义给定观测 $D$ 时允许的预测响应集合：
+\begin{equation}\label{eq:cross}
+P_i(q\mid D)=\{f(q):f\in\VS(\mathcal L_i,D)\}.
+\end{equation}
+若 $P_i(q\mid D)$ 与 $P_j(q\mid D)$ 都非空且不相交，则一个真实响应 $a$ 至少排除其中一个竞争语言。这是在检验\emph{扩展表征的方法}，不仅是在比较单个程序。两个变换的次序也可能重要：$T_i(T_j(\mathcal L))$ 未必等于 $T_j(T_i(\mathcal L))$。要证明具体的不交换性，必须提供明确见证，不能仅凭算子名称断言。
+
+如果存在最短的不一致前缀，则定义为
+\begin{equation}\label{eq:failprefix}
+t_{\rm fail}(\mathcal L)=\min\{t:\VS(\mathcal L,D_{\le t})=\varnothing\}.
+\end{equation}
+其证书要求确认前一个前缀仍有候选者，而当前前缀已无候选者；有限枚举或可靠的 UNSAT 证明必须绑定到具体语法版本。狭窄语言遭到否定，并不能证明较宽语言正确。
+
+\section{以 Rule 110 为基础层的有限局部构造}
+
+细胞自动机实验采用 $64$ 格周期环。其基础二进制层在写回答案之前遵循 Rule~110；单元角色、阶段、消息与寄存器共同形成一个\emph{扩展}的局部字母表。因此，这并不是完全由二状态 Rule~110 独立实现的观察者协议。
+
+在四条特定初始历史及两个上下文中，每对历史的全部基础状态在时刻 $10\ldots27$ 完全一致，但辅助存储保留差异。校验奇偶位在状态 $t=13$ 可用，观测回执在 $t=19$ 可用，历史比特在转移 $27\to28$ 中写回基础层。\emph{扩展}自动机的完整状态没有合并，因此不违背确定性。
+
+有效三位观测 $C_3=\{000,010,110,111\}$ 加上奇偶校验位 $p=z_1\oplus z_A\oplus z_B$：
+\begin{equation}\label{eq:code}
+C_4=\{0000,0101,1100,1111\},\qquad d_{\min}(C_4)=2.
+\end{equation}
+此码能检测有效码字的\emph{任意单比特翻转}，但不能保证检测协调的双比特篡改：$24$ 种双比特改变中有 $10$ 种产生另一个有效码字。零综合征不能证明任意 64 位初始配置的来源。
+
+\begin{equation}\label{eq:live}
+\begin{aligned}
+\mathrm{Cert}_{\rm live}(V,a,z_1,z_A,z_B,p)\ \Longleftrightarrow\quad
+ &[V=2^a]\\[-2pt]
+ &\land[(z_1,z_A,z_B)\in C_3]\\[-2pt]
+ &\land[h_{\rm code}(z_1,z_A,z_B)=a]\\[-2pt]
+ &\land[z_1\oplus z_A\oplus z_B\oplus p=0].
+\end{aligned}
+\end{equation}
+
+与只记录一次的标志不同~\cite{leucker2009}，该谓词检验\emph{当前}寄存器值。但它不能鉴别对所有字段同时进行的任意协调改写。对于任意初始配置，$\vstatus{ORIGIN\_MEMBERSHIP}$ 仍为 $\vstatus{UNKNOWN}$。
+
+\begin{table}[htbp]
+\centering\small
+\caption{有限细胞自动机构造中形式结果与计算结果的适用范围}\label{tab:lean}
+\renewcommand{\arraystretch}{1.10}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{3.2cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{2.6cm}@{}}
+\toprule
+\textbf{类别} & \textbf{被检验对象} & \textbf{证据}\\
+\midrule
+局部性质 & Rule 110 的代数等式、$C_4$ 编码、有限谓词 $\mathrm{Cert}_{\rm live}$ & 10 条 Lean 定理\\
+64 格桥接 & 基础层、四条历史的合并、时钟及六类寄存器干预 & 5 条 Lean 定理\\
+观测到的状态 & 字母表形式大小、有限轨迹及选定的故障类别 & 实验记录\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+提供的 Lean~4.36.0 日志显示两个模块成功检查、没有 \texttt{sorry}。五条时空定理仅列出标准公理 \texttt{propext}；其范围限于\emph{四条}指定历史与指定有限时刻，不涵盖全部 $2^{64}$ 种初始配置或无限时间。此前版本报告每格 $23\,014\,938\,240$ 个形式字段组合，以及正常轨迹中 $505$ 种出现过的局部状态。前者是声明字段的笛卡尔积计数，后者是有限运行统计，不是最小状态数定理。
+
+存储的下界同样需要说明适用域：如果一个共同的可访问上下文必须区分\emph{五种两两不同}的结果，则至少需要五个可区分的内部状态。在固定上下文中仅有\emph{两条}历史合并的事实，本身不能证明整个装置需要五个状态。
+
+\section{布尔假设语言的有限升级}
+
+独立的 Python 原型~\cite{jha2017} \texttt{gate6\_autonomous\_escalation.py} 使用 $Q=\F_2^3$（八个输入），以及预先声明的代数范式次数 $\le1,\le2,\le3$ 的嵌套语言。控制器选择区分性查询，在未见输入上检验看似唯一的候选者，并在 $|\VS(\mathcal L_i,D)|=0$ 时升级到下一层。
+
+五项内置测试通过：目标 $x_1x_2$、$x_1x_2x_3$、$x_1\oplus x_3$ 分别引起一次、两次与零次升级。禁止升级将阻止错误认证；改动保存的奇偶位或插入虚假的反证记录都会使局部检查器拒绝。这里展示的是预定语法下\emph{有限}的次数选择，而不是发明不受限制的新语言。
+
+检查器依据当前观测重算版本空间，并确认\emph{现存}反证记录对应的旧语言确实没有模型。但该记录列表是可变的 Python 列表，并非密码学意义下不可变的审计日志；已记录答案的 XOR 不能独立证明其真实性。在签发结果前检查八个输入，也不能证明向无限域的迁移。
+
+\section{Gate 11：用有限见证排除有界 DFA 的全域实现}
+
+这里出现一种更强的否定证书。目标域是\emph{无限}的词集合 $Q=\Sigma^*$，但被排除的机器类有\emph{固定有限}的资源上界。
+
+令 $\Sigma=\{0,1\}$、$k\ge1$，$f:\Sigma^*\to\{0,1\}$ 为目标成员判定函数（或可靠预言机）。依 Myhill--Nerode 判据~\cite{myhill1957,nerode1958}，取前缀 $p_i=0^i$ 和后缀 $s_j=1^j$，其中 $0\le i,j\le k$。查询得到有限矩阵
+\begin{equation}\label{eq:mn_matrix}
+M_k(i,j)=f(p_is_j)=f(0^i1^j),\qquad 0\le i,j\le k.
+\end{equation}
+\begin{theorem}[排除至多 $k$ 状态 DFA 的有限证书]\label{thm:bounded_dfa}
+若所有 $(k+1)^2$ 个真实答案满足
+\begin{equation}\label{eq:mn_diagonal}
+M_k(i,j)=\begin{cases}1,&i=j,\\0,&i\ne j,\end{cases}
+\end{equation}
+则\emph{不存在}状态数 $\le k$ 的 DFA 能在完整 $\Sigma^*$ 上计算 $f$。
+\end{theorem}
+\begin{proof}
+假设这样的 DFA 存在。$k+1$ 个前缀 $p_0,\ldots,p_k$ 中必有不同的 $p_i,p_j$ 将机器引至同一状态。随后读取相同后缀 $s_i=1^i$，接受结果必须相同。但式~\eqref{eq:mn_diagonal} 要求 $f(p_is_i)=1$、$f(p_js_i)=0$，矛盾。
+\end{proof}
+
+虽然该证书只包含有限个答案，却能够排除某个 DFA 作为\emph{全部输入上的实现}：一旦两个内部状态相同，所有共同后缀的输出便必然相同。关键前提是矩阵各项来自\emph{同一固定目标} $f$ 的真实答案，且查询身份与上下文关联未被破坏。
+
+\begin{figure}[htbp]
+\centering
+\begin{tabular}{c|cccc}
+$M_3$ & $s_0$ & $s_1$ & $s_2$ & $s_3$\\ \hline
+$p_0$ & $\mathbf 1$ & 0 & 0 & 0\\
+$p_1$ & 0 & $\mathbf 1$ & 0 & 0\\
+$p_2$ & 0 & 0 & $\mathbf 1$ & 0\\
+$p_3$ & 0 & 0 & 0 & $\mathbf 1$
+\end{tabular}
+\caption{$k=3$ 的示例：16 个答案排除全部不超过三个状态的 DFA，但不排除更大的 DFA。}\label{fig:matrix}
+\end{figure}
+
+\begin{remark}[有限预言机的根本限制]\label{rem:oracle}
+对于每个\emph{固定}的 $k$，矩阵~\eqref{eq:mn_diagonal} 仅排除 $\DFA(\le k)$。若无额外先验条件，任何有限查询列表都\emph{不能}排除未知目标的一切有限 DFA。总能构造与全部有限观测一致的正则语言。因此，实验本身不证明未知黑箱的非正则性。
+\end{remark}
+
+对于\emph{形式上已定义}的语言
+\begin{equation}\label{eq:anbn}
+L_{=}=\{0^n1^n:n\ge0\}
+\end{equation}
+则有不同性质的结果。公开模块 \href{https://github.com/Dnarts/proof-carrying-discovery/blob/main/formal/DFAto1DCASeparation.lean}{\texttt{DFAto1DCASeparation.lean}} 包含针对\emph{每个} $S\in\mathbb N$ 的 \texttt{anbn\_not\_dfa}，以及为一个具有三控制状态的显式确定性单计数器自动机给出的 \texttt{anbn1DCA\_accepts}。Lean~4.36.0 日志记录退出码 $0$，不同定理所依赖的标准公理包括 \texttt{propext}、\texttt{Classical.choice} 和 \texttt{Quot.sound}。量词 $\forall S$ 来自\emph{针对明确函数的数学证明}，并非对未知预言机的有限采样。
+
+仅凭这条 Lean 定理，并不能断定一个按有限数据拟合的无关 Python 自动机在所有词上正确。实现与 Lean 定义之间仍需经过检查的语义连接。
+
+\section{Gate 12：更换计算存储后的参数化认证}
+
+\subsection{替代程序的形式化家族}
+
+令 $\Sigma=\{0,1,\#\}$、$W=\Sigma^*$。对二元变换 $f:\{0,1\}\to\{0,1\}$ 定义
+\begin{equation}\label{eq:mid-language}
+L_f=\{u\,\#\,(f(u))^R:\ u\in\{0,1\}^*\},
+\end{equation}
+其中 $f(u)$ 表示逐字符应用 $f$。Gate~12 的 \texttt{StackProgram 2} 有两个控制阶段：在分隔符之前，将输入比特的 $f$-像压栈；在分隔符之后，将后续输入比特与栈顶比较并弹栈。仅在分隔符合法且栈为空时接受。这里并不声称任意 DPDA 都具有这种结构。
+
+可判定谓词 \texttt{isCanonicalMidDPDA P f} 检查每个二元符号和可能栈顶的转移、重复分隔符的禁止规则、$f$ 的允许性及接受条件。附加条件 $f(0)\ne f(1)$ 表示 $f$ 在二元字母表上是单射。在此条件下只有两种二元映射：恒等与交换，即使形式类型写作 $\mathrm{Sym}\to\mathrm{Sym}$。
+
+\begin{theorem}[栈自动机的参数化规格]\label{thm:dpda}
+对任意 $P:\texttt{StackProgram 2}$ 和二元映射 $f$，若 $\texttt{isCanonicalMidDPDA}(P,f)=\mathrm{true}$，则对所有 $w\in W$，
+\begin{equation}\label{eq:dpda-sound}
+P.\operatorname{eval}(w)=\mathrm{true}
+\quad\Longleftrightarrow\quad
+\exists u\in\{0,1\}^*:\ w=u\,\#\,(f(u))^R.
+\end{equation}
+\end{theorem}
+这个全称结论来自 \texttt{gate12\_hierarchy\_checker.lean} 内部的参数化归纳证明。对具体导出程序使用 \texttt{by decide} 检查前提，是\emph{应用}这条定理，而不是用有限实验替代归纳。
+
+\begin{theorem}[保持二元区分性时的类分离]\label{thm:separation}
+在定理~\ref{thm:dpda} 的条件及 $f(0)\ne f(1)$ 下，成立
+\begin{equation}\label{eq:global-sep}
+\begin{aligned}
+&\forall k\in\mathbb N:\ \nexists M:\DFA(k),\quad
+  \forall w\in W\; M(w)=P(w),\\
+&\forall m\in\mathbb N:\ \nexists C:\oneDCA(m),\quad
+  \forall w\in W\; C(w)=P(w).
+\end{aligned}
+\end{equation}
+这里 $\DFA(k)$、$\oneDCA(m)$ 特指形式模块中的 \texttt{DFA}、\texttt{CounterProgram} 类型，而非任意外部定义的机器。
+\end{theorem}
+
+\begin{proof}[第二条结论的证明纲要]
+固定 $m$，取 $L=2m+2$。长度为 $L$ 的不同二元前缀共有 $2^L$ 个。在形式单计数器模型中，读取此长度的前缀后，机器至多拥有 $\operatorname{dcaConfigBound}(m,L)=1+m(L+1)$ 个可区分配置，包括拒绝态。Lean 的算术引理给出
+\begin{equation}\label{eq:dca-bound}
+1+\operatorname{dcaConfigBound}(m,2m+2)\le 2^{2m+2}.
+\end{equation}
+由抽屉原理，两个不同的二元前缀必须达到同一配置。若 $f$ 为单射，针对其中一个前缀 $u$ 的续接 $\#(f(u))^R$ 只能在该前缀后被接受，而在另一个前缀后被拒绝。两次到达同一配置与此矛盾。DFA 部分采用通常的区分后缀论证。
+\end{proof}
+
+若 $f(0)=f(1)$，基于区分后缀的论证失效：语言~\eqref{eq:mid-language} 只依赖 $|u|$，不一定需要在栈中保留 $u$ 的每个比特。已提交的通用 Lean 定理\emph{没有}包含单计数器实现的反向构造，因此本文不声称条件两侧的完整形式化分类。
+
+\subsection{两个程序及其证明的导出}
+
+同一个控制器 \texttt{gate12\_blind\_chomsky\_escalation.py} 在受限语法中找到了两个不同候选程序，并生成一个应用公共定理的 Lean 文件。第一个对应 $f=\mathrm{id}$；第二个对应对合映射 $f(0)=1$、$f(1)=0$。两者都通过式~\eqref{eq:dpda-sound} 对\emph{所有}有限词成立，不只限于实验长度。这只是同一结构族的两个实例，\emph{不是}自动发现任意 DPDA 语言的证据。
+
+\begin{table}[htbp]
+\centering\small
+\caption{Gate 12 v12.3 的已执行协议：预言机调用与导出证据}\label{tab:gate12}
+\renewcommand{\arraystretch}{1.15}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}Xrrr@{}}
+\toprule
+\textbf{任务} & \textbf{预言机调用} & \textbf{保留记录} & \textbf{$(t_1,t_2)$}\\
+\midrule
+$u\#u^R$ & 88 & 60 & $(9,54)$\\
+$u\#\overline{u}^R$ & 107 & 61 & $(9,54)$\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+三项内置 Python 测试全部通过。独立有限审核为\emph{每项任务}测试了 $29\,524$ 个长度不超过九的词，没有发现差异，并确认导出 Lean 文件可按字节一致地再生成。这些有限检查既不证明无限 $W$ 上的数学定理，也不证明外部预言机真实；前者依靠形式证明，后者仍是前提。
+
+\subsection{因果证书的精确界限}
+
+布尔检查器 \texttt{checkCausalEscalation} 使用选定的观测列表 $D$ 与索引 $t_1<t_2$。它检查 $D_{\le t_1}$ 上 $\DFA(k)$ 的不足、$D_{\le t_2}$ 上 $\oneDCA(m)$ 的不足，以及导出程序与全部 $D$ 的一致性。结合规范结构谓词，\texttt{checkFullChomskyProtocol\_sound} 给出七项结论：索引次序、两项有界类排除、一致性、无限规格及两项全局类排除。
+
+但是 $D$ 是\emph{挑选后导出的列表}，并非 Python 实际调用预言机的完整时间序列。在完成第二个证书时，两个任务实际上分别调用了预言机 $82$ 次和 $100$ 次，虽然两个导出列表都取 $t_2=54$。因此，形式检查证明的是\emph{选定证据前缀在逻辑上足够}，而不是控制器作出升级决定时未看到后续回答。策略状态、全部预言机请求及实际响应时间没有在 Lean 中与完整执行轨迹绑定。
+
+故形式化验证只针对\emph{导出的机器}及其明确前提，不能视为 Python 合成器、Python$\to$Lean 翻译器或实验数据真实性的通用证明。DFA$\to$1-DCA$\to$DPDA 是\emph{机器存储能力的层级}，并非经典乔姆斯基层级中的三个不同等级。
+
+\section{证据类型与证明地位}
+
+\begin{table}[htbp]
+\centering\small
+\caption{无限域中不同的认证对象}\label{tab:status}
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{2.55cm}>{\raggedright\arraybackslash}X>{\raggedright\arraybackslash}p{3.05cm}@{}}
+\toprule
+\textbf{状态} & \textbf{能够确认什么} & \textbf{不能由此推出}\\
+\midrule
+排除类 & 可靠矩阵排除全部 $\le k$ 状态的 DFA 对完整目标 $f$ 的实现 & 黑箱非正则性\\
+与 $D$ 一致 & 程序解释有限观测 & 全域正确性\\
+在 $G$ 内识别 & 固定 $G$ 下只有一个语义候选者 & 改变 $G$ 后仍唯一\\
+形式化分离 & 给定 $L_=$ 不属于 DFA，且有 1-DCA 实现 & 任意 Python 程序正确\\
+规范 DPDA 族 $L_f$ & 单射二元 $f$ 下的通用规格，以及与 $\DFA(k)$、$\oneDCA(m)$ 的分离 & 任意 DPDA 或实际调用历史\\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+语义身份不同于程序源码相同；观测行为一致不代表物理原因同一；历史回执不能保证当前寄存器未受损；奇偶校验也不能替代数据来源证明。这些区分可以写入验证协议，但不能靠重新命名状态来消除。
+
+Gate~11 使用有限矩阵排除\emph{资源有界类}；Gate~12 则增加了一种独立的正面证据：只要参数化定理前提经过验证，即可证明\emph{合成后的形式程序}在全域正确。这仍需分别确认观测的真实次序与预言机的一致性。两种机制都建立在已有的自动机理论与识别理论之上；这个案例的方法论价值在于同时呈现断言、适用域、可检查见证及迁移限制。
+
+\section{结论}
+
+语义识别需要固定假设语言、观测域和行为等价准则。有限的区分矩阵可以排除具有既定资源上界的全部机器，但不能证明任意未知语言非正则。对于 Gate~12 合成的形式程序，建立了更强的命题：属于受限规范程序族，就能够通过可检查的步骤得到无限多个有限词上的全称规格与机器类分离结论。
+
+这个构造展示了\emph{预先声明的语法与已有参数化检查器}之内的携证合成，而没有证明通用科学语言的自主生成。正面的定理、否定证书、预言机相对性及控制器真实的因果历史，依然是四种不同的论证对象。若要把方法迁移到这两项固定二元任务之外，必须保留这些区分。
+
+\begin{thebibliography}{99}\setlength{\itemsep}{1pt}
+\bibitem{myhill1957} J.~Myhill. \emph{Finite Automata and the Representation of Events}. WADC Technical Report 57--624, 1957.
+\bibitem{nerode1958} A.~Nerode. \emph{Linear Automaton Transformations}. Proceedings of the American Mathematical Society, 9(4):541--544, 1958.
+\bibitem{moore1956} E.~F.~Moore. \emph{Gedanken-experiments on Sequential Machines}. Automata Studies, pp.~129--153, 1956.
+\bibitem{gold1978} E.~M.~Gold. \emph{Complexity of Automaton Identification from Given Data}. Information and Control, 37(3):302--320, 1978.
+\bibitem{jha2017} S.~Jha, S.~A.~Seshia. \emph{A Theory of Formal Synthesis via Inductive Learning}. Acta Informatica, 54:693--726, 2017.
+\bibitem{hamming1950} R.~W.~Hamming. \emph{Error Detecting and Error Correcting Codes}. Bell System Technical Journal, 29(2):147--160, 1950.
+\bibitem{leucker2009} M.~Leucker, C.~Schallhart. \emph{A Brief Account of Runtime Verification}. Journal of Logic and Algebraic Programming, 78(5):293--303, 2009.
+\bibitem{gate12code} A.~Strand. \emph{Gate 12 v12.3: parametric two-phase stack certification and class separation}. Lean 4.36.0 source and audit logs, 2026.
+\end{thebibliography}
+\end{document}

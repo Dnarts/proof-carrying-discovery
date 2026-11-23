@@ -4,19 +4,25 @@
 
 Evidence-scoped program discovery, finite model-class refutation, controlled representation escalation and formal verification of synthesized programs.
 
-**English** · [Русский](#русский)
+**English** · [Русский](#русский) · [简体中文](#中文简介)
+
+[**All preprints in EN / RU / 简体中文**](docs/PREPRINT_LANGUAGES.md)
 
 ## Start here — latest research (Gate 11–12, 23 November 2026)
 
 **Hypothesis Languages and Proof-Carrying Representation Escalation.** Current primary preprint; available in **Russian**.
 
-[**Read the PDF**](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [LaTeX](papers/hypothesis-language/gate11-gate12-v12.3/src/hypothesis_language_gate12_ru.tex) · [reproducible ZIP](papers/hypothesis-language/gate11-gate12-v12.3/gate12_reproducible_bundle.zip) · [Lean sources](papers/hypothesis-language/gate11-gate12-v12.3/gate12/) · [evidence and limits](papers/hypothesis-language/gate11-gate12-v12.3/README.md)
+**Preprint PDFs:** [English](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf) · [Русский](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [简体中文](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.pdf)
+
+[Original Russian LaTeX](papers/hypothesis-language/gate11-gate12-v12.3/src/hypothesis_language_gate12_ru.tex) · [reproducible ZIP](papers/hypothesis-language/gate11-gate12-v12.3/gate12_reproducible_bundle.zip) · [Lean sources](papers/hypothesis-language/gate11-gate12-v12.3/gate12/) · [evidence and limits](papers/hypothesis-language/gate11-gate12-v12.3/README.md)
 
 [Successful Lean 4.36.0 + XeLaTeX publication workflow](https://github.com/Dnarts/proof-carrying-discovery/actions/runs/45134680055).
 
 The main progression is:
 
 **Acquire a useful program → test whether it is identified → refute an inadequate model class → change representation → synthesize a new program → formally check its behavior.**
+
+The full translated PDFs preserve the proof scopes and mathematical claims of the original Russian version. For earlier publications, English was already available; [Chinese translations now accompany both earlier papers](docs/PREPRINT_LANGUAGES.md).
 
 The latest result distinguishes four different forms of evidence. A finite prefix–suffix witness rules out DFA models with **at most a specified number of states**. A separate mathematical theorem can rule out all finite DFAs for a **formally defined** nonregular language. An exported canonical two-phase stack program is proved to recognize its stated infinite-word language; under explicit binary-distinguishing assumptions, the formalization rules out every finite-control DFA and one-counter machine in the declared Lean models. A selected-history checker validates recorded witness prefixes but **not the chronological order of all actual Python oracle calls**.
 
@@ -73,7 +79,9 @@ Cite the **specific preprint and source commit** supporting each claim: [Gate 11
 
 **«Языки гипотез и доказательная эскалация представления»**, 10 страниц на русском.
 
-[**Читать PDF**](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [LaTeX](papers/hypothesis-language/gate11-gate12-v12.3/src/hypothesis_language_gate12_ru.tex) · [Бандл ZIP](papers/hypothesis-language/gate11-gate12-v12.3/gate12_reproducible_bundle.zip) · [Lean](papers/hypothesis-language/gate11-gate12-v12.3/gate12/) · [Границы и аудит](papers/hypothesis-language/gate11-gate12-v12.3/README.md).
+**Препринт:** [English PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf) · [Русский PDF](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [中文 PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.pdf)
+
+[Русский LaTeX](papers/hypothesis-language/gate11-gate12-v12.3/src/hypothesis_language_gate12_ru.tex) · [Бандл ZIP](papers/hypothesis-language/gate11-gate12-v12.3/gate12_reproducible_bundle.zip) · [Lean](papers/hypothesis-language/gate11-gate12-v12.3/gate12/) · [Границы и аудит](papers/hypothesis-language/gate11-gate12-v12.3/README.md).
 
 Теперь речь не только о конечном исключении DFA(≤k). Для **формально заданных** языков и канонических двухфазных стековых программ доказаны универсальные утверждения на всех конечных словах. В допустимом семействе с различающим биты преобразованием исключены DFA и односчётчиковые автоматы с произвольным конечным числом управляющих состояний. Но **для произвольного чёрного ящика такого вывода из конечной выборки нет**.
 
@@ -97,3 +105,16 @@ Cite the **specific preprint and source commit** supporting each claim: [Gate 11
 Для чтения начать с [основного препринта](papers/hypothesis-language/gate11-gate12-v12.3/), затем перейти к [предыдущей методологической редакции](papers/hypothesis-language/), [формальным основаниям](formal/) и [исходному эксперименту v1.1](papers/cumulative-search/). Развёрнутая [карта исследования](docs/RESEARCH_LINEAGE.ru.md) объясняет область каждого свидетельства.
 
 [MANIFEST.json](MANIFEST.json) относится только к историческому выпуску v1.1.1; у новых работ собственные хэши. [Как цитировать](CITATION.cff) · [MIT](LICENSE). Связанные, но отдельные направления: [Rule 110](https://github.com/Dnarts/rule110-dependency-fronts) и [Channel Topology and Memory](https://github.com/Dnarts/channel-topology-and-memory).
+
+
+---
+
+# 中文简介
+
+**本项目的核心问题：何时有证据支持改变假设语言，如何独立核验这种改变？**
+
+当前主要论文为 Gate 11–12 v12.3：《假设语言与携证表征升级》。[English PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf) · [Русский PDF](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [中文 PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.pdf) · [源代码与证据](papers/hypothesis-language/gate11-gate12-v12.3/)。
+
+完整研究链条：**累积程序发现 → 语义可识别性检验 → 对有界模型类的有限反证 → 表征升级 → 新程序合成 → 在已声明形式模型中验证其全称规格**。有限观测不能证明任意未知黑箱语言的非正则性；Gate 12 的参数化定理只涵盖满足规范结构条件的两阶段栈程序。历史因果检查针对选定的证据列表，而非全部真实预言机调用。
+
+另外两篇论文：[假设语言与限定证据范围的识别（中文 PDF）](papers/hypothesis-language/HYPOTHESIS_LANGUAGE.zh.pdf) · [固定引擎中的累积搜索（中文 PDF）](papers/cumulative-search/CUMULATIVE_SEARCH.zh.pdf)。[三个研究方向的语言版本索引](docs/PREPRINT_LANGUAGES.md)。

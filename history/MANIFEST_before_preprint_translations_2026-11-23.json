@@ -1,0 +1,196 @@
+{
+  "schema": "invariantnet-release/1",
+  "version": "1.1.1",
+  "repository": "https://github.com/Dnarts/proof-carrying-discovery",
+  "source_of_truth": "byte-addressed files, not their render projections",
+  "manifest_self_hash": "omitted to avoid recursion",
+  "previous": "v1.0 unmodified in legacy/; exact v1.1.0 archive in history/",
+  "timestamp": "22 November 2026 (authoring date; no third-party timestamp)",
+  "files": {
+    ".github/workflows/verify.yml": {
+      "bytes": 347,
+      "sha256": "3cf7aac5fa4412d4983f166b28de0ef40903b7e695f51d4a1f4118801db5cc2f"
+    },
+    ".gitignore": {
+      "bytes": 73,
+      "sha256": "3de0e13c82fe04ee16d678bff57d1011c82fc0545d110f7a2451fda3b531c8fb"
+    },
+    "CITATION.cff": {
+      "bytes": 1045,
+      "sha256": "286903842c0e2220675649885a889b86d6eed7ca879231bd2e7917c20bbab7d3"
+    },
+    "FIXES.md": {
+      "bytes": 7547,
+      "sha256": "91714ab9c7299cd97128bdb41ba8b2a0188a2ebaa144baa75979582d3f920916"
+    },
+    "LICENSE": {
+      "bytes": 1061,
+      "sha256": "da2daa5aeb8ede273c81bca7e777f0da9827a4727c1da110fb22a8ce8d18be06"
+    },
+    "PREPRINT_v1.1.en.md": {
+      "bytes": 19299,
+      "sha256": "d4f1af9e90816a194ca5d968c9b04befd19d3fa570671c8b3f7782ae69798bc1"
+    },
+    "PREPRINT_v1.1.en.pdf": {
+      "bytes": 314706,
+      "sha256": "edf5ddf76da0cdac39aba732782fe0dc5e82bf97c6bfe2a28b2339865fb46a54"
+    },
+    "PREPRINT_v1.1.ru.md": {
+      "bytes": 31124,
+      "sha256": "f90c2c9d247fbcb23b5ac508ff6f0dc859fc01f23dbaf45f9c1b22ef2b4a52da"
+    },
+    "PREPRINT_v1.1.ru.pdf": {
+      "bytes": 331141,
+      "sha256": "f1a454a630b4488950e04c04c40b7f84cf9e3847c7392f5788e813fadc66b4f5"
+    },
+    "README.md": {
+      "bytes": 12331,
+      "sha256": "7ccadbc094ccf88b841ef6141746882d38cf016f8b14324ebfd56810855c58f1"
+    },
+    "build_preprints.py": {
+      "bytes": 15444,
+      "sha256": "6348875c7282582b8255ed1842330180a52b6aaa0c03d973f6c75978b3f3e0ed"
+    },
+    "docs/PDF_BUILD.md": {
+      "bytes": 1776,
+      "sha256": "4a156decd0dfcbcb078a578f1c3892e4f2eaffc0171d63a899ce1bd773f09094"
+    },
+    "evidence/README.md": {
+      "bytes": 963,
+      "sha256": "348b36c83e4dc8722e3c48049cdfe6226e65a35c8eea10ae19221108643ed082"
+    },
+    "evidence/numerical_portability.json": {
+      "bytes": 2021,
+      "sha256": "9eda37f697761b8ca12e79039faa480b126de5eb7b588ef5d19c5f9f0abbb288"
+    },
+    "evidence/publication_patch.json": {
+      "bytes": 2948,
+      "sha256": "5d0d18af3e13e300ba7c26f0f3290b6c7728b908b0a4424e7fee7b4a858cd167"
+    },
+    "evidence/unittest_stdout.txt": {
+      "bytes": 1336,
+      "sha256": "28a2eba684a656ed7b47eb3096566c2e2f3df1e88ca578fcc8cfa9b0a3ca69d3"
+    },
+    "evidence/verification_receipt.json": {
+      "bytes": 782,
+      "sha256": "e9abd371d5a0117f8e177790b9d026a4d920dec8c14edf4398790f667fdeb693"
+    },
+    "history/README.md": {
+      "bytes": 587,
+      "sha256": "f7d37a3e054cf1828ae76940410c012f5970dbdb91dd25c5b1bf5ecad2f04eb4"
+    },
+    "history/invariantnet-cumulative-discovery-v1.1.0.zip": {
+      "bytes": 212932,
+      "sha256": "84b821fad73954d642fc91b1eb690ec93d88b8fc9f9b8dd02835d2812735877e"
+    },
+    "legacy/V1_AUDIT.ru.md": {
+      "bytes": 18594,
+      "sha256": "6d7a905a2a34e5aab9e834b58d3fec1aec94b45327154bb16e4f88a5a61218ad"
+    },
+    "legacy/__init__.py": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "legacy/abc_shapley_v1.py": {
+      "bytes": 11270,
+      "sha256": "90edaa1d3e9b9ddbccee07bd3893562054aabf5ae899013388a5419c6bf828fc"
+    },
+    "legacy/abc_shapley_v1_results.json": {
+      "bytes": 5058,
+      "sha256": "13d3eedccdfe6df9ec8ec4a0e0eb1734a0a8559627d10b69ee7d6475025c4958"
+    },
+    "legacy/audit_v1/MANIFEST.json": {
+      "bytes": 1860,
+      "sha256": "2949a633679705e762ac335f0090167697a35fcfde97b4f7fe4fcf4ad0dd332e"
+    },
+    "legacy/audit_v1/README.md": {
+      "bytes": 1138,
+      "sha256": "9c013676b72d25945a7aadf50d7ec7a271c5653c4f2a88276d49dcc14e55920d"
+    },
+    "legacy/audit_v1/REVIEW.ru.md": {
+      "bytes": 18594,
+      "sha256": "6d7a905a2a34e5aab9e834b58d3fec1aec94b45327154bb16e4f88a5a61218ad"
+    },
+    "legacy/audit_v1/SHA256SUMS.txt": {
+      "bytes": 1055,
+      "sha256": "0fee7aed52643773da15523f2d831b3a39464e0aac3b54c9375c91f86785dc6b"
+    },
+    "legacy/audit_v1/audit_checks.json": {
+      "bytes": 6959,
+      "sha256": "07aa34a274e984e7cbc84677921efb00275e9b286a26ace2d5988753d1643b33"
+    },
+    "legacy/audit_v1/audit_release_v1.py": {
+      "bytes": 14695,
+      "sha256": "e84aabb4b971ac5ca0e85ac1c97bc167ad5b051e53f18ccb2e06d07165102924"
+    },
+    "legacy/audit_v1/audit_stdout.txt": {
+      "bytes": 1352,
+      "sha256": "ebd93cbacb3dbbbc95b943688cf10d88b8046fdbd65c2e2fd670fe748c81b209"
+    },
+    "legacy/audit_v1/gate_witnesses.json": {
+      "bytes": 7254,
+      "sha256": "d7dd02d5ed78f185d09639b99d63b830605a45ed9f4dad34785111e1fa69da9f"
+    },
+    "legacy/audit_v1/mn_pair_witnesses.json": {
+      "bytes": 6499,
+      "sha256": "f9a96c8ef79c1df180f20470cc96f70d876f7b9b34b884fa68f27b00ef0d56b2"
+    },
+    "legacy/audit_v1/original/abc_shapley_v1.py": {
+      "bytes": 11270,
+      "sha256": "90edaa1d3e9b9ddbccee07bd3893562054aabf5ae899013388a5419c6bf828fc"
+    },
+    "legacy/audit_v1/original/abc_shapley_v1_results.json": {
+      "bytes": 5058,
+      "sha256": "13d3eedccdfe6df9ec8ec4a0e0eb1734a0a8559627d10b69ee7d6475025c4958"
+    },
+    "legacy/audit_v1/original/dfa_to_1dca_v1.py": {
+      "bytes": 13860,
+      "sha256": "4975381c4ed98e8db13be24029fb6c6d21a49dffea1851b258a00d9066b8d9ba"
+    },
+    "legacy/audit_v1/original/dfa_to_1dca_v1_results.json": {
+      "bytes": 9928,
+      "sha256": "6b4bac1a9937cae3e0e5f1d8791f0af07cac5346e2712618099f86976ccae459"
+    },
+    "legacy/dfa_to_1dca_v1.py": {
+      "bytes": 13860,
+      "sha256": "4975381c4ed98e8db13be24029fb6c6d21a49dffea1851b258a00d9066b8d9ba"
+    },
+    "legacy/dfa_to_1dca_v1_results.json": {
+      "bytes": 9928,
+      "sha256": "6b4bac1a9937cae3e0e5f1d8791f0af07cac5346e2712618099f86976ccae459"
+    },
+    "package_release.py": {
+      "bytes": 2964,
+      "sha256": "dec55bcdb798033db40b5db99a5aaef0857f8c8925af7dbc3e5a2e8fa1fcce73"
+    },
+    "tests/audit_release.py": {
+      "bytes": 3047,
+      "sha256": "6ff94729ab18db6a1be91c0538433bcb8eb29e0e381f29e4e9f281331b77fbb9"
+    },
+    "tests/test_release.py": {
+      "bytes": 11228,
+      "sha256": "734808e08ae258dbeeba6c888bb033196a9473b059cc561171d98dbe42a47ecb"
+    },
+    "v1_1/abc_historical_v1_1.py": {
+      "bytes": 11937,
+      "sha256": "2c0d37b4a234d6831094b8f1f17ed4b7862bb20180568c60b09219e81f216d13"
+    },
+    "v1_1/abc_historical_v1_1_results.json": {
+      "bytes": 39790,
+      "sha256": "d381cc5aac6479f401ba183e0ffb745312535763ed159249f4675352de748089"
+    },
+    "v1_1/build_dfa_v1_1.py": {
+      "bytes": 17237,
+      "sha256": "29f12d7e73fd9a082e024225b3c4977983c3ab8e843bb5c806e7d9780404ad81"
+    },
+    "v1_1/dfa_to_1dca_v1_1.py": {
+      "bytes": 22388,
+      "sha256": "5bd9619969a0b292bc8f53be219cf4052af7236659cfb6ab335257a00e63d4a8"
+    },
+    "v1_1/dfa_to_1dca_v1_1_results.json": {
+      "bytes": 27939,
+      "sha256": "0dbb57ad3c1f9810ee23db555b7bec806655c94ce1170110624b713d57a53456"
+    }
+  },
+  "publication_addendum": "23 November 2026: mutable root README navigation updated to cite hypothesis-language companion; v1.1.1 source/preprint content hashes unchanged. The companion papers are a separate edition and are not folded into the historical v1.1.1 manifest. 23 November 2026 Gate 11–12 root-navigation and preferred-citation update: only mutable README.md and CITATION.cff digest records are changed; earlier v1.1.1 experiment data and proofs retain original SHA-256. Prior manifests and entrypoints preserved in history/; later papers retain independent release manifests."
+}
