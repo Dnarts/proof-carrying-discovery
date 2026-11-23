@@ -7,7 +7,7 @@ A typed revision system for research representations: heuristic cross-domain exp
 | Edition | XeLaTeX source | PDF |
 |---|---|---|
 | English | [Source](src/meta_synset_invariant_preprint_v2_4_en.tex) | [PDF](meta_synset_invariant_preprint_v2_4_en.pdf) |
-| Русский | [Исходник сборки](src/meta_synset_invariant_preprint_v2_4_ru.tex) | [PDF](meta_synset_invariant_preprint_v2_4_ru.pdf) |
+| Русский | [Авторский архив](original/epistemic_revision_v2_4_final_verified_bundle.zip) · [исходник повторной вёрстки](src/meta_synset_invariant_preprint_v2_4_ru.tex) | [Авторский PDF](original/meta_synset_invariant_preprint_v2_4.pdf) · [PDF повторной вёрстки](meta_synset_invariant_preprint_v2_4_ru.pdf) |
 | 简体中文 | [LaTeX 源文件](src/meta_synset_invariant_preprint_v2_4_zh.tex) | [PDF](meta_synset_invariant_preprint_v2_4_zh.pdf) |
 
 ## Evidence and scope
@@ -20,6 +20,8 @@ The supplied [verification log](evidence/ALL_4_MODULES_v2_4_VERIFICATION.log) re
 - Gate 13's general queue/stack separation and empirical claims about total search cost remain open in this edition.
 
 English and Simplified Chinese are translations of the supplied Russian v2.4 PDF. The Russian release build reproduces the v2.4 text with redrawn diagrams and harmonized version/count labels and prose aligned with the checked hypotheses and counterexamples in §§4 and 7–8; its PDF is not required to be byte-identical to the author's supplied PDF. Those editorial changes do not change the Lean sources or theorem scopes.
+
+[Reproducible trilingual release ZIP](meta_synset_invariant_v2_4_release.zip) · [Release SHA-256](SHA256SUMS.release) · [Exact author-file SHA-256](original/SHA256SUMS.author)
 
 ## Reproduce
 

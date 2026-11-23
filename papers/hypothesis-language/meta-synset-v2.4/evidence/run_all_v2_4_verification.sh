@@ -27,6 +27,7 @@ OVERALL=0
     if [ $RC -ne 0 ]; then OVERALL=1; fi
     if echo "$OUT" | grep -qiE "warning|error"; then
       echo "WARNINGS_OR_ERRORS: PRESENT"
+      OVERALL=1
     else
       echo "WARNINGS_OR_ERRORS: NONE"
     fi

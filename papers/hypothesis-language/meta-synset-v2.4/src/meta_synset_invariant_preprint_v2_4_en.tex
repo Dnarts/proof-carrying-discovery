@@ -130,15 +130,15 @@ structure ScopeBridge (Q2 : Type) (s1 s2 : Scope) (A1 A2 : Premise)
 \node[box] (a) at (0,0) {Covered (FinitePrefix)\\partition: \(R\to\mathrm{Cov}\lor\mathrm{Gap}\)};
 \node[box] (b) at (7,0) {Total (FinitePrefix)\\DirectEvidence \(s\ A\ c\)};
 \node[box] (c) at (14,0) {LanguageMenu\\StepBranch, SymbolLift, \(\mathrm{Gain}_{\min}\)};
-\node[box] (d) at (0,-3.3) {Covered (InfiniteLanguage)\\\(w\in\Sigma^*\), ModelGap (hasEpsilon)};
-\node[box] (e) at (7,-3.3) {Total (InfiniteLanguage)};
-\node[box] (f) at (14,-3.3) {RevisionSpace\\Obs, \(\Delta_L/\Delta_D/\Delta_\pi\)};
+\node[box] (d) at (0,-4.3) {Covered (InfiniteLanguage)\\\(w\in\Sigma^*\), ModelGap (hasEpsilon)};
+\node[box] (e) at (7,-4.3) {Total (InfiniteLanguage)};
+\node[box] (f) at (14,-4.3) {RevisionSpace\\Obs, \(\Delta_L/\Delta_D/\Delta_\pi\)};
 \draw[->] (a)--node[above]{bridgeComplete} node[below]{(GapEmpty)} (b);
 \draw[->] (b)--node[above]{MenuSplit} (c);
-\draw[->] (b)--node[above,sloped]{liftScope (ScopeBridge)} node[below,sloped]{ModelGap} (d);
-\node[above left,font=\footnotesize] at (a.north east) {Direct evidence stays within its scope};
+\draw[->] (b.south) -- (7,-2.15) -- node[above,font=\footnotesize]{liftScope (ScopeBridge)} node[below,font=\footnotesize]{retains ModelGap} (0,-2.15) -- (d.north);
+\node[font=\footnotesize] at (0,1.08) {Direct evidence stays within its scope};
 \draw[->,dashed] (c)--node[right]{Obs} (f);
-\draw[->] (d)--node[above]{GapEmpty} node[below,font=\scriptsize]{\(\exists m,\ \mathrm{hasEps}(m)\) may block} (e);
+\draw[->] (d)--node[above]{GapEmpty} node[below,font=\scriptsize]{countermodel} (e);
 \end{tikzpicture}}
 \caption{The scopes and the v2.4 kernel's two bridges. The completion bridge bridgeComplete closes a gap under GapEmpty within one scope. The cross-scope lift liftScope takes a Total justification at FinitePrefix to a Covered justification at InfiniteLanguage, leaving the explicit model gap ModelGap.}
 \end{figure}
@@ -168,10 +168,12 @@ For the precise licensing statements, recall the kernel definitions:
 \]
 and
 \[
-\mathrm{VersionSpaceUnique}(L,D)\Longleftrightarrow
-\forall h_1,h_2,\ 
-(\mathrm{agreesOn}(L,D,h_1)\land\mathrm{agreesOn}(L,D,h_2)
-\Rightarrow \forall w,\ L.\mathrm{eval}(h_1,w)=L.\mathrm{eval}(h_2,w)).
+\begin{aligned}
+\mathrm{VersionSpaceUnique}(L,D) \Longleftrightarrow {}&
+ \forall h_1,h_2,\ \bigl(\mathrm{agreesOn}(L,D,h_1)\land
+ \mathrm{agreesOn}(L,D,h_2)\\
+&\qquad \Rightarrow \forall w,\ L.\mathrm{eval}(h_1,w)=L.\mathrm{eval}(h_2,w)\bigr).
+\end{aligned}
 \]
 The latter means \(|\widetilde{\mathcal V}(L,D)|\le1\) and includes an empty version space.
 
@@ -213,15 +215,15 @@ The memory hierarchy DFA \(\to\) 1-DCA \(\to\) DPDA \(\to\) Queue (Axis 1) is tr
 \resizebox{\linewidth}{!}{%
 \begin{tikzpicture}[>=Stealth, box/.style={draw,rounded corners,align=center,minimum height=15mm,text width=42mm}, thick]
 \node at (5.25,0) {\textbf{Axis 1: memory-class escalation (\(|\mathcal V|=0\) at the current port)}};
-\node[box] (a) at (0,-1.2) {Gate 11 (verified)\\MNCert: DFA(k) \(\to\) 1-DCA};
+\node[box] (a) at (0,-1.2) {Gate 11 (verified)\\MNCert: \mbox{DFA(k)} \(\to\) \mbox{1-DCA}};
 \node[box] (b) at (5.25,-1.2) {Gate 12 v12.3 (verified)\\1DCACert + \(\forall m,\neg\mathrm{1\text{-}DCA}(m)\)\\DPDA};
 \node[box] (c) at (10.5,-1.2) {Gate 13 (candidate)\\StepBranch + Queue\\DPDA exclusion remains open};
 \draw[->] (a)--(b); \draw[->] (b)--(c);
-\node[draw,rounded corners,align=center,minimum height=9mm] at (5.25,-2.55) {v2.4 kernel (verified): Scope + Covered/Total + \(\Delta(T)\)};
-\node at (5.25,-3.6) {\textbf{Axis 2: port, interventions, quantitative gap (public-port obstruction or noise)}};
-\node[box] (d) at (0,-4.9) {Gate 14 (verified)\\GaugeEquivCert, tapPort\\No SpuriousExtension repair};
-\node[box] (e) at (5.25,-4.9) {Gate 15 (verified)\\Control mask \(K\)\\Commutator \([T_L,T_R]\)};
-\node[box] (f) at (10.5,-4.9) {Gate 16 (verified)\\HasGapBound \(\Delta_\varepsilon\)\\e-value: \(P(\mathrm{reject})\le 1/K\)};
+\node[draw,rounded corners,align=center,minimum height=9mm] at (5.25,-3.0) {v2.4 kernel (verified): Scope + Covered/Total + \(\Delta(T)\)};
+\node at (5.25,-4.3) {\textbf{Axis 2: port, interventions, quantitative gap (public-port obstruction or noise)}};
+\node[box] (d) at (0,-6.0) {Gate 14 (verified)\\GaugeEquivCert, tapPort\\No SpuriousExtension repair};
+\node[box] (e) at (5.25,-6.0) {Gate 15 (verified)\\Control mask \(K\)\\Commutator \([T_L,T_R]\)};
+\node[box] (f) at (10.5,-6.0) {Gate 16 (verified)\\HasGapBound \(\Delta_\varepsilon\)\\e-value: \(P(\mathrm{reject})\le 1/K\)};
 \draw[->] (d)--(e); \draw[->] (e)--(f);
 \end{tikzpicture}}
 \caption{Two axes of research escalation: Axis 1 changes the memory class when \(|\mathcal V|=0\); Axis 2, verified in Lean 4.36.0, covers escalation of the observation port, intervention algebra, and the quantitative residual gap when a certified public-port obstruction or observation noise is present.}
@@ -240,11 +242,12 @@ K\cdot\mathrm{eventMass}(\mu,\{E\ge KD\})\le\mathrm{totalMass}(\mu)
 \]
 (evalue\_\allowbreak false\_\allowbreak rejection\_\allowbreak bound). It also establishes validity of the product of two independent e-variables (indep\_\allowbreak two\_\allowbreak step\_\allowbreak evalue\_\allowbreak product\_\allowbreak valid). The quantitative residual gap is
 \[
-\mathrm{HasGapBound}(\mu,\mathrm{Gap},\mathrm{num},\mathrm{den})
-\Longleftrightarrow
+\begin{gathered}
+\mathrm{HasGapBound}(\mu,\mathrm{Gap},\mathrm{num},\mathrm{den})\Longleftrightarrow\\
 (0<\mathrm{den})\land
-(\mathrm{eventMass}(\mu,\mathrm{Gap})\cdot\mathrm{den}
-\le\mathrm{num}\cdot\mathrm{totalMass}(\mu)).
+\bigl(\mathrm{eventMass}(\mu,\mathrm{Gap})\cdot\mathrm{den}
+\le\mathrm{num}\cdot\mathrm{totalMass}(\mu)\bigr).
+\end{gathered}
 \]
 It excludes a vacuous zero denominator (den\_\allowbreak zero\_\allowbreak rejected\_\allowbreak by\_\allowbreak HasGapBound, no axioms), generalizes GapEmpty (gapEmpty\_\allowbreak implies\_\allowbreak zero\_\allowbreak gapBound), and is subadditive for a common denominator (union\_\allowbreak gap\_\allowbreak bound).
 

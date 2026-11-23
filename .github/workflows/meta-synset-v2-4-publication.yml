@@ -2,14 +2,15 @@ name: Meta-Synset v2.4 publication check
 on:
   push:
     branches: [preprints/meta-synset-v2.4]
+    paths:
+      - 'papers/hypothesis-language/meta-synset-v2.4/src/**'
+      - 'papers/hypothesis-language/meta-synset-v2.4/evidence/**'
+      - '.github/workflows/meta-synset-v2-4-publication.yml'
   workflow_dispatch:
 permissions:
   contents: read
 jobs:
   verify-and-build:
-    if: github.ref == 'refs/heads/preprints/meta-synset-v2.4'
-    permissions:
-      contents: write
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
@@ -68,12 +69,3 @@ jobs:
             papers/hypothesis-language/meta-synset-v2.4/SHA256SUMS.release
             papers/hypothesis-language/meta-synset-v2.4/build/*pass*.log
             papers/hypothesis-language/meta-synset-v2.4/evidence/ci-verification.log
-      - name: Save checked release files on the draft branch only
-        run: |
-          set -euo pipefail
-          dir=papers/hypothesis-language/meta-synset-v2.4
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add -- "$dir"/*.pdf "$dir"/*.zip "$dir/SHA256SUMS.release" "$dir/evidence/ci-verification.log"
-          git commit -m 'Attach verified trilingual v2.4 preprint and evidence bundle'
-          git push origin HEAD:preprints/meta-synset-v2.4
