@@ -1,5 +1,7 @@
 # Cumulative Search — clean reading edition
 
+**Current series:** [Gate 11–12 primary preprint](../hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [research lineage](../../docs/RESEARCH_LINEAGE.en.md). This directory preserves a clean reading edition of the **original v1.1 experiments**; it is not the latest research result.
+
 The English and Russian Markdown papers in this directory remove release-process notes, internal claim-status labels in headings and research-planning paragraphs from the **published research narrative**. Mathematical definitions, numerical results, limitations, citations and reproduction instructions are preserved.
 
 - [English](CUMULATIVE_SEARCH.en.md)

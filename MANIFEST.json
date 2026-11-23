@@ -16,8 +16,8 @@
       "sha256": "3de0e13c82fe04ee16d678bff57d1011c82fc0545d110f7a2451fda3b531c8fb"
     },
     "CITATION.cff": {
-      "bytes": 562,
-      "sha256": "396e2e61a3b006b57a8d7fc82a016e4aaafcb1fc55ee4a111e9eb067972de606"
+      "bytes": 1045,
+      "sha256": "286903842c0e2220675649885a889b86d6eed7ca879231bd2e7917c20bbab7d3"
     },
     "FIXES.md": {
       "bytes": 7547,
@@ -44,8 +44,8 @@
       "sha256": "f1a454a630b4488950e04c04c40b7f84cf9e3847c7392f5788e813fadc66b4f5"
     },
     "README.md": {
-      "bytes": 29050,
-      "sha256": "dc19dd869efe22ce0b67ce7110ba0c782440cc875c12e9d5b53b4a7332b3cfa4"
+      "bytes": 12331,
+      "sha256": "7ccadbc094ccf88b841ef6141746882d38cf016f8b14324ebfd56810855c58f1"
     },
     "build_preprints.py": {
       "bytes": 15444,
@@ -192,5 +192,5 @@
       "sha256": "0dbb57ad3c1f9810ee23db555b7bec806655c94ce1170110624b713d57a53456"
     }
   },
-  "publication_addendum": "23 November 2026: mutable root README navigation updated to cite hypothesis-language companion; v1.1.1 source/preprint content hashes unchanged. The companion papers are a separate edition and are not folded into the historical v1.1.1 manifest."
+  "publication_addendum": "23 November 2026: mutable root README navigation updated to cite hypothesis-language companion; v1.1.1 source/preprint content hashes unchanged. The companion papers are a separate edition and are not folded into the historical v1.1.1 manifest. 23 November 2026 Gate 11–12 root-navigation and preferred-citation update: only mutable README.md and CITATION.cff digest records are changed; earlier v1.1.1 experiment data and proofs retain original SHA-256. Prior manifests and entrypoints preserved in history/; later papers retain independent release manifests."
 }

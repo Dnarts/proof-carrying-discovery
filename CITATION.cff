@@ -1,18 +1,26 @@
 cff-version: 1.2.0
-message: 'Please cite the research report and the exact software version.'
-title: 'Proof-Carrying Discovery: Cumulative Search and Explicit Phase Invariants'
+message: 'Cite the specific paper and commit. The preferred citation is the current Gate 11-12 working preprint; the original v1.1.1 software experiment remains separately citable.'
+title: 'Proof-Carrying Discovery: Evidence-Scoped Representation Change'
 authors:
   - family-names: Strand
     given-names: Aleksandr
+type: software
 version: 1.1.1
 date-released: 2026-11-22
-type: software
 repository-code: 'https://github.com/Dnarts/proof-carrying-discovery'
 url: 'https://github.com/Dnarts/proof-carrying-discovery'
 license: MIT
 keywords:
+  - proof-carrying discovery
   - program synthesis
-  - invariant inference
-  - one-counter automata
-  - Shapley attribution
-  - cumulative search
+  - representation escalation
+  - formal verification
+  - Myhill-Nerode
+preferred-citation:
+  type: article
+  title: 'Языки гипотез и доказательная эскалация представления'
+  authors:
+    - family-names: Strand
+      given-names: Aleksandr
+  year: 2026
+  url: 'https://github.com/Dnarts/proof-carrying-discovery/blob/main/papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf'
