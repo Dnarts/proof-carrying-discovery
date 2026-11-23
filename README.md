@@ -12,7 +12,7 @@ Evidence-scoped program discovery, finite model-class refutation, controlled rep
 
 **A Typed System for Revising Research Representations.** Cross-domain transfer is proposed as a heuristic; Lean verifies the typed checking protocol under stated assumptions.
 
-[**English PDF**](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_en.pdf) · [**Русский PDF**](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5.pdf) · [English source ZIP](papers/hypothesis-language/meta-synset-v2.5/meta_synset_v2_5_english_source.zip) · [Lean sources and verification logs](papers/hypothesis-language/meta-synset-v2.5/evidence/)
+[**English PDF**](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_en.pdf) · [**Русский PDF**](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5.pdf) · [**简体中文 PDF**](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_zh.pdf) · [English source ZIP](papers/hypothesis-language/meta-synset-v2.5/meta_synset_v2_5_english_source.zip) · [Lean sources and verification logs](papers/hypothesis-language/meta-synset-v2.5/evidence/)
 
 ## Gate 11–12 (23 November 2026)
 
@@ -83,7 +83,7 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 
 ## Новый препринт — «Мета-синсет и инвариант» v2.5
 
-[Оригинал PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5.pdf) · [Английский PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_en.pdf) · [Lean и журналы проверки](papers/hypothesis-language/meta-synset-v2.5/evidence/)
+[Оригинал PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5.pdf) · [Английский PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_en.pdf) · [Китайский PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_zh.pdf) · [Lean и журналы проверки](papers/hypothesis-language/meta-synset-v2.5/evidence/)
 
 ## Gate 11–12
 
@@ -123,7 +123,7 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 
 **本项目的核心问题：何时有证据支持改变假设语言，如何独立核验这种改变？**
 
-最新预印本：Meta-Synset and Invariant v2.5（[English PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_en.pdf) · [Русский PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5.pdf)，暂无中文版）。
+最新预印本：《元同义词集与不变量：研究表征的类型化修订系统》v2.5。[简体中文 PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_zh.pdf) · [中文源文件 ZIP](papers/hypothesis-language/meta-synset-v2.5/meta_synset_v2_5_chinese_source.zip) · [English PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_en.pdf) · [Русский PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5.pdf)。
 
 Gate 11–12 v12.3：《假设语言与携证表征升级》。[English PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf) · [Русский PDF](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [中文 PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.pdf) · [源代码与证据](papers/hypothesis-language/gate11-gate12-v12.3/)。
 

@@ -2,7 +2,7 @@
 
 Aleksandr Strand · 23 November 2026
 
-[English PDF](meta_synset_invariant_preprint_v2_5_en.pdf) · [Русский PDF (авторский оригинал)](meta_synset_invariant_preprint_v2_5.pdf) · [Editable English sources (ZIP)](meta_synset_v2_5_english_source.zip) · [Editorial scope notes](EDITORIAL_NOTE.md)
+[English PDF](meta_synset_invariant_preprint_v2_5_en.pdf) · [Русский PDF (авторский оригинал)](meta_synset_invariant_preprint_v2_5.pdf) · [简体中文 PDF](meta_synset_invariant_preprint_v2_5_zh.pdf) · [Editable English sources (ZIP)](meta_synset_v2_5_english_source.zip) · [中文源文件 ZIP](meta_synset_v2_5_chinese_source.zip) · [Editorial scope notes](EDITORIAL_NOTE.md) · [译稿编校说明](EDITORIAL_NOTE.zh.md)
 
 **A Typed System for Revising Research Representations.** The preprint proposes cross-domain structural transfer as a research heuristic. Its Lean formalization verifies the typed protocol for checking candidate transfers, inference licenses, and controller transitions under stated premises. It does not establish that the heuristic works universally or that the proposed ADT-HYPOTHESIS/1 experiment has been completed.
 
@@ -17,4 +17,4 @@ cd evidence
 for f in *.lean; do lean "$f" || exit; done
 ```
 
-The English ZIP includes its TeX, Markdown, and translated figures. The Russian PDF is byte-identical to the author’s copy. No Chinese edition of v2.5 is included.
+The English ZIP contains TeX, Markdown, and translated figures. The Chinese ZIP contains TeX and translated figures. Both translations follow the same Russian PDF, which is byte-identical to the author’s copy.
