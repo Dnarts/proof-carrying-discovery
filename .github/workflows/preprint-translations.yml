@@ -26,7 +26,7 @@ jobs:
           sudo DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
             texlive-xetex texlive-latex-extra texlive-lang-chinese texlive-science \
             texlive-pictures fonts-noto-core fonts-noto-cjk fonts-dejavu-core \
-            pandoc poppler-utils
+            pandoc poppler-utils lmodern
       - name: Compile full Gate 11-12 English and Chinese manuscripts
         run: |
           set -euo pipefail
