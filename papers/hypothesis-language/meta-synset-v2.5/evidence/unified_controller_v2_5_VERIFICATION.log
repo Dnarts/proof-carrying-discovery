@@ -1,0 +1,19 @@
+==============================================================================
+VERIFICATION LOG — unified_controller_v2_5
+==============================================================================
+TIMESTAMP_UTC: 2026-11-23T17:02:55Z
+HOST         : Darwin 25.6.0 arm64
+TOOLCHAIN    : Lean (version 4.36.0, arm64-apple-darwin24.6.0, commit 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9, Release)
+SOURCE_FILE  : unified_controller_v2_5.lean
+SOURCE_SHA256: 2b367e23a3b6b0c43196027799881db2a6a75b38f1965cbb7855ef9bfc6cf1a5
+SOURCE_LINES : 386
+------------------------------------------------------------------------------
+'UnifiedControllerV25.active_gauge_disjoint_from_empty' does not depend on any axioms
+'UnifiedControllerV25.zero_mass_rejected_by_HasGapBound' does not depend on any axioms
+'UnifiedControllerV25.licensed_step_preserves_valid' depends on axioms: [propext]
+'UnifiedControllerV25.two_axis_beats_fixed_public_port' depends on axioms: [propext]
+------------------------------------------------------------------------------
+EXIT_CODE    : 0
+SORRY_AX     : false
+VERDICT      : PASS
+==============================================================================

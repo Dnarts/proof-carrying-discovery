@@ -1,0 +1,61 @@
+{
+  "artifact": "Epistemic Revision v2.5 (Kernel v2.4 + Gate 14-16 v2.4 + Unified Controller v2.5) Final Verified Bundle",
+  "version": "2.5.0-final-verified",
+  "lean_toolchain": "Lean 4.36.0 (arm64-apple-darwin24.6.0)",
+  "status": "LEAN4_VERIFIED_ALL_5_MODULES_0_WARNINGS_PASS",
+  "latex_reproducible_from_bundle": true,
+  "total_verified_declarations": 48,
+  "axiom_free_declarations": 25,
+  "verified_modules": {
+    "epistemic_revision_kernel_v2_4.lean": {
+      "exit_code": 0,
+      "warnings": 0,
+      "axioms_checked": 15,
+      "axiom_free": 9,
+      "sorryAx": false
+    },
+    "gate14_port_escalation_v2_4.lean": {
+      "exit_code": 0,
+      "warnings": 0,
+      "axioms_checked": 10,
+      "axiom_free": 8,
+      "sorryAx": false
+    },
+    "gate15_intervention_algebra_v2_4.lean": {
+      "exit_code": 0,
+      "warnings": 0,
+      "axioms_checked": 8,
+      "axiom_free": 5,
+      "sorryAx": false
+    },
+    "gate16_stochastic_gap_evalue_v2_4.lean": {
+      "exit_code": 0,
+      "warnings": 0,
+      "axioms_checked": 11,
+      "axiom_free": 1,
+      "sorryAx": false
+    },
+    "unified_controller_v2_5.lean": {
+      "exit_code": 0,
+      "warnings": 0,
+      "axioms_checked": 4,
+      "axiom_free": 2,
+      "sorryAx": false
+    }
+  },
+  "files_sha256": {
+    "ALL_4_MODULES_v2_4_VERIFICATION.log": "b02fe0f7beb3871fcc3e80e61b948d10e26445e2add8797a45f2f24533d5cac4",
+    "epistemic_revision_kernel_v2_4.lean": "1bb76af2f6cc03348fa35e605d6ce41dfbd35cfcb9f5ae2a0ec8491c792319c7",
+    "fig1_dual_loop.pdf": "4a0743cc9f935e6fa625896fc1960415c4aa079d4b6ed87f4a5f1adc3d72c65c",
+    "fig2_scope_lattice_v2.pdf": "3068d23b4d3065c30188314a31c9479dcc5bca9a5ca38e3bf2648ff2db0691d5",
+    "fig3_two_axis_roadmap_v2_5.pdf": "43904dcd82f80ec62aa445c5f057aeae93071a6bb21721ca8a48b4ef0a0f628b",
+    "gate14_port_escalation_v2_4.lean": "34397f3839bcc9cdb06335b1ca959e2f983dbad1635edf7430cb7d767e0ddcc6",
+    "gate15_intervention_algebra_v2_4.lean": "67fbae749cc0ab163468879396bca8e6f14f38f881ef63b78119888c4bad9c22",
+    "gate16_stochastic_gap_evalue_v2_4.lean": "9cf958f26f67e4112367090ff5fbbcd895dcf9db849886494164a2b9fc640d99",
+    "meta_synset_invariant_preprint_v2_5.pdf": "8b9e143893358d6654da493b139ccaf2a78a340def2ed47bcb0f03b47a62b0a7",
+    "meta_synset_invariant_preprint_v2_5.tex": "99086d033774eebce560dbb739864f203e676dd304969ee320be7393bba83dad",
+    "run_all_v2_5_verification.sh": "6950f50b0d3a359fe4b683ae8bbe47b3ecbca9bdcb297eb822cffa0cf7812709",
+    "unified_controller_v2_5.lean": "2b367e23a3b6b0c43196027799881db2a6a75b38f1965cbb7855ef9bfc6cf1a5",
+    "unified_controller_v2_5_VERIFICATION.log": "8f8c01c6b6a413be9d8003ea577bb4fa57171ef6d7e7e530df76c4b2b7b35954"
+  }
+}

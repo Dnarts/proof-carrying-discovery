@@ -8,9 +8,15 @@ Evidence-scoped program discovery, finite model-class refutation, controlled rep
 
 [**All preprints in EN / RU / 简体中文**](docs/PREPRINT_LANGUAGES.md)
 
-## Start here — latest research (Gate 11–12, 23 November 2026)
+## Latest preprint — Meta-Synset and Invariant v2.5 (23 November 2026)
 
-**Hypothesis Languages and Proof-Carrying Representation Escalation.** Current primary preprint; available in **Russian**.
+**A Typed System for Revising Research Representations.** Cross-domain transfer is proposed as a heuristic; Lean verifies the typed checking protocol under stated assumptions.
+
+[**English PDF**](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_en.pdf) · [**Русский PDF**](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5.pdf) · [English source ZIP](papers/hypothesis-language/meta-synset-v2.5/meta_synset_v2_5_english_source.zip) · [Lean sources and verification logs](papers/hypothesis-language/meta-synset-v2.5/evidence/)
+
+## Gate 11–12 (23 November 2026)
+
+**Hypothesis Languages and Proof-Carrying Representation Escalation.** Previous paper in the hypothesis-language series.
 
 **Preprint PDFs:** [English](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf) · [Русский](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [简体中文](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.pdf)
 
@@ -24,7 +30,7 @@ The main progression is:
 
 The full translated PDFs preserve the proof scopes and mathematical claims of the original Russian version. For earlier publications, English was already available; [Chinese translations now accompany both earlier papers](docs/PREPRINT_LANGUAGES.md).
 
-The latest result distinguishes four different forms of evidence. A finite prefix–suffix witness rules out DFA models with **at most a specified number of states**. A separate mathematical theorem can rule out all finite DFAs for a **formally defined** nonregular language. An exported canonical two-phase stack program is proved to recognize its stated infinite-word language; under explicit binary-distinguishing assumptions, the formalization rules out every finite-control DFA and one-counter machine in the declared Lean models. A selected-history checker validates recorded witness prefixes but **not the chronological order of all actual Python oracle calls**.
+The Gate 11–12 result distinguishes four different forms of evidence. A finite prefix–suffix witness rules out DFA models with **at most a specified number of states**. A separate mathematical theorem can rule out all finite DFAs for a **formally defined** nonregular language. An exported canonical two-phase stack program is proved to recognize its stated infinite-word language; under explicit binary-distinguishing assumptions, the formalization rules out every finite-control DFA and one-counter machine in the declared Lean models. A selected-history checker validates recorded witness prefixes but **not the chronological order of all actual Python oracle calls**.
 
 This is not a proof that a finite unknown-oracle transcript establishes nonregularity, that all pushdown automata have been verified, or that the controller can invent arbitrary new architectures.
 
@@ -35,9 +41,9 @@ This is not a proof that a finite unknown-oracle transcript establishes nonregul
 | **1 — Cumulative discovery (v1.1)** | When do acquired macros, inferred invariants, and transfer actually reduce total work once acquisition and audit costs are counted? | [Original EN PDF](PREPRINT_v1.1.en.pdf) · [RU PDF](PREPRINT_v1.1.ru.pdf) · [clean editions](papers/cumulative-search/) · [code/results](v1_1/) |
 | **2 — Controlled representation change (Lean)** | When is escalation justified by a sound impossibility witness, and what does it cost? | [Formal results EN](docs/FORMAL_RESULTS.en.md) · [RU](docs/FORMAL_RESULTS.ru.md) · [Lean](formal/) |
 | **3 — Model-relative identification (Gate 4B–5)** | How do language-relative uniqueness, discriminating/falsifying queries, channel checks, and origin uncertainty differ? | [Methods paper EN](papers/hypothesis-language/HYPOTHESIS_LANGUAGE.en.md) · [RU](papers/hypothesis-language/HYPOTHESIS_LANGUAGE.ru.md) · [finite Lean source](papers/hypothesis-language/formal/) |
-| **4 — Proof-carrying escalation (Gate 11–12)** | Can the old bounded class be refuted and the generated replacement proved for **all words** in a declared formal family? | [Latest preprint](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [verified source bundle](papers/hypothesis-language/gate11-gate12-v12.3/) |
+| **4 — Proof-carrying escalation (Gate 11–12)** | Can the old bounded class be refuted and the generated replacement proved for **all words** in a declared formal family? | [Gate 11–12 preprint](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [verified source bundle](papers/hypothesis-language/gate11-gate12-v12.3/) |
 
-Gate 6–10 explored representation changes and competing operators in finite settings; **complete independently replicated packages for every intermediate Gate are not all present in this repository**. Their research history is not silently promoted to the status of the latest Lean theorems.
+Gate 6–10 explored representation changes and competing operators in finite settings; **complete independently replicated packages for every intermediate Gate are not all present in this repository**. Their research history is not silently promoted to the status of the Gate 11–12 Lean theorems.
 
 ### What the evidence does and does not establish
 
@@ -65,7 +71,7 @@ The root [MANIFEST.json](MANIFEST.json) and [SHA256SUMS.txt](SHA256SUMS.txt) ind
 
 ## Citation
 
-Cite the **specific preprint and source commit** supporting each claim: [Gate 11–12](papers/hypothesis-language/gate11-gate12-v12.3/), [v1.1](PREPRINT_v1.1.en.pdf), or the [abstract formal supplement](docs/FORMAL_RESULTS.en.md). [Citation metadata](CITATION.cff) · [MIT license](LICENSE). No DOI or peer review is claimed for the latest paper.
+Cite the **specific preprint and source commit** supporting each claim: [Meta-Synset v2.5](papers/hypothesis-language/meta-synset-v2.5/), [Gate 11–12](papers/hypothesis-language/gate11-gate12-v12.3/), [v1.1](PREPRINT_v1.1.en.pdf), or the [abstract formal supplement](docs/FORMAL_RESULTS.en.md). [Citation metadata](CITATION.cff) · [MIT license](LICENSE). No DOI or peer review is claimed for the latest paper.
 
 ---
 
@@ -75,7 +81,11 @@ Cite the **specific preprint and source commit** supporting each claim: [Gate 11
 
 Основная линия: **найти программу → проверить идентифицируемость → опровергнуть недостаточный класс → сменить представление → синтезировать решение → формально проверить его поведение.**
 
-## Текущий основной препринт — Gate 11–12
+## Новый препринт — «Мета-синсет и инвариант» v2.5
+
+[Оригинал PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5.pdf) · [Английский PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_en.pdf) · [Lean и журналы проверки](papers/hypothesis-language/meta-synset-v2.5/evidence/)
+
+## Gate 11–12
 
 **«Языки гипотез и доказательная эскалация представления»**, 10 страниц на русском.
 
@@ -113,8 +123,10 @@ Cite the **specific preprint and source commit** supporting each claim: [Gate 11
 
 **本项目的核心问题：何时有证据支持改变假设语言，如何独立核验这种改变？**
 
-当前主要论文为 Gate 11–12 v12.3：《假设语言与携证表征升级》。[English PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf) · [Русский PDF](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [中文 PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.pdf) · [源代码与证据](papers/hypothesis-language/gate11-gate12-v12.3/)。
+最新预印本：Meta-Synset and Invariant v2.5（[English PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_en.pdf) · [Русский PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5.pdf)，暂无中文版）。
+
+Gate 11–12 v12.3：《假设语言与携证表征升级》。[English PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf) · [Русский PDF](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [中文 PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.pdf) · [源代码与证据](papers/hypothesis-language/gate11-gate12-v12.3/)。
 
 完整研究链条：**累积程序发现 → 语义可识别性检验 → 对有界模型类的有限反证 → 表征升级 → 新程序合成 → 在已声明形式模型中验证其全称规格**。有限观测不能证明任意未知黑箱语言的非正则性；Gate 12 的参数化定理只涵盖满足规范结构条件的两阶段栈程序。历史因果检查针对选定的证据列表，而非全部真实预言机调用。
 
-另外两篇论文：[假设语言与限定证据范围的识别（中文 PDF）](papers/hypothesis-language/HYPOTHESIS_LANGUAGE.zh.pdf) · [固定引擎中的累积搜索（中文 PDF）](papers/cumulative-search/CUMULATIVE_SEARCH.zh.pdf)。[三个研究方向的语言版本索引](docs/PREPRINT_LANGUAGES.md)。
+另外两篇论文：[假设语言与限定证据范围的识别（中文 PDF）](papers/hypothesis-language/HYPOTHESIS_LANGUAGE.zh.pdf) · [固定引擎中的累积搜索（中文 PDF）](papers/cumulative-search/CUMULATIVE_SEARCH.zh.pdf)。[全部预印本的语言版本索引](docs/PREPRINT_LANGUAGES.md)。
