@@ -8,9 +8,15 @@ Evidence-scoped program discovery, finite model-class refutation, controlled rep
 
 [**All preprints in EN / RU / 简体中文**](docs/PREPRINT_LANGUAGES.md)
 
-## Start here — latest research (Gate 11–12, 23 November 2026)
+## New preprint — Meta-Synset and Invariant v2.4
 
-**Hypothesis Languages and Proof-Carrying Representation Escalation.** Current primary preprint; available in **Russian**.
+**A Typed Revision System for Research Representations.** A companion to Gate 11–12, with pointwise evidence coverage and a second escalation axis for observation ports, interventions, and stochastic gaps. The 44 audited Lean declarations do not establish an unconditional router or a search-cost advantage.
+
+[EN PDF](papers/hypothesis-language/meta-synset-v2.4/meta_synset_invariant_preprint_v2_4_en.pdf) · [RU PDF](papers/hypothesis-language/meta-synset-v2.4/meta_synset_invariant_preprint_v2_4_ru.pdf) · [简体中文 PDF](papers/hypothesis-language/meta-synset-v2.4/meta_synset_invariant_preprint_v2_4_zh.pdf) · [Lean & bundle](papers/hypothesis-language/meta-synset-v2.4/)
+
+## Start here for the Gate 11–12 line (23 November 2026)
+
+**Hypothesis Languages and Proof-Carrying Representation Escalation.** Foundational preprint for the language-escalation line; available in all three languages.
 
 **Preprint PDFs:** [English](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf) · [Русский](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [简体中文](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.pdf)
 
@@ -75,7 +81,11 @@ Cite the **specific preprint and source commit** supporting each claim: [Gate 11
 
 Основная линия: **найти программу → проверить идентифицируемость → опровергнуть недостаточный класс → сменить представление → синтезировать решение → формально проверить его поведение.**
 
-## Текущий основной препринт — Gate 11–12
+## Новый препринт: «Мета-синсет и инвариант» v2.4
+
+Типизированная ревизия исследовательских представлений: где менять класс гипотез, а где нужен другой канал наблюдения. [EN PDF](papers/hypothesis-language/meta-synset-v2.4/meta_synset_invariant_preprint_v2_4_en.pdf) · [RU PDF](papers/hypothesis-language/meta-synset-v2.4/meta_synset_invariant_preprint_v2_4_ru.pdf) · [简体中文 PDF](papers/hypothesis-language/meta-synset-v2.4/meta_synset_invariant_preprint_v2_4_zh.pdf) · [Lean & bundle](papers/hypothesis-language/meta-synset-v2.4/).
+
+## Основная работа по эскалации представлений — Gate 11–12
 
 **«Языки гипотез и доказательная эскалация представления»**, 10 страниц на русском.
 
@@ -113,7 +123,9 @@ Cite the **specific preprint and source commit** supporting each claim: [Gate 11
 
 **本项目的核心问题：何时有证据支持改变假设语言，如何独立核验这种改变？**
 
-当前主要论文为 Gate 11–12 v12.3：《假设语言与携证表征升级》。[English PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf) · [Русский PDF](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [中文 PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.pdf) · [源代码与证据](papers/hypothesis-language/gate11-gate12-v12.3/)。
+新预印本：《元同义词集与不变量》v2.4。区分假设类别升级与观测端口升级。[EN PDF](papers/hypothesis-language/meta-synset-v2.4/meta_synset_invariant_preprint_v2_4_en.pdf) · [RU PDF](papers/hypothesis-language/meta-synset-v2.4/meta_synset_invariant_preprint_v2_4_ru.pdf) · [简体中文 PDF](papers/hypothesis-language/meta-synset-v2.4/meta_synset_invariant_preprint_v2_4_zh.pdf) · [Lean & bundle](papers/hypothesis-language/meta-synset-v2.4/)。
+
+Gate 11–12 v12.3 的表征升级论文：《假设语言与携证表征升级》。[English PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf) · [Русский PDF](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [中文 PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.pdf) · [源代码与证据](papers/hypothesis-language/gate11-gate12-v12.3/)。
 
 完整研究链条：**累积程序发现 → 语义可识别性检验 → 对有界模型类的有限反证 → 表征升级 → 新程序合成 → 在已声明形式模型中验证其全称规格**。有限观测不能证明任意未知黑箱语言的非正则性；Gate 12 的参数化定理只涵盖满足规范结构条件的两阶段栈程序。历史因果检查针对选定的证据列表，而非全部真实预言机调用。
 
