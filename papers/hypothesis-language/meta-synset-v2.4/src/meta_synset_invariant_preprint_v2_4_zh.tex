@@ -1,5 +1,8 @@
 \documentclass[11pt,a4paper,UTF8,fontset=fandol]{ctexart}
 \usepackage[margin=23mm]{geometry}
+\setmonofont{DejaVu Sans Mono}
+\setlength{\emergencystretch}{2em}
+\usepackage{xurl}
 \usepackage{amsmath,amssymb,amsthm,booktabs,tabularx,listings,fancyhdr,tikz}
 \usetikzlibrary{arrows.meta,positioning}
 \usepackage[unicode,hidelinks]{hyperref}
@@ -89,7 +92,7 @@ e=(d,I,s^-,s^+,u,K,\alpha,\delta,\kappa),
 证据载体（\id{Carrier}，如手写推导、Lean 内核项、有限证书、穷举和实证协议）并不自动决定结论的强度：同一个 \id{LeanKernelTerm} 类型的载体既可以证明四条有限历史的局部性质，也可以证明 $\Sigma^*$ 上的普遍定理~\cite{ms2}。因此，\id{Ranker} 在七条问题轴上评估候选：证明、作用域、稳健性、因果性、迁移性、效用和区分力（\id{Proof}、\id{Scope}、\id{Robustness}、\id{Causality}、\id{Transfer}、\id{Utility}、\id{Discrimination}）。它不人为地合成总分，而使用支配预序 $T_1\succeq T_2\Longleftrightarrow\operatorname{Ent}(T_2)\subseteq\operatorname{Ent}(T_1)$，给出四种比较结果：支配、被支配、不可比或信息不足。同时，主张的强弱严格区别于研究队列中的优先级：若一个弱假设可以用代价低且结论明确的反例检验，它就在 \id{Research-Controller} 队列中优先处理。
 
 \section{作用域拓扑、封装证据与缺口代数 \texorpdfstring{$\Delta(T)$}{Δ(T)}}
-连接对象 \id{CertifiedTransfer}（第 1 节）在内核中通过 \id{TransferCoverage} 和 \id{CoveredJustification} 两个结构实现。覆盖划分 \id{partition}：
+内核通过两个结构实现连接对象 \id{CertifiedTransfer}（第 1 节）：\id{TransferCoverage} 与 \id{CoveredJustification}。覆盖划分 \id{partition}：
 $R(q)\to \Sok(q)\lor \Gap(q)$ 保证 $\Delta(T)=R\setminus \Sok\subseteq\{q\in R\mid\Gap(q)\}$。要使残余缺口恰等于右侧，还需独立假设 $\Sok$ 与 $\Gap$ 不相交。条件 \id{GapEmpty Gap} 蕴涵 $\Delta(T)=\varnothing$。
 
 在较早的 v1.0 方案中，仅以作用域 \id{Scope} 为索引，允许在作用域内部偷换主张，或在提升时隐藏非空缺口。v2.1 内核区分了 \id{CoveredJustification} 与 \id{TotalJustification}，然而主张 $c:\mathsf{Claim}\,s$ 对 $Q$ 仍是常量。因此非空缺口只能阻断 \id{bridgeComplete}，却不能禁止直接构造 \id{TotalJustification}。已验证的 v2.4 内核（\id{epistemic_revision_kernel_v2_4.lean}）通过逐点依赖 $c:Q\to\mathsf{Claim}\,s$ 封堵了这一漏洞。
@@ -165,7 +168,7 @@ $w\in\Sigma^*$；\id{ModelGap}（\id{hasEpsilon}） &&
 \mathsf{agreesOn}(L,D,h_1)\land\mathsf{agreesOn}(L,D,h_2)\\[-.3em]
 &\hspace{4.7em}\Longrightarrow \forall w,\ L.\mathsf{eval}(h_1,w)=L.\mathsf{eval}(h_2,w)\bigr).
 \end{align*}
-后式即 $|\widetilde \mathcal V(L,D)|\le1$，包括版本空间为空的情形。
+后式即 $|\widetilde{\mathcal V}(L,D)|\le1$，包括版本空间为空的情形。
 
 \begin{theorem}[收缩的可靠性及防泄漏定理；经 Lean 4.36.0 验证]
 \begin{enumerate}
