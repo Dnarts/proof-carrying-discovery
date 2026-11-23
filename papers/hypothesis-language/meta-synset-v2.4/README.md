@@ -7,7 +7,7 @@ A typed revision system for research representations: heuristic cross-domain exp
 | Edition | XeLaTeX source | PDF |
 |---|---|---|
 | English | [Source](src/meta_synset_invariant_preprint_v2_4_en.tex) | [PDF](meta_synset_invariant_preprint_v2_4_en.pdf) |
-| Русский | [Авторский архив](original/epistemic_revision_v2_4_final_verified_bundle.zip) · [исходник повторной вёрстки](src/meta_synset_invariant_preprint_v2_4_ru.tex) | [Авторский PDF](original/meta_synset_invariant_preprint_v2_4.pdf) · [PDF повторной вёрстки](meta_synset_invariant_preprint_v2_4_ru.pdf) |
+| Русский | [Авторский архив с LaTeX и рисунками](original/epistemic_revision_v2_4_final_verified_bundle.zip) | [Авторский PDF](original/meta_synset_invariant_preprint_v2_4.pdf) |
 | 简体中文 | [LaTeX 源文件](src/meta_synset_invariant_preprint_v2_4_zh.tex) | [PDF](meta_synset_invariant_preprint_v2_4_zh.pdf) |
 
 ## Evidence and scope
@@ -19,10 +19,10 @@ The supplied [verification log](evidence/ALL_4_MODULES_v2_4_VERIFICATION.log) re
 - Gate 15's control-mask check is local. The two confounding examples are distinct: one gives misleading order dependence, the other an apparent one-step semantic shift despite commuting interventions. Gate 16 covers a fixed pair of independent e-variables; it is not an arbitrary adaptive stopping theorem.
 - Gate 13's general queue/stack separation and empirical claims about total search cost remain open in this edition.
 
-English and Simplified Chinese are translations of the supplied Russian v2.4 PDF. The Russian release build reproduces the v2.4 text with redrawn diagrams and harmonized version/count labels and prose aligned with the checked hypotheses and counterexamples in §§4 and 7–8; its PDF is not required to be byte-identical to the author's supplied PDF. Those editorial changes do not change the Lean sources or theorem scopes.
+English and Simplified Chinese are translations of the canonical Russian v2.4 PDF. The Russian edition and its source archive are the original author-supplied bytes. The previous draft included an optional Russian re-typeset copy with an incorrect gap statement in §4; that copy is no longer distributed. In §4, the uncovered set is contained in the recorded gap on the requested region; equality needs disjointness, and empty recorded gap implies empty uncovered set, not conversely.
 
 [Reproducible trilingual release ZIP](meta_synset_invariant_v2_4_release.zip) · [Release SHA-256](SHA256SUMS.release) · [Exact author-file SHA-256](original/SHA256SUMS.author)
 
 ## Reproduce
 
-Use XeLaTeX, Noto Serif, Noto Sans, Noto Mono, and CTeX/Fandol. Run XeLaTeX twice per source from `src/`. From `evidence/`, use Lean 4.36.0 and `bash run_all_v2_4_verification.sh` (this rewrites the local log). The release archive includes separate source and PDF digests.
+Use XeLaTeX, Noto Serif, Noto Sans, Noto Mono, and CTeX/Fandol. Run XeLaTeX twice per translation from `src/`. For Russian, use the author archive containing the exact source and figures. From `evidence/`, use Lean 4.36.0 and `bash run_all_v2_4_verification.sh` (this rewrites the local log). The release archive includes separate source and PDF digests.

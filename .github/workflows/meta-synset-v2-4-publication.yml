@@ -5,6 +5,7 @@ on:
     paths:
       - 'papers/hypothesis-language/meta-synset-v2.4/src/**'
       - 'papers/hypothesis-language/meta-synset-v2.4/evidence/**'
+      - 'papers/hypothesis-language/meta-synset-v2.4/original/**'
       - '.github/workflows/meta-synset-v2-4-publication.yml'
   workflow_dispatch:
 permissions:
@@ -36,13 +37,14 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends texlive-xetex texlive-latex-extra texlive-lang-cyrillic texlive-lang-chinese texlive-science texlive-pictures fonts-noto-core fonts-noto-mono fonts-noto-cjk fonts-dejavu-core poppler-utils zip
-      - name: Typeset all three languages and build evidence bundle
+      - name: Verify canonical Russian edition, typeset translations and build evidence bundle
         working-directory: papers/hypothesis-language/meta-synset-v2.4
         run: |
           set -euo pipefail
           mkdir -p build
+          (cd original && sha256sum -c SHA256SUMS.author)
           cd src
-          for lang in ru en zh; do
+          for lang in en zh; do
             rf="meta_synset_invariant_preprint_v2_4_$lang"
             for pass in 1 2; do
               if ! xelatex -halt-on-error -interaction=nonstopmode -output-directory=../build "$rf.tex" > "../build/$lang-pass$pass.log" 2>&1; then
@@ -57,8 +59,10 @@ jobs:
             test "$(wc -c < "../build/$lang.txt")" -gt 18000
           done
           cd ..
-          sha256sum ./*.pdf src/*.tex evidence/*.lean evidence/*.log > SHA256SUMS.release
-          zip -q -r meta_synset_invariant_v2_4_release.zip README.md CITATION.cff SHA256SUMS.release src evidence ./*.pdf
+          sha256sum ./*.pdf src/*.tex evidence/*.lean evidence/*.log evidence/*.sh original/*.pdf original/*.zip README.md CITATION.cff > SHA256SUMS.release
+          sha256sum -c SHA256SUMS.release
+          rm -f meta_synset_invariant_v2_4_release.zip
+          zip -q -r meta_synset_invariant_v2_4_release.zip README.md CITATION.cff SHA256SUMS.release src evidence original ./*.pdf
       - uses: actions/upload-artifact@v4
         if: always()
         with:
