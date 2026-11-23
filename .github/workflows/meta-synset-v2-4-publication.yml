@@ -22,9 +22,9 @@ jobs:
         working-directory: papers/hypothesis-language/meta-synset-v2.4/evidence
         run: |
           set -euo pipefail
-          sha256sum -c SHA256SUMS.lean
+          sha256sum -c SHA256SUMS.sources
           lean --version | tee ci-verification.log
-          for f in *.lean; do
+          for f in epistemic_revision_kernel_v2_4.lean gate14_port_escalation_v2_4.lean gate15_intervention_algebra_v2_4.lean gate16_stochastic_gap_evalue_v2_4.lean; do
             echo "MODULE: $f" | tee -a ci-verification.log
             lean "$f" 2>&1 | tee -a ci-verification.log
           done
