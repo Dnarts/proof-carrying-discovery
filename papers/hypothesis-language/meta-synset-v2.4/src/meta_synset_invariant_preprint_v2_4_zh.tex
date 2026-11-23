@@ -1,0 +1,317 @@
+\documentclass[11pt,a4paper,UTF8,fontset=fandol]{ctexart}
+\usepackage[margin=23mm]{geometry}
+\setmonofont{DejaVu Sans Mono}
+\setlength{\emergencystretch}{2em}
+\usepackage{xurl}
+\usepackage{amsmath,amssymb,amsthm,booktabs,tabularx,listings,fancyhdr,tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\usepackage[unicode,hidelinks]{hyperref}
+\setlength{\headheight}{15pt}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{元同义词集与不变量（v2.4）}
+\fancyhead[R]{亚历山大·斯特兰德}
+\fancyfoot[C]{\thepage}
+\newtheorem{theorem}{定理}[section]
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{remark}[theorem]{说明}
+\Urlmuskip=0mu plus 1mu
+\def\UrlBreaks{\do\_\do\.\do\-\do\/}
+\DeclareRobustCommand{\id}[1]{\nolinkurl{#1}}
+\newcommand{\Sok}{S_{\mathrm{ok}}}
+\newcommand{\Gap}{\mathit{Gap}}
+\newcommand{\Denote}{\mathsf{Denote}}
+\lstset{basicstyle=\small\ttfamily,breaklines=true,columns=fullflexible,
+ literate={∀}{{$\forall$}}1 {→}{{$\to$}}1 {∨}{{$\lor$}}1}
+\title{\textbf{元同义词集与不变量：\\研究表征的类型化修订系统}\\[.6em]
+\large 扩展与收缩的对偶性、残余缺口 $\Delta(T)$ 的代数、\\
+依赖式推论许可与经 Lean 4.36.0 机器验证的内核}
+\author{亚历山大·斯特兰德（Aleksandr Strand）}
+\date{2026 年 11 月 23 日 · 预印本 v2.4\\
+内核 v2.4 与第二轴（Gate 14–16 v2.4）已在 Lean 4.36.0 中验证}
+\begin{document}
+\maketitle
+\begin{abstract}
+研究搜索分为两种要求不相容的模式：借助跨领域类比生成新候选，需要允许概念在控制下漂移；而证明性核验与下一项实验的选择则要求引用透明，并禁止事后改写定义。本文形式化了假设语言 $\mathcal L_H$ 的双回路架构：\id{meta-synset}（聚焦扩展）与 \id{invariant}（严格收缩）。两条回路由相变 \id{Freeze}、必须保留残余缺口 $\Delta(T)=R\setminus \Sok$ 的类型化迁移 \id{CertifiedTransfer}，以及分支步骤 \id{StepBranch} 相连。相较 v1.0，本文消除了简单作用域索引的结构性缺陷：（1）证据 \id{DirectEvidence s A c} 通过函子 $\Denote:\mathsf{Claim}\,s\to\mathsf{Prop}$ 严格绑定到主张 $c:\mathsf{Claim}\,s$；（2）覆盖论证与完全论证均以逐点依赖族 $c:Q\to\mathsf{Claim}\,s$ 为索引，使 \id{evidenceAt} 无须非空性假设即可逐点构造，并由 \id{pointwise_unproved_blocks_any_total} 排除绕过完备性桥的直接构造；（3）跨作用域提升 \id{liftScope} 使用条件式 \id{ScopeBridge}（仅在 \id{ModelOk} 上发挥作用），并显式保留模型缺口 \id{ModelGap}。本文引入依赖式推论许可 $\kappa:\mathsf{Judgement}(\alpha,\delta)$，证明其可靠性、语言收缩（\id{restriction_sound}）与防泄漏定理；对于 \id{StepBranch} 的分支探针，证明完整 \id{SymbolLift} 的充分性，并分别证明两项条件（\id{binPreserving} 与 \id{injectiveBin}）的必要性。本文另形式化并验证第二升级轴（Gate 14–16）：依据规范等价证书 \id{GaugeEquivCert} 升级观测端口，并排除无效隐藏变量（Gate 14）；在规范化器 $N$ 下构造带可计算控制掩码 $K$ 和交换子 $[T_L,T_R]$ 的干预代数（Gate 15）；在精确离散测度上给出量化残余缺口 $\Delta_\varepsilon$（\id{HasGapBound}）以及两个独立 e-值的乘积证书（固定时域为 2；Gate 16）。四个模块（内核 v2.4 及 Gate 14–16 v2.4）的全部 44 项关键声明均在 Lean 4.36.0 的同一次运行中通过机器验证（0 项错误、0 项警告、无 \id{sorryAx}；44 项中有 23 项不依赖公理，其余仅使用 \id{propext}、\id{Classical.choice}、\id{Quot.sound}）；另有 12 条 Gate 11–12 v12.3 定理在文献~\cite{g1112} 中通过验证。
+\end{abstract}
+
+\section{科学搜索中两种要求不相容的模式}
+识别与证明驱动的表征变更的形式理论~\cite{g1112,angluin} 在既定结构内工作：给定固定的对象语言 $L=(G,J_G)$、观测数据集 $D$ 与语义版本空间
+\begin{equation}
+ \mathcal V(L,D)=\{f\in \mathcal B(L):\forall(x,y)\in D,\ f(x)=y\},\qquad \mathcal B(L)=\operatorname{im}J_G,
+\end{equation}
+就能严格定义一致性、识别的唯一性 $|\mathcal V(L,D)|=1$、一致同意集 $\operatorname{Agree}(\mathcal V)$，以及通过一步排除语言的条件 $\mathcal V(L,D\cup\{(q,y)\})=\varnothing$。然而，当旧语言已被证伪，或概念框架尚未形成时，研究者会面临彼此冲突的两项要求：
+\begin{enumerate}
+\item \textbf{扩展要求。} 为打破概念固着并找到非平凡的替代类别（例如从计数器记忆转向栈或队列），必须在一套刻意不完整的初步观察准则（透镜 $\lambda_t$）下比较相距甚远的领域对象，允许概念边界移动乃至分裂。
+\item \textbf{严格收缩要求。} 为防止候选比较、排除备选与下一项实验的选择沦为事后调适定义，每条主张的版本、作用域与前提均须冻结，且必须区分已有证据与期望成立但尚未得到证明的推广。
+\end{enumerate}
+将两种模式混在一起会产生两个对称的问题：若对生成阶段施加最终证明的要求，搜索会被局限于同一领域的同义表达；若允许验证阶段继续使用可变的定义，则会出现退化性漂移。$\mathsf{meta\mbox{-}synset}\leftrightarrow\mathsf{invariant}$ 架构将这些模式分别置于假设语言 $\mathcal L_H$ 的两个隔离回路中，只通过一道类型化接缝相连，即相变 \id{Freeze}（图~\ref{fig:dual}）。
+
+\begin{figure}[htbp]
+\centering\small
+\begin{tabularx}{\linewidth}{@{}XcX@{}}
+\toprule
+回路 1：\id{meta-synset}（聚焦扩展） && 回路 2：\id{invariant}（严格收缩）\\
+\midrule
+起点 $M_0=\langle\lambda_0,E_0\rangle$
+&& \id{Ranker}：四值比较，依据 $\operatorname{Ent}(T_2)\subseteq\operatorname{Ent}(T_1)$\\
+$\mathsf{Proj}(M_t,D)\to(E_D,\delta_D)$
+& $\xrightarrow{\ \mathsf{Freeze}\ }$ & \id{Research-Controller}：\id{StepBranch}，$\max_q\mathrm{Gain}_{\min}(q)$\\
+$\mathsf{Split}(M_t,\tau_{\mathrm{blind}}/\tau_{\mathrm{axis}})$：剔除或分支
+& $M_t\longmapsto\{\Phi_i\},\,\Delta(T)$ & \id{CertifiedRev} / \id{ScopeBridge}：保留 $\Delta(T)$\\
+\bottomrule
+\end{tabularx}
+\caption{\id{meta-synset} 与 \id{invariant} 的双回路架构。可变的操作数 $M_t$ 必须经过相变 \id{Freeze} 才能进入 \id{Ranker}；这一转换终止漂移并固定残余缺口 $\Delta(T)$。}
+\label{fig:dual}
+\end{figure}
+
+\section{\texorpdfstring{\id{meta-synset}}{meta-synset} 的作用：聚焦扩展与受控漂移}
+普通同义词集（如 WordNet）在同一对象层内归集同义表达；与之不同，元同义词集以受控方式累积不同领域中的结构类比，直至达到分岔点、使隐藏的差异轴显现~\cite{ms2}。
+
+\begin{definition}[元同义词集与内部元组]
+设 $U=\bigsqcup_{d\in\mathcal D}\mathrm{Obj}_d$ 为各领域对象的带标记并集。版本 $t$ 的初步透镜是一项部分定义的筛选过程 $\lambda_t:U\rightharpoonup\mathcal P(\mathrm{Pred})$；它必须能够返回“不适用”，而不能事后另选特征。版本 $t$ 的元同义词集操作数为 $M_t=\langle\lambda_t,E_t\rangle$，其中 $|\mathrm{domains}(M_t)|\ge2$。$M_t$ 内部的证据元组为
+\begin{equation}
+e=(d,I,s^-,s^+,u,K,\alpha,\delta,\kappa),
+\end{equation}
+其中 $I=(X,Y,Z,B)$ 指定接口与预算；$u:s^-\mapsto s^+$ 是允许的操作；$K$ 是标记保持不变、被修改及未受控制坐标的掩码；$\alpha=(a,b,c,\eta)$ 是结构映射；$\delta$ 列出丢失或尚未核验的性质；$\kappa$ 是依赖式推论许可（第~\ref{sec:lic} 节）。
+\end{definition}
+
+操作数的所有变更均严格通过类型化算子进行：
+\begin{itemize}
+\item $\mathsf{Proj}(M_t,D)\to(E_D,\delta_D)$：将透镜 $\lambda_t$ 投影到新领域 $D$，用反同义筛选排除仅有措辞相似的候选，并即时记录丢失的特征 $\delta_D$。
+\item $\mathsf{Split}(M_t,\tau_{\mathrm{blind}})\to M_{t+1}$：把不能适用的反例排除在外，不对操作数本身作分裂。
+\item $\mathsf{Split}(M_t,\tau_{\mathrm{axis}})\to(M_{t+1}^a,M_{t+1}^b)$：保持一条隐藏轴不变、破坏另一条轴的区分测试；关闭 $M_t$ 并生成两条新分支，从而固定分岔点。
+\item $\mathsf{Merge}(M_1,M_2)\to M_{12}$：仅当透镜相容、且在共有领域提取的结构一致时才合并。
+\item $\mathsf{Freeze}(M_t)\to\{\Phi_1,\ldots,\Phi_k\}$：终止漂移并输出冻结候选 $\Phi=(P,S,\mathcal A,\bot_\Phi)$ 的相变。
+\end{itemize}
+扩展的正确性由三条公理和两道操作界线维持。三条公理是引用透明性（版本 $M_{t+1}$ 的状态不追溯适用到 $M_t$）、防退化性（$|\mathrm{domains}(M_t)|\ge2$）、在分岔处终止（沿差异轴分裂后关闭 $M_t$）；两道界线分别是 $M_t$ 和 $\Phi$ 之间的相变界线，以及观测者可复现性的界线。例如，从种子 $M_0=\langle\lambda_{\mathrm{filter}},\{\text{防火墙},\text{细胞膜},\text{海关}\}\rangle$ 出发，向神经网络作投影（$\delta$：“物理屏障消失”）并用“砖墙”作排除型反例后，以“马尔可夫毯”进行区分测试，分出两个独立分支：$M_2^a$（接口屏蔽）和 $M_2^b$（基于规则的选择性过滤）。随后，$\mathsf{Freeze}(M_2^b)$ 才将冻结候选送入 \id{invariant}。在当前 Lean 内核中，\id{meta-synset} 回路已在基础层实现机械化（\id{MetaOperand}、\id{metaProj}、\id{metaFreeze}）；\id{Split}/\id{Merge} 的完整语义和 \id{Ranker} 的七条评估轴仍属形式规范。
+
+\section{\texorpdfstring{\id{invariant}}{invariant} 的作用：后果的偏序与探针控制器}
+\id{invariant} 回路处理 \id{meta-synset} 无法回答的两个问题：已经确立了什么（\id{Ranker}），以及接下来应做哪项实验（\id{Research-Controller}）。
+
+\paragraph{区分载体与内容。}
+证据载体（\id{Carrier}，如手写推导、Lean 内核项、有限证书、穷举和实证协议）并不自动决定结论的强度：同一个 \id{LeanKernelTerm} 类型的载体既可以证明四条有限历史的局部性质，也可以证明 $\Sigma^*$ 上的普遍定理~\cite{ms2}。因此，\id{Ranker} 在七条问题轴上评估候选：证明、作用域、稳健性、因果性、迁移性、效用和区分力（\id{Proof}、\id{Scope}、\id{Robustness}、\id{Causality}、\id{Transfer}、\id{Utility}、\id{Discrimination}）。它不人为地合成总分，而使用支配预序 $T_1\succeq T_2\Longleftrightarrow\operatorname{Ent}(T_2)\subseteq\operatorname{Ent}(T_1)$，给出四种比较结果：支配、被支配、不可比或信息不足。同时，主张的强弱严格区别于研究队列中的优先级：若一个弱假设可以用代价低且结论明确的反例检验，它就在 \id{Research-Controller} 队列中优先处理。
+
+\section{作用域拓扑、封装证据与缺口代数 \texorpdfstring{$\Delta(T)$}{Δ(T)}}
+内核通过两个结构实现连接对象 \id{CertifiedTransfer}（第 1 节）：\id{TransferCoverage} 与 \id{CoveredJustification}。覆盖划分 \id{partition}：
+$R(q)\to \Sok(q)\lor \Gap(q)$ 保证 $\Delta(T)=R\setminus \Sok\subseteq\{q\in R\mid\Gap(q)\}$。要使残余缺口恰等于右侧，还需独立假设 $\Sok$ 与 $\Gap$ 不相交。条件 \id{GapEmpty Gap} 蕴涵 $\Delta(T)=\varnothing$。
+
+在较早的 v1.0 方案中，仅以作用域 \id{Scope} 为索引，允许在作用域内部偷换主张，或在提升时隐藏非空缺口。v2.1 内核区分了 \id{CoveredJustification} 与 \id{TotalJustification}，然而主张 $c:\mathsf{Claim}\,s$ 对 $Q$ 仍是常量。因此非空缺口只能阻断 \id{bridgeComplete}，却不能禁止直接构造 \id{TotalJustification}。已验证的 v2.4 内核（\id{epistemic_revision_kernel_v2_4.lean}）通过逐点依赖 $c:Q\to\mathsf{Claim}\,s$ 封堵了这一漏洞。
+
+\paragraph{四个作用域的拓扑。}
+所有主张分属于四个互不相交的 \id{Scope}：\id{FinitePrefix}（仅追加日志 \id{RawLog} 的有限前缀）、\id{LanguageMenu}（实验前冻结的有限备选菜单 $\mathcal R$）、\id{InfiniteLanguage}（整个无限词集 $\Sigma^*$）和 \id{RevisionSpace}（修订轨迹及层级 $\Delta L/\Delta D/\Delta\pi$ 的空间）。
+
+\begin{lstlisting}[caption={经验证的内核 v2.4（Lean 4.36.0）：逐点依赖的主张、逐点证据与条件式作用域桥。}]
+structure CoveredJustification (Q : Type) (s : Scope) (A : Premise) (c : Q → Claim s)
+    where
+  R         : Q → Prop
+  Covered   : Q → Prop
+  Gap       : Q → Prop
+  partition : ∀ q : Q, R q → Covered q ∨ Gap q
+  localProof : A → ∀ q : Q, Covered q → Denote (c q)
+
+structure TotalJustification (Q : Type) (s : Scope) (A : Premise) (c : Q → Claim s)
+    where
+  R          : Q → Prop
+  evidenceAt : ∀ q : Q, R q → DirectEvidence s A (c q)
+  fullCover  : A → ∀ q : Q, R q → Denote (c q)
+
+structure ScopeBridge (Q2 : Type) (s1 s2 : Scope) (A1 A2 : Premise)
+    (c1 : Claim s1) (c2 : Q2 → Claim s2) (ModelOk : Q2 → Prop) where
+  liftProof : A2 → Denote c1 → ∀ q : Q2, ModelOk q → Denote (c2 q)
+\end{lstlisting}
+
+\begin{figure}[htbp]
+\centering\small
+\begin{tabularx}{\linewidth}{@{}XcXX@{}}
+\toprule
+覆盖（\id{FinitePrefix}） &
+$\xrightarrow[\mathsf{GapEmpty}]{\ \mathsf{bridgeComplete}\ }$ &
+完全（\id{FinitePrefix}） & \id{LanguageMenu} \\
+$\mathsf{partition}:R\Rightarrow\mathsf{Cov}\lor\Gap$ &&
+\id{DirectEvidence s A c} & \id{StepBranch}、\id{SymbolLift}、$\mathrm{Gain}_{\min}$ \\
+\midrule
+覆盖（\id{InfiniteLanguage}） &
+$\xleftarrow{\ \mathsf{liftScope}\ }$ &
+上方完全论证经 \id{ScopeBridge} 提升 & \id{RevisionSpace} \\
+$w\in\Sigma^*$；\id{ModelGap}（\id{hasEpsilon}） &&
+缺口见证 $m$：$\mathsf{hasEps}(m)$ &
+\id{Obs}；$\Delta L/\Delta D/\Delta\pi$ \\
+\bottomrule
+\end{tabularx}
+\caption{四种作用域的拓扑，以及内核 v2.4 的两座不同桥梁：完备性桥 \id{bridgeComplete} 在同一作用域内以 \id{GapEmpty} 闭合缺口；跨作用域提升 \id{liftScope} 则把 \id{FinitePrefix} 中的完全论证迁移为 \id{InfiniteLanguage} 中的覆盖论证，并显式保留模型缺口 \id{ModelGap}。}
+\end{figure}
+
+注意 \id{ScopeBridge} 签名中的不对称性：源端 $c_1:\mathsf{Claim}\,s_1$ 是单个主张，目标端 $c_2:Q_2\to\mathsf{Claim}\,s_2$ 却是一个逐点主张族。这是因为一个有限的轨迹一致性证书（\id{TraceAgrees}）可通过参数化定理一次提升到整个目标模型族 $Q_2$。
+
+\begin{theorem}[封堵漏洞与逐点缺口代数；经 Lean 4.36.0 验证]
+模块 \id{EpistemicRevisionV2}（v2.4，不使用内核公理）的结果如下。
+\begin{enumerate}
+\item \textbf{内涵性}（\id{claim_distinct_not_reusable}）：拥有 \id{cTrue} 的证据，不能据此为同一作用域中的 \id{cFalse} 构造 \id{DirectEvidence}。
+\item \textbf{无非空性假设的逐点桥}（\id{bridgeComplete}）：在 \id{GapEmpty Gap} 成立时，通过 \id{partition} 和 \id{localProof} 逐点构造 \id{evidenceAt q hRq}，不再需要原先的查询非空性假设。
+\item \textbf{排除任何直接完全论证}（\id{pointwise_unproved_blocks_any_total}）：如果存在 $q_0\in Q$ 使 $R(q_0)\land A\land\neg\Denote(c(q_0))$，则不可能存在作用域恰为 \id{tot.R = R} 的 \id{TotalJustification}，即使绕过 \id{bridgeComplete} 也无法构造。该结果不排除在避开 $q_0$ 的收缩作用域 $R'\subset R$ 上构造完全论证。
+\item \textbf{缺口的复合}（\id{composeCoverage_gap_empty_iff}）：沿 $f:Q_1\to Q_2$，复合覆盖区是 $S_{\mathrm{ok},1}(q)\land S_{\mathrm{ok},2}(f(q))$，复合缺口是 $\Gap_1(q)\lor\Gap_2(f(q))$。
+\item \textbf{条件式提升}（\id{liftScope}、\id{gate12_13_epsilon_blocks_any_total}）：\id{ScopeBridge} 仅在子集 \id{ModelOk} 上有效。若存在带 $\varepsilon$ 转移的模型 $m_0$，在该模型中 $A_1\land A_2$ 成立但目标主张为假，则不可能构造覆盖整个模型空间 $Q_{\mathrm{mod}}$、即 \id{tot.R = (fun _ => True)} 的 \id{TotalJustification}。
+\end{enumerate}
+\end{theorem}
+
+\paragraph{两座桥的本质区别。}
+在 v2.4 内核中，\id{bridgeComplete} 和 \id{liftScope} 是不同的数学操作。前者在固定的作用域内闭合残余缺口（$\Delta(T)=\varnothing$）；后者在作用域之间迁移结论，并改变缺口的性质（从词的有限样本，变为实时 \id{StackProgram} 与一般下推自动机 PDA 之间的模型限制）。
+
+\section{依赖式推论许可 \texorpdfstring{$\kappa:\mathsf{Judgement}(\alpha,\delta)$}{κ: Judgement(α,δ)} 与 RawLog 的演化}\label{sec:lic}
+元同义词集元组的坐标 $\kappa$ 不是方法标签的列表，而被形式化为独立的归纳许可类型 \id{Judgement}。当前实现不显式包含语法参数 $\alpha,\delta$；允许推论的算子为 $\Gamma(\kappa)=\mathsf{AllowedConclusion}\,\kappa$。其构造器包括 \id{Transport}、\id{LocalIso}、\id{Refutation}、\id{NonIdent}、\id{Expansion}、\id{Restriction}、\id{FormalTheorem} 与 \id{FiniteCheck}。
+
+为精确陈述许可定理，回顾内核定义：
+\begin{align*}
+\mathsf{LangEmbed}(L_2,L_1)&\Longleftrightarrow
+\forall h_2,\ \exists h_1,\ \forall w,\ L_1.\mathsf{eval}(h_1,w)=L_2.\mathsf{eval}(h_2,w),\\
+\mathsf{VersionSpaceUnique}(L,D)&\Longleftrightarrow \forall h_1,h_2,\ \bigl(
+\mathsf{agreesOn}(L,D,h_1)\land\mathsf{agreesOn}(L,D,h_2)\\[-.3em]
+&\hspace{4.7em}\Longrightarrow \forall w,\ L.\mathsf{eval}(h_1,w)=L.\mathsf{eval}(h_2,w)\bigr).
+\end{align*}
+后式即 $|\widetilde{\mathcal V}(L,D)|\le1$，包括版本空间为空的情形。
+
+\begin{theorem}[收缩的可靠性及防泄漏定理；经 Lean 4.36.0 验证]
+\begin{enumerate}
+\item \textbf{收缩的可靠性}（\id{restriction_sound}，无公理）：对于满足语义嵌入 $\mathsf{LangEmbed}(L_2,L_1)$ 的任意语言（$L_2$ 中每个程序都等价于 $L_1$ 中某个程序），收缩语言既保持证伪（$\mathsf{VersionSpaceEmpty}\,L_1\,D\to\mathsf{VersionSpaceEmpty}\,L_2\,D$），也保持语义唯一性（$\mathsf{VersionSpaceUnique}\,L_1\,D\to\mathsf{VersionSpaceUnique}\,L_2\,D$）。
+\item \textbf{有限核验的防泄漏性}（\id{finiteCheck_blocks_universal}，\id{propext}）：存在边界 $B$ 和谓词 $P$，使 $\Gamma(\mathsf{FiniteCheck}\,B\,P)$ 为真，而 $\forall w\in\Sigma^*,\,P(w)=\mathsf{true}$ 为假。
+\item \textbf{证伪的防泄漏性}（\id{refutation_blocks_extended}，\id{propext}）：存在语言 $L_1,L_2$ 和日志 $D$，使 $\Gamma(\mathsf{Refutation}\,L_1\,D)$ 为真，但 $L_2$ 未在 $D$ 上被证伪。
+\item \textbf{前缀单调性}（\id{versionSpaceEmpty_monotone}，无公理）：若语言 $L$ 已在仅追加日志的前缀 $l_1$ 上被证伪（$\mathsf{PrefixOf}\,l_1\,l_2$），则在任意扩展 $l_2$ 上仍被证伪。
+\end{enumerate}
+\end{theorem}
+
+以前缀单调性为基础，定义不可逆地冻结的菜单 \id{FrozenMenu}（绑定前缀 \id{frozenAt}）、经认证的修订 \id{CertifiedRev}（修订前后的状态、\id{PrefixOf} 的证明、原始修改清单 $\Delta L/\Delta D/\Delta\pi$ 与 \id{CoveredJustification}）以及端到端的发现链 \id{DiscoveryChain}。这些对象与修订层级定理~\cite[定理 3]{ms2} 一同表明：只凭外部答案，缺少语法和数据日志，就不能定位修订发生在哪一层。
+
+\section{分支控制器 StepBranch、SymbolLift 与最坏情形探针 \texorpdfstring{$\mathrm{Gain}_{\min}(q)$}{Gain min(q)}}
+分支步骤 \id{StepBranch} 将固定的线性阶梯（DFA$\to$1-DCA$\to$DPDA）替换为备选树。在当前类别已被日志前缀 $D_{\le t}$ 证伪之后，\id{meta-synset} 提供冻结菜单 $\mathcal R$，而 \id{Research-Controller} 根据保证能排除的最少备选数选择探针 $q$：
+\begin{equation}
+\mathrm{Gain}_{\min}(q)=|\mathcal R|-\max_y |\mathcal R_{q,y}|.
+\end{equation}
+
+v1.0 的审计发现：对于区分栈（LIFO）和队列（FIFO）的三点探针，知道 $f(0)=b_0$ 和 $f(1)=b_1$ 并不足够。必须有一个显式的规范对象 $\mathsf{SymbolLift}\,f$，证明逐符号同态延拓 $f(u\mathbin{+\!\!+}v)=f(u)\mathbin{+\!\!+}f(v)$、二元字母表保持性（\id{binPreserving}：$f(0),f(1)\in\{0,1\}$）以及单射性（\id{injectiveBin}：$f(0)\ne f(1)$）。
+
+\begin{theorem}[探针依赖于零假设类；SymbolLift 的条件不可缺省]
+\begin{enumerate}
+\item \textbf{无限格 $\mathbb{Z}$ 上的 Rule 110}~\cite[定理 4–5]{ms2}：相对于任意有效仿射映射 $A_t$，制备的最小权重为 2（$F_t(a,b)=a\lor b$ 对 $A_t(a,b)=a\oplus b$）；若把零假设类收缩为在偶数时域上迭代同一个平移不变的仿射规则 $U^t$，最小权重降为 1。
+\item \textbf{在 StepBranch 中分离 LIFO 与 FIFO}（\id{stepBranch_order_probe_splits}，Lean 4.36.0）：若有 $\mathsf{SymbolLift}\,f$，五符号顺序探针 $q^*=[0,1,\#,f(1),f(0)]$ 在标准栈分支上返回 \id{true}，在标准队列分支上返回 \id{false}，且 $\mathrm{Gain}_{\min}(q^*)=1$。
+\item \textbf{binPreserving 的必要性}（\id{stepBranch_fails_without_binPreserving}，Lean 4.36.0）：映射 $f_{\mathrm{bad}}(0)=\#$、$f_{\mathrm{bad}}(1)=0$ 满足单射条件，但两个分支对 $q^*$ 均返回 \id{false}，$\mathrm{Gain}_{\min}(q^*)=0$。
+\item \textbf{injectiveBin 的必要性}（\id{stepBranch_fails_without_injectiveBin}，Lean 4.36.0）：映射 $f_{\mathrm{const}}(0)=f_{\mathrm{const}}(1)=0$ 满足 \id{binPreserving}，但两个分支对 $q^*$ 均返回 \id{true}，$\mathrm{Gain}_{\min}(q^*)=0$。
+\end{enumerate}
+\end{theorem}
+
+\section{第二轴：端口升级（Gate 14）、干预代数（Gate 15）与量化残余（Gate 16）}
+
+记忆层级 DFA$\to$1-DCA$\to$DPDA$\to$Queue（第一轴）在固定观测端口上的版本空间为空（$|\mathcal V|=0$）时启动。分析多组件系统和大型语言模型时会遇到对偶问题：在同一公共端口上，任何允许的查询都无法区分一个具备证书的规范等价对，尽管其他候选仍可能被排除。因此需要一条正交的第二轴：升级观测接口本身、构造干预代数，并转向残余缺口的概率估计（图~\ref{fig:axis}）。
+
+\begin{figure}[htbp]
+\centering\small
+\begin{tabularx}{\linewidth}{@{}XXX@{}}
+\toprule
+\multicolumn{3}{@{}l}{第一轴：固定端口上 $|\mathcal V|=0$ 时升级记忆类别}\\
+\midrule
+Gate 11：\id{MNCert}，DFA($k$)$\to$1-DCA &
+Gate 12 v12.3：\id{1DCACert}，$\forall m\,\neg$1-DCA，转向 DPDA &
+Gate 13（候选）：\id{StepBranch} 与 Queue（$\forall m\,\neg$DPDA）\\
+\midrule
+\multicolumn{3}{@{}l}{v2.4 修订内核：\id{Scope}、覆盖／完全论证与 $\Delta(T)$}\\
+\midrule
+\multicolumn{3}{@{}l}{第二轴：公共端口存在经证实的区分障碍或观测噪声}\\
+\midrule
+Gate 14：\id{GaugeEquivCert}、\id{tapPort}；排除 \id{SpuriousExtension} &
+Gate 15：掩码 $K$ 与交换子 $[T_L,T_R]$ &
+Gate 16：\id{HasGapBound}、$\Delta_\varepsilon$ 与 e-值，$\Pr(\text{拒绝})\le1/K$\\
+\bottomrule
+\end{tabularx}
+\caption{研究升级的双轴图。第一轴在 $|\mathcal V|=0$ 时改变记忆类别；经 Lean 4.36.0 验证的第二轴在公共端口存在经证实的区分障碍或观测噪声时，升级端口、施用干预代数并量化残余缺口。}
+\label{fig:axis}
+\end{figure}
+
+\begin{theorem}[第二轴：端口、干预与量化残余；经 Lean 4.36.0 验证]
+三个彼此独立、仅使用 Lean 4 Core 且无 \id{sorry} 的模块证明了以下结果。
+\begin{enumerate}
+\item \textbf{Gate 14}（\id{gate14_port_escalation_v2_4.lean}，10 项定理~\cite{g14}）：对于两阶段机制 $Q\xrightarrow{R} Z\xrightarrow{S}Y$ 和可逆变换 $T$（\id{GaugeEquivCert}：$T(R(q_0))\ne R(q_0)$），规范等价的孪生机制 $M_2=(T\circ R,S\circ T^{-1})$ 与 $M_1$ 不同，但通过 \id{publicPort} 在任何日志上都不可区分（\id{gaugeCert_blocks_single_port_id}）。端口细化 \id{PortRefinement} 的非严格条件 $\mathsf{proj}\circ P_2=P_1$ 保留以往的证伪；扩展端口 \id{tapPort} 只需查询一次 $q_0$ 即可区分该规范等价层中的这对机制（\id{tapPort_breaks_gaugeCert}）。另证明若无效扩展 \id{SpuriousExtension} 不改变观测像，它就不能在任何日志上挽救已被证伪的类别（\id{spurious_extension_cannot_repair_refutation}）。
+\item \textbf{Gate 15}（\id{gate15_intervention_algebra_v2_4.lean}，8 项定理~\cite{g15}）：给定两个干预 $(T_L,T_R)$ 与形式规范化器 $N$，可在给定点 $x_0$ 用可计算谓词 \id{checkOrthogonalControl} 检查掩码 $K$ 的局部正交性（\id{by decide}）。若 $T_L$ 在全局保持 $N$，则
+\[
+  N(T_L(T_R x))=N(T_R(T_L x))
+\]
+等价于策略 $T_R$ 的语言不变性；一个不交换的见证即可证伪联合不变性（\id{noncomm_refutes_joint_invariance}）。防泄漏定理 \id{confounded_TL_fakes_noncomm_without_mask_K} 与 \id{unaligned_normalizer_fakes_semantic_shift} 分别给出两个反例：未保持 \id{Held} 坐标时，即使策略与语言无关，也可能出现顺序依赖；当 $N$ 未对齐时，即使两种干预可交换，也可能出现虚假的单步语义偏移。
+\item \textbf{Gate 16}（\id{gate16_stochastic_gap_evalue_v2_4.lean}，11 项声明~\cite{g16}）：在自然数上的精确离散测度中证明了马尔可夫不等式（\id{markov_ineq}），以及有效 e-变量 $\mathbb E_\mu[E/D]\le1$ 的错误拒绝上界
+\[
+ K\cdot\mathsf{eventMass}(\mu,\{E\ge KD\})\le\mathsf{totalMass}(\mu)
+\]
+（\id{evalue_false_rejection_bound}），并证明了两个独立 e-变量乘积的有效性（\id{indep_two_step_evalue_product_valid}）。量化缺口定义为
+\begin{align*}
+&\mathsf{HasGapBound}(\mu,\Gap,\mathsf{num},\mathsf{den})\\
+&\quad\Longleftrightarrow (0<\mathsf{den})\land
+\bigl(\mathsf{eventMass}(\mu,\Gap)\cdot\mathsf{den}
+\le\mathsf{num}\cdot\mathsf{totalMass}(\mu)\bigr).
+\end{align*}
+该定义排除使界失去实质约束的零分母（\id{den_zero_rejected_by_HasGapBound}，无公理），推广 \id{GapEmpty}（\id{gapEmpty_implies_zero_gapBound}），并在分母相同的条件下满足次可加性（\id{union_gap_bound}）。
+\end{enumerate}
+\end{theorem}
+
+\paragraph{\id{meta-synset} 算子与两轴间的条件式分流。}
+v2.4 内核新增基础结构 \id{MetaOperand}（防退化不变量 $2\le\mathsf{domainCount}$）、\id{metaProj} 与 \id{metaFreeze}（\id{metaFreeze_preserves_candidates}），以及条件式分流 \id{chooseConditionalTwoAxisAction} / \id{conditional_two_axis_routing_blocks_spurious_memory_escalation}：若预先假定原因互斥（\id{disjointCause}），规范等价导致的不可识别性（\id{axis2Gauge}）将阻止盲目沿第一轴升级记忆。这里有一项重要边界：\id{axis1Refuted} 与 \id{axis2Gauge} 是自由谓词，尚未在统一类型中分别从 \id{VersionSpaceEmpty} 与 \id{GaugeEquivCert} 推导；因此该定理只建立两轴之间的条件式联系。
+
+\section{Lean 4.36.0 机器验证状态与适用边界}
+表~\ref{tab:verify} 区分已经通过 Lean 4.36.0 内核检查的结果（退出代码 0、无 \id{sorryAx}）和仍属形式规范、候选或开放实证问题的组件。
+
+\begin{table}[htbp]
+\centering\small
+\begin{tabularx}{\linewidth}{@{}p{23mm}Xp{34mm}p{32mm}@{}}
+\toprule
+层／模块 & 关键定理 & Lean 4.36.0 公理 & 实际状态 \\
+\midrule
+修订内核 v2.4 & 15 项声明，包括 \id{pointwise_unproved_blocks_any_total}、\id{stepBranch_fails_without_injectiveBin}、\id{metaFreeze_preserves_candidates}、\id{conditional_two_axis_routing} 等 &
+9 项无公理；2 项 \id{propext}；1 项 \id{Quot.sound}；3 项使用标准公理 &
+已验证~\cite{kernel}（\id{1bb76af2...}；605 行；无警告）\\
+Gate 11–12 v12.3 & 12 项定理，包括 \id{checkMNCert_sound}、\id{check1DCACert_sound}、\id{checkFullChomskyProtocol_sound} &
+\id{propext}、\id{Classical.choice}、\id{Quot.sound} &
+已验证~\cite{g1112}（\id{763f59d7...}）\\
+Gate 14 v2.4（端口） & 10 项声明，包括 \id{gaugeCert_blocks_single_port_id}、\id{tapPort_breaks_gaugeCert}、\id{spurious_extension_cannot_repair_refutation} &
+8 项无公理；2 项使用 \id{propext}、\id{Quot.sound} &
+已验证~\cite{g14}（\id{34397f38...}；272 行；无警告）\\
+Gate 15 v2.4（算子） & 8 项声明，包括 \id{checkNonCommProtocol_sound}、\id{noncomm_refutes_joint_invariance} 及 \id{Held}／$N$ 防泄漏 &
+5 项无公理；3 项使用 \id{propext} &
+已验证~\cite{g15}（\id{67fbae74...}；231 行；无警告）\\
+Gate 16 v2.4（缺口 $\Delta_\varepsilon$） & 11 项声明，包括 \id{markov_ineq}、\id{evalue_false_rejection_bound}、\id{indep_two_step_evalue_product_valid}、\id{den_zero_rejected_by_HasGapBound} &
+1 项无公理；3 项使用 \id{propext}；7 项使用 \id{propext}、\id{Quot.sound} &
+已验证~\cite{g16}（\id{9cf958f2...}；304 行；无警告）\\
+Gate 13（第 4 级） & \id{QueueProgram}，$\forall m\,\neg\mathsf{StackProgram}(m)$ & — & 候选（尚待运行 Lean 验证）\\
+迁移实证 & \id{StepBranch} 和 \id{meta-synset} 的全成本收益 & — & 开放假设（计划搭建试验平台）\\
+\bottomrule
+\end{tabularx}
+\caption{v2.4 架构已验证模块全图（Lean 4.36.0，无 \id{sorryAx}）。}
+\label{tab:verify}
+\end{table}
+
+\begin{remark}[形式审计所确定的 v2.4 适用边界]
+\begin{enumerate}
+\item \textbf{Gate 14。} \id{PortRefinement} 形式化的是非严格细化（$\mathsf{proj}\circ P_2=P_1$）；升级的严格性由 \id{tapPort_breaks_gaugeCert} 单独建立。\id{SpuriousExtension} 中的 \id{sameObs} 是对所有 $f:Q\to O$ 给出的假设，不是从语法形式推导出的性质。
+\item \textbf{Gate 15。} 掩码 $K$ 的正交性只在给定点 $x_0$ 局部核验；关于层级混杂的定理只证明存在性：违反 \id{Held} 的保持条件可能造成误导性的顺序依赖，而 $N$ 未对齐可能造成虚假的语义偏移。
+\item \textbf{Gate 16 v2.4。} \id{HasGapBound} 定义直接要求 $0<\mathsf{den}$，\id{den_zero_rejected_by_HasGapBound} 确认了这一点。要作概率解释，仍需额外要求 $\mathsf{totalMass}(\mu)>0$（当前定义不排除零测度）；\id{union_gap_bound} 要求共同分母 $q$；\id{indep_two_step_evalue_product_valid} 只证明固定两步的乘积结果，并不涵盖任意数据依赖的停止时刻（Ville 不等式）。
+\item \textbf{v2.4 内核。} 四个模块在 \id{ALL_4_MODULES_v2_4_VERIFICATION.log} 所载的统一运行中均以零警告编译。\id{conditional_two_axis_routing} 系列仍只是在自由谓词 \id{axis1Refuted}／\id{axis2Gauge} 上假定 \id{disjointCause} 的条件式分流；当二者皆假时，默认返回第二轴，单独的“证据不足”结果 \id{InsufficientEvidence} 将留待下一版统一控制器。\id{metaFreeze} 传递候选列表和日志前缀，但尚不携带完整的缺口和来源证书。\id{gate12_13_parametric_lift} 中的谓词 \id{hPart} 在整个 $Q_{\mathrm{mod}}$ 上含有 \id{True ->} 前提；\id{pointwise_unproved_blocks_any_total} 只对作用域恰满足 \id{tot.R = R} 的完全论证证明其不存在。
+\end{enumerate}
+\end{remark}
+
+\section{结论}
+v2.4 的对偶回路 \id{meta-synset} 与 \id{invariant} 覆盖了两条研究升级轴。在 Lean 4.36.0 中经机器检查的 44 项声明涵盖修订内核 v2.4、观测端口升级（Gate 14）、带可计算掩码 $K$ 的干预代数（Gate 15），以及带精确 e-值界的量化残余缺口（Gate 16）。核心对象包括：封装证据 \id{DirectEvidence s A c}；附有划分证明 \id{partition}、必须保留的残余缺口 $\Delta(T)$；彼此独立的完备性桥 \id{bridgeComplete} 与跨作用域提升 \id{liftScope}；依赖式推论许可 $\Gamma(\kappa)$；以及由 \id{SymbolLift} 的关键前提支撑的冻结菜单 $\mathcal R$ 上的分支选择。接下来有两项直接工作：验证第 4 级（Gate 13，\id{QueueProgram}），以及在留出的任务集上比较分支控制器 \id{StepBranch} 与线性升级的全成本。
+
+\sloppy
+\begin{thebibliography}{15}
+\bibitem{ms2} 亚历山大·斯特兰德。《元同义词集 II：经认证的假设语言修订。类型化迁移、推论作用域与可核验的表征变更》，v0.3，手稿，2026。
+\bibitem{g1112} 亚历山大·斯特兰德。《假设语言与证明驱动的表征升级。从有限不可能性证书到计数器与栈式自动机的参数化定理》，Gate 11–12 v12.3，2026。
+\bibitem{kernel} 亚历山大·斯特兰德。\id{epistemic_revision_kernel_v2_4.lean}：修订系统 v2.4 的形式内核（Lean 4.36.0，SHA-256 \id{1bb76af2f6cc03348fa35e605d6ce41dfbd35cfcb9f5ae2a0ec8491c792319c7}，15 项声明，无警告），2026。
+\bibitem{g14} 亚历山大·斯特兰德。\id{gate14_port_escalation_v2_4.lean}：观测端口升级与无效扩展的排除（Lean 4.36.0，SHA-256 \id{34397f3839bcc9cdb06335b1ca959e2f983dbad1635edf7430cb7d767e0ddcc6}，10 项声明，无警告），2026。
+\bibitem{g15} 亚历山大·斯特兰德。\id{gate15_intervention_algebra_v2_4.lean}：干预代数、局部可计算掩码 $K$ 与交换子 $[T_L,T_R]$（Lean 4.36.0，SHA-256 \id{67fbae749cc0ab163468879396bca8e6f14f38f881ef63b78119888c4bad9c22}，8 项声明，无警告），2026。
+\bibitem{g16} 亚历山大·斯特兰德。\id{gate16_stochastic_gap_evalue_v2_4.lean}：量化残余缺口 $\Delta_\varepsilon$（$0<\mathsf{den}$）与两个独立 e-值的乘积（Lean 4.36.0，SHA-256 \id{9cf958f26f67e4112367090ff5fbbcd895dcf9db849886494164a2b9fc640d99}，11 项声明，无警告），2026。
+\bibitem{gentner} D. Gentner. Structure-Mapping: A Theoretical Framework for Analogy. \emph{Cognitive Science}, 7:155–170, 1983.
+\bibitem{goguen} J. A. Goguen, R. M. Burstall. Institutions: Abstract Model Theory for Specification and Programming. \emph{Journal of the ACM}, 39(1):95–146, 1992.
+\bibitem{blackwell} D. Blackwell. Equivalent Comparisons of Experiments. \emph{Annals of Mathematical Statistics}, 24(2):265–272, 1953.
+\bibitem{angluin} D. Angluin. Learning Regular Sets from Queries and Counterexamples. \emph{Information and Computation}, 75(2):87–106, 1987.
+\bibitem{myhill} J. Myhill. Finite Automata and the Representation of Events. WADC Technical Report, 57–624, 1957.
+\bibitem{nerode} A. Nerode. Linear Automaton Transformations. \emph{Proceedings of the American Mathematical Society}, 9(4):541–544, 1958.
+\bibitem{lakatos} I. Lakatos. \emph{Proofs and Refutations: The Logic of Mathematical Discovery}. Cambridge University Press, 1976.
+\bibitem{huffman} B. Huffman, O. Kunčar. Lifting and Transfer: A Modular Design for Quotients. CPP 2013, LNCS 8307, pp. 131–146, 2013.
+\bibitem{jha} S. Jha, S. A. Seshia. A Theory of Formal Synthesis via Inductive Learning. \emph{Acta Informatica}, 54:693–726, 2017.
+\end{thebibliography}
+\end{document}

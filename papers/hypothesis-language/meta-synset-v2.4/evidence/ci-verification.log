@@ -1,0 +1,49 @@
+Lean (version 4.36.0, x86_64-unknown-linux-gnu, commit 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9, Release)
+MODULE: epistemic_revision_kernel_v2_4.lean
+'EpistemicRevisionV2.claim_distinct_not_reusable' does not depend on any axioms
+'EpistemicRevisionV2.nonempty_gap_blocks_total' does not depend on any axioms
+'EpistemicRevisionV2.pointwise_unproved_blocks_any_total' does not depend on any axioms
+'EpistemicRevisionV2.composeCoverage_gap_empty_iff' does not depend on any axioms
+'EpistemicRevisionV2.judgement_sound' does not depend on any axioms
+'EpistemicRevisionV2.restriction_sound' does not depend on any axioms
+'EpistemicRevisionV2.finiteCheck_blocks_universal' depends on axioms: [propext]
+'EpistemicRevisionV2.refutation_blocks_extended' depends on axioms: [propext]
+'EpistemicRevisionV2.versionSpaceEmpty_monotone' does not depend on any axioms
+'EpistemicRevisionV2.stepBranch_order_probe_splits' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EpistemicRevisionV2.stepBranch_fails_without_binPreserving' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EpistemicRevisionV2.stepBranch_fails_without_injectiveBin' depends on axioms: [propext, Classical.choice, Quot.sound]
+'EpistemicRevisionV2.metaFreeze_preserves_candidates' does not depend on any axioms
+'EpistemicRevisionV2.conditional_two_axis_routing_blocks_spurious_memory_escalation' depends on axioms: [Quot.sound]
+'EpistemicRevisionV2.gate12_13_epsilon_blocks_any_total' does not depend on any axioms
+MODULE: gate14_port_escalation_v2_4.lean
+'Gate14PortEscalation.gauge_preserves_publicPort' does not depend on any axioms
+'Gate14PortEscalation.gaugeCert_blocks_single_port_id' does not depend on any axioms
+'Gate14PortEscalation.tapPort_breaks_gaugeCert' does not depend on any axioms
+'Gate14PortEscalation.port_refinement_preserves_agreement' depends on axioms: [propext, Quot.sound]
+'Gate14PortEscalation.port_refinement_preserves_refutation' depends on axioms: [propext, Quot.sound]
+'Gate14PortEscalation.spurious_extension_zero_discriminatory_gain' does not depend on any axioms
+'Gate14PortEscalation.spurious_extension_cannot_repair_refutation' does not depend on any axioms
+'Gate14PortEscalation.spurious_hidden_var_concrete_witness' does not depend on any axioms
+'Gate14PortEscalation.example_gauge_unidentifiable' does not depend on any axioms
+'Gate14PortEscalation.example_tap_separates' does not depend on any axioms
+MODULE: gate15_intervention_algebra_v2_4.lean
+'Gate15InterventionAlgebra.lang_invariance_implies_commutativity_iff_strategy_invariance' does not depend on any axioms
+'Gate15InterventionAlgebra.noncomm_refutes_joint_invariance' does not depend on any axioms
+'Gate15InterventionAlgebra.checkOrthogonalControl_sound' depends on axioms: [propext]
+'Gate15InterventionAlgebra.checkNonCommProtocol_sound' depends on axioms: [propext]
+'Gate15InterventionAlgebra.confounded_TL_fakes_noncomm_without_mask_K' does not depend on any axioms
+'Gate15InterventionAlgebra.unaligned_normalizer_fakes_semantic_shift' does not depend on any axioms
+'Gate15InterventionAlgebra.modelA_commutes_everywhere' does not depend on any axioms
+'Gate15InterventionAlgebra.modelB_certified_corollary' depends on axioms: [propext]
+MODULE: gate16_stochastic_gap_evalue_v2_4.lean
+'Gate16StochasticGap.markov_ineq' depends on axioms: [propext, Quot.sound]
+'Gate16StochasticGap.evalue_false_rejection_bound' depends on axioms: [propext, Quot.sound]
+'Gate16StochasticGap.indep_two_step_evalue_product_valid' depends on axioms: [propext, Quot.sound]
+'Gate16StochasticGap.gapEmpty_implies_zero_gapBound' depends on axioms: [propext, Quot.sound]
+'Gate16StochasticGap.eventMass_or_le' depends on axioms: [propext, Quot.sound]
+'Gate16StochasticGap.union_gap_bound' depends on axioms: [propext, Quot.sound]
+'Gate16StochasticGap.checkEValueCert_sound' depends on axioms: [propext]
+'Gate16StochasticGap.checkGapBound_sound' depends on axioms: [propext]
+'Gate16StochasticGap.sample_evalue_rejection_corollary' depends on axioms: [propext, Quot.sound]
+'Gate16StochasticGap.sample_stoch_gap_corollary' depends on axioms: [propext]
+'Gate16StochasticGap.den_zero_rejected_by_HasGapBound' does not depend on any axioms

@@ -44,8 +44,8 @@
       "sha256": "f1a454a630b4488950e04c04c40b7f84cf9e3847c7392f5788e813fadc66b4f5"
     },
     "README.md": {
-      "bytes": 14572,
-      "sha256": "26ae5131d3ab5a0e74b93fe9b4a4a6a44c84164c9c2d2961fcb9c24d6dc47a41"
+      "bytes": 16548,
+      "sha256": "60f50201c63bccb196b034525f7e0fd77cc47c1f0903a29a3dc4d7d9f9e9a57a"
     },
     "build_preprints.py": {
       "bytes": 15444,
@@ -192,5 +192,5 @@
       "sha256": "0dbb57ad3c1f9810ee23db555b7bec806655c94ce1170110624b713d57a53456"
     }
   },
-  "publication_addendum": "23 November 2026: mutable root README navigation updated to cite hypothesis-language companion; v1.1.1 source/preprint content hashes unchanged. The companion papers are a separate edition and are not folded into the historical v1.1.1 manifest. 23 November 2026 Gate 11–12 root-navigation and preferred-citation update: only mutable README.md and CITATION.cff digest records are changed; earlier v1.1.1 experiment data and proofs retain original SHA-256. Prior manifests and entrypoints preserved in history/; later papers retain independent release manifests. 23 Nov 2026: added Chinese and English translation navigation and updated preferred citation to the English Gate 11–12 edition; only README/CITATION mutable hashes changed. Historical source files and evidence retain their indexed hashes, translation PDFs have a separate manifest."
+  "publication_addendum": "23 November 2026: mutable root README navigation updated to cite hypothesis-language companion; v1.1.1 source/preprint content hashes unchanged. The companion papers are a separate edition and are not folded into the historical v1.1.1 manifest. 23 November 2026 Gate 11–12 root-navigation and preferred-citation update: only mutable README.md and CITATION.cff digest records are changed; earlier v1.1.1 experiment data and proofs retain original SHA-256. Prior manifests and entrypoints preserved in history/; later papers retain independent release manifests. 23 Nov 2026: added Chinese and English translation navigation and updated preferred citation to the English Gate 11–12 edition; only README/CITATION mutable hashes changed. Historical source files and evidence retain their indexed hashes, translation PDFs have a separate manifest. 23 November 2026: updated mutable root README navigation for Meta-Synset and Invariant v2.4; its scientific files have a separate digest manifest."
 }

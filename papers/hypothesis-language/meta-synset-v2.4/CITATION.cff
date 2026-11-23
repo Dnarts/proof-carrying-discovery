@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "Cite the v2.4 preprint and the pinned source commit."
+title: "Meta-Synset and Invariant: A Typed System for Revising Research Representations"
+authors:
+  - family-names: Strand
+    given-names: Aleksandr
+version: "2.4"
+repository-code: "https://github.com/Dnarts/proof-carrying-discovery"
+preferred-citation:
+  type: article
+  title: "Meta-Synset and Invariant: A Typed System for Revising Research Representations"
+  authors:
+    - family-names: Strand
+      given-names: Aleksandr
+  year: 2026
+  version: "2.4"

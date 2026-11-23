@@ -1,0 +1,75 @@
+name: Meta-Synset v2.4 publication check
+on:
+  push:
+    branches: [preprints/meta-synset-v2.4]
+    paths:
+      - 'papers/hypothesis-language/meta-synset-v2.4/src/**'
+      - 'papers/hypothesis-language/meta-synset-v2.4/evidence/**'
+      - 'papers/hypothesis-language/meta-synset-v2.4/original/**'
+      - '.github/workflows/meta-synset-v2-4-publication.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-and-build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install Lean 4.36.0
+        run: |
+          curl -fsSL https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh | sh -s -- -y --default-toolchain leanprover/lean4:v4.36.0
+          echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      - name: Match the author verification hashes and recheck all four modules
+        working-directory: papers/hypothesis-language/meta-synset-v2.4/evidence
+        run: |
+          set -euo pipefail
+          sha256sum -c SHA256SUMS.sources
+          lean --version | tee ci-verification.log
+          for f in epistemic_revision_kernel_v2_4.lean gate14_port_escalation_v2_4.lean gate15_intervention_algebra_v2_4.lean gate16_stochastic_gap_evalue_v2_4.lean; do
+            echo "MODULE: $f" | tee -a ci-verification.log
+            lean "$f" 2>&1 | tee -a ci-verification.log
+          done
+          if grep -E 'warning:|error:|sorryAx' ci-verification.log; then exit 1; fi
+          test "$(grep -c 'depend.*axioms' ci-verification.log)" = 44
+          test "$(grep -c 'does not depend on any axioms' ci-verification.log)" = 23
+      - name: Install XeLaTeX and language fonts
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends texlive-xetex texlive-latex-extra texlive-lang-cyrillic texlive-lang-chinese texlive-science texlive-pictures fonts-noto-core fonts-noto-mono fonts-noto-cjk fonts-dejavu-core poppler-utils zip
+      - name: Verify canonical Russian edition, typeset translations and build evidence bundle
+        working-directory: papers/hypothesis-language/meta-synset-v2.4
+        run: |
+          set -euo pipefail
+          mkdir -p build
+          (cd original && sha256sum -c SHA256SUMS.author)
+          cd src
+          for lang in en zh; do
+            rf="meta_synset_invariant_preprint_v2_4_$lang"
+            for pass in 1 2; do
+              if ! xelatex -halt-on-error -interaction=nonstopmode -output-directory=../build "$rf.tex" > "../build/$lang-pass$pass.log" 2>&1; then
+                tail -n 80 "../build/$lang-pass$pass.log"
+                exit 1
+              fi
+            done
+            if grep -E 'Missing character|There were undefined|Undefined control sequence' "../build/$lang-pass2.log"; then exit 1; fi
+            cp "../build/$rf.pdf" ../
+            pdftotext -layout "../$rf.pdf" "../build/$lang.txt"
+            test "$(pdfinfo "../$rf.pdf" | awk '/^Pages:/ {print $2}')" -ge 6
+            test "$(wc -c < "../build/$lang.txt")" -gt 18000
+          done
+          cd ..
+          sha256sum ./*.pdf src/*.tex evidence/*.lean evidence/*.log evidence/*.sh original/*.pdf original/*.zip README.md CITATION.cff > SHA256SUMS.release
+          sha256sum -c SHA256SUMS.release
+          rm -f meta_synset_invariant_v2_4_release.zip
+          zip -q -r meta_synset_invariant_v2_4_release.zip README.md CITATION.cff SHA256SUMS.release src evidence original ./*.pdf
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: meta-synset-v2.4-build
+          path: |
+            papers/hypothesis-language/meta-synset-v2.4/*.pdf
+            papers/hypothesis-language/meta-synset-v2.4/*.zip
+            papers/hypothesis-language/meta-synset-v2.4/SHA256SUMS.release
+            papers/hypothesis-language/meta-synset-v2.4/build/*pass*.log
+            papers/hypothesis-language/meta-synset-v2.4/evidence/ci-verification.log
