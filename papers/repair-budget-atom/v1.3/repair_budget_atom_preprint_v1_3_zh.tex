@@ -1,0 +1,398 @@
+\documentclass[11pt,a4paper]{article}
+% Build twice with XeLaTeX; requires Noto Serif CJK SC and Noto Sans CJK SC.
+\usepackage{fontspec}
+\setmainfont{Noto Serif CJK SC}[ItalicFeatures={FakeSlant=0.13},ItalicFont={Noto Serif CJK SC}]
+\setsansfont{Noto Sans CJK SC}
+\setmonofont{DejaVu Sans Mono}
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip=0pt plus 1pt
+\emergencystretch=3em
+\usepackage[a4paper,top=18mm,bottom=18mm,left=20.5mm,right=20.5mm,headheight=14pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,tabularx}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{代码清单}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{primary}{RGB}{24,62,108}
+\definecolor{accent}{RGB}{138,43,43}
+\definecolor{muted}{RGB}{85,95,108}
+\definecolor{bgbox}{RGB}{244,247,251}
+\definecolor{codebg}{RGB}{248,249,250}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  citecolor=primary,
+  urlcolor=primary,
+  pdftitle={目标相关的信息充分性与研究修复原子},
+  pdfauthor={Aleksandr Strand}
+}
+
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+\setlength{\parindent}{0pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}目标相关的信息充分性与研究修复原子 (v1.3)}
+\fancyhead[R]{\small\color{muted}A. Strand}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\newtheoremstyle{preprintthm}
+  {8pt}{6pt}{\itshape}{}{\bfseries\color{primary}}{.}{0.5em}{}
+\newtheoremstyle{preprintdef}
+  {8pt}{6pt}{\normalfont}{}{\bfseries\color{primary}}{.}{0.5em}{}
+
+\theoremstyle{preprintthm}
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{proposition}[theorem]{命题}
+\newtheorem{corollary}[theorem]{推论}
+
+\theoremstyle{preprintdef}
+\newtheorem{definition}[theorem]{定义}
+\newtheorem{remark}[theorem]{注}
+\newtheorem{example}[theorem]{示例}
+
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  backgroundcolor=\color{codebg},
+  frame=single,
+  rulecolor=\color{primary!25},
+  xleftmargin=4pt,
+  xrightmargin=4pt,
+  aboveskip=6pt,
+  belowskip=6pt,
+  breaklines=true,
+  keepspaces=true,
+  columns=fullflexible,
+  extendedchars=true
+}
+
+\renewcommand{\abstractname}{摘要}
+\renewcommand{\refname}{参考文献}
+\renewcommand{\tablename}{表}
+\renewcommand{\proofname}{证明}
+\newcommand{\takeaway}[2]{%
+  \vspace{4pt}\noindent\colorbox{bgbox}{%
+    \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
+      \vspace{3pt}\textbf{\color{primary}#1.}\hspace{0.4em}#2\vspace{3pt}%
+    }%
+  }\vspace{4pt}%
+}
+
+\newcommand{\Cost}{\operatorname{Cost}}
+\newcommand{\kerrel}{\operatorname{ker}}
+\newcommand{\obs}{\operatorname{obs}}
+\newcommand{\Valid}{\operatorname{Valid}}
+\newcommand{\Gap}{\operatorname{Gap}}
+
+\providecommand{\llbracket}{\mathopen{[\![}}
+\providecommand{\rrbracket}{\mathclose{]\!]}}
+
+\newcommand{\subheading}[1]{\par\addvspace{8pt}\noindent\textbf{#1}\par\nobreak}
+\begin{document}
+\thispagestyle{plain}
+\begin{center}
+  {\LARGE\bfseries 目标相关的信息充分性与研究修复原子}\\[10pt]
+  {\large\color{muted} 修订代数、保证行动的极小极大预算、框架变换下的不变量与局部元胞协议规范}\\[12pt]
+  {\normalsize Aleksandr Strand（亚历山大·斯特兰德）}\\[4pt]
+  {\small\color{muted} 2026年11月24日 $\cdot$ 预印本 v1.3 简体中文译本 $\cdot$ 形式化、经 Lean~4.36.0 验证的核心（18/18）及局部元胞自动机基准}
+\end{center}
+
+\vspace{4pt}
+\begin{abstract}
+\noindent
+研究系统并非总要确定真实世界；它需要获得\emph{足够的信息}，以便在硬性预算内采取安全行动并证明其结果。本文形式化了一套统一架构，将\emph{研究修订代数}（以状态 $E=(L,P,D,\Pi,J,B)$（此处略去第 2 节的二阶规则存储 $\mathcal{R}$）为索引的转移代数数据类型）与\emph{研究修复原子}结合起来。文中区分三个互不等价的结果层级：识别世界（$|W|=1$）、识别目标（$g|_W=\mathrm{const}$）以及是否存在安全的修复行动（$G(W)=\bigcap_{\omega\in W}R(\omega)\ne\varnothing$）。在相容世界集 $W$ 有限且非空、行动菜单有限、探测是确定性的条件下，证明了立即执行通用修复的判据（$C(W)\le B$）、单步探测的门槛（$c(q)+\max_y C(W_{q,y})\le B$）、极小极大递推 $V_h(W)$ 的可靠性与完备性（$\operatorname{GuaranteedRepair}(W,h,B)\iff V_h(W)\le B$）、单调性 $V_{h+1}(W)\le V_h(W)$、带显式视界 $h$ 的五种确定性判定结果的穷尽性与互斥性，以及知识与资源的背离现象（$V_h(W')\le V_h(W)$，同时 $V_h(W')>B-c(q)$）。另给出框架变换下的不变量：可区分性的因子分解 $\kerrel(O_{Q_0}|_W)\subseteq\kerrel(g|_W)$、反驳迁移的逆变性、适用域的复合 $S_f\cap f^{-1}(S_h)$，以及确定性核心在自适应随机轨迹下的适用边界。对含两个修复行动的原子，证明了流式折叠累加器的精确五状态下界（$\{\texttt{EMPTY},\texttt{00},\texttt{01},\texttt{10},\texttt{11}\}$），并规定了局部一维多轨元胞协议。标量数学核心在不依赖 Mathlib 的独立 Lean~4.36.0 模块中通过机器验证（18 项声明，包括预算 $B$ 下自适应计划严格优于非自适应计划的实例、$(h,B)$-操作同余的相关性质及判定检测器的五状态下界；\texttt{exit 0}，无错误或警告，不使用 \texttt{sorryAx} 或 \texttt{native\_decide}）。针对最小原子（$|A|=2$、$|Q|=1$、$h\le1$），作者提供了仅使用 Python~3 标准库的可复现基准实现，其中独立的证书验证器按拒绝优先原则运行（已验证 8\,224 份证书）。作者还实现了半径为 1 的显式多轨元胞自动机：对于长度 $L\le4$ 的区段，穷举比对 32\,767 次，结果与基准完全一致，无差异，也未给出任何错误保证。
+\end{abstract}
+
+\section{问题设定：从识别世界到足以行动}
+
+主动学习与诊断的经典设定，追求从“未知世界”转向“唯一确定的模型”（$|W|=1$）。存在硬性资源约束时，这一目标有时并无必要，有时又无法实现：与同一份公开日志 $D$ 相容的不同世界，可能都允许同一个安全修复；反之，先查明诊断也可能耗尽执行修复所需的预算。
+
+固定可能世界空间 $\Omega$、目标对照函数 $g:\Omega\to G$，以及有限的可用修复行动集 $A$。对每个世界 $\omega\in\Omega$，给定满足预先公布的结果与安全契约的行动集 $R(\omega)\subseteq A$。对与公开日志相容的非空世界集 $W\subseteq\Omega$，定义三个基本谓词：
+\begin{equation}
+  \begin{aligned}
+    \operatorname{IdentifyWorld}(W) &\iff |W|=1,\\
+    \operatorname{IdentifyGoal}(W)  &\iff g|_W = \mathrm{const},\\
+    \operatorname{CertifyAction}(W) &\iff G(W) := \bigcap_{\omega\in W} R(\omega) \ne \varnothing.
+  \end{aligned}
+\end{equation}
+
+\begin{proposition}[三个结果层级两两不等价]
+\label{prop:three_levels}
+谓词 $\operatorname{IdentifyWorld}$、$\operatorname{IdentifyGoal}$ 与 $\operatorname{CertifyAction}$ 互不等价：
+\begin{enumerate}
+  \item $\operatorname{CertifyAction}(W) \not\Rightarrow \operatorname{IdentifyWorld}(W)$，且 $\operatorname{CertifyAction}(W) \not\Rightarrow \operatorname{IdentifyGoal}(W)$：两个不同的世界 $\omega_1\ne\omega_2$ 即使有 $g(\omega_1)\ne g(\omega_2)$，仍可能允许同一个安全行动 $a\in R(\omega_1)\cap R(\omega_2)$。
+  \item $\operatorname{IdentifyGoal}(W) \not\Rightarrow \operatorname{CertifyAction}(W)$：两个目标值相同的世界（$g(\omega_1)=g(\omega_2)$）可能需要互不相容的修复（$R(\omega_1)\cap R(\omega_2)=\varnothing$）。
+  \item 考虑预算 $B$ 时，付费探测后即便有 $\operatorname{IdentifyWorld}(W')$，也不能推出仍有预算执行修复（$C(W')>B-c(q)$）。
+\end{enumerate}
+\end{proposition}
+
+\takeaway{核心原则（Goal-Relative Information Sufficiency）}{研究自动机并不追求尽可能多地了解世界，而是获取足以在硬性预算内采取安全行动的可验证知识。}
+
+\section{作为索引代数数据类型的研究修订代数}
+
+\begin{definition}[研究状态与端口注册表]
+系统状态由如下元组给出：
+\begin{equation}
+  E=(L,P,D,\Pi,J,B,\mathcal{R}).
+\end{equation}
+其中，$L=(H,\llbracket\cdot\rrbracket:H\to\Omega)$ 是假设语言；$P=(Q_p,(Y_{p,q},\obs_{p,q})_{q\in Q_p})$ 是来自固定注册表的带类型端口，具有明确的语义版本；$D$ 是只可追加的日志，由类型为 $\Sigma(p:\texttt{PortId})\,\Sigma(q:Q_p)\,Y_{p,q}$ 的依赖记录构成；$\Pi$ 是根据公开历史选择步骤的策略；$J$ 是评估计划和候选项的准则；$B=(\mathrm{limits},\mathrm{frozenTariffs})$ 是硬性预算，标量成本取成本向量 $\Cost=(c_q,c_s,c_p,c_v,c_m)$ 按冻结费率加权后的和；$\mathcal{R}$ 是已保存的二阶修订规则集合。
+\end{definition}
+
+世界层的版本空间与语言层的版本空间严格分开：
+\begin{equation}
+  \Omega_D=\{\omega\in\Omega:\forall(p,q,y)\in D,\ \obs_{p,q}(\omega)=y\},
+  \qquad V(E)=\{h\in H:\llbracket h\rrbracket\in\Omega_D\}.
+\end{equation}
+当 $V(E)=\varnothing$ 时，$\Omega_D$ 仍可能非空，这意味着语言 $L$ 中的假设已全部排除。反之，$\Omega_D=\varnothing$ 表明数据、语义或前提之间存在矛盾，并不自动授权扩充语言。
+
+\begin{definition}[封存证据]
+证据具有类型 $\kappa:\texttt{Evidence}(A,S,\varphi)$，并由元组 $(w,m,v_{\mathrm{ok}},\mathrm{sound})$ 构成。其中 $w$ 是见证，$m$ 是方法载体；$v_{\mathrm{ok}}:\Valid(w,m)$ 是显式有效性证明，必须与蕴涵分开，以排除因前件为假而形式上成立的证据；$\mathrm{sound}:\Valid(w,m)\to\forall x\in S,\ A(x)\to\varphi(x)$。
+\end{definition}
+
+\begin{table}[!htbp]
+\centering
+\caption{基本步骤 $\mathsf{Step}(E,E')$ 的索引代数数据类型。所有步骤还须扣减预算：$B'=B-\mathrm{cost}(s)$，$0\le\mathrm{cost}(s)\le B$。}
+\label{tab:steps}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}l l >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{构造子} & \textbf{坐标} & \textbf{契约及使用的必要条件} \\
+\midrule
+$\texttt{Probe}(q,y)$ & $D'\!=\!D\cdot(p,q,y)$ & 端口 $P$ 允许探测 $q$，且答复 $y$ 是实际取得的；选择规则不变时，更换探测 $\Delta q$ 不构成 $\Delta\Pi$。 \\
+$\texttt{RevisePolicy}(\Pi',\kappa)$ & $\Pi$ & 新策略须在 $P$ 上具有正确类型，并给出使 $\Pi(h)\ne\Pi'(h)$ 的历史见证；两种策略须使用同一外部度量比较。 \\
+$\texttt{RevisePort}(P',\kappa,\tau)$ & $P$ & 明确给出依赖字段的迁移映射 $\tau$ 与原日志 $D$ 中记录的投影；若要消除盲区，需要能够区分的见证。 \\
+$\texttt{ReviseLanguage}(L',\kappa)$ & $L$ & 指定 $L'$ 的语义及其与 $L$ 的关系；$V(E)=\varnothing$ 只能排除 $L$，不能自动选出 $L'$。 \\
+$\texttt{ReviseObjective}(J',\kappa)$ & $J$ & 保持原外部任务，或明确声明新任务；旧准则 $J$ 的证据不能未经另行验证便迁移。 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+有限步骤链构成路径范畴 $\mathsf{Path}(E,E')$，单位态射是空路径 $1_E$，复合 $s;t$ 满足结合律，其中 $\mathrm{cost}(s;t)=\mathrm{cost}(s)+\mathrm{cost}(t)\le B$。与路径不同，可执行的自适应计划 \texttt{PlanTree} 仅以状态的公开表示为参数，并按\emph{公开允许的答复类型} $Y_q$ 分支，而非按隐藏的世界集 $W$ 分支：
+\begin{lstlisting}[caption={自适应计划树的安全契约：不泄露隐藏的世界空间 $W$。}]
+ADT PlanTree(E) =
+  | BranchProbe(q : Q_p, next : Y_{p,q} -> PlanTree)
+  | Halt(verdict : RepairVerdict)  -- includes terminal REPAIR(a, kappa)
+\end{lstlisting}
+验证组件另将最坏情况评估限制在实际可达的答复 $y\in f_q[W]$ 上。终止性修复统一纳入叶节点构造子 \texttt{Halt}，从而保证每条分支都恰好以一个判定结果结束。
+
+最后，严格区分以下两个谓词：
+\begin{equation}
+  \begin{aligned}
+    \operatorname{CertifiedNow}(E;A,S,\varphi) &:= \exists\kappa:\texttt{Evidence}(A,S,\varphi),\ \Valid_E(\kappa),\\
+    \operatorname{CanSolve}_W(E,\Pi,B) &:= \forall\omega\in W,\ \operatorname{Run}_B(E,\Pi;\omega)\Downarrow g(\omega).
+  \end{aligned}
+\end{equation}
+证明眼下陷入僵局，并不能排除观察之后存在预算可负担的脱困计划。
+
+\section{研究修复原子与极小极大递推 \texorpdfstring{$V_h(W)$}{V\_h(W)}}
+
+固定确定性核心：有限的相容世界集 $W=\Omega_D$；有限的修复行动菜单 $A$，其已知成本 $c(a)\ge0$ 在各世界相同；有限的探测菜单 $Q$，成本 $c(q)\ge0$，确定性答复 $f_q:\Omega\to Y_q$ 不改变世界。对非空 $W$，令
+\begin{equation}
+  G(W)=\bigcap_{\omega\in W}R(\omega),\qquad
+  C(W)=\min_{a\in G(W)}c(a),\qquad
+  \min\varnothing=+\infty.
+\end{equation}
+
+\begin{lemma}[无需识别世界即可执行的通用修复]
+\label{lem:common_repair}
+对非空 $W$，存在可立即执行且有保证的修复，当且仅当 $C(W)\le B$。随机选择行动并不放宽此条件。
+\end{lemma}
+\begin{proof}
+面对同一公开日志 $D$，控制器必须对所有 $\omega\in W$ 选用同一行动 $a\in A$。要满足契约并保证不超预算，须有 $a\in\bigcap_{\omega\in W}R(\omega)=G(W)$ 且 $c(a)\le B$，这等价于 $C(W)\le B$。在随机策略中，每个以正概率选中的行动都必须在所有 $\omega\in W$ 中可行，且成本不超过 $B$。
+\end{proof}
+
+\begin{remark}[两两相交并不充分]
+在三个世界中，若 $R(\omega_1)=\{a,b\}$、$R(\omega_2)=\{b,c\}$、$R(\omega_3)=\{a,c\}$，则任意两个世界都有通用修复，但 $G(W)=\varnothing$，因而 $C(W)=+\infty$。
+\end{remark}
+
+对探测 $q\in Q$ 与答复 $y\in f_q[W]$，令 $W_{q,y}=\{\omega\in W:f_q(\omega)=y\}$。定义至多进行 $h$ 次探测时保证完成修复的极小极大门槛：
+\begin{equation}
+  V_0(W)=C(W),\qquad
+  V_{h+1}(W)=\min\!\left\{C(W),\;\min_{q\in Q}\!\left[c(q)+\max_{y\in f_q[W]}V_h(W_{q,y})\right]\right\},
+\end{equation}
+其中最大值只在可达的非空分支 $y\in f_q[W]$ 上取。
+
+\begin{lemma}[单步探测的门槛]
+\label{lem:one_step}
+计划“执行探测 $q$，随后立即实施根据答复 $y$ 选定的修复”，在预算 $B$ 内能够保证完成，当且仅当 $c(q)+\max_{y\in f_q[W]}C(W_{q,y})\le B$。
+\end{lemma}
+\begin{proof}
+扣除 $c(q)$ 后，每个可达分支 $W_{q,y}$ 的剩余预算为 $B-c(q)$。由引理~\ref{lem:common_repair}，各分支均存在有保证的修复，当且仅当对所有 $y\in f_q[W]$ 都有 $C(W_{q,y})\le B-c(q)$，等价于 $c(q)+\max_{y\in f_q[W]}C(W_{q,y})\le B$。
+\end{proof}
+
+\begin{theorem}[自适应研究足以保证修复的条件]
+\label{thm:minimax_main}
+给定有限非空 $W$、有限菜单 $A,Q$ 与视界 $h\in\mathbb{N}$，存在深度不超过 $h$ 的自适应计划树 \texttt{PlanTree}，在预算 $B$ 内保证每个 $\omega\in W$ 都得到允许的修复，当且仅当 $V_h(W)\le B$。
+\end{theorem}
+\begin{proof}
+对 $h$ 归纳。基例 $h=0$ 即引理~\ref{lem:common_repair}。在第 $h+1$ 步，树根或者以立即修复结束任务（此时 $C(W)\le B$），或者选择 $q\in Q$ 且 $c(q)\le B$，并对每个可达答复 $y\in f_q[W]$ 给出深度不超过 $h$、预算为 $B-c(q)$ 的子树。由归纳假设，后者等价于对所有 $y\in f_q[W]$ 都有 $V_h(W_{q,y})\le B-c(q)$。合并两类情形即得 $V_{h+1}(W)\le B$。
+\end{proof}
+
+\begin{proposition}[随细化和视界的单调性，以及与预算的背离]
+\label{prop:monotonicity}
+固定 $A,Q$ 及其费率：
+\begin{enumerate}
+  \item 若 $\varnothing\ne W'\subseteq W$，则 $G(W)\subseteq G(W')$、$C(W')\le C(W)$，并且对所有 $h$ 有 $V_h(W')\le V_h(W)$。
+  \item 对所有 $h\in\mathbb{N}$，有 $V_{h+1}(W)\le V_h(W)\le C(W)$。延长允许的探测视界可能使状态由 $\texttt{BUDGET}(B,h)$ 转为 $\texttt{PROBE}(h')$，但绝不会抬高门槛。
+  \item 在支付成本 $c(q)>0$ 执行探测 $q$ 后，可能同时出现 $V_h(W_{q,y})\le V_h(W)$ 及 $V_h(W_{q,y})>B-c(q)$：知识增多了，却再也无力完成修复。
+\end{enumerate}
+\end{proposition}
+
+\begin{proposition}[带显式视界 $h$ 的判定结果的穷尽性与互斥性]
+\label{prop:verdicts}
+由于 $V_h(W)\le C(W)$，在 $(W,B,h)$ 固定且计算完备时，以下五种确定性判定结果中恰有一种成立（第六种结果 \texttt{UNKNOWN} 仅用于搜索未完成或超时）：
+\begin{center}
+\normalfont\footnotesize
+\begin{tabularx}{\linewidth}{@{}l l >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{判定结果} & \textbf{精确条件} & \textbf{允许的结论} \\
+\midrule
+$\texttt{INCONSISTENT}$ & $W=\varnothing$ & 数据或前提矛盾；不得采取行动。 \\
+$\texttt{REPAIR}(a^*)$ & $W\ne\varnothing,\ C(W)\le B$ & 立即执行通用修复；无需进一步诊断。 \\
+$\texttt{PROBE}(q^*,h)$ & $W\ne\varnothing,\ V_h(W)\le B<C(W)$ & 深度 $\le h$、有保证的计划树的第一次探测。 \\
+$\texttt{BUDGET}(B,h)$ & $W\ne\varnothing,\ B<V_h(W)<+\infty$ & 视界 $h$ 内有解，但预算不足。 \\
+$\texttt{NO\_PLAN\_IN\_SCOPE}(h)$ & $W\ne\varnothing,\ V_h(W)=+\infty$ & 在菜单 $Q$ 和视界 $h$ 内无计划；并非在任何条件下都不可能。 \\
+\bottomrule
+\end{tabularx}
+\end{center}
+\end{proposition}
+
+等待操作 \texttt{WAIT} 本身不能解释为何拒绝执行；只有明确指定外部事件、事件成本、等待时限以及 $(D,B,A)$ 如何改变，才允许等待。
+
+\begin{example}[双世界原子：门槛 $B=2,3,4$]
+设 $W=\{\omega_L,\omega_P\}$ 分别表示模型出错与传感器出错。行动集 $A=\{a_L,a_P\}$，成本 $c(a_L)=1,\ c(a_P)=2$，可行性掩码为 $R(\omega_L)=\texttt{10}$、$R(\omega_P)=\texttt{01}$。探测前 $\texttt{10}\mathbin{\&}\texttt{01}=\texttt{00}$，所以 $C(W)=+\infty$。无用探测（$f(\omega_L)=f(\omega_P)=0$）不改变交集。成本 $c=1$ 的基准校准（$f_{\mathrm{cal}}(\omega_L)=0$、$f_{\mathrm{cal}}(\omega_P)=1$）给出 $V_1(W)=1+\max(1,2)=3$。若 $B=2$，校准后 $\omega_L$ 分支仍负担得起（$1\le1$），而 $\omega_P$ 分支已无法负担（$2>1$），故输出 $\texttt{BUDGET}(2,1)$。若 $B=3$，状态变为 $\texttt{PROBE}(q_{\mathrm{cal}},1)$。若校准成本改为 $c=2$，门槛增至 $V_1(W)=4$。
+\end{example}
+
+\section{框架变换下的不变量、迁移与确定性的边界}
+
+\begin{theorem}[可区分性的因子分解]
+\label{thm:factorization}
+设 $W\subseteq\Omega$ 非空，联合观测为 $O_{Q_0}(\omega)=(\obs_q(\omega))_{q\in Q_0}$。在 $O_{Q_0}$ 的像上存在满足 $g|_W=d\circ O_{Q_0}|_W$ 的解码器 $d$，当且仅当
+\begin{equation}
+  \kerrel(O_{Q_0}|_W)\subseteq\kerrel(g|_W),
+\end{equation}
+其中 $\kerrel(f)=\{(\omega,\omega')\in W^2:f(\omega)=f(\omega')\}$。
+\end{theorem}
+\begin{proof}
+正向：$O_{Q_0}(\omega)=O_{Q_0}(\omega')$ 立即推出 $g(\omega)=d(O_{Q_0}(\omega))=d(O_{Q_0}(\omega'))=g(\omega')$。逆向：在 $\kerrel(O_{Q_0}|_W)$ 的每个等价类上，$d(O_{Q_0}(\omega)):=g(\omega)$ 均有良定义。
+\end{proof}
+
+定理~\ref{thm:factorization} 给出了信息充分性的不变量，但不保证解码器可计算，也不保证预算足以支付所有探测。在数据不变的前提下更换评估准则 $J$（例如由 $L_2$ 范数改为最优传输）会改变搜索空间的结构和最佳计划，却\emph{不改变} $\kerrel(O_Q)$ 的等价类。因此，针对某一 $J$ 的最优性见证不能直接迁移到另一 $J$，必须另行验证；反过来，更换准则 $J$ 也不能代替更换端口 $P$。
+
+\subheading{带类型的迁移与反驳的逆变性。}
+修订规则 $r:\prod_E (G_r(E)\to\sum_{E'}\mathsf{Path}(E,E'))$ 可通过映射 $\alpha=(a,b,c_q,b_U)$ 在领域间迁移。须满足交换条件 $\obs'_{b(q)}(a(\omega))=c_q(\obs_q(\omega))$ 与 $a(u\omega)=b_U(u)(a(\omega))$，检查目标前置条件 $G_{r'}(f(E))$，并明确保留残余缺口 $\Gap(T)=S_\alpha\setminus S_\kappa$。这里区分两种迁移构造：
+\begin{itemize}
+  \item \emph{严格无损迁移（\texttt{StrictTransfer}）：}答复映射 $c_q$ 在已声明的可区分对上保持单射性（$\obs_q(\omega)\ne\obs_q(\omega')\Rightarrow c_q(\obs_q(\omega))\ne c_q(\obs_q(\omega'))$），以排除答复的退化合并。
+  \item \emph{损失受控的迁移（\texttt{LossyTransfer}）：}允许合并答复，但必须明确记录损失 $\delta$，并另证 $\texttt{LossBounded}(\delta)$（合并后分支中的后续步骤仍然可行）。
+\end{itemize}
+迁移复合 $h\circ f$ 的经验证适用域为 $S_f\cap f^{-1}(S_h)$。迁移\emph{对某一类的反驳}（$V(E)=\varnothing$）时，映射必须是\emph{逆变的}：目标类中每个允许的模型都必须映到源类中与日志相容的模型。单向地从源类映到目标类，无法排除目标类中多出的模型。
+
+\subheading{自适应优势与 $(h,B)$-操作同余。}
+要保证行动，只须在计划树 $\Pi$ 的每个可达叶节点中存在预算可负担的公共修复（$G(W_\ell)\ne\varnothing$），不需要完全识别世界（$|W_\ell|=1$）。在确定性标量核心中，以下四项结构性质已通过机器验证：
+\begin{enumerate}
+  \item \emph{自适应的严格优势（\texttt{adaptive\_\allowbreak strictly\_\allowbreak beats\_\allowbreak nonadaptive}）：}四世界任务包含三种成本均为~$1$ 的探测，修复的成本也为~$1$。在预算 $B=3$、视界 $h=2$ 时，存在有保证的自适应树（\texttt{ValidPlanTree}），但没有能保证修复的非自适应探测序列 \texttt{qs} 能够满足 $B=3$ 的限制。
+  \item \emph{$h=0$ 时的支配（\texttt{h0\_dominated\_world\_redundant}）：}若 $\omega_1\in W$ 且 $R(\omega_1)\subseteq R(\omega_2)$，则加入 $\omega_2$ 不改变 $C(W)$。当 $h=0$ 时，只有按包含关系取极小的 $R(\omega)$ 构成的反链起作用。
+  \item \emph{$h\ge1$ 时对探测的敏感性（\texttt{h1\_\allowbreak same\_\allowbreak repair\_\allowbreak different\_\allowbreak probe\_\allowbreak not\_\allowbreak congruent}）：}两个世界 $u_1,u_2$ 虽然有相同的修复配置 $R(u_1)=R(u_2)$，但 $f_q(u_1)\ne f_q(u_2)$，由此得到 $V_1(\{u_1,v\})=2\ne+\infty=V_1(\{u_2,v\})$。
+  \item \emph{按预算 $B$ 截断（\texttt{unaffordable\_probe\_irrelevant}）：}任意变更预算无法负担的探测（$c(q)>B$）的观测函数 $f_q$，都保持预算 $B$ 下的 \texttt{ValidPlanTree}；因此，操作同余以参数对 $(h,B)$ 标记。
+\end{enumerate}
+\noindent\textbf{本译本说明：}本文所称“$(h,B)$-操作同余”指上列第 2 至 4 项中分别验证的结果，不表示已获得一般操作同余的完整刻画。
+
+\subheading{确定性核心的适用边界。}
+对于随机端口，一维边缘分布相同并不意味着观测的联合分布相同。若信源~1 在两次探测中输出同一个隐藏的公平比特，信源~2 则输出两个独立的公平比特，两者均有 $\Pr(Y_t=1)=1/2$，但二维统计量 $\Pr(Y_1=Y_2)$ 分别为 $1$ 和 $1/2$。两次被动探测的联合分布即已区分这两个信源（见 \texttt{marginal\_\allowbreak equality\_\allowbreak not\_\allowbreak joint\_\allowbreak equality}）；确定性自适应的优势则由 \texttt{adaptive\_\allowbreak strictly\_\allowbreak beats\_\allowbreak nonadaptive} 单独证明。随机、自适应轨迹的概率律（e-变量、KL）不在该 Lean 模块范围内。
+
+\section{局部元胞协议与五状态折叠}
+
+对于两个修复行动 $(a_L,a_P)$，以流式方式处理任意长度的二位可行性掩码序列时，定义五状态累加器 $\texttt{FoldAcc}=\{\texttt{EMPTY},\ \texttt{00},\ \texttt{01},\ \texttt{10},\ \texttt{11}\}$，转移为 $\mathrm{fold}(\texttt{EMPTY},m)=m$ 与 $\mathrm{fold}(a,m)=a\mathbin{\&}m$。
+
+\begin{theorem}[精确性、顺序不变性与五状态下界]
+\label{thm:fold5}
+对任意有限掩码序列 $m_1,\dots,m_k\in\{\texttt{00},\texttt{01},\texttt{10},\texttt{11}\}$：
+\begin{enumerate}
+  \item $\mathrm{fold}(m_1,\dots,m_k)=\texttt{EMPTY}\iff k=0$（$W=\varnothing$）；若 $k\ge1$，某个行动位在结果中置位，当且仅当它在所有掩码 $m_i$ 中均置位，因此精确算出 $G(W)$。
+  \item 此运算满足结合律与交换律，结果不随候选项的重排而改变。
+  \item 按输出 $\texttt{FoldVerdict}=\{\texttt{INCONSISTENT},\ \texttt{NO\_COMMON},\ \texttt{HAS\_COMMON}\}$ 判断，五个状态 $\{\texttt{EMPTY},\texttt{00},\texttt{01},\texttt{10},\texttt{11}\}$ 中任意两个，均可用长度 $\le1$ 的后缀区分。任何计算 $\texttt{classifyFold}\circ\texttt{foldMasks}$ 的确定性流式摩尔自动机 $(S,q_0,\delta,\mathrm{out}:S\to\texttt{FoldVerdict})$，都把五个标准前缀 $\texttt{witnessPrefix}:\texttt{StateIdx}\to\mathrm{List}\,\texttt{Mask2}$ 映到两两不同的状态（\texttt{five\_states\_lower\_bound}）；特别地，对任何单射 $\texttt{StateIdx}\to\mathrm{Fin}\,n$，均有 $5\le n$（\texttt{five\_le\_of\_injective\_stateIdx}）。
+\end{enumerate}
+\end{theorem}
+
+五状态下界针对流式折叠累加器，而非完整的多轨元胞自动机。一维局部多轨元胞自动机的协议设计取半径 $r>0$，分为四阶段：
+（1）\texttt{FOLD\_G}：从左至右扫描标记的候选区段，用 \texttt{FoldAcc} 累加；
+（2）\texttt{PREVIEW}：按二元探测的预测答复，并行折叠两个分支 $(\mathrm{acc}_0,\mathrm{acc}_1)$。空分支（\texttt{EMPTY}）不参与取最大值；若两者均为 \texttt{EMPTY}，则输出 \texttt{INCONSISTENT}；
+（3）\texttt{BUDGET}：将预算 $B$ 与 $C(\mathrm{acc}_G)$ 及 $c(q)+\max(C(\mathrm{acc}_0),C(\mathrm{acc}_1))$ 比较；
+（4）\texttt{EMIT}：扫完整个区段后，输出命题~\ref{prop:verdicts} 的五种完整判定之一。不可消除的通信时延至少为 $\lceil d/r\rceil$ 个时间步。
+
+\noindent\textbf{本译本说明：}上述单次探测协议及实现在 $|A|=2$、$|Q|=1$、$h\le1$ 的最小原子设定中使用；第 6 节的穷举比对取 $h=1$。实现使用局部整数寄存器，不声称在费率无上界时仍有统一的固定有限字母表。
+
+\section{Lean~4.36.0 机器验证、可执行实现与工作边界}
+
+标量数学核心形式化于独立模块 \texttt{repair\_\allowbreak budget\_\allowbreak atom\_\allowbreak v1\_3.lean} 中（不依赖 Mathlib、824 行、纯 LF、无 BOM；SHA-256 为 \texttt{9b641375a621cac5\ldots0eabd6d2}）。原稿此处使用历史文件名 \texttt{repair\_\allowbreak budget\_\allowbreak atom\_\allowbreak v1\_3\_fixed.lean}；此处按发布包与同一校验和所列文件名标注。作者报告使用编译器 \texttt{Lean 4.36.0}（\texttt{arm64-apple-darwin24.6.0}，提交 \texttt{611c117b}）运行结果为 \texttt{exit 0}，0 个错误、0 个警告、0 个 \texttt{sorryAx}、0 个 \texttt{Lean.ofReduceBool}、0 个 \texttt{Lean.trustCompiler}。全部 18 项声明、经验证核心与规范的边界见表~\ref{tab:lean}。
+
+\begin{table}[!htbp]
+\centering
+\caption{\texttt{repair\_budget\_atom\_v1\_3.lean} 中 18 项声明的验证情况（Lean~4.36.0，\texttt{exit 0}，0 个 \texttt{sorryAx}）及规范边界。}
+\label{tab:lean}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}l >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{状态／\texttt{\#print axioms} 配置} & \textbf{声明及覆盖范围} \\
+\midrule
+无公理（3） & \texttt{refinement\_grows\_common\_repairs}, \texttt{contravariant\_refutation\_transfer}, \texttt{marginal\_equality\_not\_joint\_equality} \\
+\texttt{[propext]}（6） & \texttt{confidence\_up\_affordability\_down}, \texttt{foldMasks\_order\_invariant}, \texttt{myhill\_nerode\_five\_states\_distinct}, \texttt{five\_states\_lower\_bound}, \texttt{h1\_\allowbreak same\_\allowbreak repair\_\allowbreak different\_\allowbreak probe\_\allowbreak not\_\allowbreak congruent}, \texttt{unaffordable\_probe\_irrelevant} \\
+\texttt{[propext, Quot.sound]}（4） & \texttt{lemma1\_common\_repair\_iff}, \texttt{foldMasks\_exact\_common\_repair}, \texttt{five\_le\_of\_injective\_stateIdx}, \texttt{h0\_dominated\_world\_redundant} \\
+\texttt{[propext, Classical.choice, Quot.sound]}（5） & \texttt{pairwise\_intersection\_insufficient}, \texttt{lemma2\_one\_step\_probe\_iff}, \texttt{minimaxV\_iff\_validPlanTree}, \texttt{factorization\_iff\_kernel\_inclusion}, \texttt{adaptive\_\allowbreak strictly\_\allowbreak beats\_\allowbreak nonadaptive} \\
+\midrule
+经 Lean 验证（标量核心） & \texttt{costA, costQ : Nat}，\texttt{Cost = Nat $\cup$ \{+$\infty$\}}，自适应优势（$B=3,h=2$），$(h,B)$-操作同余的上述三项结果，基于判定结果的检测器（$5\le n$）。 \\
+仅为规范（未纳入 Lean） & 向量预算 \texttt{CostVec}（最小预算的帕累托反链）、随机 e-变量／KL、任意 $(|A|,|Q|,h)$ 下的通用元胞自动机。 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subheading{可执行实现与 \texttt{Q1--Q2} 验证。}
+除 Lean 核心外，作者制作了可复现的归档包 \texttt{repair\_budget\_atom\_v1\_3.zip}（只用 Python~3 标准库；原稿所列归档 SHA-256 为 \texttt{050f788e\ldots}，校验和见 \texttt{SHA256SUMS.txt}）。归档实现三个相互关联的层次：基准计算器 $(G,C,V_h)$，带公开计划树 \texttt{PlanTree} 的生成器与拒绝优先的独立证书验证器 \texttt{verify\_certificate}（\texttt{reference\_engine.py}）；五状态流式自动机（\texttt{fold\_acc.py}）；以及半径 1 的一维多轨元胞自动机，其计算过程不全局访问带（\texttt{local\_ca.py}）。表~\ref{tab:exec} 列出作者完整运行 \texttt{test\_suite.py} 后记录的结果。证书验证对肯定判定逐一在仍相容的世界中重放计划树，对否定判定则由基准求解器精确重算 $V_h$。本译本未重新运行这些验证。
+
+\begin{table}[!htbp]
+\centering
+\caption{可执行归档 \texttt{repair\_budget\_atom\_v1\_3.zip} 的运行结果（\texttt{ALL\_PASSED}，0 次错误保证）。}
+\label{tab:exec}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}l >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{验证项目} & \textbf{范围与记录结果} \\
+\midrule
+回归测试 \texttt{T01--T08} & 8/8 \texttt{PASS}（空 $W$、通用修复、两两相交陷阱、无用探测、门槛 $B=2,3,4$、24/24 种排列）。 \\
+基准与证书（\texttt{B1}） & 1\,200 个随机实例（$|W|\le6, |A|\le4, |Q|\le4, h\le2$）；1\,200 次检验 $V_2\le V_1\le V_0$ 的单调性；独立验证 8\,224 份证书；0 次错误的 \texttt{REPAIR}/\texttt{PROBE} 判定。 \\
+\texttt{FoldAcc} 折叠（\texttt{C}） & 穷举 1\,365 个序列（$L\le5$）；200\,000 次随机差分比对（0 次差异）；5/5 个可区分的 Myhill--Nerode 签名（4 个状态不足）。 \\
+元胞自动机等价性（\texttt{D}） & 在 7 种费率配置下，对全部 $8^L$ 个区段（$L\le4$）进行共 32\,767 次穷举比对 \texttt{CA == ReferenceEngine}；0 次差异，时延恰为 $L+2$ 个时间步。 \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subheading{局限。}
+\texttt{local\_ca.py} 中半径为 1 的局部元胞自动机，专为最小原子（$|A|=2$、$|Q|=1$、$h\le1$）构建并穷举验证，而非针对任意有限 $(|A|,|Q|,h)$。\texttt{CostVec} 的向量帕累托优化、向二元规则~110 的迁移、随机自适应轨迹的概率律（e-变量、KL）、二阶实验 \texttt{Q3--Q5} 以及自主生成新语言 $L'$，均留待下一阶段研究。
+\begin{thebibliography}{9}
+\small\setlength{\itemsep}{1pt}
+
+\bibitem{weitzman1979}
+M.\,L.\,Weitzman. \href{https://scholar.harvard.edu/files/weitzman/files/optimalsearchbestalternative.pdf}{Optimal Search for the Best Alternative}. \emph{Econometrica}, 47(3):641--654, 1979.
+
+\bibitem{arrow1974}
+K.\,J.\,Arrow, A.\,C.\,Fisher. \href{https://doi.org/10.2307/1883074}{Environmental Preservation, Uncertainty, and Irreversibility}. \emph{The Quarterly Journal of Economics}, 88(2):312--319, 1974.
+
+\bibitem{sims2003}
+C.\,A.\,Sims. \href{https://doi.org/10.1016/S0304-3932(03)00029-1}{Implications of Rational Inattention}. \emph{Journal of Monetary Economics}, 50(3):665--690, 2003.
+
+\bibitem{reiter1987}
+R.\,Reiter. \href{https://doi.org/10.1016/0004-3702(87)90062-2}{A Theory of Diagnosis from First Principles}. \emph{Artificial Intelligence}, 32(1):57--95, 1987.
+
+\bibitem{hyafil1976}
+L.\,Hyafil, R.\,L.\,Rivest. \href{https://www.sciencedirect.com/science/article/abs/pii/0020019076900958}{Constructing Optimal Binary Decision Trees Is NP-Complete}. \emph{Information Processing Letters}, 5(1):15--17, 1976.
+
+\end{thebibliography}
+
+\end{document}

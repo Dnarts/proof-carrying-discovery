@@ -2,7 +2,9 @@
 
 **Александр Странд · v1.3 · 24 ноября 2026**
 
-[Русский препринт (PDF)](repair_budget_atom_preprint_v1_3.pdf) · [LaTeX](repair_budget_atom_preprint_v1_3.tex) · [SHA-256](SHA256SUMS.txt)
+[Русский препринт (PDF)](repair_budget_atom_preprint_v1_3.pdf) · [English PDF](repair_budget_atom_preprint_v1_3_en.pdf) · [简体中文 PDF](repair_budget_atom_preprint_v1_3_zh.pdf)
+
+LaTeX: [RU](repair_budget_atom_preprint_v1_3.tex) · [EN](repair_budget_atom_preprint_v1_3_en.tex) · [简体中文](repair_budget_atom_preprint_v1_3_zh.tex). SHA-256: [оригинал и код](SHA256SUMS.txt) · [переводы](SHA256SUMS.translations.txt).
 
 Модель отвечает на вопрос: можно ли в заданном бюджете гарантировать безопасное действие, не устанавливая, какой из совместимых с наблюдениями миров истинный?
 

@@ -1,0 +1,407 @@
+% English edition of the canonical Russian preprint v1.3.
+% Build with XeLaTeX twice (or LuaLaTeX on a full TeX Live install):
+%   xelatex -interaction=nonstopmode -halt-on-error repair_budget_atom_preprint_v1_3_en.tex
+% Requires Noto Serif, Noto Sans, Noto Mono, standard LaTeX packages,
+% and Latin Modern fonts available to the TeX engine.
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage{babel}
+\babelprovide[import, main]{english}
+\babelfont{rm}{Noto Serif}
+\babelfont{sf}{Noto Sans}
+\babelfont{tt}[AutoFakeBold=1.5,AutoFakeSlant=0.15]{Noto Mono}
+\emergencystretch=3em
+\tolerance=1400
+\hfuzz=0.5pt
+\usepackage[a4paper,top=18mm,bottom=18mm,left=20.5mm,right=20.5mm,headheight=14pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,tabularx}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Listing}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{primary}{RGB}{24,62,108}
+\definecolor{accent}{RGB}{138,43,43}
+\definecolor{muted}{RGB}{85,95,108}
+\definecolor{bgbox}{RGB}{244,247,251}
+\definecolor{codebg}{RGB}{248,249,250}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  citecolor=primary,
+  urlcolor=primary,
+pdftitle={Goal-Relative Information Sufficiency and the Research Repair Atom},
+pdfauthor={Aleksandr Strand}
+}
+
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+\setlength{\parindent}{0pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}Goal-Relative Information Sufficiency and the Research Repair Atom (v1.3)}
+\fancyhead[R]{\small\color{muted}A.\,Strand}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\newtheoremstyle{preprintthm}
+  {8pt}{6pt}{\itshape}{}{\bfseries\color{primary}}{.}{0.5em}{}
+\newtheoremstyle{preprintdef}
+  {8pt}{6pt}{\normalfont}{}{\bfseries\color{primary}}{.}{0.5em}{}
+
+\theoremstyle{preprintthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{preprintdef}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{example}[theorem]{Example}
+
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  backgroundcolor=\color{codebg},
+  frame=single,
+  rulecolor=\color{primary!25},
+  xleftmargin=4pt,
+  xrightmargin=4pt,
+  aboveskip=6pt,
+  belowskip=6pt,
+  breaklines=true,
+  keepspaces=true,
+  columns=fullflexible,
+  extendedchars=true
+}
+
+\newcommand{\takeaway}[2]{%
+  \vspace{4pt}\noindent\colorbox{bgbox}{%
+    \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
+      \vspace{3pt}\textbf{\color{primary}#1.}\hspace{0.4em}#2\vspace{3pt}%
+    }%
+  }\vspace{4pt}%
+}
+
+\newcommand{\Cost}{\operatorname{Cost}}
+\newcommand{\kerrel}{\operatorname{ker}}
+\newcommand{\obs}{\operatorname{obs}}
+\newcommand{\Valid}{\operatorname{Valid}}
+\newcommand{\Gap}{\operatorname{Gap}}
+
+\providecommand{\llbracket}{\mathopen{[\![}}
+\providecommand{\rrbracket}{\mathclose{]\!]}}
+
+\begin{document}
+
+\thispagestyle{plain}
+\begin{center}
+  {\LARGE\bfseries Goal-Relative Information Sufficiency\\[3pt]
+  and the Research Repair Atom}\\[10pt]
+  {\large\color{muted} Revision algebra, minimax budgets for guaranteed action,\\
+  invariants under frame changes, and a local cellular protocol specification}\\[12pt]
+  {\normalsize Aleksandr Strand}\\[4pt]
+  {\small\color{muted} 24 November 2026\,$\cdot$\,Preprint v1.3\,$\cdot$\,Formalization, verified Lean~4.36.0 core (18/18), and local CA reference implementation}
+\end{center}
+
+\vspace{4pt}
+\begin{abstract}
+\noindent
+A research system need not always identify the true world. It must obtain \emph{enough information} to take a safe action with a provable result under a hard budget. We formalize a unified architecture combining a \emph{research revision algebra}, an indexed algebraic transition type over $E=(L,P,D,\Pi,J,B)$ (with the second-order rule store detailed in Section~2), with a \emph{research repair atom}. We distinguish three inequivalent outcomes: world identification ($|W|=1$), goal identification ($g|_W=\mathrm{const}$), and availability of safe repair ($G(W)=\bigcap_{\omega\in W}R(\omega)\ne\varnothing$). For a finite nonempty set $W$ of compatible worlds, a finite action menu, and deterministic probes, we prove the immediate common repair criterion ($C(W)\le B$), the one-step probe threshold ($c(q)+\max_y C(W_{q,y})\le B$), soundness and completeness of the minimax recursion $V_h(W)$ ($\operatorname{GuaranteedRepair}(W,h,B)\iff V_h(W)\le B$), monotonicity $V_{h+1}(W)\le V_h(W)$, exhaustiveness and mutual exclusivity of five deterministic verdicts with explicit horizon $h$, and knowledge--resource divergence ($V_h(W')\le V_h(W)$ while $V_h(W')>B-c(q)$). We also formulate invariants under frame changes: factorization of distinguishability $\kerrel(O_{Q_0}|_W)\subseteq\kerrel(g|_W)$, contravariant transfer of refutations, composition of scopes $S_f\cap f^{-1}(S_h)$, and the boundary of the deterministic core for adaptive stochastic traces. For the two-repair atom, we establish a tight five-state bound for the streaming fold accumulator ($\{\texttt{EMPTY},\texttt{00},\texttt{01},\texttt{10},\texttt{11}\}$) and specify a local one-dimensional multitrack cellular protocol. The scalar mathematical core (18 declarations, including a strict adaptive advantage under budget $B$, three results concerning $(h,B)$-operational congruence, and the five-state lower bound for the verdict detector) was machine-checked in a self-contained Lean~4.36.0 module without Mathlib (\texttt{exit 0}, no errors or warnings, no \texttt{sorryAx} or \texttt{native\_decide}). For the minimal atom ($|A|=2$, $|Q|=1$, $h\le1$), a reproducible reference stack uses only the Python~3 standard library, with an independent fail-closed certificate verifier (8,224 certificates checked) and an explicit radius-one multitrack cellular automaton (CA). The CA agreed with the reference on all 32,767 exhaustive segment checks of length $L\le4$, with no discrepancies or false guarantees.
+\end{abstract}
+
+\section{Problem statement: from world identification to sufficiency for action}
+
+Classical active learning and diagnosis seek to move from an unknown world to a uniquely identified model ($|W|=1$). Under hard resource constraints, this aim can be excessive or unattainable: distinct worlds compatible with the same public log $D$ may admit the same safe repair, and attempting a more precise diagnosis first can consume the resources needed for the action itself.
+
+\begin{samepage}
+Fix a space of possible worlds $\Omega$, a goal contrast $g:\Omega\to G$, and a finite repair action set $A$. Each world $\omega\in\Omega$ has a set $R(\omega)\subseteq A$ of actions satisfying a predeclared outcome and safety contract. For a nonempty set $W\subseteq\Omega$ of worlds compatible with the public log, define three fundamental predicates:
+\begin{equation}
+  \begin{aligned}
+    \operatorname{IdentifyWorld}(W) &\iff |W|=1,\\
+    \operatorname{IdentifyGoal}(W)  &\iff g|_W = \mathrm{const},\\
+    \operatorname{CertifyAction}(W) &\iff G(W) := \bigcap_{\omega\in W} R(\omega) \ne \varnothing.
+  \end{aligned}
+\end{equation}
+\end{samepage}
+
+\begin{proposition}[Pairwise inequivalence of the three levels of outcome]
+\label{prop:three_levels}
+The predicates $\operatorname{IdentifyWorld}$, $\operatorname{IdentifyGoal}$, and $\operatorname{CertifyAction}$ are inequivalent:
+\begin{enumerate}
+  \item $\operatorname{CertifyAction}(W)\not\Rightarrow\operatorname{IdentifyWorld}(W)$ and $\operatorname{CertifyAction}(W)\not\Rightarrow\operatorname{IdentifyGoal}(W)$: two worlds $\omega_1\ne\omega_2$ with $g(\omega_1)\ne g(\omega_2)$ may admit a common safe action $a\in R(\omega_1)\cap R(\omega_2)$.
+  \item $\operatorname{IdentifyGoal}(W)\not\Rightarrow\operatorname{CertifyAction}(W)$: two worlds with the same goal value $g(\omega_1)=g(\omega_2)$ may require incompatible repairs ($R(\omega_1)\cap R(\omega_2)=\varnothing$).
+  \item With budget $B$, even $\operatorname{IdentifyWorld}(W')$ after a paid probe does not imply that repair remains affordable ($C(W')>B-c(q)$).
+\end{enumerate}
+\end{proposition}
+
+\takeaway{Central principle: Goal-Relative Information Sufficiency}{The research automaton seeks not the most information about the world, but enough verifiable knowledge to carry out a safe action within a hard budget.}
+
+\section{Research revision algebra as an indexed ADT}
+
+\begin{definition}[Research state and port registry]
+The system state is the tuple
+\begin{equation}
+  E = (L, P, D, \Pi, J, B, \mathcal{R}),
+\end{equation}
+where $L=(H,\llbracket\cdot\rrbracket:H\to\Omega)$ is the hypothesis language; $P=(Q_p,(Y_{p,q},\obs_{p,q})_{q\in Q_p})$ is a typed port from a fixed registry with versioned semantics; $D$ is a strictly append-only log of dependent records $\Sigma(p:\texttt{PortId})\,\Sigma(q:Q_p)\,Y_{p,q}$; $\Pi$ is the policy for choosing the next step from public history; $J$ is the criterion for evaluating plans and candidates; $B=(\mathrm{limits},\mathrm{frozenTariffs})$ is the hard budget (scalar cost is the weighted sum of the resource vector $\Cost=(c_q,c_s,c_p,c_v,c_m)$ at the frozen tariffs); and $\mathcal R$ is the set of stored second-order revision rules.
+\end{definition}
+
+The world-level version space is kept distinct from the language-level version space:
+\begin{equation}
+  \Omega_D = \{\omega\in\Omega : \forall (p,q,y)\in D,\ \obs_{p,q}(\omega)=y\},
+  \qquad
+  V(E) = \{h\in H : \llbracket h\rrbracket \in \Omega_D\}.
+\end{equation}
+In particular, $V(E)=\varnothing$ can hold while $\Omega_D$ remains nonempty: language $L$ has been exhausted. By contrast, $\Omega_D=\varnothing$ signals inconsistent data, semantics, or assumptions rather than an automatic license to expand the language.
+
+\begin{definition}[Sealed evidence]
+Evidence has type $\kappa:\texttt{Evidence}(A,S,\varphi)$ and contains $(w,m,v_{\mathrm{ok}},\mathrm{sound})$, where $w$ is the witness, $m$ is the method carrier, $v_{\mathrm{ok}}:\Valid(w,m)$ is an explicit validity proof kept separate from the implication to rule out vacuous evidence, and $\mathrm{sound}:\Valid(w,m)\to\forall x\in S,\ A(x)\to\varphi(x)$.
+\end{definition}
+
+\begin{table}[!htbp]
+\centering
+\caption{Indexed algebraic type of elementary steps $\mathsf{Step}(E,E')$, in addition to the budget debit $B'=B-\mathrm{cost}(s)$ with $0\le\mathrm{cost}(s)\le B$.}
+\label{tab:steps}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}l l >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Constructor} & \textbf{Coordinate} & \textbf{Contract and required condition} \\
+\midrule
+$\texttt{Probe}(q,y)$ & $D'\!=\!D\cdot(p,q,y)$ & Probe $q$ is admissible in $P$, and response $y$ was actually observed. Changing the probe by $\Delta q$ under the same selection rule is not a change $\Delta\Pi$. \\
+$\texttt{RevisePolicy}(\Pi',\kappa)$ & $\Pi$ & The new policy is typed over $P$. It requires a history witness $\Pi(h)\ne\Pi'(h)$ and a comparison under a common external metric. \\
+$\texttt{RevisePort}(P',\kappa,\tau)$ & $P$ & Specify transport $\tau$ for dependent fields and a projection for old records in $D$. Removing an observational blind spot requires a distinguishing witness. \\
+$\texttt{ReviseLanguage}(L',\kappa)$ & $L$ & Specify the semantics of $L'$ and its relation to $L$. An empty $V(E)$ rules out $L$ but does not select $L'$ automatically. \\
+$\texttt{ReviseObjective}(J',\kappa)$ & $J$ & Preserve the external task or explicitly declare a new one. Evidence for the old $J$ does not carry over without a separate check. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Finite step sequences form a path category $\mathsf{Path}(E,E')$ with empty path $1_E$ and associative composition $s;t$, where $\mathrm{cost}(s;t)=\mathrm{cost}(s)+\mathrm{cost}(t)\le B$. Unlike a path, an executable adaptive \texttt{PlanTree} is parameterized solely by the public state representation and branches over the \emph{publicly admissible response type} $Y_q$, not the hidden set $W$:
+\begin{lstlisting}[caption={Safe contract for an adaptive plan tree without leaking the hidden world set $W$.}]
+ADT PlanTree(E) =
+  | BranchProbe(q : Q_p, next : Y_{p,q} -> PlanTree)
+  | Halt(verdict : RepairVerdict)   -- includes the terminal action REPAIR(a, kappa)
+\end{lstlisting}
+The verifier separately restricts the worst-case calculation to reachable outcomes $y\in f_q[W]$. The single leaf constructor \texttt{Halt} for terminal repair ensures that every branch ends with exactly one verdict.
+
+Finally, we distinguish two predicates:
+\begin{equation}
+  \begin{aligned}
+    \operatorname{CertifiedNow}(E;A,S,\varphi) &:= \exists\kappa:\texttt{Evidence}(A,S,\varphi),\ \Valid_E(\kappa),\\
+    \operatorname{CanSolve}_W(E,\Pi,B) &:= \forall\omega\in W,\ \operatorname{Run}_B(E,\Pi;\omega)\Downarrow g(\omega).
+  \end{aligned}
+\end{equation}
+A certificate that the system is at an impasse now does not exclude an affordable plan that becomes available after observation.
+
+\section{The research repair atom and minimax recursion \texorpdfstring{$V_h(W)$}{V\_h(W)}}
+
+Fix the deterministic core: a finite compatible world set $W=\Omega_D$; a finite repair menu $A$ with known nonnegative prices $c(a)$, the same in every world; and a finite probe menu $Q$ with prices $c(q)\ge0$ and deterministic responses $f_q:\Omega\to Y_q$ that do not change the world. For nonempty $W$, define
+\begin{equation}
+  G(W) = \bigcap_{\omega\in W} R(\omega),
+  \qquad
+  C(W) = \min_{a\in G(W)} c(a),
+  \qquad
+  \min\varnothing = +\infty.
+\end{equation}
+
+\begin{lemma}[Common repair without world identification]
+\label{lem:common_repair}
+For nonempty $W$, immediate guaranteed repair exists if and only if $C(W)\le B$. Randomizing the action does not relax this condition.
+\end{lemma}
+\begin{proof}
+With one public log $D$, the controller must choose the same action $a\in A$ in every $\omega\in W$. The contract and budget require $a\in\bigcap_{\omega\in W}R(\omega)=G(W)$ and $c(a)\le B$, equivalently $C(W)\le B$. A randomized policy must assign positive probability only to actions admissible in every $\omega\in W$ and affordable within $B$.
+\end{proof}
+
+\begin{remark}[Pairwise intersections do not suffice]
+For three worlds with $R(\omega_1)=\{a,b\}$, $R(\omega_2)=\{b,c\}$, and $R(\omega_3)=\{a,c\}$, every pair shares a repair, but $G(W)=\varnothing$ and $C(W)=+\infty$.
+\end{remark}
+
+For a probe $q\in Q$ and response $y\in f_q[W]$, let $W_{q,y}=\{\omega\in W:f_q(\omega)=y\}$. Define the minimax threshold for guaranteed completion within at most $h$ probes:
+\begin{equation}
+  V_0(W) = C(W),
+  \qquad
+  V_{h+1}(W) = \min\!\left\{ C(W),\; \min_{q\in Q}\!\left[\, c(q) + \max_{y\in f_q[W]} V_h(W_{q,y}) \,\right] \right\},
+\end{equation}
+where the maximum ranges only over the nonempty, reachable branches $y\in f_q[W]$.
+
+\begin{lemma}[One-step probe threshold]
+\label{lem:one_step}
+A plan that runs probe $q$ and immediately applies a repair chosen from response $y$ is guaranteed to fit budget $B$ if and only if $c(q)+\max_{y\in f_q[W]}C(W_{q,y})\le B$.
+\end{lemma}
+\begin{proof}
+After debiting $c(q)$, every reachable branch $W_{q,y}$ has budget $B-c(q)$. By Lemma~\ref{lem:common_repair}, there is a guaranteed repair on each branch exactly when $C(W_{q,y})\le B-c(q)$ for every $y\in f_q[W]$, equivalently $c(q)+\max_{y\in f_q[W]}C(W_{q,y})\le B$.
+\end{proof}
+
+\begin{theorem}[Adaptive research sufficiency for guaranteed repair]
+\label{thm:minimax_main}
+For finite nonempty $W$, finite menus $A,Q$, and horizon $h\in\mathbb N$, an adaptive \texttt{PlanTree} of depth at most $h$ guarantees an admissible repair in every $\omega\in W$ under budget $B$ if and only if $V_h(W)\le B$.
+\end{theorem}
+\begin{proof}
+Induct on $h$. The base case $h=0$ is Lemma~\ref{lem:common_repair}. At $h+1$, the root either ends with immediate repair ($C(W)\le B$) or selects $q\in Q$ with $c(q)\le B$ and provides, for each reachable response $y\in f_q[W]$, a subtree of depth at most $h$ under budget $B-c(q)$. By induction this is equivalent to $V_h(W_{q,y})\le B-c(q)$ for every $y\in f_q[W]$. Combining the immediate and probe cases yields $V_{h+1}(W)\le B$.
+\end{proof}
+
+\begin{proposition}[Refinement monotonicity, horizon monotonicity, and budget divergence]
+\label{prop:monotonicity}
+Fix $A,Q$ and the tariffs.
+\begin{enumerate}
+  \item If $\varnothing\ne W'\subseteq W$, then $G(W)\subseteq G(W')$, $C(W')\le C(W)$, and $V_h(W')\le V_h(W)$ for every $h$.
+  \item For every $h\in\mathbb N$, $V_{h+1}(W)\le V_h(W)\le C(W)$. Increasing the probe horizon can turn $\texttt{BUDGET}(B,h)$ into $\texttt{PROBE}(h')$ but never raises the threshold.
+  \item A paid probe $q$ with $c(q)>0$ can leave both $V_h(W_{q,y})\le V_h(W)$ and $V_h(W_{q,y})>B-c(q)$ true: knowledge has increased, but completing the repair is no longer affordable.
+\end{enumerate}
+\end{proposition}
+
+\begin{proposition}[Exhaustive and mutually exclusive verdicts at explicit horizon $h$]
+\label{prop:verdicts}
+Because $V_h(W)\le C(W)$, a complete computation for fixed $(W,B,h)$ returns exactly one of five deterministic verdicts. A sixth outcome, \texttt{UNKNOWN}, is reserved for an incomplete search or timeout:
+\begin{center}
+\normalfont\footnotesize
+\begin{tabularx}{\linewidth}{@{}l l >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Verdict} & \textbf{Exact condition} & \textbf{Licensed conclusion} \\
+\midrule
+$\texttt{INCONSISTENT}$ & $W=\varnothing$ & The data or assumptions are inconsistent; no actions are licensed. \\
+$\texttt{REPAIR}(a^*)$ & $W\ne\varnothing,\ C(W)\le B$ & Immediate common repair; further diagnosis is unnecessary. \\
+$\texttt{PROBE}(q^*,h)$ & $W\ne\varnothing,\ V_h(W)\le B<C(W)$ & The first probe of a guaranteed tree of depth at most $h$. \\
+$\texttt{BUDGET}(B,h)$ & $W\ne\varnothing,\ B<V_h(W)<+\infty$ & A solution exists within horizon $h$ but is not affordable. \\
+$\texttt{NO\_PLAN\_IN\_SCOPE}(h)$ & $W\ne\varnothing,\ V_h(W)=+\infty$ & No plan in menu $Q$ within horizon $h$; not a universal impossibility. \\
+\bottomrule
+\end{tabularx}
+\end{center}
+\end{proposition}
+
+A \texttt{WAIT} operation does not explain failure. It is admissible only when the external event, its cost, a time limit, and its effect on $(D,B,A)$ are explicitly specified.
+
+\begin{example}[Two-world atom: thresholds $B=2,3,4$]
+Let $W=\{\omega_L,\omega_P\}$ represent a model error versus a sensor error. Let $A=\{a_L,a_P\}$ have prices $c(a_L)=1$ and $c(a_P)=2$, with masks $R(\omega_L)=10$ and $R(\omega_P)=01$. Before probing, $10\mathbin{\&}01=00$, so $C(W)=+\infty$. An uninformative probe ($f(\omega_L)=f(\omega_P)=0$) leaves the intersection unchanged. Reference calibration ($f_{\mathrm{cal}}(\omega_L)=0,\ f_{\mathrm{cal}}(\omega_P)=1$) priced at $c=1$ yields $V_1(W)=1+\max(1,2)=3$. At $B=2$, after calibration the $\omega_L$ branch is still affordable ($1\le1$) but $\omega_P$ is not ($2>1$), giving $\texttt{BUDGET}(2,1)$. At $B=3$, the status changes to $\texttt{PROBE}(q_{\mathrm{cal}},1)$. If calibration costs $c=2$, the threshold rises to $V_1(W)=4$.
+\end{example}
+
+\section{Invariants under frame changes, transfer, and the boundary of determinism}
+
+\begin{theorem}[Distinguishability as factorization]
+\label{thm:factorization}
+For nonempty $W\subseteq\Omega$ and aggregate observation $O_{Q_0}(\omega)=(\obs_q(\omega))_{q\in Q_0}$, a decoder $d$ on the image of $O_{Q_0}$ satisfying $g|_W=d\circ O_{Q_0}|_W$ exists if and only if
+\begin{equation}
+  \kerrel(O_{Q_0}|_W) \subseteq \kerrel(g|_W),
+\end{equation}
+where $\kerrel(f)=\{(\omega,\omega')\in W^2:f(\omega)=f(\omega')\}$.
+\end{theorem}
+\begin{proof}
+In the forward direction, $O_{Q_0}(\omega)=O_{Q_0}(\omega')$ immediately gives $g(\omega)=d(O_{Q_0}(\omega))=d(O_{Q_0}(\omega'))=g(\omega')$. Conversely, setting $d(O_{Q_0}(\omega)):=g(\omega)$ is well-defined on each fiber of $\kerrel(O_{Q_0}|_W)$.
+\end{proof}
+
+Theorem~\ref{thm:factorization} establishes an invariant of information sufficiency, not of decoder computability or of affordability of all probes. Changing the evaluation criterion $J$ (for example, replacing the $L_2$ norm with optimal transport while holding the data fixed) changes the search landscape and optimal plan, but \emph{does not change the fibers} $\kerrel(O_Q)$. An optimality certificate for one $J$ therefore does not transfer to another without a separate check. Changing $J$ likewise does not substitute for changing port $P$.
+
+\paragraph{Typed transfer and contravariance of refutation.}
+A revision rule $r:\prod_E(G_r(E)\to\sum_{E'}\mathsf{Path}(E,E'))$ is transferred across domains by $\alpha=(a,b,c_q,b_U)$, with commuting conditions $\obs'_{b(q)}(a(\omega))=c_q(\obs_q(\omega))$ and $a(u\omega)=b_U(u)(a(\omega))$, verification of the target precondition $G_{r'}(f(E))$, and mandatory residual gap $\Gap(T)=S_\alpha\setminus S_\kappa$. There are two transfer constructors:
+\begin{itemize}
+  \item \emph{Strict lossless transfer (\texttt{StrictTransfer}):} the response map $c_q$ is injective on the declared distinguishing pairs ($\obs_q(\omega)\ne\obs_q(\omega')\Rightarrow c_q(\obs_q(\omega))\ne c_q(\obs_q(\omega'))$), which prevents collapsing those responses.
+  \item \emph{Transfer with controlled loss (\texttt{LossyTransfer}):} responses may be collapsed if the losses $\delta$ are explicitly recorded and a separate proof of $\texttt{LossBounded}(\delta)$ establishes that continuations remain admissible on the merged branches.
+\end{itemize}
+For the composite transfer $h\circ f$, the verified scope is $S_f\cap f^{-1}(S_h)$. Transferring a \emph{class refutation} ($V(E)=\varnothing$) requires a \emph{contravariant} map: every admissible target-class model must map to a source-class model compatible with the log. A map only from source to target does not rule out extra target models.
+
+\paragraph{Adaptive advantage and $(h,B)$-operational congruence.}
+A guaranteed action needs an affordable common repair $G(W_\ell)\ne\varnothing$ at each reachable plan-tree leaf, not complete identification $|W_\ell|=1$. The deterministic scalar core machine-checks four structural results:
+\begin{enumerate}
+  \item \emph{Strict adaptive advantage (\texttt{adaptive\_\allowbreak strictly\_\allowbreak beats\_\allowbreak nonadaptive}):} in a four-world problem with three unit-cost probes and unit-cost repairs, a guaranteed adaptive tree (\texttt{ValidPlanTree}) exists for $B=3$, $h=2$, but no nonadaptive probe schedule \texttt{qs} succeeds within $B=3$.
+  \item \emph{Dominance at $h=0$ (\texttt{h0\_dominated\_world\_redundant}):} if $\omega_1\in W$ and $R(\omega_1)\subseteq R(\omega_2)$, adding $\omega_2$ leaves $C(W)$ unchanged (at $h=0$, only the antichain of inclusion-minimal $R(\omega)$ matters).
+  \item \emph{Probe sensitivity for $h\ge1$ (\texttt{h1\_\allowbreak same\_\allowbreak repair\_\allowbreak different\_\allowbreak probe\_\allowbreak not\_\allowbreak congruent}):} two worlds $u_1,u_2$ with identical repair profiles $R(u_1)=R(u_2)$ but $f_q(u_1)\ne f_q(u_2)$ give $V_1(\{u_1,v\})=2\ne+\infty=V_1(\{u_2,v\})$.
+  \item \emph{Budget cutoff (\texttt{unaffordable\_probe\_irrelevant}):} arbitrarily changing observation function $f_q$ on unaffordable probes ($c(q)>B$) preserves \texttt{ValidPlanTree} at budget $B$. Thus both horizon $h$ and budget $B$ enter the operational comparison.
+\end{enumerate}
+
+\paragraph{Boundary of the deterministic core.}
+On stochastic ports, equal one-dimensional marginals do not imply equal joint observation laws. If source~1 repeats one hidden fair bit in both probes and source~2 gives two independent fair bits, the marginals coincide ($\Pr(Y_t=1)=1/2$), but $\Pr(Y_1=Y_2)$ is $1$ and $1/2$, respectively. Two passive probes suffice for this separation (formalized by \texttt{marginal\_\allowbreak equality\_\allowbreak not\_\allowbreak joint\_\allowbreak equality}). The deterministic adaptive advantage is proved separately by \texttt{adaptive\_\allowbreak strictly\_\allowbreak beats\_\allowbreak nonadaptive}. Adaptive stochastic trace laws (e-variables, KL divergence) remain outside the Lean module.
+
+\section{Local cellular protocol and five-state fold}
+
+For two repair actions $(a_L,a_P)$ and streaming input consisting of an arbitrary sequence of two-bit admissibility masks, define the five-state accumulator $\texttt{FoldAcc}=\{\texttt{EMPTY},\ \texttt{00},\ \texttt{01},\ \texttt{10},\ \texttt{11}\}$, with $\mathrm{fold}(\texttt{EMPTY},m)=m$ and $\mathrm{fold}(a,m)=a\mathbin{\&}m$.
+
+\begin{theorem}[Exactness, order invariance, and five-state lower bound]
+\label{thm:fold5}
+For any finite mask sequence $m_1,\dots,m_k\in\{\texttt{00},\texttt{01},\texttt{10},\texttt{11}\}$:
+\begin{enumerate}
+  \item $\mathrm{fold}(m_1,\dots,m_k)=\texttt{EMPTY}\iff k=0$ ($W=\varnothing$). For $k\ge1$, an action bit is set in the result exactly when it is set in every $m_i$ (exact computation of $G(W)$).
+  \item The operation is associative and commutative: permuting the candidates does not change the result.
+  \item The five states $\{\texttt{EMPTY},\texttt{00},\texttt{01},\texttt{10},\texttt{11}\}$ are pairwise distinguishable by suffixes of length $\le1$ through $\texttt{FoldVerdict}=\{\texttt{INCONSISTENT},\ \texttt{NO\_COMMON},\ \texttt{HAS\_COMMON}\}$. Any deterministic streaming Moore machine $(S,q_0,\delta,\mathrm{out}:S\to\texttt{FoldVerdict})$ that computes $\texttt{classifyFold}\circ\texttt{foldMasks}$ sends the five canonical prefixes $\texttt{witnessPrefix}:\texttt{StateIdx}\to\mathrm{List}\,\texttt{Mask2}$ to distinct states (\texttt{five\_states\_lower\_bound}). In particular, an injection $\texttt{StateIdx}\to\mathrm{Fin}\,n$ requires $5\le n$ (\texttt{five\_le\_of\_injective\_stateIdx}).
+\end{enumerate}
+\end{theorem}
+
+The five-state bound concerns the streaming fold accumulator, not the entire multitrack cellular automaton. The proposed local one-dimensional multitrack CA of radius $r>0$ has four phases: (1)~\texttt{FOLD\_G}, a left-to-right scan of the marked candidate segment with \texttt{FoldAcc}; (2)~\texttt{PREVIEW}, a parallel fold of the two branches $(\mathrm{acc}_0,\mathrm{acc}_1)$ from forecasts of the binary probe (exclude an \texttt{EMPTY} branch from the maximum; if both are \texttt{EMPTY}, emit \texttt{INCONSISTENT}); (3)~\texttt{BUDGET}, compare $B$ with $C(\mathrm{acc}_G)$ and $c(q)+\max(C(\mathrm{acc}_0),C(\mathrm{acc}_1))$; (4)~\texttt{EMIT}, issue one of the five full verdicts of Proposition~\ref{prop:verdicts} after scanning the full segment, with an unavoidable communication delay of at least $\lceil d/r\rceil$ ticks when a position at distance $d$ can affect the output.
+\paragraph{English edition note: protocol scope.} The one-probe preview above is for the minimal atom of Section~6 ($|A|=2$, $|Q|=1$, $h\le1$). At $h=0$ only the immediate repair test applies. For a larger menu at $h=1$, a global negative verdict requires checking the whole menu or certifying its minimum. For $h>1$, immediate branch repair costs must be replaced by verified continuation values for the remaining horizon. The five-state bound is for the verdict fold, not a bound on the state count of the CA or a Lean implementation of the five-way classifier.
+
+\section{Machine verification in Lean~4.36.0, executable stack, and limits}
+
+The scalar mathematical core is formalized in a self-contained Lean module (no Mathlib, 824 lines, LF endings, no BOM; SHA-256 \texttt{9b641375a621cac5\ldots0eabd6d2}). The author reports a Lean~4.36.0 check (\texttt{arm64-apple-darwin24.6.0}, commit \texttt{611c117b}): exit code~0, no errors or warnings, no \texttt{sorryAx}, \texttt{Lean.ofReduceBool}, or \texttt{Lean.trustCompiler}. Table~\ref{tab:lean} lists all 18 declarations and separates the verified core from the specification.
+\paragraph{English edition note: audit provenance.} The Russian PDF uses the historical filename \texttt{repair\_\allowbreak budget\_\allowbreak atom\_\allowbreak v1\_3\_fixed.lean}. The published copy is \texttt{lean/repair\_\allowbreak budget\_\allowbreak atom\_\allowbreak v1\_3.lean}; its digest matches the source digest reported there. Compiler and test results are from the original author logs and were not rerun for this translation. The $(h,B)$ row denotes the three named results in Section~4, not a verified general equivalence characterization.
+
+\begin{table}[!htbp]
+\centering
+\caption{Verification of 18 declarations in the module \texttt{repair\_\allowbreak budget\_\allowbreak atom\_\allowbreak v1\_3.lean} (Lean~4.36.0, \texttt{exit 0}, no \texttt{sorryAx}) and scope of the specification.}
+\label{tab:lean}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}l >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Status / \texttt{\#print axioms} profile} & \textbf{Declarations and scope} \\
+\midrule
+No axioms (3) & \texttt{refinement\_grows\_common\_repairs}, \texttt{contravariant\_refutation\_transfer}, \texttt{marginal\_equality\_not\_joint\_equality} \\
+\texttt{[propext]} (6) & \texttt{confidence\_up\_affordability\_down}, \texttt{foldMasks\_order\_invariant}, \texttt{myhill\_nerode\_five\_states\_distinct}, \texttt{five\_states\_lower\_bound}, \texttt{h1\_\allowbreak same\_\allowbreak repair\_\allowbreak different\_\allowbreak probe\_\allowbreak not\_\allowbreak congruent}, \texttt{unaffordable\_probe\_irrelevant} \\
+\texttt{[propext, Quot.sound]} (4) & \texttt{lemma1\_common\_repair\_iff}, \texttt{foldMasks\_exact\_common\_repair}, \texttt{five\_le\_of\_injective\_stateIdx}, \texttt{h0\_dominated\_world\_redundant} \\
+\texttt{[propext, Classical.choice, Quot.sound]} (5) & \texttt{pairwise\_intersection\_insufficient}, \texttt{lemma2\_one\_step\_probe\_iff}, \texttt{minimaxV\_iff\_validPlanTree}, \texttt{factorization\_iff\_kernel\_inclusion}, \texttt{adaptive\_\allowbreak strictly\_\allowbreak beats\_\allowbreak nonadaptive} \\
+\midrule
+Verified in Lean (scalar core) & \texttt{costA, costQ : Nat}, $\texttt{Cost}=\mathbb N\cup\{+\infty\}$; adaptive advantage ($B=3,h=2$); the three named horizon/budget results; five-state lower bound for the verdict detector ($5\le n$). \\
+Specification only (outside Lean) & \texttt{CostVec} vector budgets (Pareto antichain of minimal budgets), stochastic e-variables/KL divergence, and a general CA for arbitrary $(|A|,|Q|,h)$. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsubsection*{Executable stack and \texttt{Q1--Q2} checks}
+The reproducible package \texttt{repair\_\allowbreak budget\_\allowbreak atom\_\allowbreak v1\_3.zip} complements the Lean core (Python~3 standard library only; archive SHA-256 \texttt{050f788e\ldots}; checksums in \texttt{SHA256SUMS.txt}). It implements three linked levels: the reference evaluator $(G,C,V_h)$ with a public \texttt{PlanTree} generator and independent fail-closed verifier \texttt{verify\_\allowbreak certificate} (\texttt{reference\_\allowbreak engine.py}); the five-state streaming automaton (\texttt{fold\_acc.py}); and a radius-one one-dimensional multitrack CA without global tape access (\texttt{local\_ca.py}). Table~\ref{tab:exec} reports the full \texttt{test\_suite.py} run.
+
+\begin{table}[!htbp]
+\centering
+\caption{Results from the executable stack \texttt{repair\_\allowbreak budget\_\allowbreak atom\_\allowbreak v1\_3.zip} (\texttt{ALL\_PASSED}, no false guarantees).}
+\label{tab:exec}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}l >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Test block} & \textbf{Scope and reported outcome} \\
+\midrule
+Regressions \texttt{T01--T08} & 8/8 \texttt{PASS}: empty $W$, common repair, pairwise-intersection trap, uninformative probe, thresholds $B=2,3,4$, and 24/24 permutations. \\
+Reference and certificates (\texttt{B1}) & 1,200 random cases ($|W|\le6,|A|\le4,|Q|\le4,h\le2$); 1,200 monotonicity checks $V_2\le V_1\le V_0$; 8,224 independently verified certificates; no false \texttt{REPAIR}/\texttt{PROBE} verdicts. \\
+\texttt{FoldAcc} fold (\texttt{C}) & 1,365 exhaustive sequences ($L\le5$); 200,000 random differential checks without discrepancy; all five Myhill--Nerode signatures distinguishable (four states are impossible). \\
+CA equivalence (\texttt{D}) & 32,767 exhaustive \texttt{CA == ReferenceEngine} checks over all $8^L$ segments ($L\le4$) and seven tariff regimes; no discrepancies; delay exactly $L+2$ ticks. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Limits.}
+The local radius-one CA in \texttt{local\_ca.py} was implemented and exhaustively tested for the minimal atom ($|A|=2$, $|Q|=1$, $h\le1$), not for arbitrary finite $(|A|,|Q|,h)$. Vector Pareto optimization (\texttt{CostVec}), transfer to binary Rule~110, adaptive stochastic trace laws (e-variables, KL divergence), second-order experiments \texttt{Q3--Q5}, and autonomous generation of new languages $L'$ remain open.
+\paragraph{English edition note: implementation evidence.} The archived exhaustive CA loop uses $h=1$, $L\le4$, two repairs, and one probe. It uses local integer registers, not a uniform finite alphabet for arbitrarily large costs. Positive certificates are independently replayed per live world; the checker verifies negative decisions by recomputing the exact $V_h$ with the reference solver.
+
+\begin{thebibliography}{9}
+\small\setlength{\itemsep}{1pt}
+
+\bibitem{weitzman1979}
+M.\,L.\,Weitzman. \href{https://scholar.harvard.edu/files/weitzman/files/optimalsearchbestalternative.pdf}{Optimal Search for the Best Alternative}. \emph{Econometrica}, 47(3):641--654, 1979.
+
+\bibitem{arrow1974}
+K.\,J.\,Arrow, A.\,C.\,Fisher. \href{https://doi.org/10.2307/1883074}{Environmental Preservation, Uncertainty, and Irreversibility}. \emph{The Quarterly Journal of Economics}, 88(2):312--319, 1974.
+
+\bibitem{sims2003}
+C.\,A.\,Sims. \href{https://doi.org/10.1016/S0304-3932(03)00029-1}{Implications of Rational Inattention}. \emph{Journal of Monetary Economics}, 50(3):665--690, 2003.
+
+\bibitem{reiter1987}
+R.\,Reiter. \href{https://doi.org/10.1016/0004-3702(87)90062-2}{A Theory of Diagnosis from First Principles}. \emph{Artificial Intelligence}, 32(1):57--95, 1987.
+
+\bibitem{hyafil1976}
+L.\,Hyafil, R.\,L.\,Rivest. \href{https://www.sciencedirect.com/science/article/abs/pii/0020019076900958}{Constructing Optimal Binary Decision Trees Is NP-Complete}. \emph{Information Processing Letters}, 5(1):15--17, 1976.
+
+\end{thebibliography}
+
+\end{document}
