@@ -1,0 +1,313 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage{babel}
+\babelprovide[import, main]{russian}
+\babelfont{rm}{Noto Serif}
+\babelfont{sf}{Noto Sans}
+\babelfont{tt}[AutoFakeBold=1.5,AutoFakeSlant=0.15]{Noto Mono}
+\emergencystretch=3em
+\tolerance=1400
+\hfuzz=0.5pt
+\AtBeginDocument{%
+  \directlua{
+    local lid = tex.language
+    local l = lang.new(lid)
+    local cur = lang.patterns(l)
+    if (not cur) or (string.len(cur) < 100) then
+      local f = io.open("/opt/spark/local/lib/python3.11/dist-packages/pyphen/dictionaries/hyph_ru_RU.dic", "r")
+      if f then
+        local pats = {}
+        for line in f:lines() do
+          if (not (line == "UTF-8")) and (not (line == "")) then
+            table.insert(pats, line)
+          end
+        end
+        f:close()
+        lang.patterns(l, table.concat(pats, " "))
+        tex.lefthyphenmin = 2
+        tex.righthyphenmin = 2
+      end
+    end
+  }%
+}
+
+\usepackage[a4paper,top=19mm,bottom=19mm,left=21mm,right=21mm,headheight=14pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,tabularx}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{microtype}
+\usepackage[colorlinks=true,linkcolor=blue!55!black,citecolor=blue!55!black,urlcolor=blue!55!black]{hyperref}
+
+\definecolor{accent}{RGB}{24,62,112}
+\definecolor{muted}{RGB}{95,105,118}
+\definecolor{boxbg}{RGB}{245,247,250}
+
+\newtheoremstyle{cleanthm}{8pt}{8pt}{\itshape}{}{\bfseries\color{accent}}{.}{.5em}{}
+\newtheoremstyle{cleandef}{8pt}{8pt}{\normalfont}{}{\bfseries\color{accent}}{.}{.5em}{}
+\theoremstyle{cleanthm}
+\newtheorem{theorem}{Теорема}[section]
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{proposition}[theorem]{Предложение}
+\theoremstyle{cleandef}
+\newtheorem{definition}{Определение}[section]
+\newtheorem{example}[theorem]{Пример}
+\newtheorem{remark}[theorem]{Замечание}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}Наблюдать, менять представление или действовать (v2.6.1)}
+\fancyhead[R]{\small\color{muted}А. Странд}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\DeclareMathOperator{\RepairReach}{RepairReach}
+\DeclareMathOperator{\obs}{obs}
+\DeclareMathOperator{\Gain}{Gain}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries Наблюдать, менять представление или действовать:\\[3pt]
+  сертифицированный выбор стратегии при ограничениях памяти, бюджета и времени}\\[8pt]
+  {\large\color{muted} Разделение информационных, структурных и каузально-временных препятствий для ограниченного наблюдателя}\\[10pt]
+  {\normalsize Александр Странд}\\[3pt]
+  {\small\color{muted} 24 ноября 2026\,г.\,$\cdot$\,препринт v2.6.1\,$\cdot$\,формализация, верификация в Lean~4.36.0 (27/27) и Python-эталон}
+\end{center}
+
+\vspace{4pt}
+\begin{abstract}
+\noindent
+Представим агента или систему управления, которая должна распознать устройство среды или предотвратить в ней сбой, но заходит в тупик. Причина неудачи может быть одной из четырёх принципиально разных: (1)~не хватает данных --- нужно задать ещё один вопрос в рамках текущей модели; (2)~слишком беден сам язык описания или память --- никакие новые наблюдения не помогут, пока система не перейдёт, например, от стековой памяти к очереди; (3)~слепо окно наблюдения --- два разных состояния мира дают одинаковые показания датчиков, и нужно либо открыть новый канал наблюдения (не перепутав его с бесполезным шумом), либо активно вмешаться в среду; (4)~истекает физическое время --- пока система ждёт новых данных, среда эволюционирует, и окно для безопасного вмешательства закрывается. Обычный алгоритм поиска не различает эти четыре ситуации: при бедности языка он тратит бюджет на бесконечные пробы, при ресурсном таймауте ложно усложняет модель, а при переносе опыта в новую задачу применяет старые инварианты там, где изменился физический фон среды.
+
+В работе построена и машинно верифицирована единая теория того, как ограниченный наблюдатель может строго различать эти препятствия и выбирать минимальное действие, устраняющее именно причину тупика. Во-первых, мы формализуем три координаты доступности среды --- выразимость в текущем языке ($\mathcal{X}$), различимость через пассивное окно наблюдения ($\mathcal{D}$) и операционную идентифицируемость через вмешательство ($\mathcal{J}$) --- и доказываем их полное взаимное отделение в единой модели. Во-вторых, мы доказываем безусловное отделение потоковой памяти типа очереди (FIFO) от стековой памяти (LIFO) произвольной ёмкости на многосимвольных словах и строим вычислимый детектор мнимых расширений сенсора, отсекающий датчики, не несущие новой разделяющей информации. В-третьих, шесть элементарных шагов --- проба, расширение языка, расширение сенсора, хирургическое вмешательство, стохастическая отбраковка по $e$-значениям и перенос памяти --- объединены в единый контроллер с пятимерным векторным бюджетом и разделением привилегий: таймаут по ресурсам без структурного сертификата неопровержимо блокируется и не может вызвать ложную эскалацию модели. В-четвёртых, на динамике клеточного автомата Rule~110 мы связываем перенос памяти и выбор действия с физикой среды: контроллер автоматически разрешает перенос 4-битного автономного наблюдателя на периодическом эфирном фоне, блокирует его ложный перенос на нулевой фон (где возникает хиральный шов из четырёх внешних входов) и при угрозе закрытия каузального горизонта ($t^*=3,\ \Delta t=2$) отменяет ожидание пробы в пользу немедленного ремонта. Все 27~теорем проверены ядром Lean~4.36.0 без внешних библиотек (\texttt{exit 0}, 0~\texttt{sorryAx}, 0~\texttt{native\_decide}: 10~без аксиом и 17~только на стандартных аксиомах \texttt{propext}, \texttt{Classical.choice}, \texttt{Quot.sound}) и воспроизведены в эталонном пакете на Python~3.
+\end{abstract}
+
+\section{Постановка задачи: четыре природы тупика при ограниченном наблюдении}
+
+Когда исследовательская программа или автономный контроллер работает в частично наблюдаемой среде при ограниченных ресурсах, любая остановка выглядит снаружи одинаково: текущая цель не достигнута. Однако за этим внешним отказом скрываются четыре ортогональных препятствия, требующих совершенно разных ответных действий~\cite{reiter1987,pearl2009,wolpert2008}:
+\begin{enumerate}
+  \item \textbf{Информационная неопределённость внутри адекватной модели.} Текущий язык гипотез $H$ уже содержит верное описание, а текущий сенсорный порт $\Pi$ способен различить конкурирующие состояния мира $W$, но нужно выполнить ещё одну пробу $q$, чтобы сузить $W$.
+  \item \textbf{Структурная бедность представления ($\neg\mathcal{X}$).} Целевой закон среды вообще не выразим в текущем классе памяти $H$ (например, среда копирует поток по правилу очереди FIFO, тогда как наблюдатель ищет гипотезу среди конечных автоматов или магазинных стеков LIFO). В этом режиме любые новые пробы и любое расширение сенсоров лишь сжигают бюджет: необходим переход на более богатый уровень языка $H\mapsto H'$.
+  \item \textbf{Слепота пассивного порта наблюдения ($\neg\mathcal{D}$) или коллизия механизмов ($\neg\mathcal{J}$).} Язык $H$ достаточно богат, но разные миры $w_1,w_2\in W$ с противоположным значением целевого свойства дают тождественные показания на текущем порту $\Pi(w_1)=\Pi(w_2)$. Здесь бесполезно менять язык $H$: требуется либо добавить новый нетривиальный датчик $\Pi\mapsto\Pi'$, либо применить активное хирургическое вмешательство $do(a)$, разделяющее скрытые механизмы.
+  \item \textbf{Закрытие каузально-временного горизонта.} В эволюционирующей среде $T:\Omega\to\Omega$ с конечной скоростью распространения взаимодействий ожидание пробы в течение $\Delta t>0$ тактов позволяет полностью узнать мир ($|W'_{q,y}|=1$), но к моменту $t+\Delta t$ зона действия актуатора уже выпадает из обратного светового конуса цели к дедлайну $t^*$. В этом случае стремление <<сначала точно узнать, а потом действовать>> приводит к необратимому сбою: контроллер обязан действовать немедленно на $t=0$.
+\end{enumerate}
+
+Цель настоящей работы --- свести диагностику всех четырёх препятствий и правила выбора ответного шага в единую формальную систему с машинно проверяемыми сертификатами в Lean~4.36.0.
+
+\section{Три координаты доступности среды и их полное разделение}
+
+Зафиксируем эпистемическое состояние наблюдателя $E = \langle W, H, \mathrm{eval}_H, \Pi, A, \mathrm{apply}_A, \Phi^*\rangle$, где $W$ --- конечный список совместимых миров, $H$ --- текущий класс доступных гипотез с семантикой $\mathrm{eval}_H:H\to\Omega\to\mathrm{Bool}$, $\Pi:\Omega\to\mathcal{O}$ --- пассивный порт наблюдения, $A$ --- доступные вмешательства с действием $\mathrm{apply}_A:A\to\Omega\to\Omega$, а $\Phi^*:\Omega\to\mathrm{Bool}$ --- целевой инвариант.
+
+\begin{definition}[Трёхкоординатный профиль эпистемической доступности $\mathcal{E}(E)$]
+Определим три булевы координаты состояния $E$:
+\begin{align}
+  \mathcal{X}_E (\text{Выразимость}) &:\iff \exists h\in H,\ \forall w\in W:\ \mathrm{eval}_H(h,w) = \Phi^*(w), \\
+  \mathcal{D}_E (\text{Различимость}) &:\iff \forall w_1,w_2\in W:\ \Phi^*(w_1)\ne\Phi^*(w_2) \implies \Pi(w_1)\ne\Pi(w_2), \\
+  \mathcal{J}_E (\text{Идентифицируемость}) &:\iff \mathcal{X}_E \land \mathcal{D}_E \land \Bigl(\forall w_1,w_2\in W:\ \Phi^*(w_1)\ne\Phi^*(w_2) \nonumber\\
+  &\qquad\quad \implies \exists a\in A:\ \Pi(\mathrm{apply}_A(a,w_1)) \ne \Pi(\mathrm{apply}_A(a,w_2))\Bigr).
+\end{align}
+\end{definition}
+
+В предшествующих версиях формализации проверки независимости координат $\mathcal{X}_E$, $\mathcal{D}_E$ и $\mathcal{J}_E$ были разнесены по разным модулям с несовпадающими сигнатурами типов. В едином модуле \texttt{certified\_strategy\_selection\_v2\_6\_1.lean} мы строим четыре состояния $E_1,E_2,E_3,E_4$ над одним и тем же базовым пространством миров $\Omega=\mathrm{Bool}$ и доказываем полную теорему разделения.
+
+\begin{theorem}[Полное разделение и включения трёх координат доступности]
+\label{thm:h1_separation}
+В единой модели над $\Omega=\mathrm{Bool}$ (\texttt{H1\_three\_\allowbreak coordinate\_\allowbreak strict\_\allowbreak separation}):
+\begin{enumerate}
+  \item Выполняются строгие включения $\mathcal{J}_E \implies \mathcal{X}_E$ и $\mathcal{J}_E \implies \mathcal{D}_E$ (\texttt{H1\_identifiable\_\allowbreak implies\_\allowbreak expressible}, \texttt{H1\_identifiable\_\allowbreak implies\_\allowbreak distinguishable}).
+  \item Выразимость не влечёт различимость ($\mathcal{X}_{E_1} \land \neg\mathcal{D}_{E_1}$, \texttt{H1\_E1\_expressible\_\allowbreak not\_\allowbreak distinguishable}): при богатом языке $H$ и <<слепом>> порте $\Pi(w)=\mathrm{const}$ цель выразима, но миры неразличимы.
+  \item Различимость не влечёт выразимость ($\mathcal{D}_{E_2} \land \neg\mathcal{X}_{E_2}$, \texttt{H1\_E2\_distinguishable\_\allowbreak not\_\allowbreak expressible}): точный порт $\Pi(w)=w$ разделяет все миры, но вырожденный класс гипотез $H=\{h_0\}$ с $\mathrm{eval}_H(h_0,w)=\mathsf{false}$ не способен выразить $\Phi^*(w)=w$.
+  \item Совместная выразимость и пассивная различимость не влекут операционной идентифицируемости ($\mathcal{X}_{E_3} \land \mathcal{D}_{E_3} \land \neg\mathcal{J}_{E_3}$, \texttt{H1\_E3\_expr\_\allowbreak and\_\allowbreak dist\_\allowbreak not\_\allowbreak identifiable}), если доступные вмешательства разрушают наблюдаемое различие ($\mathrm{apply}_A(a,w)=\mathsf{false}$).
+\end{enumerate}
+\end{theorem}
+
+\section{Отделение памяти типа очереди от стека произвольной глубины и детектор мнимых сенсоров}
+
+Чтобы переключение языка $H\mapsto H'$ и расширение порта $\Pi\mapsto\Pi'$ опирались на вычислимые сертификаты, а не на эвристику, необходимо закрыть два конструктивных вопроса: (а)~как доказать, что задача действительно требует перехода от стековой памяти (LIFO) к очереди (FIFO) на многосимвольных потоках; (б)~как алгоритмически отличить полезное расширение сенсора от мнимого (шумового или дублирующего).
+
+\subsection{Многосимвольный автомат с очередью против стека произвольной ёмкости}
+
+Рассмотрим трёхбуквенный алфавит $\Sigma=\{\mathtt{0},\mathtt{1},\mathtt{\#}\}$ и потоковые слова вида $u\mathtt{\#}v$, где $u,v\in\{\mathtt{0},\mathtt{1}\}^*$. Определим в чистом ядре Lean~4 два операционных автомата с буфером $\mathrm{buf}\in\mathrm{List\ Bool}$, параметром инверсии бита $\mathrm{inv}\in\mathrm{Bool}$ и ёмкостью буфера $\mathrm{cap}\in\mathbb{N}$:
+\begin{itemize}
+  \item \textbf{Автомат с очередью $\mathrm{evalQueue}(\mathrm{inv},\mathrm{cap},w)$ (уровень $L_4$, FIFO):} до разделителя $\mathtt{\#}$ записывает биты в \emph{конец} списка $\mathrm{buf}\mapsto\mathrm{buf}\mathbin{+\!+}[b]$ (при $|\mathrm{buf}|<\mathrm{cap}$), а после $\mathtt{\#}$ извлекает первый элемент из \emph{начала} списка ($h::\mathrm{tl}$) и проверяет равенство $b = h \oplus \mathrm{inv}$.
+  \item \textbf{Автомат со стеком $\mathrm{evalStack}(\mathrm{inv},\mathrm{cap},w)$ (уровень $L_3$, LIFO):} до разделителя $\mathtt{\#}$ кладёт биты на \emph{вершину} стека $\mathrm{buf}\mapsto b::\mathrm{buf}$, а после $\mathtt{\#}$ снимает бит с той же вершины ($h::\mathrm{tl}$) и проверяет $b = h \oplus \mathrm{inv}$.
+\end{itemize}
+
+На паре тестовых слов $w_{00}=\mathtt{00\#00}$ (симметричный повтор) и $w_{01}=\mathtt{01\#01}$ (асимметричное копирование потока FIFO) возникает фундаментальное препятствие для любого стека: после прочтения префикса $\mathtt{01\#}$ на вершине LIFO-стека оказывается бит~$\mathtt{1}$, тогда как первым символом после разделителя в $w_{01}$ идёт~$\mathtt{0}$. Если стек не инвертирует биты ($\mathrm{inv}=\mathsf{false}$), он отвергает $w_{01}$ при любой ёмкости $\mathrm{cap}\in\mathbb{N}$; если же стек инвертирует биты ($\mathrm{inv}=\mathsf{true}$), он отвергает симметричное слово $w_{00}=\mathtt{00\#00}$ при любой ёмкости $\mathrm{cap}\in\mathbb{N}$.
+
+\begin{theorem}[Безусловное отделение очереди от стека произвольной глубины]
+\label{thm:h2_queue_vs_stack}
+Автомат очереди $\mathrm{evalQueue}(\mathsf{false},3,\cdot)$ принимает потоковые копии $w_{00}=\mathtt{00\#00}$, $w_{01}=\mathtt{01\#01}$, $w_{101}=\mathtt{101\#101}$ и отвергает реверс $w_{\mathrm{rev}}=\mathtt{01\#10}$ (\texttt{H2\_queue\_\allowbreak recognizes\_\allowbreak fifo\_\allowbreak copy}), тогда как для \textbf{любого} булева преобразования $\mathrm{inv}\in\{\mathsf{false},\mathsf{true}\}$ и \textbf{любой} ёмкости стека $\mathrm{cap}\in\mathbb{N}$ (\texttt{H2\_gate13\_\allowbreak queue\_\allowbreak separates\_\allowbreak from\_\allowbreak arbitrary\_\allowbreak stack}):
+\begin{equation}
+  \neg\begin{aligned}[t]
+    \Bigl(&\mathrm{evalStack}(\mathrm{inv},\mathrm{cap},w_{00}) = \mathrm{evalQueue}(\mathsf{false},3,w_{00}) \\
+          &\land\; \mathrm{evalStack}(\mathrm{inv},\mathrm{cap},w_{01}) = \mathrm{evalQueue}(\mathsf{false},3,w_{01})\Bigr).
+  \end{aligned}
+\end{equation}
+\end{theorem}
+
+Теорема~\ref{thm:h2_queue_vs_stack} закрывает сертификацию перехода на уровень очереди $L_4$ без постулированных таблиц истинности и без искусственного ограничения глубины стека $\mathrm{cap}$.
+
+\subsection{Вычислимый детектор мнимых расширений сенсора}
+
+Пусть базовый порт наблюдения задаёт отклик $\Pi_{\mathrm{base}}:Q\to\Omega\to\mathcal{O}_1$, а кандидат на расширенный порт возвращает пару $\Pi_{\mathrm{ext}}:Q\to\Omega\to\mathcal{O}_1\times\mathcal{O}_2$. Расширение является \emph{мнимым} ($\mathrm{IsSpuriousSemantic}$), если на конечном базисе проб $Q$ и активных миров $W$ первая компонента $\Pi_{\mathrm{ext}}$ совпадает с $\Pi_{\mathrm{base}}$, а любой сплит $\Pi_{\mathrm{ext}}(q,w_1)\ne\Pi_{\mathrm{ext}}(q,w_2)$ происходит только на тех парах миров $(w_1,w_2)\in W\times W$, которые \emph{уже} различаются базовым портом $\Pi_{\mathrm{base}}(q,w_1)\ne\Pi_{\mathrm{base}}(q,w_2)$.
+
+Вместо постулирования универсального квантора в структуре данных мы определяем чистую булеву функцию $\mathrm{checkSpuriousFin}(W,Q,\Pi_{\mathrm{base}},\Pi_{\mathrm{ext}})\in\mathrm{Bool}$, перебирающую $Q\times W\times W$.
+
+\begin{theorem}[Звучность вычислимого детектора мнимых сенсоров]
+\label{thm:h3_spurious}
+Для любых конечных списков миров $W$ и проб $Q$ с разрешимым равенством откликов (\texttt{H3\_checkSpuriousFin\_sound}):
+\begin{equation}
+  \mathrm{checkSpuriousFin}(W,Q,\Pi_{\mathrm{base}},\Pi_{\mathrm{ext}}) = \mathsf{true} \implies \mathrm{IsSpuriousSemantic}(W,Q,\Pi_{\mathrm{base}},\Pi_{\mathrm{ext}}).
+\end{equation}
+На трёхуровневом проверочном стенде детектор безошибочно отбраковывает детерминированный хеш-дубликат чётности ($\mathsf{true}$) и пропускает датчик скрытого старшего бита ($\mathsf{false}$, \texttt{H3\_detector\_\allowbreak separates\_\allowbreak spurious\_\allowbreak from\_\allowbreak genuine}).
+\end{theorem}
+
+\section{Единый контроллер с пятимерным бюджетом и разделением привилегий}
+
+Объединим теперь все допустимые операции наблюдателя в единое индуктивное отношение перехода $\mathrm{LicensedStep}(\mathcal{T}, s, s')$, параметризованное замороженным положительным расписанием тарифов $\mathcal{T} = (c_q, c_s, c_p, c_v, c_m) > 0$ с условием амортизации памяти $c_m < c_s$. Состояние контроллера $s\in\mathrm{UnifiedState}$ хранит число активных миров $|W_s|$, число активных гипотез $|H_s|$, ранг текущего уровня языка $\mathrm{tier}(s)\in\{L_0,\dots,L_4\}$, ранг сенсорного порта $\mathrm{portRank}(s)$, интервенционный ранг $\mathrm{intRank}(s)$, счётчик накопленных сертификатов $\mathrm{knowledgeCount}(s)$, а также 5-мерный вектор израсходованных ресурсов $\mathrm{spent}(s)\in\mathbb{N}^5$ и векторный потолок бюджета $B\in\mathbb{N}^5$.
+
+Контроллер допускает ровно шесть конструкторов перехода, каждый из которых защищён собственным структурным сертификатом и покомпонентной проверкой векторного бюджета $\mathrm{spent}(s') \le B$:
+\begin{enumerate}
+  \item \texttt{probe}: информационная проба, требующая строгого сжатия множества миров ($0 < |W_{s'}| < |W_s|$) со списанием тарифа $c_q$.
+  \item \texttt{escalateLang}: повышение уровня языка $\mathrm{tier}(s) < \mathrm{tier}(s')$, требующее структурного сигнала неопровержимости $\mathrm{hasStructCert}(\mathrm{sig})=\mathsf{true}$ со списанием $c_s$.
+  \item \texttt{escalatePort}: расширение сенсорного порта $\mathrm{portRank}(s')=\mathrm{portRank}(s)+1$, требующее как структурного сертификата препятствия, так и отрицательного вердикта детектора мнимости ($\mathrm{isSpurious}=\mathsf{false}$ из Теоремы~\ref{thm:h3_spurious}) со списанием $c_p$.
+  \item \texttt{intervene}: активное хирургическое вмешательство, требующее сертификата $\mathrm{Gate15Cert}$ (пассивная коллизия наблюдения + ортогональность контрольной маски $K(do(I)(x))=K(x)$ + ненулевой коммутатор $[T_L,T_R]\ne 0$) со списанием $c_v$.
+  \item \texttt{stochasticReject}: стохастическая отбраковка гипотез по последовательному $e$-значению, требующая сертификата $\mathrm{Gate16Cert}$ (явная положительность знаменателя $0<\mathrm{den}$ и полной массы $0<\mathrm{totalMass}$, наличие равномерной границы зазора $\mathrm{hasGapBound}=\mathsf{true}$ и пересечение порога $\mathrm{eValueNum}\ge \alpha^{-1}\cdot\mathrm{eValueDen}$) со списанием $c_q$.
+  \item \texttt{recoverMemory}: восстановление ранее сертифицированного представления из ревизионной памяти при выполнении предусловия переноса $\mathrm{precondOk}=\mathsf{true}$ со списанием сниженного тарифа $c_m < c_s$.
+\end{enumerate}
+
+\begin{theorem}[Звучность, разделение привилегий и строгий прогресс единого контроллера]
+\label{thm:h4_h7_controller}
+Для любого положительного расписания тарифов $\mathcal{T}$ и любого лицензированного перехода $\mathrm{LicensedStep}(\mathcal{T}, s, s')$:
+\begin{enumerate}
+  \item \textbf{Инвариант векторного бюджета (\texttt{H4\_licensed\_\allowbreak step\_\allowbreak preserves\_\allowbreak vector\_\allowbreak budget}):} по всем пяти координатам $(c_q,c_s,c_p,c_v,c_m)$ выполняется $\mathrm{spent}(s') \le B$.
+  \item \textbf{Разделение привилегий (\texttt{H4\_privilege\_\allowbreak separation\_\allowbreak blocks\_\allowbreak timeout\_\allowbreak escalation}):} сигнал ресурсного таймаута $\mathrm{resourceTimeout}$ без структурного свидетельства $\mathrm{certifiedUnsat}$ никогда не проходит страж $\mathrm{hasStructCert}=\mathsf{true}$ и не может вызвать \texttt{escalateLang} или \texttt{escalatePort}.
+  \item \textbf{Блокировка мнимых портов и невалидных сертификатов (\texttt{H5\_spurious\_\allowbreak port\_\allowbreak blocked}, \texttt{H6\_gate15\_\allowbreak and\_\allowbreak gate16\_\allowbreak certificates\_\allowbreak enforced}):} при $\mathrm{isSpurious}=\mathsf{true}$ шлюз расширения порта возвращает $\mathsf{none}$, а шаги \texttt{intervene} и \texttt{stochasticReject} гарантируют выполнение всех алгебраических и вероятностных стражей.
+  \item \textbf{Строгий монотонный прогресс (\texttt{H7\_licensed\_\allowbreak step\_\allowbreak strict\_\allowbreak epistemic\_\allowbreak progress}):} каждый шаг строго увеличивает суммарный индекс эпистемического прогресса $\mathcal{P}(s) = \mathrm{tier}(s) + \mathrm{portRank}(s) + \mathrm{intRank}(s) + \mathrm{knowledgeCount}(s)$, исключая вырожденные стратегии <<всегда НЕИЗВЕСТНО>> и циклы по мнимым сенсорам.
+\end{enumerate}
+\end{theorem}
+
+\section{Алгоритмический синтез разделяющих признаков и типизированная память переноса}
+
+\subsection{Алгоритмический оператор выбора разделяющей оси}
+
+Пусть кандидаты $d\in M$ из разных предметных областей снабжены $k$-битовыми структурными сигнатурами признаков $\mathrm{features}(d):\mathrm{Fin}\,k\to\mathrm{Bool}$. Определим три оператора без участия человека в составлении меню проб: проекцию признака $\mathrm{projFeature}(a,d)=d.\mathrm{features}(a)$, проверку осевого расщепления
+\begin{equation}
+  \mathrm{isAxialSplit}(M, a) :\iff \bigl(\exists d_0\in M:\ \neg\mathrm{projFeature}(a,d_0)\bigr) \;\land\; \bigl(\exists d_1\in M:\ \mathrm{projFeature}(a,d_1)\bigr),
+\end{equation}
+и оператор заморозки пробы $\mathrm{freezeAxisQuery}(a,M,b) = \{\,d\in M \mid \mathrm{projFeature}(a,d)=b\,\}$ с гарантированным минимаксным выигрышем
+\begin{equation}
+  \mathrm{minimaxGain}(M,a) := |M| - \max_{b\in\{\mathsf{false},\mathsf{true}\}}\bigl|\mathrm{freezeAxisQuery}(a,M,b)\bigr|.
+\end{equation}
+
+\begin{theorem}[Гарантированный минимаксный выигрыш алгоритмического синтеза пробы]
+\label{thm:h8_metasynset}
+Для любого конечного списка междоменных объектов $M$ и любой структурной оси $a\in\mathrm{Fin}\,k$:
+\begin{enumerate}
+  \item (\texttt{H8\_partition\_\allowbreak length\_\allowbreak conservation}) Сумма мощностей ветвей равна исходному списку: $|\mathrm{freezeAxisQuery}(a,M,\mathsf{false})| + |\mathrm{freezeAxisQuery}(a,M,\mathsf{true})| = |M|$.
+  \item (\texttt{H8\_algorithmic\_\allowbreak metasynset\_\allowbreak minimax\_\allowbreak gain\_\allowbreak ge\_1}) Если $\mathrm{isAxialSplit}(M,a)=\mathsf{true}$, то обе ветви строго сжимают список кандидатов и $\mathrm{minimaxGain}(M,a)\ge 1$.
+\end{enumerate}
+\end{theorem}
+
+\subsection{Типизированная память переноса и дихотомия фона в Rule~110}
+
+Токен ревизионной памяти $\tau\in\mathrm{RevisionToken}$ сохраняет домен происхождения, ширину порта $\mathrm{portWidth}$, допустимое число внешних входов шва $\mathrm{requiredSeamInputs}$, границу остаточного зазора $\Delta(T)$, цену открытия с нуля $c_s$ и цену переноса $c_m$. При переходе к новой среде $E_{\mathrm{env}}$ функция $\mathrm{verifyTransferPrecond}(\tau,E_{\mathrm{env}})$ проверяет совпадение ширины порта, автономность порта на новом фоне ($\mathrm{isPortAutonomous}=\mathsf{true}$), непревышение числа внешних входов шва ($\mathrm{actualSeamInputs}\le\mathrm{requiredSeamInputs}$), допуск по зазору и неравенство $c_m < c_s$.
+
+Чтобы продемонстрировать, почему проверка физического фона среды критична для безопасности переноса, рассмотрим 4-клеточное окно наблюдения $W=\{3,4,5,6\}$ на 14-клеточном кольце клеточного автомата Rule~110 ($f_{110}(l,c,r)=c\oplus r\oplus cr\oplus lcr$):
+\begin{itemize}
+  \item На \textbf{эфирном фоне} периодической решётки граничные клетки слева и справа от окна фиксированы ($x_2=1,\ x_7=0$), благодаря чему 4-битный порт $W$ эволюционирует как \emph{замкнутый автономный конечный автомат} $\mathrm{etherAutomaton}:\mathrm{Bit4}\to\mathrm{Bit4}$ с нулём внешних входов шва ($\mathrm{actualSeamInputs}=0$).
+  \item На \textbf{нулевом фоне} правая граничная клетка $x_7$ больше не удерживается эфиром: при варьировании $x_7\in\{0,1\}$ уже за один шаг состояние клетки~$6$ меняется ($\mathrm{isPortAutonomousWithVaryingRightNeighbor}=\mathsf{false}$), а для замыкания предсказания на 4 такта вперёд требуются все 4 правых входных конуса хирального шва ($\mathrm{actualSeamInputs}=4$).
+\end{itemize}
+
+\begin{theorem}[Звучность переноса памяти, потоковая амортизация и блокировка ложного переноса]
+\label{thm:h9_h11_memory}
+Для оператора восстановления токена $\mathrm{recoverToken}(\mathrm{mem}, E_{\mathrm{env}})$:
+\begin{enumerate}
+  \item (\texttt{H9\_recoverToken\_\allowbreak preserves\_\allowbreak provenance\_\allowbreak and\_\allowbreak gap}) Любой восстановленный токен $\tau$ принадлежит памяти $\mathrm{mem}$, сохраняет ширину порта и удовлетворяет всем ограничениям автономности, числа входов шва и остаточного зазора $\Delta(T)$.
+  \item (\texttt{H10\_memory\_\allowbreak transfer\_\allowbreak strict\_\allowbreak stream\_\allowbreak amortization}) На любом потоке из $k\ge 2$ совместимых эпизодов суммарные затраты с памятью строго меньше затрат без памяти:
+  \begin{equation}
+    c_s + (k-1)c_m < k\cdot c_s.
+  \end{equation}
+  \item (\texttt{H11\_unsound\_\allowbreak transfer\_\allowbreak blocked\_\allowbreak on\_\allowbreak r110\_\allowbreak zero\_\allowbreak bg\_\allowbreak and\_\allowbreak d4\_\allowbreak shortcut}) Токен 4-битного автономного наблюдателя \texttt{r110EtherPortToken}, выученный на эфирном кольце Rule~110, успешно восстанавливается в новом эпизоде на эфирном кольце ($\mathrm{some\ r110EtherPortToken}$), но автоматически \textbf{блокируется} ($\mathsf{none}$) при попытке переноса на нулевой фон Rule~110 и на граф $D_4$ с добавленным ребром-шорткатом.
+\end{enumerate}
+\end{theorem}
+
+\section{Синтез эпистемической ревизии и горизонта ремонта}
+
+Заключительный шаг связывает выбор эпистемического действия с физическим временем эволюционирующей среды $T:\Omega\to\Omega$. Пусть к дедлайну $t^*$ необходимо обеспечить целевой инвариант $\mathcal{I}:\Omega\to\mathrm{Bool}$, а локальный актуатор располагает набором вмешательств $A_{\mathrm{loc}}$. Как показано в динамической теории ремонта, множество физически достижимых до дедлайна вмешательств в момент $t\le t^*$ равно
+\begin{equation}
+  \RepairReach(W,t,t^*) = \bigl\{\, a\in A_{\mathrm{loc}} \;\big|\; \forall w\in W:\ \mathcal{I}\bigl(T^{t^*-t}(a(w))\bigr)=\mathsf{true} \,\bigr\}.
+\end{equation}
+
+В статическом контроллере при коллизии наблюдений на пассивном порту ($\Pi(w_0)=\Pi(w_1)$) естественным шагом является запуск пробы с задержкой $\Delta t>0$, разделяющей миры на эволюционировавших ветвях $T^{\Delta t}(W_{q,y})$. Однако в среде с конечной скоростью распространения сигнала ожидание $\Delta t$ тактов может привести к тому, что на всех ветвях $y$ множество $\RepairReach(T^{\Delta t}(W_{q,y}),\, t+\Delta t,\, t^*)$ окажется пустым.
+
+Поэтому в объединённом контроллере \texttt{selectCausalEpistemicAction} перед выполнением отложенной пробы проверяется не только её информационный выигрыш, но и \emph{открытость каузального горизонта ремонта} на всех достижимых ветвях после задержки $\Delta t$. Если хотя бы на одной ветви после ожидания $\RepairReach=\varnothing$, а в текущий момент $t$ существует общее безопасное вмешательство $a^*\in\RepairReach(W,t,t^*)$, контроллер отменяет пассивную пробу и немедленно выполняет хирургический ремонт $a^*$.
+
+\begin{theorem}[Каузально-эпистемический перехват на 6-кольце Rule~110 и детекция аномалии субъекта]
+\label{thm:h12_synthesis}
+На 6-клеточном кольце Rule~110 для пары миров $W=\{\omega_0=(1,0,0,0,1,0),\ \omega_1=(1,0,0,1,1,0)\}$, дедлайна $t^*=3$, пассивного порта в клетке~$1$ с задержкой $\Delta t=2$, актуатора в клетке~$2$ и цели $w_0(3)=0$:
+\begin{enumerate}
+  \item (\texttt{H12\_causal\_\allowbreak epistemic\_\allowbreak horizon\_\allowbreak synthesis}) На такте $t=0$ миры неразличимы через пассивный порт ($\Pi_1(\omega_0)=\Pi_1(\omega_1)=\mathsf{false}$), а после ожидания $\Delta t=2$ полностью идентифицируются ($\Pi_1(T^2\omega_0)=\mathsf{false},\ \Pi_1(T^2\omega_1)=\mathsf{true}$); тем не менее на обеих ветвях на такте $t=2$ горизонт ремонта закрыт ($\RepairReach=\varnothing$), тогда как на $t=0$ действие \texttt{set2To1} спасает оба мира, и объединённый контроллер выбирает $\texttt{immediateSurgicalRepair\ set2To1}$.
+  \item (\texttt{H12\_rule110\_\allowbreak algebraic\_\allowbreak xor\_\allowbreak gate}, \texttt{H12\_temporal\_\allowbreak subject\_\allowbreak period2\_\allowbreak and\_\allowbreak anomaly\_\allowbreak trigger}) Локальное обновление Rule~110 при единичном левом соседе реализует точный алгебраический гейт $f_{110}(1,z,k)=z\oplus k$ темпорального субъекта, а на эфирном 4-битном порту состояние $\mathtt{0111}$ возвращается в себя за 2~такта с нулевым сигналом аномалии ($\mathrm{subjectDetectsAnomaly}=\mathsf{false}$), тогда как внешнее возмущение $\mathtt{1111}$ мгновенно поднимает флаг аномалии ($\mathsf{true}$), лицензируя каузальный ремонт.
+\end{enumerate}
+\end{theorem}
+
+\begin{remark}[Точный объём теорем $H_{12}$ и связь с \texttt{v1.5}]
+\label{rem:h12_scope}
+Теорема \texttt{H12\_temporal\_\allowbreak subject\_\allowbreak period2\_\allowbreak and\_\allowbreak anomaly\_\allowbreak trigger} формально доказывает возврат 4-битного автономного порта $\mathtt{0111}$ за 2~такта ($\mathrm{etherAutomaton}^2(\mathtt{0111})=\mathtt{0111}$, в отличие от глобального периода~7 фонового эфира Rule~110) и мгновенное срабатывание флага аномалии на $\mathtt{1111}$. Теорема \texttt{H12\_causal\_\allowbreak epistemic\_\allowbreak horizon\_\allowbreak synthesis} формализует случай закрытия горизонта при дедлайне $t^*=3$ ($\Delta t=2$); сравнение с дедлайном $t^*=4$ (где ожидание сохраняет $\RepairReach\neq\varnothing$ и проба становится необходимой), общая эквивалентность $V_{\mathrm{dyn}}$ деревьям планов и параметрическая хиральная граница $3m\to 2m$ на бесконечной решётке $\mathbb{Z}$ вынесены в сопутствующий модуль \texttt{causal\_dynamic\_repair\_v1\_5\_fixed.lean}.
+\end{remark}
+
+\section{Машинная верификация в Lean~4.36.0, воспроизводимость и границы}
+
+Все определения и все 27~теорем разделов~2--6 формализованы в едином самодостаточном файле \texttt{certified\_\allowbreak strategy\_\allowbreak selection\_\allowbreak v2\_6\_1.lean} (1253~строки, 59\,667~байт, чистый LF без BOM, 0~внешних импортов, без Mathlib, пространство имён \texttt{CertifiedStrategySelectionV26}; SHA-256 \texttt{4c76155e475a7964\ldots{}f9cf9c77}). Модуль скомпилирован и проверен ядром \texttt{Lean 4.36.0} (\texttt{arm64-apple-darwin24.6.0}, commit \texttt{611c117b}): \texttt{exit 0}, 0~ошибок, 0~предупреждений, 0~\texttt{sorryAx}, 0~\texttt{Lean.ofReduceBool} (\texttt{native\_decide} не используется). Полное распределение аксиом по протоколу \texttt{V2\_6\_1\_VERIFICATION.log} приведено в Таблице~\ref{tab:axioms_v26}.
+
+\begin{table}[!htbp]
+\centering
+\caption{Фактический профиль \texttt{\#print axioms} для всех 27~теорем в \texttt{certified\_strategy\_selection\_v2\_6\_1.lean} (Lean~4.36.0, \texttt{exit 0}, 0~\texttt{sorryAx}, 0~\texttt{native\_decide}).}
+\label{tab:axioms_v26}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}l >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Профиль \texttt{\#print axioms}} & \textbf{Верифицированные теоремы (27/27)} \\
+\midrule
+Без аксиом (10) & \texttt{H1\_identifiable\_\allowbreak implies\_\allowbreak expressible}, \texttt{H1\_identifiable\_\allowbreak implies\_\allowbreak distinguishable}, \texttt{H2\_queue\_\allowbreak recognizes\_\allowbreak fifo\_\allowbreak copy}, \texttt{H2\_stack\_\allowbreak recognizes\_\allowbreak lifo\_\allowbreak palindrome}, \texttt{H3\_detector\_\allowbreak separates\_\allowbreak spurious\_\allowbreak from\_\allowbreak genuine}, \texttt{H8\_cross\_\allowbreak domain\_\allowbreak instance\_\allowbreak verified}, \texttt{H11\_unsound\_\allowbreak transfer\_\allowbreak blocked\_\allowbreak on\_\allowbreak r110\_\allowbreak zero\_\allowbreak bg\_\allowbreak and\_\allowbreak d4\_\allowbreak shortcut}, \texttt{H12\_causal\_\allowbreak epistemic\_\allowbreak horizon\_\allowbreak synthesis}, \texttt{H12\_rule110\_\allowbreak algebraic\_\allowbreak xor\_\allowbreak gate}, \texttt{H12\_temporal\_\allowbreak subject\_\allowbreak period2\_\allowbreak and\_\allowbreak anomaly\_\allowbreak trigger} \\
+\texttt{[propext]} (6) & \texttt{H1\_E2\_distinguishable\_\allowbreak not\_\allowbreak expressible}, \texttt{H3\_checkSpuriousFin\_sound}, \texttt{H4\_licensed\_\allowbreak step\_\allowbreak preserves\_\allowbreak vector\_\allowbreak budget}, \texttt{H4\_privilege\_\allowbreak separation\_\allowbreak blocks\_\allowbreak timeout\_\allowbreak escalation}, \texttt{H5\_spurious\_\allowbreak port\_\allowbreak blocked}, \texttt{H6\_gate15\_\allowbreak and\_\allowbreak gate16\_\allowbreak certificates\_\allowbreak enforced} \\
+\texttt{[propext, Quot.sound]} (7) & \texttt{H1\_E1\_expressible\_\allowbreak not\_\allowbreak distinguishable}, \texttt{H1\_E3\_expr\_\allowbreak and\_\allowbreak dist\_\allowbreak not\_\allowbreak identifiable}, \texttt{H1\_three\_\allowbreak coordinate\_\allowbreak strict\_\allowbreak separation}, \texttt{H2\_stack\_\allowbreak inv\_\allowbreak false\_\allowbreak rejects\_\allowbreak w01}, \texttt{H2\_stack\_\allowbreak inv\_\allowbreak true\_\allowbreak rejects\_\allowbreak w00}, \texttt{H2\_gate13\_\allowbreak queue\_\allowbreak separates\_\allowbreak from\_\allowbreak arbitrary\_\allowbreak stack}, \texttt{H8\_partition\_\allowbreak length\_\allowbreak conservation} \\
+\texttt{[propext, Classical.choice, Quot.sound]} (4) & \texttt{H7\_licensed\_\allowbreak step\_\allowbreak strict\_\allowbreak epistemic\_\allowbreak progress}, \texttt{H8\_algorithmic\_\allowbreak metasynset\_\allowbreak minimax\_\allowbreak gain\_\allowbreak ge\_1}, \texttt{H9\_recoverToken\_\allowbreak preserves\_\allowbreak provenance\_\allowbreak and\_\allowbreak gap}, \texttt{H10\_memory\_\allowbreak transfer\_\allowbreak strict\_\allowbreak stream\_\allowbreak amortization} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Сопровождающий эталонный пакет на чистом stdlib Python~3 (\texttt{certified\_\allowbreak strategy\_\allowbreak selection\_\allowbreak v2\_6.py}, SHA-256 \texttt{3dbdf0e5\ldots}, с явной защитой $W\neq\varnothing$ в \texttt{repair\_reach}; \texttt{test\_v2\_6.py}, SHA-256 \texttt{963d89ff\ldots}) исполняет все 12~проверочных сценариев и негативные тесты fail-closed аудитора \texttt{S0} (отклонение поддельных сертификатов с $\mathrm{den}=0$, $\mathrm{isSpurious}=\mathsf{true}$, неортогональной маской или сигналом $\mathrm{resourceTimeout}$), формируя детерминированный отчёт \texttt{v2\_6\_witness\_report.json} (SHA-256 \texttt{2ddf09ec\ldots}).
+
+\paragraph{Пределы.}
+Доказанные теоремы относятся к конечному списку активных миров $W$ и конечному базису проб $Q$ в каждый дискретный момент принятия решения (за исключением Теоремы~\ref{thm:h2_queue_vs_stack}, квантифицированной по всем $\mathrm{cap}\in\mathbb{N}$, и Теорем~\ref{thm:h8_metasynset}--\ref{thm:h9_h11_memory}, универсально квантифицированных по длине списка кандидатов $|M|$ и длине потока эпизодов $k\ge 2$). В частности: (1)~Теорема~\ref{thm:h2_queue_vs_stack} отделяет очередь $\mathrm{evalQueue}$ от конкретного 1-параметрического стекового вычислителя $\mathrm{evalStack}(\mathrm{inv},\mathrm{cap})$ произвольной ёмкости, а не от произвольного магазинного автомата (PDA) с произвольным конечным управлением; (2)~Теорема~\ref{thm:h4_h7_controller} гарантирует покоординатное сохранение 5-мерного бюджета $\mathrm{spent}(s')\le B$ на шагах $\mathrm{LicensedStep}$, но не решает задачу многокритериальной Парето-оптимизации по несравнимым бюджетам; (3)~как отмечено в Замечании~\ref{rem:h12_scope}, $H_{12}$ в данном модуле фиксирует дедлайн $t^*=3$ и 2-шаговый цикл порта $\mathtt{0111}$, тогда как контраст с $t^*=4$ и хиральные границы на $\mathbb{Z}$ находятся в \texttt{causal\_dynamic\_repair\_v1\_5\_fixed.lean}. Стохастическая динамика самой среды $T$ и непрерывные пространства наблюдений в данную формализацию не входят и составляют предмет следующего шага программы.
+
+\begin{thebibliography}{9}
+\small\setlength{\itemsep}{2pt}
+
+\bibitem{cook2004}
+M.\,Cook. Universality in Elementary Cellular Automata. \emph{Complex Systems}, 15(1):1--40, 2004.
+
+\bibitem{martinez2006}
+G.\,J.\,Mart\'inez, H.\,V.\,McIntosh, J.\,C.\,Seck-Tuoh-Mora. Gliders in Rule~110. \emph{International Journal of Unconventional Computing}, 2(1):1--49, 2006.
+
+\bibitem{reiter1987}
+R.\,Reiter. \href{https://doi.org/10.1016/0004-3702(87)90062-2}{A Theory of Diagnosis from First Principles}. \emph{Artificial Intelligence}, 32(1):57--95, 1987.
+
+\bibitem{hyafil1976}
+L.\,Hyafil, R.\,L.\,Rivest. \href{https://www.sciencedirect.com/science/article/abs/pii/0020019076900958}{Constructing Optimal Binary Decision Trees Is NP-Complete}. \emph{Information Processing Letters}, 5(1):15--17, 1976.
+
+\bibitem{wolpert2008}
+D.\,H.\,Wolpert. \href{https://doi.org/10.1016/j.physd.2008.03.040}{Physical Limits of Inference}. \emph{Physica D: Nonlinear Phenomena}, 237(9):1257--1281, 2008.
+
+\bibitem{pearl2009}
+J.\,Pearl. \emph{Causality: Models, Reasoning, and Inference}, 2nd ed. Cambridge University Press, 2009.
+
+\end{thebibliography}
+
+\end{document}

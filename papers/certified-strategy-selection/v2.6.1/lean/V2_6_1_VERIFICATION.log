@@ -1,0 +1,55 @@
+==============================================================================
+VERIFICATION LOG — certified_strategy_selection_v2_6_1_rename_candidate.lean
+==============================================================================
+Timestamp (local) : 2026-11-24 20:46:17+0200
+Toolchain         : Lean (version 4.36.0, arm64-apple-darwin24.6.0, commit 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9, Release)
+
+1. INTEGRITY
+   SHA-256 : 4c76155e475a7964a3781e934a501b729ae9aa012f2a42c9ddccf150f9cf9c77
+   size    : 59667 bytes, 1253 lines
+
+2. LEAN VERIFICATION
+   command   : lean certified_strategy_selection_v2_6_1_rename_candidate.lean
+   exit code : 0
+   errors    : 0
+   warnings  : 0
+   sorryAx   : 0
+   ofReduceBool : 0
+
+3. RAW #print axioms OUTPUT
+'CertifiedStrategySelectionV26.H1_identifiable_implies_expressible' does not depend on any axioms
+'CertifiedStrategySelectionV26.H1_identifiable_implies_distinguishable' does not depend on any axioms
+'CertifiedStrategySelectionV26.H1_E1_expressible_not_distinguishable' depends on axioms: [propext, Quot.sound]
+'CertifiedStrategySelectionV26.H1_E2_distinguishable_not_expressible' depends on axioms: [propext]
+'CertifiedStrategySelectionV26.H1_E3_expr_and_dist_not_identifiable' depends on axioms: [propext, Quot.sound]
+'CertifiedStrategySelectionV26.H1_three_coordinate_strict_separation' depends on axioms: [propext, Quot.sound]
+'CertifiedStrategySelectionV26.H2_queue_recognizes_fifo_copy' does not depend on any axioms
+'CertifiedStrategySelectionV26.H2_stack_recognizes_lifo_palindrome' does not depend on any axioms
+'CertifiedStrategySelectionV26.H2_stack_inv_false_rejects_w01' depends on axioms: [propext, Quot.sound]
+'CertifiedStrategySelectionV26.H2_stack_inv_true_rejects_w00' depends on axioms: [propext, Quot.sound]
+'CertifiedStrategySelectionV26.H2_gate13_queue_separates_from_arbitrary_stack' depends on axioms: [propext, Quot.sound]
+'CertifiedStrategySelectionV26.H3_checkSpuriousFin_sound' depends on axioms: [propext]
+'CertifiedStrategySelectionV26.H3_detector_separates_spurious_from_genuine' does not depend on any axioms
+'CertifiedStrategySelectionV26.H4_licensed_step_preserves_vector_budget' depends on axioms: [propext]
+'CertifiedStrategySelectionV26.H4_privilege_separation_blocks_timeout_escalation' depends on axioms: [propext]
+'CertifiedStrategySelectionV26.H5_spurious_port_blocked' depends on axioms: [propext]
+'CertifiedStrategySelectionV26.H6_gate15_and_gate16_certificates_enforced' depends on axioms: [propext]
+'CertifiedStrategySelectionV26.H7_licensed_step_strict_epistemic_progress' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'CertifiedStrategySelectionV26.H8_partition_length_conservation' depends on axioms: [propext, Quot.sound]
+'CertifiedStrategySelectionV26.H8_algorithmic_metasynset_minimax_gain_ge_1' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'CertifiedStrategySelectionV26.H8_cross_domain_instance_verified' does not depend on any axioms
+'CertifiedStrategySelectionV26.H9_recoverToken_preserves_provenance_and_gap' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'CertifiedStrategySelectionV26.H10_memory_transfer_strict_stream_amortization' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'CertifiedStrategySelectionV26.H11_unsound_transfer_blocked_on_r110_zero_bg_and_d4_shortcut' does not depend on any axioms
+'CertifiedStrategySelectionV26.H12_causal_epistemic_horizon_synthesis' does not depend on any axioms
+'CertifiedStrategySelectionV26.H12_rule110_algebraic_xor_gate' does not depend on any axioms
+'CertifiedStrategySelectionV26.H12_temporal_subject_period2_and_anomaly_trigger' does not depend on any axioms
+==============================================================================

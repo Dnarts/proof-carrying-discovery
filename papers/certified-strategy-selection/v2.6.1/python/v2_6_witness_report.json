@@ -1,0 +1,110 @@
+{
+  "schema": "certified-strategy-selection/v2.6",
+  "suite_status": "ALL_12_HYPOTHESES_PASSED",
+  "H1_three_coordinates": {
+    "status": "PASSED",
+    "models": {
+      "E1": {
+        "X_expressible": true,
+        "D_distinguishable": false,
+        "J_identifiable": false
+      },
+      "E2": {
+        "X_expressible": false,
+        "D_distinguishable": true,
+        "J_identifiable": false
+      },
+      "E3": {
+        "X_expressible": true,
+        "D_distinguishable": true,
+        "J_identifiable": false
+      },
+      "E4": {
+        "X_expressible": true,
+        "D_distinguishable": true,
+        "J_identifiable": true
+      }
+    }
+  },
+  "H2_gate13_queue_vs_stack": {
+    "status": "PASSED",
+    "tested_stack_capacities": 33,
+    "queue_w00_w01_w101_wRev": [
+      true,
+      true,
+      true,
+      false
+    ],
+    "stack_w00_w01_wRev": [
+      true,
+      false,
+      true
+    ]
+  },
+  "H3_spurious_port_detector": {
+    "status": "PASSED",
+    "spurious_hash_port_detected": true,
+    "genuine_hidden_port_detected": false
+  },
+  "H4_to_H7_unified_controller_and_s0": {
+    "status": "PASSED",
+    "s0_rejected_attacks": [
+      "S0_REJECT: Ax4_privilege_separation_blocks_non_structural_signal",
+      "S0_REJECT: H3_spurious_port_extension_blocked",
+      "S0_REJECT: Gate15_certificate_invalid",
+      "S0_REJECT: Gate16_positivity_or_gap_bound_failed"
+    ],
+    "initial_progress_score": 1,
+    "final_progress_score": 13,
+    "final_spent_vector": {
+      "cq": 2,
+      "cs": 4,
+      "cp": 3,
+      "cv": 2,
+      "cm": 1
+    },
+    "budget_vector": {
+      "cq": 4,
+      "cs": 4,
+      "cp": 3,
+      "cv": 2,
+      "cm": 2
+    }
+  },
+  "H8_algorithmic_metasynset": {
+    "status": "PASSED",
+    "domains_spanned": [
+      1,
+      2,
+      4,
+      5
+    ],
+    "synthesized_axis": 1,
+    "minimax_gain": 2
+  },
+  "H9_to_H11_revision_memory_and_r110_ring": {
+    "status": "PASSED",
+    "zero_bg_autonomous_submasks_of_15": 0,
+    "recover_on_r110_ether_ring": 110,
+    "recover_on_r110_zero_bg": null,
+    "recover_on_d4_shortcut": null,
+    "stream_5_episodes_cost_with_memory": 8,
+    "stream_5_episodes_cost_memoryless": 20
+  },
+  "H12_causal_epistemic_horizon_synthesis": {
+    "status": "PASSED",
+    "reach_at_t0": [
+      "set_2_to_1"
+    ],
+    "reach_after_dt2_branch0": [],
+    "reach_after_dt2_branch1": [],
+    "V_1_dyn": 1,
+    "controller_decision": {
+      "decision": "immediateSurgicalRepair",
+      "actuator": "set_2_to_1",
+      "at_t": 0
+    },
+    "r110_xor_gate_verified": true,
+    "ether_port4_cycle_verified": true
+  }
+}
