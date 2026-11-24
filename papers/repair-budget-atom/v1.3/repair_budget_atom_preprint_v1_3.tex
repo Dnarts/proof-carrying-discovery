@@ -1,0 +1,420 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage{babel}
+\babelprovide[import, main]{russian}
+\babelfont{rm}{Noto Serif}
+\babelfont{sf}{Noto Sans}
+\babelfont{tt}[AutoFakeBold=1.5,AutoFakeSlant=0.15]{Noto Mono}
+\emergencystretch=3em
+\tolerance=1400
+\hfuzz=0.5pt
+\AtBeginDocument{%
+  \directlua{
+    local lid = tex.language
+    local l = lang.new(lid)
+    local cur = lang.patterns(l)
+    if (not cur) or (string.len(cur) < 100) then
+      local f = io.open("/opt/spark/local/lib/python3.11/dist-packages/pyphen/dictionaries/hyph_ru_RU.dic", "r")
+      if f then
+        local pats = {}
+        for line in f:lines() do
+          if (not (line == "UTF-8")) and (not (line == "")) then
+            table.insert(pats, line)
+          end
+        end
+        f:close()
+        lang.patterns(l, table.concat(pats, " "))
+        tex.lefthyphenmin = 2
+        tex.righthyphenmin = 2
+      end
+    end
+  }%
+}
+
+\usepackage[a4paper,top=18mm,bottom=18mm,left=20.5mm,right=20.5mm,headheight=14pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,tabularx}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{listings}
+\renewcommand{\lstlistingname}{Листинг}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\definecolor{primary}{RGB}{24,62,108}
+\definecolor{accent}{RGB}{138,43,43}
+\definecolor{muted}{RGB}{85,95,108}
+\definecolor{bgbox}{RGB}{244,247,251}
+\definecolor{codebg}{RGB}{248,249,250}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  citecolor=primary,
+  urlcolor=primary,
+  pdftitle={Целевая достаточность информации и атом исследовательского ремонта},
+  pdfauthor={Александр Странд}
+}
+
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+\setlength{\parindent}{0pt}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}Целевая достаточность информации и атом исследовательского ремонта (v1.3)}
+\fancyhead[R]{\small\color{muted}А.\,Странд}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\newtheoremstyle{preprintthm}
+  {8pt}{6pt}{\itshape}{}{\bfseries\color{primary}}{.}{0.5em}{}
+\newtheoremstyle{preprintdef}
+  {8pt}{6pt}{\normalfont}{}{\bfseries\color{primary}}{.}{0.5em}{}
+
+\theoremstyle{preprintthm}
+\newtheorem{theorem}{Теорема}[section]
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{proposition}[theorem]{Предложение}
+\newtheorem{corollary}[theorem]{Следствие}
+
+\theoremstyle{preprintdef}
+\newtheorem{definition}[theorem]{Определение}
+\newtheorem{remark}[theorem]{Замечание}
+\newtheorem{example}[theorem]{Пример}
+
+\lstset{
+  basicstyle=\ttfamily\footnotesize,
+  backgroundcolor=\color{codebg},
+  frame=single,
+  rulecolor=\color{primary!25},
+  xleftmargin=4pt,
+  xrightmargin=4pt,
+  aboveskip=6pt,
+  belowskip=6pt,
+  breaklines=true,
+  keepspaces=true,
+  columns=fullflexible,
+  extendedchars=true
+}
+
+\newcommand{\takeaway}[2]{%
+  \vspace{4pt}\noindent\colorbox{bgbox}{%
+    \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
+      \vspace{3pt}\textbf{\color{primary}#1.}\hspace{0.4em}#2\vspace{3pt}%
+    }%
+  }\vspace{4pt}%
+}
+
+\newcommand{\Cost}{\operatorname{Cost}}
+\newcommand{\kerrel}{\operatorname{ker}}
+\newcommand{\obs}{\operatorname{obs}}
+\newcommand{\Valid}{\operatorname{Valid}}
+\newcommand{\Gap}{\operatorname{Gap}}
+
+\providecommand{\llbracket}{\mathopen{[\![}}
+\providecommand{\rrbracket}{\mathclose{]\!]}}
+
+\begin{document}
+
+\thispagestyle{plain}
+\begin{center}
+  {\LARGE\bfseries Целевая достаточность информации\\[3pt]
+  и атом исследовательского ремонта}\\[10pt]
+  {\large\color{muted} Алгебра ревизии, минимаксный бюджет гарантированного действия,\\
+  инварианты смены рамки и спецификация локального клеточного протокола}\\[12pt]
+  {\normalsize Александр Странд}\\[4pt]
+  {\small\color{muted} 24 ноября 2026\,г.\,$\cdot$\,препринт v1.3\,$\cdot$\,формализация, верифицированное ядро Lean~4.36.0 (18/18) и локальный КА-эталон}
+\end{center}
+
+\vspace{4pt}
+\begin{abstract}
+\noindent
+Исследовательской системе не всегда требуется установить истинный мир: ей необходимо получить \emph{достаточно информации}, чтобы выполнить безопасное действие с доказуемым результатом при жёстком бюджете. В работе формализована единая архитектура, объединяющая \emph{алгебру исследовательской ревизии} (индексированный алгебраический тип переходов над состоянием $E=(L,P,D,\Pi,J,B)$) и \emph{атом исследовательского ремонта}. Разделены три неэквивалентных уровня результата: идентификация мира ($|W|=1$), идентификация цели ($g|_W=\mathrm{const}$) и доступность безопасного ремонта ($G(W)=\bigcap_{\omega\in W}R(\omega)\ne\varnothing$). Для конечного непустого множества совместимых миров $W$, конечного меню действий и детерминированных проб доказаны критерий немедленного общего ремонта ($C(W)\le B$), одношаговый порог пробы ($c(q)+\max_y C(W_{q,y})\le B$), теорема звучности и полноты минимаксной рекурсии $V_h(W)$ ($\operatorname{GuaranteedRepair}(W,h,B)\iff V_h(W)\le B$), монотонность $V_{h+1}(W)\le V_h(W)$, исчерпываемость и непересекаемость пяти детерминированных вердиктов с явным параметром горизонта $h$, а также феномен расхождения знания и ресурса ($V_h(W')\le V_h(W)$ при $V_h(W')>B-c(q)$). Дополнительно сформулированы инварианты смены рамки --- факторизация различимости $\kerrel(O_{Q_0}|_W)\subseteq\kerrel(g|_W)$, контравариантность переноса опровержения, композиция областей $S_f\cap f^{-1}(S_h)$ и граница детерминированного ядра для адаптивных стохастических трасс. Для двухремонтного атома установлена точная нижняя граница пяти состояний потокового аккумулятора свёртки ($\{\texttt{EMPTY},\texttt{00},\texttt{01},\texttt{10},\texttt{11}\}$) и задана спецификация локального одномерного многодорожечного клеточного протокола. Скалярное математическое ядро (18~деклараций, включая строгое преимущество адаптивных планов над неадаптивными при бюджете $B$, свойства $(h,B)$-операционной конгруэнции и нижнюю границу пяти состояний для детектора по вердиктам) машинно верифицировано в самодостаточном модуле Lean~4.36.0 без Mathlib (\texttt{exit 0}, 0~ошибок и предупреждений, без \texttt{sorryAx} и \texttt{native\_decide}). Для минимального атома ($|A|=2$, $|Q|=1$, $h\le 1$) собран воспроизводимый эталонный стек на stdlib Python~3 с независимым fail-closed верификатором сертификатов (8\,224 проверенных сертификата) и явным радиус-1 многодорожечным КА, совпавшим с эталоном на всех 32\,767 исчерпывающих проверках сегментов длины $L\le 4$ (0 расхождений, 0 ложных гарантий).
+\end{abstract}
+
+\section{Постановка задачи: от идентификации мира к достаточности для действия}
+
+Классическая постановка активного обучения и диагностики ориентирована на переход «неизвестный мир $\to$ единственно установленная модель» ($|W|=1$). При жёстких ограничениях на ресурсы такая цель оказывается избыточной в одних случаях и недостижимой в других: разные миры, совместимые с одним публичным журналом $D$, могут допускать один и тот же безопасный ремонт, а попытка сначала уточнить диагноз способна исчерпать бюджет, необходимый для самого действия.
+
+Зафиксируем пространство возможных миров $\Omega$, целевой контраст $g:\Omega\to G$ и конечное множество доступных действий ремонта $A$. Для каждого мира $\omega\in\Omega$ задано множество $R(\omega)\subseteq A$ действий, удовлетворяющих заранее объявленному контракту результата и безопасности. Для непустого множества миров $W\subseteq\Omega$, совместимых с публичным журналом, определим три фундаментальных предиката:
+\begin{equation}
+  \begin{aligned}
+    \operatorname{IdentifyWorld}(W) &\iff |W|=1,\\
+    \operatorname{IdentifyGoal}(W)  &\iff g|_W = \mathrm{const},\\
+    \operatorname{CertifyAction}(W) &\iff G(W) := \bigcap_{\omega\in W} R(\omega) \ne \varnothing.
+  \end{aligned}
+\end{equation}
+
+\begin{proposition}[Попарная неэквивалентность трёх уровней результата]
+\label{prop:three_levels}
+Предикаты $\operatorname{IdentifyWorld}$, $\operatorname{IdentifyGoal}$ и $\operatorname{CertifyAction}$ неэквивалентны:
+\begin{enumerate}
+  \item $\operatorname{CertifyAction}(W) \not\Rightarrow \operatorname{IdentifyWorld}(W)$ и $\operatorname{CertifyAction}(W) \not\Rightarrow \operatorname{IdentifyGoal}(W)$: два мира $\omega_1\ne\omega_2$ с $g(\omega_1)\ne g(\omega_2)$ могут допускать общее безопасное действие $a\in R(\omega_1)\cap R(\omega_2)$.
+  \item $\operatorname{IdentifyGoal}(W) \not\Rightarrow \operatorname{CertifyAction}(W)$: два мира с одинаковым значением цели $g(\omega_1)=g(\omega_2)$ могут требовать несовместимых ремонтов ($R(\omega_1)\cap R(\omega_2)=\varnothing$).
+  \item При учёте бюджета $B$ даже $\operatorname{IdentifyWorld}(W')$ после платной пробы не влечёт доступности ремонта ($C(W') > B - c(q)$).
+\end{enumerate}
+\end{proposition}
+
+\takeaway{Центральный принцип (Goal-Relative Information Sufficiency)}{Исследовательский автомат оптимизирует не максимальный объём сведений о мире, а достаточность проверяемого знания для выполнения безопасного действия в пределах жёсткого бюджета.}
+
+\section{Алгебра исследовательской ревизии как индексированный ADT}
+
+\begin{definition}[Исследовательское состояние и реестр портов]
+Состояние системы задаётся кортежем
+\begin{equation}
+  E = (L, P, D, \Pi, J, B, \mathcal{R}),
+\end{equation}
+где $L = (H, \llbracket\cdot\rrbracket : H\to\Omega)$ --- язык гипотез; $P = (Q_p, (Y_{p,q}, \obs_{p,q})_{q\in Q_p})$ --- типизированный порт из фиксированного реестра портов с версией семантики; $D$ --- строго добавляемый журнал зависимых записей $\Sigma(p:\texttt{PortId})\,\Sigma(q:Q_p)\,Y_{p,q}$; $\Pi$ --- политика выбора шага по публичной истории; $J$ --- критерий оценки планов и кандидатов; $B = (\mathrm{limits}, \mathrm{frozenTariffs})$ --- жёсткий бюджет (скалярная стоимость вычисляется как взвешенная сумма вектора затрат $\Cost=(c_q,c_s,c_p,c_v,c_m)$ по замороженным тарифам); $\mathcal{R}$ --- множество сохранённых правил ревизии второго порядка.
+\end{definition}
+
+Пространство версий на уровне миров строго отделяется от пространства версий на уровне языка:
+\begin{equation}
+  \Omega_D = \{\omega\in\Omega : \forall (p,q,y)\in D,\ \obs_{p,q}(\omega)=y\},
+  \qquad
+  V(E) = \{h\in H : \llbracket h\rrbracket \in \Omega_D\}.
+\end{equation}
+В частности, при $V(E)=\varnothing$ множество миров $\Omega_D$ может быть непустым (исчерпан язык $L$), тогда как $\Omega_D=\varnothing$ сигнализирует о противоречии данных, семантики или предпосылок, а не даёт автоматического права на расширение языка.
+
+\begin{definition}[Запечатанное свидетельство]
+Свидетельство имеет тип $\kappa : \texttt{Evidence}(A, S, \varphi)$ и содержит кортеж $(w, m, v_{\mathrm{ok}}, \mathrm{sound})$, где $w$ --- свидетель, $m$ --- носитель метода, $v_{\mathrm{ok}} : \Valid(w,m)$ --- явное доказательство валидности (отдельное от импликации, чтобы исключить вакуумные свидетельства), а $\mathrm{sound} : \Valid(w,m)\to \forall x\in S,\ A(x)\to\varphi(x)$.
+\end{definition}
+
+\begin{table}[!htbp]
+\centering
+\caption{Индексированный алгебраический тип элементарных шагов $\mathsf{Step}(E,E')$ (помимо списания бюджета $B'=B-\mathrm{cost}(s)$, $0\le\mathrm{cost}(s)\le B$).}
+\label{tab:steps}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}l l >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Конструктор} & \textbf{Координата} & \textbf{Контракт и обязательное условие применения} \\
+\midrule
+$\texttt{Probe}(q,y)$ & $D'\!=\!D\cdot(p,q,y)$ & Проба $q$ допустима в $P$, ответ $y$ получен фактически; смена пробы $\Delta q$ при прежнем правиле выбора не есть $\Delta\Pi$. \\
+$\texttt{RevisePolicy}(\Pi',\kappa)$ & $\Pi$ & Новая политика типизируется на $P$; требуется свидетель истории $\Pi(h)\ne\Pi'(h)$ и сравнение по общей внешней метрике. \\
+$\texttt{RevisePort}(P',\kappa,\tau)$ & $P$ & Явное транспортное отображение $\tau$ для зависимых полей и проекция старых записей $D$; для устранения слепоты нужен различающий свидетель. \\
+$\texttt{ReviseLanguage}(L',\kappa)$ & $L$ & Заданы семантика $L'$ и отношение к $L$; пустота $V(E)=\varnothing$ исключает $L$, но не выбирает $L'$ автоматически. \\
+$\texttt{ReviseObjective}(J',\kappa)$ & $J$ & Сохранена внешняя задача либо явно объявлена новая; свидетельства старого $J$ не переносятся без отдельной проверки. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Конечные цепочки шагов образуют категорию путей $\mathsf{Path}(E,E')$ с пустым путём $1_E$ и ассоциативной композицией $s;t$, где $\mathrm{cost}(s;t)=\mathrm{cost}(s)+\mathrm{cost}(t)\le B$. В отличие от пути, исполнимый адаптивный план $\texttt{PlanTree}$ параметризован исключительно публичным представлением состояния и ветвится по \emph{публично допустимому типу ответов} $Y_q$ (а не по скрытому множеству миров $W$):
+\begin{lstlisting}[caption={Безопасный контракт адаптивного дерева планов без утечки скрытого пространства миров $W$.}]
+ADT PlanTree(E) =
+  | BranchProbe(q : Q_p, next : Y_{p,q} -> PlanTree)
+  | Halt(verdict : RepairVerdict)   -- включает терминальное действие REPAIR(a, kappa)
+\end{lstlisting}
+Проверяющий компонент отдельно ограничивает оценку худшего случая реально достижимыми ответами $y\in f_q[W]$. Объединение терминального ремонта в единственный листовой конструктор $\texttt{Halt}$ гарантирует инвариант: каждая ветвь дерева оканчивается ровно одним вердиктом.
+
+Наконец, строго различаются два предиката:
+\begin{equation}
+  \begin{aligned}
+    \operatorname{CertifiedNow}(E;A,S,\varphi) &:= \exists\kappa:\texttt{Evidence}(A,S,\varphi),\ \Valid_E(\kappa),\\
+    \operatorname{CanSolve}_W(E,\Pi,B) &:= \forall\omega\in W,\ \operatorname{Run}_B(E,\Pi;\omega)\Downarrow g(\omega).
+  \end{aligned}
+\end{equation}
+Сертификат тупика сейчас не исключает существования оплачиваемого плана выхода после наблюдения.
+
+\section{Атом исследовательского ремонта и минимаксная рекурсия \texorpdfstring{$V_h(W)$}{V\_h(W)}}
+
+Зафиксируем детерминированное ядро: конечное множество совместимых миров $W=\Omega_D$, конечное меню действий ремонта $A$ с известными неотрицательными ценами $c(a)$ (одинаковыми между мирами), конечное меню проб $Q$ с ценами $c(q)\ge 0$ и детерминированными ответами $f_q:\Omega\to Y_q$, не меняющими мир. Для непустого $W$ положим:
+\begin{equation}
+  G(W) = \bigcap_{\omega\in W} R(\omega),
+  \qquad
+  C(W) = \min_{a\in G(W)} c(a),
+  \qquad
+  \min\varnothing = +\infty.
+\end{equation}
+
+\begin{lemma}[Общий ремонт без идентификации мира]
+\label{lem:common_repair}
+Для непустого $W$ немедленный гарантированный ремонт существует тогда и только тогда, когда $C(W)\le B$. Случайный выбор действия не ослабляет это условие.
+\end{lemma}
+\begin{proof}
+При одном публичном журнале $D$ контроллер обязан выбрать единое действие $a\in A$ для всех $\omega\in W$. Гарантия контракта и бюджета означает $a\in\bigcap_{\omega\in W} R(\omega)=G(W)$ и $c(a)\le B$, что равносильно $C(W)\le B$. В рандомизированной политике каждое действие с положительной вероятностью обязано быть допустимым во всех $\omega\in W$ и укладываться в $B$.
+\end{proof}
+
+\begin{remark}[Недостаточность попарных пересечений]
+На трёх мирах с $R(\omega_1)=\{a,b\}$, $R(\omega_2)=\{b,c\}$, $R(\omega_3)=\{a,c\}$ любая пара миров имеет общий ремонт, но $G(W)=\varnothing$ и $C(W)=+\infty$.
+\end{remark}
+
+Для пробы $q\in Q$ и ответа $y\in f_q[W]$ положим $W_{q,y}=\{\omega\in W : f_q(\omega)=y\}$. Определим минимаксный порог гарантированного завершения в горизонте не более $h$ проб:
+\begin{equation}
+  V_0(W) = C(W),
+  \qquad
+  V_{h+1}(W) = \min\!\left\{ C(W),\; \min_{q\in Q}\!\left[\, c(q) + \max_{y\in f_q[W]} V_h(W_{q,y}) \,\right] \right\},
+\end{equation}
+где максимум берётся строго по непустым достижимым ветвям $y\in f_q[W]$.
+
+\begin{lemma}[Одношаговый порог пробы]
+\label{lem:one_step}
+План «выполнить пробу $q$ и сразу применить ремонт, выбранный по ответу $y$» гарантированно выполним в бюджете $B$ тогда и только тогда, когда $c(q)+\max_{y\in f_q[W]} C(W_{q,y}) \le B$.
+\end{lemma}
+\begin{proof}
+После списания $c(q)$ в каждой достижимой ветви $W_{q,y}$ остаётся бюджет $B-c(q)$. По Лемме~\ref{lem:common_repair} гарантированный ремонт на каждой ветви существует тогда и только тогда, когда $C(W_{q,y})\le B-c(q)$ для всех $y\in f_q[W]$, что эквивалентно $c(q)+\max_{y\in f_q[W]} C(W_{q,y})\le B$.
+\end{proof}
+
+\begin{theorem}[Достаточность адаптивного исследования для гарантированного ремонта]
+\label{thm:minimax_main}
+Для конечного непустого $W$, конечных меню $A,Q$ и горизонта $h\in\mathbb{N}$ адаптивное дерево $\texttt{PlanTree}$ глубины не более $h$, гарантирующее допустимый ремонт в каждом $\omega\in W$ при бюджете $B$, существует тогда и только тогда, когда $V_h(W)\le B$.
+\end{theorem}
+\begin{proof}
+Индукцией по $h$. База $h=0$ совпадает с Леммой~\ref{lem:common_repair}. На шаге $h+1$ корень дерева либо завершает задачу немедленным ремонтом ($C(W)\le B$), либо выбирает пробу $q\in Q$ с $c(q)\le B$ и для каждого достижимого ответа $y\in f_q[W]$ предъявляет поддерево глубины не более $h$ в бюджете $B-c(q)$, что по предположению индукции равносильно $V_h(W_{q,y})\le B-c(q)$ для всех $y\in f_q[W]$. Объединение двух ветвей даёт $V_{h+1}(W)\le B$.
+\end{proof}
+
+\begin{proposition}[Монотонность по уточнению, монотонность по горизонту и расхождение с бюджетом]
+\label{prop:monotonicity}
+При фиксированных $A,Q$ и тарифах:
+\begin{enumerate}
+  \item Если $\varnothing\ne W'\subseteq W$, то $G(W)\subseteq G(W')$, $C(W')\le C(W)$ и $V_h(W')\le V_h(W)$ для всех $h$.
+  \item Для всех $h\in\mathbb{N}$ выполнено $V_{h+1}(W)\le V_h(W)\le C(W)$: увеличение допустимого горизонта проб может перевести статус $\texttt{BUDGET}(B,h)$ в $\texttt{PROBE}(h')$, но никогда не ухудшает порог.
+  \item После платной пробы $q$ с $c(q)>0$ возможна ситуация $V_h(W_{q,y})\le V_h(W)$ одновременно с $V_h(W_{q,y})>B-c(q)$: знание усилилось, но возможность завершить ремонт исчезла.
+\end{enumerate}
+\end{proposition}
+
+\begin{proposition}[Исчерпываемость и непересекаемость вердиктов с явным горизонтом $h$]
+\label{prop:verdicts}
+Поскольку $V_h(W)\le C(W)$, при полном расчёте для фиксированных $(W,B,h)$ ровно один из пяти детерминированных вердиктов истинен (шестой исход $\texttt{UNKNOWN}$ резервируется исключительно для неполного поиска или таймаута):
+\begin{center}
+\normalfont\footnotesize
+\begin{tabularx}{\linewidth}{@{}l l >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Вердикт} & \textbf{Точное условие} & \textbf{Разрешённый вывод} \\
+\midrule
+$\texttt{INCONSISTENT}$ & $W=\varnothing$ & Противоречие данных или предпосылок; действия не разрешены. \\
+$\texttt{REPAIR}(a^*)$ & $W\ne\varnothing,\ C(W)\le B$ & Немедленный общий ремонт; дальнейший диагноз не нужен. \\
+$\texttt{PROBE}(q^*,h)$ & $W\ne\varnothing,\ V_h(W)\le B < C(W)$ & Первая проба гарантированного дерева глубины $\le h$. \\
+$\texttt{BUDGET}(B,h)$ & $W\ne\varnothing,\ B < V_h(W) < +\infty$ & Решение в горизонте $h$ существует, но недоступно по цене. \\
+$\texttt{NO\_PLAN\_IN\_SCOPE}(h)$ & $W\ne\varnothing,\ V_h(W)=+\infty$ & Нет плана в меню $Q$ и горизонте $h$ (не универсальная невозможность). \\
+\bottomrule
+\end{tabularx}
+\end{center}
+\end{proposition}
+
+Операция ожидания $\texttt{WAIT}$ не является объяснением отказа: она допустима лишь при явном задании внешнего события, его цены, ограничения времени и способа изменения $(D,B,A)$.
+
+\begin{example}[Двухмировой атом: пороги $B=2,3,4$]
+Пусть $W=\{\omega_L,\omega_P\}$ (ошибка модели vs ошибка датчика), $A=\{a_L,a_P\}$ с ценами $c(a_L)=1,\ c(a_P)=2$ и масками допустимости $R(\omega_L)=\texttt{10}$, $R(\omega_P)=\texttt{01}$. До пробы $\texttt{10}\mathbin{\&}\texttt{01}=\texttt{00}$, поэтому $C(W)=+\infty$. Бесполезная проба ($f(\omega_L)=f(\omega_P)=0$) не меняет пересечения. Эталонная калибровка ($f_{\mathrm{cal}}(\omega_L)=0,\ f_{\mathrm{cal}}(\omega_P)=1$) ценой $c=1$ даёт $V_1(W)=1+\max(1,2)=3$: при $B=2$ после калибровки ветвь $\omega_L$ ещё оплачивается ($1\le 1$), а ветвь $\omega_P$ --- уже нет ($2>1$), что даёт $\texttt{BUDGET}(2,1)$; при $B=3$ статус переходит в $\texttt{PROBE}(q_{\mathrm{cal}},1)$. При цене калибровки $c=2$ порог сдвигается до $V_1(W)=4$.
+\end{example}
+
+\section{Инварианты при смене рамки, перенос и граница детерминизма}
+
+\begin{theorem}[Различимость как факторизация]
+\label{thm:factorization}
+Для непустого $W\subseteq\Omega$ и совокупного наблюдения $O_{Q_0}(\omega)=(\obs_q(\omega))_{q\in Q_0}$ декодер $d$ на образе $O_{Q_0}$, удовлетворяющий $g|_W = d\circ O_{Q_0}|_W$, существует тогда и только тогда, когда
+\begin{equation}
+  \kerrel(O_{Q_0}|_W) \subseteq \kerrel(g|_W),
+\end{equation}
+где $\kerrel(f)=\{(\omega,\omega')\in W^2 : f(\omega)=f(\omega')\}$.
+\end{theorem}
+\begin{proof}
+В прямую сторону равенство $O_{Q_0}(\omega)=O_{Q_0}(\omega')$ немедленно влечёт $g(\omega)=d(O_{Q_0}(\omega))=d(O_{Q_0}(\omega'))=g(\omega')$. В обратную сторону значение $d(O_{Q_0}(\omega)):=g(\omega)$ корректно определено на каждом слое отношения $\kerrel(O_{Q_0}|_W)$.
+\end{proof}
+
+Теорема~\ref{thm:factorization} задаёт инвариант информационной достаточности (но не вычислимости декодера и не укладывания всех проб в бюджет). Смена критерия оценки $J$ (например, $L_2$-нормы на оптимальный транспорт при фиксированных данных) меняет ландшафт поиска и оптимальный план, но \emph{не меняет слои} $\kerrel(O_Q)$ --- поэтому свидетельство оптимальности для одного $J$ не переносится на другой $J$ без отдельной проверки, и наоборот, смена $J$ не заменяет смену порта $P$.
+
+\paragraph{Типизированный перенос и контравариантность опровержения.}
+Правило ревизии $r : \prod_E (G_r(E)\to \sum_{E'}\mathsf{Path}(E,E'))$ переносится между доменами через карту $\alpha=(a,b,c_q,b_U)$ с условиями коммутирования $\obs'_{b(q)}(a(\omega))=c_q(\obs_q(\omega))$ и $a(u\omega)=b_U(u)(a(\omega))$, проверкой целевого предусловия $G_{r'}(f(E))$ и обязательным остаточным разрывом $\Gap(T)=S_\alpha\setminus S_\kappa$. Здесь различаются два конструктора переноса:
+\begin{itemize}
+  \item \emph{Строгий перенос без потерь (\texttt{StrictTransfer}):} отображение ответов $c_q$ инъективно на заявленных различающих парах ($\obs_q(\omega)\ne\obs_q(\omega')\Rightarrow c_q(\obs_q(\omega))\ne c_q(\obs_q(\omega'))$), что запрещает вырожденную склейку ответов.
+  \item \emph{Перенос с контролируемыми потерями (\texttt{LossyTransfer}):} допускает склейку ответов при явной фиксации утрат $\delta$ и отдельного доказательства $\texttt{LossBounded}(\delta)$ (сохранения допустимости продолжений на склеенных ветвях).
+\end{itemize}
+Для композиции переносов $h\circ f$ проверенная область есть $S_f\cap f^{-1}(S_h)$. Для переноса \emph{опровержения класса} ($V(E)=\varnothing$) отображение обязано быть \emph{контравариантным}: каждая допустимая модель целевого класса должна отображаться в совместимую с журналом модель исходного класса (отображение только из исходного класса в целевой не исключает лишних целевых моделей).
+
+\paragraph{Адаптивное преимущество и $(h,B)$-операционная конгруэнция.}
+Для гарантированного действия на каждом достижимом листе дерева планов $\Pi$ достаточно $G(W_\ell)\ne\varnothing$ в пределах бюджета, а не полной идентификации $|W_\ell|=1$. В детерминированном скалярном ядре машинно доказаны четыре структурных свойства:
+\begin{enumerate}
+  \item \emph{Строгое преимущество адаптивности (\texttt{adaptive\_\allowbreak strictly\_\allowbreak beats\_\allowbreak nonadaptive}):} на 4-мировой задаче с тремя пробами цены~$1$ и ремонтом цены~$1$ при бюджете $B=3$ и горизонте $h=2$ существует гарантированное адаптивное дерево (\texttt{ValidPlanTree}), тогда как ни одно неадаптивное расписание проб \texttt{qs} не укладывается в $B=3$.
+  \item \emph{Доминирование при $h=0$ (\texttt{h0\_dominated\_world\_redundant}):} если $\omega_1\in W$ и $R(\omega_1)\subseteq R(\omega_2)$, добавление $\omega_2$ не меняет $C(W)$ (при $h=0$ существенна только антицепь минимальных по включению $R(\omega)$).
+  \item \emph{Чувствительность к пробам при $h\ge 1$ (\texttt{h1\_\allowbreak same\_\allowbreak repair\_\allowbreak different\_\allowbreak probe\_\allowbreak not\_\allowbreak congruent}):} два мира $u_1,u_2$ с идентичным профилем $R(u_1)=R(u_2)$, но $f_q(u_1)\ne f_q(u_2)$, дают $V_1(\{u_1,v\})=2\ne +\infty = V_1(\{u_2,v\})$.
+  \item \emph{Отсечка по бюджету $B$ (\texttt{unaffordable\_probe\_irrelevant}):} произвольное изменение функции наблюдений $f_q$ на недоступных пробах ($c(q)>B$) сохраняет \texttt{ValidPlanTree} при бюджете $B$; тем самым операционная конгруэнция параметризована именно парой $(h,B)$.
+\end{enumerate}
+
+\paragraph{Граница детерминированного ядра.}
+На стохастических портах равенство одномерных маргинальных распределений не влечёт равенства совместного распределения наблюдений. Если источник~1 выдаёт один скрытый честный бит в обеих пробах, а источник~2 --- два независимых честных бита, то маргинали совпадают ($\Pr(Y_t=1)=1/2$), но двумерная статистика $\Pr(Y_1=Y_2)$ равна $1$ и $1/2$ соответственно. Это разделение реализуется уже парой пассивных проб (именно оно формализовано в \texttt{marginal\_\allowbreak equality\_\allowbreak not\_\allowbreak joint\_\allowbreak equality}); детерминированное преимущество адаптивности доказано отдельно в \texttt{adaptive\_\allowbreak strictly\_\allowbreak beats\_\allowbreak nonadaptive}, тогда как стохастические адаптивные законы трасс (e-переменные, KL) остаются вне модуля Lean.
+
+\section{Локальный клеточный протокол и пятисостоянийная свёртка}
+
+Для двух действий ремонта $(a_L,a_P)$ и потоковой обработки произвольной последовательности двухбитных масок допустимости определим 5-состоянийный аккумулятор $\texttt{FoldAcc} = \{\texttt{EMPTY},\ \texttt{00},\ \texttt{01},\ \texttt{10},\ \texttt{11}\}$ с переходом $\mathrm{fold}(\texttt{EMPTY},m)=m$ и $\mathrm{fold}(a,m)=a\mathbin{\&}m$.
+
+\begin{theorem}[Точность, инвариантность к порядку и нижняя граница 5 состояний]
+\label{thm:fold5}
+Для любой конечной последовательности масок $m_1,\dots,m_k\in\{\texttt{00},\texttt{01},\texttt{10},\texttt{11}\}$:
+\begin{enumerate}
+  \item $\mathrm{fold}(m_1,\dots,m_k)=\texttt{EMPTY}\iff k=0$ ($W=\varnothing$); при $k\ge 1$ бит действия установлен в результате тогда и только тогда, когда он установлен в каждой маске $m_i$ (точное вычисление $G(W)$).
+  \item Операция ассоциативна и коммутативна: результат инвариантен к перестановке кандидатов.
+  \item Все пять состояний $\{\texttt{EMPTY},\texttt{00},\texttt{01},\texttt{10},\texttt{11}\}$ попарно разделимы суффиксами длины $\le 1$ по выходу $\texttt{FoldVerdict}=\{\texttt{INCONSISTENT},\ \texttt{NO\_COMMON},\ \texttt{HAS\_COMMON}\}$. Любой детерминированный потоковый автомат Мура $(S,q_0,\delta,\mathrm{out}:S\to\texttt{FoldVerdict})$, вычисляющий $\texttt{classifyFold}\circ\texttt{foldMasks}$, отображает пять канонических префиксов $\texttt{witnessPrefix}:\texttt{StateIdx}\to\mathrm{List}\,\texttt{Mask2}$ в попарно различные состояния (\texttt{five\_states\_lower\_bound}); в частности, для любого инъективного вложения $\texttt{StateIdx}\to\mathrm{Fin}\,n$ выполняется $5\le n$ (\texttt{five\_le\_of\_injective\_stateIdx}).
+\end{enumerate}
+\end{theorem}
+
+Заметим, что граница в 5 состояний относится именно к потоковому аккумулятору свёртки, а не к полному многодорожечному клеточному автомату. Проект локального 1D многодорожечного КА радиуса $r>0$ распадается на четыре фазы: (1)~\texttt{FOLD\_G} --- проход слева направо по размеченному сегменту кандидатов с аккумулятором $\texttt{FoldAcc}$; (2)~\texttt{PREVIEW} --- параллельная свёртка двух ветвей $(\mathrm{acc}_0,\mathrm{acc}_1)$ по прогнозам бинарной пробы (пустая ветвь $\texttt{EMPTY}$ исключается из максимума, а если обе ветви равны $\texttt{EMPTY}$, выдаётся $\texttt{INCONSISTENT}$); (3)~\texttt{BUDGET} --- сравнение бюджета $B$ с $C(\mathrm{acc}_G)$ и с $c(q)+\max(C(\mathrm{acc}_0),C(\mathrm{acc}_1))$; (4)~\texttt{EMIT} --- выпуск одного из пяти полных вердиктов Предложения~\ref{prop:verdicts} после прохода всего сегмента (с неустранимой коммуникационной задержкой $\ge \lceil d/r\rceil$ тактов).
+
+\section{Машинная верификация в Lean~4.36.0, исполнимый стек и границы работы}
+
+Скалярное математическое ядро формализовано в самодостаточном модуле \texttt{repair\_\allowbreak budget\_\allowbreak atom\_\allowbreak v1\_3\_fixed.lean} (без Mathlib, 824~строки, чистый LF без BOM; SHA-256 \texttt{9b641375a621cac5\ldots0eabd6d2}) и проверено компилятором \texttt{Lean 4.36.0} (\texttt{arm64-apple-darwin24.6.0}, commit \texttt{611c117b}): \texttt{exit 0}, 0~ошибок, 0~предупреждений, 0~\texttt{sorryAx}, 0~\texttt{Lean.ofReduceBool} и 0~\texttt{Lean.trustCompiler}. Все 18~деклараций и граница между верифицированным ядром и спецификацией сведены в Таблице~\ref{tab:lean}.
+
+\begin{table}[!htbp]
+\centering
+\caption{Верификация 18~деклараций в \texttt{repair\_budget\_atom\_v1\_3\_fixed.lean} (Lean~4.36.0, \texttt{exit 0}, 0~\texttt{sorryAx}) и граница спецификации.}
+\label{tab:lean}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}l >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Статус / профиль \texttt{\#print axioms}} & \textbf{Декларации и область покрытия} \\
+\midrule
+Без аксиом (3) & \texttt{refinement\_grows\_common\_repairs}, \texttt{contravariant\_refutation\_transfer}, \texttt{marginal\_equality\_not\_joint\_equality} \\
+\texttt{[propext]} (6) & \texttt{confidence\_up\_affordability\_down}, \texttt{foldMasks\_order\_invariant}, \texttt{myhill\_nerode\_five\_states\_distinct}, \texttt{five\_states\_lower\_bound}, \texttt{h1\_\allowbreak same\_\allowbreak repair\_\allowbreak different\_\allowbreak probe\_\allowbreak not\_\allowbreak congruent}, \texttt{unaffordable\_probe\_irrelevant} \\
+\texttt{[propext, Quot.sound]} (4) & \texttt{lemma1\_common\_repair\_iff}, \texttt{foldMasks\_exact\_common\_repair}, \texttt{five\_le\_of\_injective\_stateIdx}, \texttt{h0\_dominated\_world\_redundant} \\
+\texttt{[propext, Classical.choice, Quot.sound]} (5) & \texttt{pairwise\_intersection\_insufficient}, \texttt{lemma2\_one\_step\_probe\_iff}, \texttt{minimaxV\_iff\_validPlanTree}, \texttt{factorization\_iff\_kernel\_inclusion}, \texttt{adaptive\_\allowbreak strictly\_\allowbreak beats\_\allowbreak nonadaptive} \\
+\midrule
+Верифицировано в Lean (скалярное ядро) & \texttt{costA, costQ : Nat}, \texttt{Cost = Nat $\cup$ \{+$\infty$\}}, адаптивное преимущество ($B=3,h=2$), $(h,B)$-конгруэнция, детектор по вердиктам ($5\le n$). \\
+Только спецификация (вне Lean) & Векторные бюджеты \texttt{CostVec} (Парето-антицепь минимальных бюджетов), стохастические e-переменные/KL, общий КА для произвольных $(|A|,|Q|,h)$. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Исполнимый стек и проверки \texttt{Q1--Q2}.}
+В дополнение к Lean-ядру собран воспроизводимый пакет \texttt{repair\_budget\_atom\_v1\_3.zip} (чистый stdlib Python~3, SHA-256 архива \texttt{050f788e\ldots}, контрольные суммы в \texttt{SHA256SUMS.txt}), реализующий три связанных уровня: эталонный вычислитель $(G,C,V_h)$ с генератором публичных деревьев \texttt{PlanTree} и независимым fail-closed верификатором \texttt{verify\_certificate} (\texttt{reference\_engine.py}), 5-состоянийный потоковый автомат (\texttt{fold\_acc.py}) и радиус-1 одномерный многодорожечный КА без глобального доступа к ленте (\texttt{local\_ca.py}). Результаты полного прогона \texttt{test\_suite.py} приведены в Таблице~\ref{tab:exec}.
+
+\begin{table}[!htbp]
+\centering
+\caption{Результаты прогона исполнимого стека \texttt{repair\_budget\_atom\_v1\_3.zip} (\texttt{ALL\_PASSED}, 0~ложных гарантий).}
+\label{tab:exec}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}l >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Блок проверки} & \textbf{Объём и зафиксированный исход} \\
+\midrule
+Регрессии \texttt{T01--T08} & 8/8 \texttt{PASS} (пустой $W$, общий ремонт, ловушка попарных пересечений, бесполезная проба, пороги $B=2,3,4$, 24/24 перестановок). \\
+Эталон и сертификаты (\texttt{B1}) & 1\,200 случайных экземпляров ($|W|\le 6,|A|\le 4,|Q|\le 4,h\le 2$), 1\,200 проверок монотонности $V_2\le V_1\le V_0$, 8\,224 независимо верифицированных сертификата, 0~ложных статусов \texttt{REPAIR}/\texttt{PROBE}. \\
+Свёртка \texttt{FoldAcc} (\texttt{C}) & 1\,365 исчерпывающих последовательностей ($L\le 5$), 200\,000 случайных дифференциальных прогонов (0~расхождений), 5/5 различимых сигнатур Майхилла--Нероуда (4~состояния невозможны). \\
+Эквивалентность КА (\texttt{D}) & 32\,767 исчерпывающих сверок \texttt{CA == ReferenceEngine} по всем $8^L$ сегментам ($L\le 4$) на 7~тарифных режимах, 0~расхождений, задержка ровно $L+2$ такта. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Пределы.}
+Локальный радиус-1 КА в \texttt{local\_ca.py} построен и исчерпывающе проверен именно для минимального атома ($|A|=2$, $|Q|=1$, $h\le 1$), а не для произвольных конечных $(|A|,|Q|,h)$. Векторная Парето-оптимизация \texttt{CostVec}, перенос в двоичный Rule~110, стохастические адаптивные законы трасс (e-переменные, KL), эксперименты 2-го порядка \texttt{Q3--Q5} и самостоятельное порождение новых языков $L'$ остаются открытыми задачами следующего этапа.
+
+\begin{thebibliography}{9}
+\small\setlength{\itemsep}{1pt}
+
+\bibitem{weitzman1979}
+M.\,L.\,Weitzman. \href{https://scholar.harvard.edu/files/weitzman/files/optimalsearchbestalternative.pdf}{Optimal Search for the Best Alternative}. \emph{Econometrica}, 47(3):641--654, 1979.
+
+\bibitem{arrow1974}
+K.\,J.\,Arrow, A.\,C.\,Fisher. \href{https://doi.org/10.2307/1883074}{Environmental Preservation, Uncertainty, and Irreversibility}. \emph{The Quarterly Journal of Economics}, 88(2):312--319, 1974.
+
+\bibitem{sims2003}
+C.\,A.\,Sims. \href{https://doi.org/10.1016/S0304-3932(03)00029-1}{Implications of Rational Inattention}. \emph{Journal of Monetary Economics}, 50(3):665--690, 2003.
+
+\bibitem{reiter1987}
+R.\,Reiter. \href{https://doi.org/10.1016/0004-3702(87)90062-2}{A Theory of Diagnosis from First Principles}. \emph{Artificial Intelligence}, 32(1):57--95, 1987.
+
+\bibitem{hyafil1976}
+L.\,Hyafil, R.\,L.\,Rivest. \href{https://www.sciencedirect.com/science/article/abs/pii/0020019076900958}{Constructing Optimal Binary Decision Trees Is NP-Complete}. \emph{Information Processing Letters}, 5(1):15--17, 1976.
+
+\end{thebibliography}
+
+\end{document}

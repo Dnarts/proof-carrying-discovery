@@ -1,0 +1,60 @@
+{
+  "schema": "repair-budget-atom/certificate/v1.3",
+  "W_size": 2,
+  "B": 3,
+  "h": 1,
+  "C_W": null,
+  "V_h_W": 3,
+  "verdict": "PROBE",
+  "action": null,
+  "first_probe": "q_cal",
+  "plan_tree": {
+    "kind": "BranchProbe",
+    "probe": "q_cal",
+    "probe_cost": 1,
+    "branches": {
+      "0": {
+        "kind": "HaltRepair",
+        "action": "aL",
+        "action_cost": 1
+      },
+      "1": {
+        "kind": "HaltRepair",
+        "action": "aP",
+        "action_cost": 2
+      }
+    }
+  },
+  "proof_trace": [
+    {
+      "world": "wL",
+      "steps": 1,
+      "path": [
+        {
+          "probe": "q_cal",
+          "answer": "0",
+          "probe_cost": 1
+        }
+      ],
+      "action": "aL",
+      "action_cost": 1,
+      "total_cost": 2,
+      "safe": true
+    },
+    {
+      "world": "wP",
+      "steps": 1,
+      "path": [
+        {
+          "probe": "q_cal",
+          "answer": "1",
+          "probe_cost": 1
+        }
+      ],
+      "action": "aP",
+      "action_cost": 2,
+      "total_cost": 3,
+      "safe": true
+    }
+  ]
+}

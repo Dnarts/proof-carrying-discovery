@@ -8,7 +8,13 @@ Evidence-scoped program discovery, finite model-class refutation, controlled rep
 
 [**All preprints in EN / RU / 简体中文**](docs/PREPRINT_LANGUAGES.md)
 
-## Latest preprint — Meta-Synset and Invariant v2.5 (23 November 2026)
+## Latest preprint: Goal-Relative Information Sufficiency and the Research Repair Atom v1.3 (24 November 2026)
+
+A finite worst-case model of when observations suffice to guarantee an action within a hard budget, without identifying the world. The release includes a scalar Lean kernel and a bounded local cellular-automaton benchmark.
+
+[**Original Russian PDF**](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3.pdf) · [Source, code and verification records](papers/repair-budget-atom/v1.3/)
+
+## Meta-Synset and Invariant v2.5 (23 November 2026)
 
 **A Typed System for Revising Research Representations.** Cross-domain transfer is proposed as a heuristic; Lean verifies the typed checking protocol under stated assumptions.
 
@@ -81,7 +87,11 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 
 Основная линия: **найти программу → проверить идентифицируемость → опровергнуть недостаточный класс → сменить представление → синтезировать решение → формально проверить его поведение.**
 
-## Новый препринт — «Мета-синсет и инвариант» v2.5
+## Новый препринт: «Целевая достаточность информации и атом исследовательского ремонта» v1.3
+
+[**Оригинал PDF**](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3.pdf) · [Исходники, код и журналы проверки](papers/repair-budget-atom/v1.3/)
+
+## «Мета-синсет и инвариант» v2.5
 
 [Оригинал PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5.pdf) · [Английский PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_en.pdf) · [Китайский PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_zh.pdf) · [Lean и журналы проверки](papers/hypothesis-language/meta-synset-v2.5/evidence/)
 
@@ -123,7 +133,9 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 
 **本项目的核心问题：何时有证据支持改变假设语言，如何独立核验这种改变？**
 
-最新预印本：《元同义词集与不变量：研究表征的类型化修订系统》v2.5。[简体中文 PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_zh.pdf) · [中文源文件 ZIP](papers/hypothesis-language/meta-synset-v2.5/meta_synset_v2_5_chinese_source.zip) · [English PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_en.pdf) · [Русский PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5.pdf)。
+最新预印本：目标相关的信息充分性与研究修复原子 v1.3。[俄文 PDF](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3.pdf) · [源代码与验证记录](papers/repair-budget-atom/v1.3/)。
+
+《元同义词集与不变量：研究表征的类型化修订系统》v2.5。[简体中文 PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_zh.pdf) · [中文源文件 ZIP](papers/hypothesis-language/meta-synset-v2.5/meta_synset_v2_5_chinese_source.zip) · [English PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_en.pdf) · [Русский PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5.pdf)。
 
 Gate 11–12 v12.3：《假设语言与携证表征升级》。[English PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf) · [Русский PDF](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [中文 PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.pdf) · [源代码与证据](papers/hypothesis-language/gate11-gate12-v12.3/)。
 

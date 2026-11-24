@@ -1,0 +1,69 @@
+==============================================================================
+VERIFICATION LOG — repair_budget_atom_v1_3 (fixed copy)
+==============================================================================
+Timestamp (local) : 2026-11-24 14:55:18 IST
+Toolchain         : Lean (version 4.36.0, arm64-apple-darwin24.6.0, commit 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9, Release)
+
+TWO INPUTS, TWO VERDICTS
+  as delivered  : SHA ace57e822dc01735d2ed468e9b7a8686f7ebcae98faca4bfbcbb7d0dbee063a4
+                  exit 1 — ONE error at L777, and one theorem sorry-backed:
+                    h1_same_repair_different_probe_not_congruent  [propext, sorryAx]
+  this file     : SHA 9b641375a621cac55873800886f74f7986d2b84f900c33a16261e4ae0eabd6d2
+                  exit 0 — 0 errors, 0 warnings, 18/18 declarations, 0 sorryAx
+                  bytes 33937, lines 824, pure LF, no BOM
+
+THE SINGLE DEFECT AND ITS FIX
+  L777 `theorem h1_same_repair_different_probe_not_congruent ... := by decide`
+  error: failed to synthesize Decidable ((∀ a, f2R .u1 a = f2R .u2 a) ∧
+         minimaxV ... [.u1, .v] = .fin 2 ∧ minimaxV ... [.u2, .v] = .inf)
+  Cause: `decide` cannot synthesise a Decidable instance for a conjunction whose
+  components mix a bounded ∀ over AtomAction with two minimaxV equals-cost tests;
+  instance search does not unfold minimaxV far enough inside a nested ∧.
+  Fix (statements unchanged, theorem keeps the identical type): split into three
+  separately-decided parts and assemble the conjunction from them:
+    h1_part_repr : ∀ a, f2R .u1 a = f2R .u2 a                 (by intro a; cases a <;> rfl)
+    h1_part_u1   : minimaxV ... [.u1, .v] = .fin 2             (by decide)
+    h1_part_u2   : minimaxV ... [.u2, .v] = .inf               (by decide)
+    h1_same_... : <original conjunction> := ⟨h1_part_repr, h1_part_u1, h1_part_u2⟩
+
+WHAT v1.3 ADDS (four new results, all now genuinely proved)
+  adaptive_strictly_beats_nonadaptive        [propext, Classical.choice, Quot.sound]
+  h0_dominated_world_redundant               [propext, Quot.sound]
+  h1_same_repair_different_probe_not_congruent [propext]   (was [propext, sorryAx])
+  unaffordable_probe_irrelevant              [propext]
+  These are exactly the operational-congruence facts: h=0 collapses to the repair
+  profile (dominated worlds are redundant), while h>=1 separates worlds with equal
+  repair profiles because the probe splits them, and the (h, B) cutoff makes
+  unaffordable probes irrelevant. The parametrisation by B is now machine-checked,
+  not just asserted in prose.
+
+------------------------------------------------------------------------------
+#print axioms — ALL 18 DECLARATIONS (real output)
+------------------------------------------------------------------------------
+  lemma1_common_repair_iff                       propext, Quot.sound
+  pairwise_intersection_insufficient             propext, Classical.choice, Quot.sound
+  refinement_grows_common_repairs                none
+  lemma2_one_step_probe_iff                      propext, Classical.choice, Quot.sound
+  confidence_up_affordability_down               propext
+  minimaxV_iff_validPlanTree                     propext, Classical.choice, Quot.sound
+  factorization_iff_kernel_inclusion             propext, Classical.choice, Quot.sound
+  contravariant_refutation_transfer              none
+  foldMasks_exact_common_repair                  propext, Quot.sound
+  foldMasks_order_invariant                      propext
+  myhill_nerode_five_states_distinct             propext
+  marginal_equality_not_joint_equality           none
+  five_states_lower_bound                        propext
+  five_le_of_injective_stateIdx                  propext, Quot.sound
+  adaptive_strictly_beats_nonadaptive            propext, Classical.choice, Quot.sound
+  h0_dominated_world_redundant                   propext, Quot.sound
+  h1_same_repair_different_probe_not_congruent   propext
+  unaffordable_probe_irrelevant                  propext
+
+  sorryAx present        : NO
+  ofReduceBool/trustComp : NO  -> native_decide absent
+  axiom-free             : 3 of 18
+
+VERDICT: v1.3 VERIFIED AFTER ONE TACTIC REPAIR (split of a conjoined `decide`).
+         exit 0, 0 warnings, 18/18 declarations clean, 0 sorryAx, 0 native_decide.
+         Hash to cite: 9b641375a621cac55873800886f74f7986d2b84f900c33a16261e4ae0eabd6d2
+==============================================================================

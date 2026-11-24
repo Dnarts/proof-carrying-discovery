@@ -1,0 +1,41 @@
+{
+  "schema": "repair-budget-atom/verification-report/v1.3",
+  "status": "ALL_PASSED",
+  "block_B2_regressions_T01_T08": {
+    "T01_EmptyWorld": "PASS (INCONSISTENT)",
+    "T02_CommonRepair": "PASS (REPAIR aL, no diagnosis needed)",
+    "T03_PairwiseIntersectionTrap": "PASS (all pairs nonempty, global G empty)",
+    "T04_UselessProbe": "PASS (NO_PLAN_IN_SCOPE)",
+    "T05_Atom_B2": "PASS (BUDGET: V1=3 > B=2)",
+    "T06_Atom_B3": "PASS (PROBE q_cal, V1=3 <= B=3)",
+    "T07_Atom_B4": "PASS (BUDGET at B=3, PROBE at B=4)",
+    "T08_PermutationInvariant": "PASS (24/24 permutations identical)"
+  },
+  "block_B1_small_instances": {
+    "random_instances_UpTo_W6_A4_Q4": 1200,
+    "monotonicity_checks": 1200,
+    "certificates_independently_verified": 8224,
+    "false_guaranteed_verdicts": 0
+  },
+  "block_C_fold_acc": {
+    "five_state_exhaustive_len_0_to_5": 1365,
+    "distinct_myhill_nerode_signatures": 5,
+    "pairwise_separated_pairs": 10,
+    "four_state_possible": false,
+    "differential_random_trials": 200000
+  },
+  "block_D_local_ca_equivalence": {
+    "max_segment_len": 4,
+    "regimes_tested": 7,
+    "total_exhaustive_checks": 32767,
+    "mismatches": 0,
+    "false_guaranteed_verdicts": 0,
+    "verdict_distribution": {
+      "INCONSISTENT": 7,
+      "REPAIR": 3590,
+      "PROBE": 780,
+      "BUDGET": 2000,
+      "NO_PLAN_IN_SCOPE": 26390
+    }
+  }
+}
