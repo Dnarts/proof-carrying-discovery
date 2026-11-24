@@ -24,8 +24,8 @@
       "sha256": "91714ab9c7299cd97128bdb41ba8b2a0188a2ebaa144baa75979582d3f920916"
     },
     "LICENSE": {
-      "bytes": 1061,
-      "sha256": "da2daa5aeb8ede273c81bca7e777f0da9827a4727c1da110fb22a8ce8d18be06"
+      "bytes": 1073,
+      "sha256": "df34da6d0786dbb00d5795b41d63b1dcbc8bc134d01608402edf1894ff99d630"
     },
     "PREPRINT_v1.1.en.md": {
       "bytes": 19299,
@@ -44,8 +44,8 @@
       "sha256": "f1a454a630b4488950e04c04c40b7f84cf9e3847c7392f5788e813fadc66b4f5"
     },
     "README.md": {
-      "bytes": 19283,
-      "sha256": "e18b605f15feb8c07854549a18614231d4a09fb53741bab68c2bd87be4727711"
+      "bytes": 20058,
+      "sha256": "73d9e0b631899bb4be62c1cce23f33d38ac60f55143e33e4dab3d34d5c71c4f9"
     },
     "build_preprints.py": {
       "bytes": 15444,

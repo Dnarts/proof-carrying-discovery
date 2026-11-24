@@ -1,0 +1,264 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\setmainfont{Latin Modern Roman}
+\setmonofont{DejaVu Sans Mono}
+\usepackage[a4paper,margin=21mm,headheight=15pt]{geometry}
+\usepackage{amsmath,amsthm,booktabs,tabularx,xcolor,fancyhdr,xurl,float,unicode-math}
+\setmathfont{Latin Modern Math}
+\usepackage[colorlinks=true,linkcolor=blue!55!black,citecolor=blue!55!black,urlcolor=blue!55!black]{hyperref}
+\definecolor{accent}{RGB}{24,62,112}
+\definecolor{muted}{RGB}{95,105,118}
+\emergencystretch=3em
+\newtheoremstyle{cleanthm}{8pt}{8pt}{\itshape}{}{\bfseries\color{accent}}{.}{.5em}{}
+\theoremstyle{cleanthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{definition}{Definition}[section]
+\newtheorem{remark}[theorem]{Remark}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}Observe, Change the Representation, or Act (v2.6.1, corrected)}
+\fancyhead[R]{\small\color{muted}A. Strand}
+\fancyfoot[C]{\small\thepage}
+\DeclareMathOperator{\RepairReach}{RepairReach}
+\DeclareMathOperator{\obs}{obs}
+\DeclareMathOperator{\Gain}{Gain}
+\DeclareRobustCommand{\id}[1]{\allowbreak\nolinkurl{#1}\allowbreak}
+\hypersetup{pdftitle={Observe, Change the Representation, or Act: Certified Strategy Selection under Memory, Budget, and Time Constraints},pdfauthor={Aleksandr Strand}}
+\begin{document}
+
+\begin{center}
+{\LARGE\bfseries Observe, Change the Representation, or Act:\\[3pt]
+Certified Strategy Selection under Memory, Budget, and Time Constraints}\\[8pt]
+{\large\color{muted} Separating Informational, Structural, and Causal--Temporal Obstacles for a Bounded Observer}\\[10pt]
+{\normalsize Aleksandr Strand}\\[3pt]
+{\small\color{muted} 24 November 2026 $\cdot$ Preprint v2.6.1, corrected edition $\cdot$ Formalization, verification in Lean~4.36.0 (27/27), and Python reference implementation}
+\end{center}
+
+\begin{abstract}
+\noindent
+Consider an agent or control system that needs to identify how its environment works or prevent a failure in it, but reaches an impasse. The failure may have one of four fundamentally different causes: (1)~there is not enough data, so another question must be asked within the current model; (2)~the descriptive language or memory itself is too limited, so no new observations will help until the system switches, for example, from a stack to a queue; (3)~the observation window is blind, so that two different world states yield identical sensor readings, requiring either a new observation channel (not to be confused with uninformative noise) or an active intervention in the environment; (4)~physical time is running out: while the system waits for new data, the environment evolves and the window for safe intervention closes. An ordinary search algorithm does not distinguish these four situations. When the language lacks expressive power, it exhausts the budget on repeated probes; when resources time out, it needlessly complicates the model; and when transferring experience to a new task, it applies old invariants even where the physical background has changed.
+
+This work develops and machine-verifies a unified theory of how a bounded observer can rigorously distinguish these obstacles and select an admissible action appropriate to the cause of the impasse. First, we formalize three coordinates of environmental accessibility---expressibility in the current language ($\mathcal X$), distinguishability through a passive observation window ($\mathcal D$), and operational identifiability through intervention ($\mathcal J$)---and prove their full separation in a single model. Second, we prove an unconditional separation between streaming queue memory (FIFO) and the specified family of stack evaluators (LIFO) of arbitrary capacity on words of multiple symbols, and construct a computable detector of spurious sensor extensions that rejects sensors providing no new distinguishing information. Third, six elementary steps---probing, language escalation, sensor escalation, surgical intervention, stochastic rejection based on $e$-values, and memory transfer---are unified in one controller with a five-dimensional vector budget and privilege separation: a resource timeout without a structural certificate is provably blocked and cannot trigger spurious model escalation. Fourth, Rule~110 examples connect memory transfer and action selection to the dynamics of the environment. The transfer check accepts the token for a port model with clamped neighbors when the transfer assumptions are supplied in the environment record. This model is distinct from observation on the freely evolving ether ring. In a separate example of causal horizon closure ($t^*=3,\ \Delta t=2$), the controller selects immediate repair rather than waiting for the probe. All 27 theorems were checked by the Lean~4.36.0 kernel without external libraries (\id{exit 0}, 0~\id{sorryAx}, 0~\id{native_decide}; 10 use no axioms, and 17 use only the standard axioms \id{propext}, \id{Classical.choice}, and \id{Quot.sound}); the Python~3 reference package reproduces finite validation examples.
+\end{abstract}
+
+\section{Problem statement: Four kinds of impasse under bounded observation}
+When a research program or autonomous controller operates in a partially observable environment with limited resources, every halt looks the same from the outside: the current goal has not been achieved. Yet this outward failure can conceal four orthogonal obstacles requiring quite different responses~\cite{reiter1987,pearl2009,wolpert2008}:
+\begin{enumerate}
+\item \textbf{Informational uncertainty within an adequate model.} The current hypothesis language $H$ already contains the correct description, and the current sensor port $\Pi$ can distinguish competing worlds in $W$, but another probe $q$ is needed to narrow down $W$.
+\item \textbf{Structural limitations of the representation ($\neg\mathcal{X}$).} The target law of the environment cannot be expressed in the current memory class $H$ (for example, the environment copies a stream in FIFO order while the observer searches among finite automata or LIFO pushdown stacks). In this regime, additional probes or sensors only consume budget: a move to a richer language tier $H\mapsto H'$ is required.
+\item \textbf{Blindness of the passive observation port ($\neg\mathcal{D}$) or a mechanism collision ($\neg\mathcal{J}$).} The language $H$ is rich enough, but worlds $w_1,w_2\in W$ with opposite values of the target property produce identical readings at the current port, $\Pi(w_1)=\Pi(w_2)$. Changing $H$ is of no use: one must add a nontrivial sensor $\Pi\mapsto\Pi'$ or apply an active surgical intervention $do(a)$ that separates the hidden mechanisms.
+\item \textbf{Closure of the causal--temporal horizon.} In an evolving environment $T:\Omega\to\Omega$ with finite propagation speed, waiting $\Delta t>0$ ticks for a probe makes it possible to identify the world completely ($|W'_{q,y}|=1$). By $t+\Delta t$, however, the actuator's operating region already falls outside the target's backward light cone for deadline $t^*$. Trying to find out for certain first and act afterward thus leads to an irreversible failure: the controller must act immediately at $t=0$.
+\end{enumerate}
+This work aims to bring the diagnosis of all four obstacles and the rules for selecting a response into one formal system with machine-checkable certificates in Lean~4.36.0.
+
+\section{Three coordinates of environmental accessibility and their full separation}
+Fix the epistemic state of the observer $E=\langle W,H,\mathrm{eval}_H,\Pi,A,\mathrm{apply}_A,\Phi^*\rangle$, where $W$ is a finite list of compatible worlds, $H$ is the current class of available hypotheses with semantics $\mathrm{eval}_H:H\to\Omega\to\mathrm{Bool}$, $\Pi:\Omega\to\mathcal O$ is the passive observation port, $A$ is the set of available interventions acting via $\mathrm{apply}_A:A\to\Omega\to\Omega$, and $\Phi^*:\Omega\to\mathrm{Bool}$ is the target invariant.
+
+\begin{definition}[Three-coordinate profile of epistemic accessibility $\mathcal E(E)$]
+Define three Boolean coordinates of $E$:
+\begin{align}
+\mathcal X_E\ \text{(expressibility)} &:\iff \exists h\in H,\ \forall w\in W:\ \mathrm{eval}_H(h,w)=\Phi^*(w),\\
+\mathcal D_E\ \text{(distinguishability)} &:\iff \forall w_1,w_2\in W:\ \Phi^*(w_1)\ne\Phi^*(w_2)\implies\Pi(w_1)\ne\Pi(w_2),\\
+\mathcal J_E\ \text{(identifiability)} &:\iff \mathcal X_E\land\mathcal D_E\land
+\Bigl(\forall w_1,w_2\in W:\ \Phi^*(w_1)\ne\Phi^*(w_2)\nonumber\\
+&\qquad\implies \exists a\in A:\ \Pi(\mathrm{apply}_A(a,w_1))\ne\Pi(\mathrm{apply}_A(a,w_2))\Bigr).
+\end{align}
+\end{definition}
+Earlier versions checked the independence of $\mathcal X_E$, $\mathcal D_E$, and $\mathcal J_E$ in separate modules with different type signatures. In the unified module \id{certified_strategy_selection_v2_6_1.lean}, we construct four states $E_1,E_2,E_3,E_4$ over the same underlying world space $\Omega=\mathrm{Bool}$ and prove a full separation theorem.
+
+\begin{theorem}[Full separation and inclusions of the three accessibility coordinates]
+\label{thm:h1_separation}
+In a single model over $\Omega=\mathrm{Bool}$ (\id{H1_three_coordinate_strict_separation}):
+\begin{enumerate}
+\item The inclusions $\mathcal J_E\implies\mathcal X_E$ and $\mathcal J_E\implies\mathcal D_E$ are strict (\id{H1_identifiable_implies_expressible}, \id{H1_identifiable_implies_distinguishable}).
+\item Expressibility does not imply distinguishability ($\mathcal X_{E_1}\land\neg\mathcal D_{E_1}$, \id{H1_E1_expressible_not_distinguishable}): with a rich language $H$ and a blind port $\Pi(w)=\mathrm{const}$, the goal is expressible, but the worlds are indistinguishable.
+\item Distinguishability does not imply expressibility ($\mathcal D_{E_2}\land\neg\mathcal X_{E_2}$, \id{H1_E2_distinguishable_not_expressible}): the exact port $\Pi(w)=w$ separates all worlds, but the degenerate hypothesis class $H=\{h_0\}$ with $\mathrm{eval}_H(h_0,w)=\mathsf{false}$ cannot express $\Phi^*(w)=w$.
+\item Joint expressibility and passive distinguishability do not imply operational identifiability ($\mathcal X_{E_3}\land\mathcal D_{E_3}\land\neg\mathcal J_{E_3}$, \id{H1_E3_expr_and_dist_not_identifiable}) if the available interventions destroy the observable distinction ($\mathrm{apply}_A(a,w)=\mathsf{false}$).
+\end{enumerate}
+\end{theorem}
+
+\section{Separation of queue memory from stacks of arbitrary depth and a detector of spurious sensors}
+For a language change $H\mapsto H'$ and a port extension $\Pi\mapsto\Pi'$ to rest on computable certificates rather than heuristics, we must answer two constructive questions: (a)~how to prove that the task genuinely requires moving from stack (LIFO) to queue (FIFO) memory on multisymbol streams, and (b)~how to distinguish a useful sensor extension algorithmically from a spurious one (noise or duplication).
+
+\subsection{A queue automaton on multisymbol words versus a stack of arbitrary capacity}
+Consider the three-symbol alphabet $\Sigma=\{\mathtt{0},\mathtt{1},\mathtt{\#}\}$ and stream words $u\mathtt{\#}v$ with $u,v\in\{\mathtt{0},\mathtt{1}\}^*$. In pure Lean~4 Core, define two operational automata with a buffer $\mathrm{buf}\in\mathrm{List\ Bool}$, bit inversion parameter $\mathrm{inv}\in\mathrm{Bool}$, and buffer capacity $\mathrm{cap}\in\mathbb N$:
+\begin{itemize}
+\item \textbf{Queue automaton $\mathrm{evalQueue}(\mathrm{inv},\mathrm{cap},w)$ (tier $L_4$, FIFO):} before the separator $\mathtt{\#}$, it appends bits to the \emph{end} of the list, $\mathrm{buf}\mapsto\mathrm{buf}\mathbin{+\!+}[b]$ (provided $|\mathrm{buf}|<\mathrm{cap}$); after $\mathtt{\#}$, it takes the first element from the \emph{front} of the list ($h::\mathrm{tl}$) and checks $b=h\oplus\mathrm{inv}$.
+\item \textbf{Stack automaton $\mathrm{evalStack}(\mathrm{inv},\mathrm{cap},w)$ (tier $L_3$, LIFO):} before $\mathtt{\#}$, it pushes bits onto the \emph{top} of the stack, $\mathrm{buf}\mapsto b::\mathrm{buf}$; after $\mathtt{\#}$, it pops a bit from the same end ($h::\mathrm{tl}$) and checks $b=h\oplus\mathrm{inv}$.
+\end{itemize}
+The test words $w_{00}=\mathtt{00\#00}$ (a symmetric repetition) and $w_{01}=\mathtt{01\#01}$ (an asymmetric FIFO stream copy) expose a fundamental obstacle for any such stack. After reading $\mathtt{01\#}$, the bit on top of the LIFO stack is $\mathtt{1}$, whereas the first symbol after the separator in $w_{01}$ is $\mathtt{0}$. A non-inverting stack ($\mathrm{inv}=\mathsf{false}$) rejects $w_{01}$ at every capacity $\mathrm{cap}\in\mathbb N$; an inverting stack ($\mathrm{inv}=\mathsf{true}$) rejects the symmetric word $w_{00}=\mathtt{00\#00}$ at every capacity $\mathrm{cap}\in\mathbb N$.
+
+\begin{theorem}[Unconditional separation of a queue from a stack of arbitrary depth]
+\label{thm:h2_queue_vs_stack}
+The queue automaton $\mathrm{evalQueue}(\mathsf{false},3,\cdot)$ accepts the stream copies $w_{00}=\mathtt{00\#00}$, $w_{01}=\mathtt{01\#01}$, and $w_{101}=\mathtt{101\#101}$ and rejects the reversal $w_{\mathrm{rev}}=\mathtt{01\#10}$ (\id{H2_queue_recognizes_fifo_copy}). For \textbf{every} Boolean transformation $\mathrm{inv}\in\{\mathsf{false},\mathsf{true}\}$ and \textbf{every} stack capacity $\mathrm{cap}\in\mathbb N$ (\id{H2_gate13_queue_separates_from_arbitrary_stack}):
+\begin{equation}
+  \neg\begin{aligned}[t]
+    \Bigl(&\mathrm{evalStack}(\mathrm{inv},\mathrm{cap},w_{00}) = \mathrm{evalQueue}(\mathsf{false},3,w_{00}) \\
+          &\land\; \mathrm{evalStack}(\mathrm{inv},\mathrm{cap},w_{01}) = \mathrm{evalQueue}(\mathsf{false},3,w_{01})\Bigr).
+  \end{aligned}
+\end{equation}
+\end{theorem}
+Theorem~\ref{thm:h2_queue_vs_stack} certifies the move to queue tier $L_4$ without postulated truth tables or artificial bounds on the stack depth $\mathrm{cap}$.
+
+\subsection{A computable detector of spurious sensor extensions}
+Let the base observation port return $\Pi_{\mathrm{base}}:Q\to\Omega\to\mathcal O_1$, and let the candidate extended port return a pair, $\Pi_{\mathrm{ext}}:Q\to\Omega\to\mathcal O_1\times\mathcal O_2$. The extension is \emph{spurious} ($\mathrm{IsSpuriousSemantic}$) if, over the finite basis of probes $Q$ and active worlds $W$, the first component of $\Pi_{\mathrm{ext}}$ agrees with $\Pi_{\mathrm{base}}$ and any split $\Pi_{\mathrm{ext}}(q,w_1)\ne\Pi_{\mathrm{ext}}(q,w_2)$ occurs only for pairs $(w_1,w_2)\in W\times W$ that the base port \emph{already} distinguishes, $\Pi_{\mathrm{base}}(q,w_1)\ne\Pi_{\mathrm{base}}(q,w_2)$.
+Instead of postulating a universal quantifier in a data structure, we define a pure Boolean function $\mathrm{checkSpuriousFin}(W,Q,\Pi_{\mathrm{base}},\Pi_{\mathrm{ext}})\in\mathrm{Bool}$ that enumerates $Q\times W\times W$.
+
+\begin{theorem}[Soundness of the computable detector of spurious sensors]
+\label{thm:h3_spurious}
+For any finite lists of worlds $W$ and probes $Q$ with decidable equality of responses (\id{H3_checkSpuriousFin_sound}):
+\begin{equation}
+  \mathrm{checkSpuriousFin}(W,Q,\Pi_{\mathrm{base}},\Pi_{\mathrm{ext}}) = \mathsf{true} \implies \mathrm{IsSpuriousSemantic}(W,Q,\Pi_{\mathrm{base}},\Pi_{\mathrm{ext}}).
+\end{equation}
+On a three-tier testbed, the detector correctly rejects a deterministic hash that duplicates parity ($\mathsf{true}$) and admits a hidden high-bit sensor ($\mathsf{false}$; \id{H3_detector_separates_spurious_from_genuine}).
+\end{theorem}
+
+\section{A unified controller with a five-dimensional budget and privilege separation}
+We now unify all admissible observer operations in a single inductive transition relation $\mathrm{LicensedStep}(\mathcal T,s,s')$, parameterized by a frozen positive cost schedule $\mathcal T=(c_q,c_s,c_p,c_v,c_m)>0$ with the memory amortization condition $c_m<c_s$. Controller state $s\in\mathrm{UnifiedState}$ stores the number of active worlds $|W_s|$, the number of active hypotheses $|H_s|$, the rank of the current language tier $\mathrm{tier}(s)\in\{L_0,\dots,L_4\}$, the sensor port rank $\mathrm{portRank}(s)$, the intervention rank $\mathrm{intRank}(s)$, the count of accumulated certificates $\mathrm{knowledgeCount}(s)$, the five-dimensional vector of spent resources $\mathrm{spent}(s)\in\mathbb N^5$, and the vector budget ceiling $B\in\mathbb N^5$.
+
+The controller admits exactly six transition constructors, each guarded by its own structural certificate and a componentwise vector budget check $\mathrm{spent}(s')\le B$:
+\begin{enumerate}
+\item \id{probe}: an informational probe that requires strict shrinkage of the world set ($0<|W_{s'}|<|W_s|$) and charges $c_q$.
+\item \id{escalateLang}: raises the language tier, $\mathrm{tier}(s)<\mathrm{tier}(s')$, requires a structural signal of certified unsatisfiability, $\mathrm{hasStructCert}(\mathrm{sig})=\mathsf{true}$, and charges $c_s$.
+\item \id{escalatePort}: extends the sensor port, $\mathrm{portRank}(s')=\mathrm{portRank}(s)+1$. It requires both a structural certificate of the obstacle and a negative verdict from the spuriousness detector ($\mathrm{isSpurious}=\mathsf{false}$ from Theorem~\ref{thm:h3_spurious}), and charges $c_p$.
+\item \id{intervene}: an active surgical intervention requiring a certificate $\mathrm{Gate15Cert}$ (a passive observation collision, orthogonality of the control mask $K(do(I)(x))=K(x)$, and a nonzero commutator $[T_L,T_R]\ne0$); it charges $c_v$.
+\item \id{stochasticReject}: stochastic rejection of hypotheses by a sequential $e$-value. It requires $\mathrm{Gate16Cert}$ (explicit positivity of the denominator $0<\mathrm{den}$ and of the total mass $0<\mathrm{totalMass}$, a uniform gap bound $\mathrm{hasGapBound}=\mathsf{true}$, and crossing the threshold $\mathrm{eValueNum}\ge\alpha^{-1}\cdot\mathrm{eValueDen}$), and charges $c_q$.
+\item \id{recoverMemory}: restores a previously certified representation from revision memory when the transfer precondition $\mathrm{precondOk}=\mathsf{true}$ holds. It charges the reduced cost $c_m<c_s$.
+\end{enumerate}
+
+\begin{theorem}[Soundness, privilege separation, and strict progress of the unified controller]
+\label{thm:h4_h7_controller}
+For any positive cost schedule $\mathcal T$ and licensed transition $\mathrm{LicensedStep}(\mathcal T,s,s')$:
+\begin{enumerate}
+\item \textbf{Vector budget invariant} (\id{H4_licensed_step_preserves_vector_budget}): $\mathrm{spent}(s')\le B$ holds in all five coordinates $(c_q,c_s,c_p,c_v,c_m)$.
+\item \textbf{Privilege separation} (\id{H4_privilege_separation_blocks_timeout_escalation}): a resource timeout signal $\mathrm{resourceTimeout}$ without structural evidence $\mathrm{certifiedUnsat}$ never passes the guard $\mathrm{hasStructCert}=\mathsf{true}$ and cannot trigger \id{escalateLang} or \id{escalatePort}.
+\item \textbf{Blocking spurious ports and invalid certificates} (\id{H5_spurious_port_blocked}, \id{H6_gate15_and_gate16_certificates_enforced}): if $\mathrm{isSpurious}=\mathsf{true}$, the port-extension gate returns $\mathsf{none}$, while \id{intervene} and \id{stochasticReject} enforce all algebraic and probabilistic guards.
+\item \textbf{Strict monotonic progress} (\id{H7_licensed_step_strict_epistemic_progress}): every step strictly increases the aggregate epistemic progress index $\mathcal P(s)=\mathrm{tier}(s)+\mathrm{portRank}(s)+\mathrm{intRank}(s)+\mathrm{knowledgeCount}(s)$, excluding degenerate always-UNKNOWN strategies and loops over spurious sensors.
+\end{enumerate}
+\end{theorem}
+
+\section{Algorithmic synthesis of distinguishing features and typed transfer memory}
+
+\subsection{An algorithmic operator for selecting a distinguishing axis}
+Suppose candidates $d\in M$ from different domains have $k$-bit structural feature signatures $\mathrm{features}(d):\mathrm{Fin}\,k\to\mathrm{Bool}$. Define three operators without human input in constructing the probe menu: feature projection $\mathrm{projFeature}(a,d)=d.\mathrm{features}(a)$, an axial split check
+\begin{equation}
+  \mathrm{isAxialSplit}(M,a):\iff
+  \bigl(\exists d_0\in M:\ \neg\mathrm{projFeature}(a,d_0)\bigr)
+  \land\bigl(\exists d_1\in M:\ \mathrm{projFeature}(a,d_1)\bigr),
+\end{equation}
+and a probe-freezing operator $\mathrm{freezeAxisQuery}(a,M,b)=\{d\in M\mid\mathrm{projFeature}(a,d)=b\}$ with guaranteed minimax gain
+\begin{equation}
+  \mathrm{minimaxGain}(M,a):=|M|-\max_{b\in\{\mathsf{false},\mathsf{true}\}}\bigl|\mathrm{freezeAxisQuery}(a,M,b)\bigr|.
+\end{equation}
+
+\begin{theorem}[Guaranteed minimax gain in algorithmic probe synthesis]
+\label{thm:h8_metasynset}
+For any finite list $M$ of cross-domain objects and structural axis $a\in\mathrm{Fin}\,k$:
+\begin{enumerate}
+\item (\id{H8_partition_length_conservation}) The branch sizes add up to the original list size: $|\mathrm{freezeAxisQuery}(a,M,\mathsf{false})|+|\mathrm{freezeAxisQuery}(a,M,\mathsf{true})|=|M|$.
+\item (\id{H8_algorithmic_metasynset_minimax_gain_ge_1}) If $\mathrm{isAxialSplit}(M,a)=\mathsf{true}$, then both branches strictly shrink the candidate list and $\mathrm{minimaxGain}(M,a)\ge1$.
+\end{enumerate}
+\end{theorem}
+
+\subsection{Typed transfer memory and the background dichotomy in Rule~110}
+A revision-memory token $\tau\in\mathrm{RevisionToken}$ stores its domain of origin, port width $\mathrm{portWidth}$, permitted number of external seam inputs $\mathrm{requiredSeamInputs}$, residual gap bound $\Delta(T)$, cost of discovery from scratch $c_s$, and transfer cost $c_m$. When moving to a new environment $E_{\mathrm{env}}$, the function $\mathrm{verifyTransferPrecond}(\tau,E_{\mathrm{env}})$ checks that port widths match, that the port is autonomous on the new background ($\mathrm{isPortAutonomous}=\mathsf{true}$), that the number of external seam inputs does not exceed the bound ($\mathrm{actualSeamInputs}\le\mathrm{requiredSeamInputs}$), that the gap is within tolerance, and that $c_m<c_s$.
+
+To show why checking the physical background matters for safe transfer, consider the four-cell observation window $W=\{3,4,5,6\}$ on a 14-cell ring of the Rule~110 cellular automaton ($f_{110}(l,c,r)=c\oplus r\oplus cr\oplus lcr$):
+\begin{itemize}
+\item In the \textbf{clamped-boundary model}, $x_2=1$ and $x_7=0$ are held fixed at every tick by definition. Port $W$ then evolves under the closed map $\mathrm{etherAutomaton}:\mathrm{Bit4}\to\mathrm{Bit4}$ without external inputs. This is a model boundary condition, not a property of the freely evolving ether ring.
+\item On the \textbf{freely evolving 14-cell ether ring} initialized at $\mathtt{00010011011111}$ (indices start at 0 on the left), the pair $(x_2,x_7)$ varies. Direct calculation gives the following port orbit:
+\[
+\mathtt{1001}\to\mathtt{1011}\to\mathtt{1110}\to\mathtt{0010}\to
+\mathtt{0110}\to\mathtt{1111}\to\mathtt{1000}\to\mathtt{1001}.
+\]
+The seven distinct port words give an autonomous lookup update only on this orbit. In particular, the free ring gives $\mathtt{1011}\to\mathtt{1110}$, whereas the clamped map gives $\mathtt{1011}\to\mathtt{1111}$. Thus the clamped detector would wrongly flag that nominal free-ring transition. This calculation is not a new Lean theorem and does not establish autonomy under arbitrary perturbations.
+\item In the \textbf{zero-background check}, varying the right neighbor $x_7\in\{0,1\}$ while holding the other inputs at zero changes cell~6 after one tick. This is a checked witness of non-autonomy. The value $\mathrm{actualSeamInputs}=4$ is supplied in the environment record for the transfer test; the test does not prove that this seam-input count is minimal.
+\end{itemize}
+
+\begin{theorem}[Soundness of memory transfer, stream amortization, and blocking unsound transfer]
+\label{thm:h9_h11_memory}
+For the token recovery operator $\mathrm{recoverToken}(\mathrm{mem},E_{\mathrm{env}})$:
+\begin{enumerate}
+\item (\id{H9_recoverToken_preserves_provenance_and_gap}) Any recovered token $\tau$ belongs to memory $\mathrm{mem}$, preserves the port width, and satisfies all constraints on autonomy, seam input count, and the residual gap $\Delta(T)$.
+\item (\id{H10_memory_transfer_strict_stream_amortization}) On any stream of $k\ge2$ compatible episodes, total costs with memory are strictly lower than costs without memory:
+\begin{equation}
+c_s+(k-1)c_m<k\cdot c_s.
+\end{equation}
+\item (\id{H11_unsound_transfer_blocked_on_r110_zero_bg_and_d4_shortcut}) For the supplied record \id{envR110EtherRing} with $\mathrm{isPortAutonomous}=\mathsf{true}$ and $\mathrm{actualSeamInputs}=0$, the check returns \id{some r110EtherPortToken}. It returns \id{none} for the other two records (the Rule~110 zero background and graph $D_4$ with a shortcut). H11 checks the outcome on those records; it does not derive autonomy of the free ether ring.
+\end{enumerate}
+\end{theorem}
+
+\section{Synthesis of epistemic revision and the repair horizon}
+
+The final step ties the selection of epistemic actions to physical time in an evolving environment $T:\Omega\to\Omega$. Suppose that a target invariant $\mathcal I:\Omega\to\mathrm{Bool}$ must hold at deadline $t^*$, and a local actuator has a set of interventions $A_{\mathrm{loc}}$. As shown in the theory of dynamic repair, the set of interventions that can physically achieve the target by the deadline when applied at $t\le t^*$ is
+\begin{equation}
+  \RepairReach(W,t,t^*) = \bigl\{\, a\in A_{\mathrm{loc}} \;\big|\; \forall w\in W:\ \mathcal{I}\bigl(T^{t^*-t}(a(w))\bigr)=\mathsf{true} \,\bigr\}.
+\end{equation}
+
+In the static controller, when observations collide at the passive port ($\Pi(w_0)=\Pi(w_1)$), a natural step is to run a probe with a delay $\Delta t>0$ that separates the worlds along the evolved branches $T^{\Delta t}(W_{q,y})$. In an environment with finite signal propagation speed, however, waiting $\Delta t$ ticks can make $\RepairReach(T^{\Delta t}(W_{q,y}),\,t+\Delta t,\,t^*)$ empty for every branch $y$.
+
+For nonempty $W$, the selector \id{selectCausalEpistemicAction} checks whether waiting meets the deadline and leaves a repair available on every reachable branch. If waiting fails this check and a common intervention $a^*\in\RepairReach(W,t,t^*)$ is available now, the selector chooses immediate repair. The selector itself does not compare information gain or the costs of competing strategies.
+
+\begin{theorem}[Causal--epistemic override on a six-cell Rule~110 ring and subject anomaly detection]
+\label{thm:h12_synthesis}
+On a six-cell Rule~110 ring, take the world pair $W=\{\omega_0=(1,0,0,0,1,0),\ \omega_1=(1,0,0,1,1,0)\}$, deadline $t^*=3$, a passive port at cell~1 with delay $\Delta t=2$, an actuator at cell~2, and the target $w_0(3)=0$:
+\begin{enumerate}
+\item (\id{H12_causal_epistemic_horizon_synthesis}) At tick $t=0$, the worlds are indistinguishable through the passive port ($\Pi_1(\omega_0)=\Pi_1(\omega_1)=\mathsf{false}$), but are fully identified after waiting $\Delta t=2$ ($\Pi_1(T^2\omega_0)=\mathsf{false}$, $\Pi_1(T^2\omega_1)=\mathsf{true}$). Nevertheless, by tick $t=2$ the repair horizon has closed on both branches ($\RepairReach=\varnothing$). At $t=0$, \id{set2To1} saves both worlds, and the integrated controller selects \id{immediateSurgicalRepair set2To1}.
+\item (\id{H12_rule110_algebraic_xor_gate}, \id{H12_temporal_subject_period2_and_anomaly_trigger}) With a left neighbor set to one, the local Rule~110 update implements the temporal subject's exact algebraic gate $f_{110}(1,z,k)=z\oplus k$. In the four-bit clamped model, state $\mathtt{0111}$ returns to itself in two ticks, and its nominal first transition does not raise an anomaly signal ($\mathrm{subjectDetectsAnomaly}=\mathsf{false}$), while supplying $\mathtt{1111}$ instead of the expected next state raises the anomaly flag ($\mathsf{true}$), but this flag alone does not certify that a repair is admissible or will succeed.
+\end{enumerate}
+\end{theorem}
+
+\begin{remark}[Exact scope of the $H_{12}$ theorems and relation to v1.5]
+\label{rem:h12_scope}
+Theorem \id{H12_temporal_subject_period2_and_anomaly_trigger} formally establishes that the four-bit clamped model at state $\mathtt{0111}$ returns in two ticks ($\mathrm{etherAutomaton}^2(\mathtt{0111})=\mathtt{0111}$, this does not describe the free ether orbit), and that the anomaly flag is raised immediately on $\mathtt{1111}$. Theorem \id{H12_causal_epistemic_horizon_synthesis} formalizes horizon closure at deadline $t^*=3$ ($\Delta t=2$). The comparison with deadline $t^*=4$ (where waiting preserves $\RepairReach\ne\varnothing$ and probing becomes necessary), the general equivalence of $V_{\mathrm{dyn}}$ to plan trees, and the parametric chiral boundary $3m\to2m$ on the infinite lattice $\mathbb Z$ are treated in the companion module \id{causal_dynamic_repair_v1_5_fixed.lean}.
+\end{remark}
+
+\section{Machine verification in Lean~4.36.0, reproducibility, and limitations}
+
+All definitions and all 27 theorems in Sections~2--6 are formalized in a single self-contained file, \id{certified_strategy_selection_v2_6_1.lean} (1,253 lines, 59,667 bytes, plain LF with no BOM, no external imports or Mathlib, namespace \id{CertifiedStrategySelectionV26}; SHA-256 \id{4c76155e475a7964}\ldots\id{f9cf9c77}). The module was compiled and checked by the Lean~4.36.0 kernel (\id{arm64-apple-darwin24.6.0}, commit \id{611c117b}): \id{exit 0}, no errors or warnings, no \id{sorryAx}, and no \id{Lean.ofReduceBool} (\id{native_decide} is not used). Table~\ref{tab:axioms_v26} gives the complete distribution of axioms recorded in \id{V2_6_1_VERIFICATION.log}.
+
+\begin{table}[H]
+\centering
+\caption{Observed \texttt{\#print axioms} profile for all 27~theorems in \texttt{certified\_strategy\_selection\_v2\_6\_1.lean} (Lean~4.36.0, \texttt{exit 0}, 0~\texttt{sorryAx}, 0~\texttt{native\_decide}).}
+\label{tab:axioms_v26}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}p{.31\linewidth} >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Profile: \texttt{\#print axioms}} & \textbf{Verified theorems (27/27)} \\
+\midrule
+No axioms (10) & \texttt{H1\_identifiable\_\allowbreak implies\_\allowbreak expressible}, \texttt{H1\_identifiable\_\allowbreak implies\_\allowbreak distinguishable}, \texttt{H2\_queue\_\allowbreak recognizes\_\allowbreak fifo\_\allowbreak copy}, \texttt{H2\_stack\_\allowbreak recognizes\_\allowbreak lifo\_\allowbreak palindrome}, \texttt{H3\_detector\_\allowbreak separates\_\allowbreak spurious\_\allowbreak from\_\allowbreak genuine}, \texttt{H8\_cross\_\allowbreak domain\_\allowbreak instance\_\allowbreak verified}, \texttt{H11\_unsound\_\allowbreak transfer\_\allowbreak blocked\_\allowbreak on\_\allowbreak r110\_\allowbreak zero\_\allowbreak bg\_\allowbreak and\_\allowbreak d4\_\allowbreak shortcut}, \texttt{H12\_causal\_\allowbreak epistemic\_\allowbreak horizon\_\allowbreak synthesis}, \texttt{H12\_rule110\_\allowbreak algebraic\_\allowbreak xor\_\allowbreak gate}, \texttt{H12\_temporal\_\allowbreak subject\_\allowbreak period2\_\allowbreak and\_\allowbreak anomaly\_\allowbreak trigger} \\
+\texttt{[propext]} (6) & \texttt{H1\_E2\_distinguishable\_\allowbreak not\_\allowbreak expressible}, \texttt{H3\_checkSpuriousFin\_sound}, \texttt{H4\_licensed\_\allowbreak step\_\allowbreak preserves\_\allowbreak vector\_\allowbreak budget}, \texttt{H4\_privilege\_\allowbreak separation\_\allowbreak blocks\_\allowbreak timeout\_\allowbreak escalation}, \texttt{H5\_spurious\_\allowbreak port\_\allowbreak blocked}, \texttt{H6\_gate15\_\allowbreak and\_\allowbreak gate16\_\allowbreak certificates\_\allowbreak enforced} \\
+\texttt{[propext, Quot.sound]} (7) & \texttt{H1\_E1\_expressible\_\allowbreak not\_\allowbreak distinguishable}, \texttt{H1\_E3\_expr\_\allowbreak and\_\allowbreak dist\_\allowbreak not\_\allowbreak identifiable}, \texttt{H1\_three\_\allowbreak coordinate\_\allowbreak strict\_\allowbreak separation}, \texttt{H2\_stack\_\allowbreak inv\_\allowbreak false\_\allowbreak rejects\_\allowbreak w01}, \texttt{H2\_stack\_\allowbreak inv\_\allowbreak true\_\allowbreak rejects\_\allowbreak w00}, \texttt{H2\_gate13\_\allowbreak queue\_\allowbreak separates\_\allowbreak from\_\allowbreak arbitrary\_\allowbreak stack}, \texttt{H8\_partition\_\allowbreak length\_\allowbreak conservation} \\
+\texttt{[propext, Classical.choice, Quot.sound]} (4) & \texttt{H7\_licensed\_\allowbreak step\_\allowbreak strict\_\allowbreak epistemic\_\allowbreak progress}, \texttt{H8\_algorithmic\_\allowbreak metasynset\_\allowbreak minimax\_\allowbreak gain\_\allowbreak ge\_1}, \texttt{H9\_recoverToken\_\allowbreak preserves\_\allowbreak provenance\_\allowbreak and\_\allowbreak gap}, \texttt{H10\_memory\_\allowbreak transfer\_\allowbreak strict\_\allowbreak stream\_\allowbreak amortization} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+The accompanying Python~3 reference package, which uses only the standard library (\id{certified_strategy_selection_v2_6.py}, SHA-256 \id{3dbdf0e5}\ldots, with an explicit nonemptiness guard $W\ne\varnothing$ in \id{repair_reach}; and \id{test_v2_6.py}, SHA-256 \id{963d89ff}\ldots), runs all 12 witness scenarios and the negative tests for fail-closed auditor \id{S0} (rejection of forged certificates with $\mathrm{den}=0$, $\mathrm{isSpurious}=\mathsf{true}$, a nonorthogonal mask, or a $\mathrm{resourceTimeout}$ signal). It produces the deterministic report \id{v2_6_witness_report.json} (SHA-256 \id{2ddf09ec}\ldots).
+
+\paragraph{Limitations.}
+The proved theorems concern a finite list of active worlds $W$ and a finite basis of probes $Q$ at each discrete decision time, except that Theorem~\ref{thm:h2_queue_vs_stack} quantifies over all $\mathrm{cap}\in\mathbb N$, and Theorems~\ref{thm:h8_metasynset}--\ref{thm:h9_h11_memory} quantify universally over the candidate list length $|M|$ and episode-stream length $k\ge2$. More specifically: (1)~Theorem~\ref{thm:h2_queue_vs_stack} separates the queue evaluator $\mathrm{evalQueue}$ from the specified one-parameter stack evaluator $\mathrm{evalStack}(\mathrm{inv},\mathrm{cap})$ at arbitrary capacity, not from an arbitrary pushdown automaton (PDA) with arbitrary finite control; (2)~Theorem~\ref{thm:h4_h7_controller} guarantees componentwise preservation of the five-dimensional budget $\mathrm{spent}(s')\le B$ for \id{LicensedStep}, but does not solve a multiobjective Pareto optimization problem over incomparable budgets; (3)~as noted in Remark~\ref{rem:h12_scope}, $H_{12}$ in this module treats the fixed deadline $t^*=3$ and the two-step cycle in the clamped model from state $\mathtt{0111}$, whereas the contrast with $t^*=4$ and the chiral bounds on $\mathbb Z$ are in \id{causal_dynamic_repair_v1_5_fixed.lean}. Stochastic dynamics of the environment $T$ itself and continuous observation spaces are outside this formalization and are topics for the next stage of the program.
+
+\begin{thebibliography}{9}
+\small\setlength{\itemsep}{2pt}
+
+\bibitem{cook2004}
+M.\,Cook. Universality in Elementary Cellular Automata. \emph{Complex Systems}, 15(1):1--40, 2004.
+
+\bibitem{martinez2006}
+G.\,J.\,Mart\'inez, H.\,V.\,McIntosh, J.\,C.\,Seck-Tuoh-Mora. Gliders in Rule~110. \emph{International Journal of Unconventional Computing}, 2(1):1--49, 2006.
+
+\bibitem{reiter1987}
+R.\,Reiter. \href{https://doi.org/10.1016/0004-3702(87)90062-2}{A Theory of Diagnosis from First Principles}. \emph{Artificial Intelligence}, 32(1):57--95, 1987.
+
+\bibitem{hyafil1976}
+L.\,Hyafil, R.\,L.\,Rivest. \href{https://www.sciencedirect.com/science/article/abs/pii/0020019076900958}{Constructing Optimal Binary Decision Trees Is NP-Complete}. \emph{Information Processing Letters}, 5(1):15--17, 1976.
+
+\bibitem{wolpert2008}
+D.\,H.\,Wolpert. \href{https://doi.org/10.1016/j.physd.2008.03.040}{Physical Limits of Inference}. \emph{Physica D: Nonlinear Phenomena}, 237(9):1257--1281, 2008.
+
+\bibitem{pearl2009}
+J.\,Pearl. \emph{Causality: Models, Reasoning, and Inference}, 2nd ed. Cambridge University Press, 2009.
+
+\end{thebibliography}
+
+\end{document}

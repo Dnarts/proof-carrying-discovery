@@ -1,0 +1,304 @@
+\documentclass[11pt,a4paper]{article}
+% Compile twice with XeLaTeX. Fonts: Noto Serif CJK SC, Noto Sans CJK SC, Noto Mono.
+\usepackage{fontspec}
+\setmainfont{Noto Serif CJK SC}[ItalicFont={Noto Serif CJK SC},ItalicFeatures={FakeSlant=0.15}]
+\setsansfont{Noto Sans CJK SC}
+\setmonofont{Noto Mono}[AutoFakeBold=1.5,AutoFakeSlant=0.15]
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip=0pt plus 0.12em
+\emergencystretch=3em
+\tolerance=1700
+\hfuzz=0.5pt
+\renewcommand{\abstractname}{摘要}
+\renewcommand{\refname}{参考文献}
+\renewcommand{\tablename}{表}
+
+\usepackage[a4paper,top=19mm,bottom=19mm,left=21mm,right=21mm,headheight=14pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,tabularx}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage[colorlinks=true,linkcolor=blue!55!black,citecolor=blue!55!black,urlcolor=blue!55!black]{hyperref}
+
+\definecolor{accent}{RGB}{24,62,112}
+\definecolor{muted}{RGB}{95,105,118}
+\definecolor{boxbg}{RGB}{245,247,250}
+
+\newtheoremstyle{cleanthm}{8pt}{8pt}{\normalfont}{}{\bfseries\color{accent}}{.}{.5em}{}
+\newtheoremstyle{cleandef}{8pt}{8pt}{\normalfont}{}{\bfseries\color{accent}}{.}{.5em}{}
+\theoremstyle{cleanthm}
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{proposition}[theorem]{命题}
+\theoremstyle{cleandef}
+\newtheorem{definition}{定义}[section]
+\newtheorem{example}[theorem]{示例}
+\newtheorem{remark}[theorem]{注}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}观察、改变表征，还是行动？（v2.6.1 修订版）}
+\fancyhead[R]{\small\color{muted}Alexander Strand}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\DeclareMathOperator{\RepairReach}{RepairReach}
+\DeclareMathOperator{\obs}{obs}
+\DeclareMathOperator{\Gain}{Gain}
+
+\hypersetup{
+  pdftitle={观察、改变表征，还是行动？在记忆、预算与时间约束下进行经认证的策略选择},
+  pdfauthor={Alexander Strand},
+  pdflang={zh-CN}
+}
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries 观察、改变表征，还是行动？\\[3pt]
+  在记忆、预算与时间约束下进行经认证的策略选择}\\[8pt]
+  {\large\color{muted} 区分受限观察者面临的信息、结构与因果时间障碍}\\[10pt]
+  {\normalsize Alexander Strand}\\[3pt]
+  {\small\color{muted} 2026年11月24日\,$\cdot$\,预印本 v2.6.1 修订版\,$\cdot$\,形式化、Lean~4.36.0 验证（27/27）与 Python 参考实现}
+\end{center}
+
+\vspace{4pt}
+\begin{abstract}
+\noindent
+设想一个智能体或控制系统，必须识别环境的运作方式，或防止它出现故障，却陷入了僵局。失败原因可分为四类：（1）数据不足，需要在当前模型中再问一个问题；（2）描述语言本身或记忆形式过于受限，除非系统升级表征（例如从栈切换到队列），否则再多观测也无济于事；（3）观测窗口存在盲区，世界的两种不同状态给出相同传感器读数，此时要么开辟新的观测通道（并排除无用噪声），要么主动干预环境；（4）物理时间即将耗尽，系统等待新数据时，环境仍在演化，安全干预的窗口会关闭。一般搜索算法无法区分这四种情形：当语言不够丰富时，它会把预算花在无休止的探测上；当资源耗尽而超时时，它会错误地使模型复杂化；当把经验迁移到新任务时，它会在物理背景已经改变的环境中继续使用旧的不变量。
+
+本文建立了一套经机器验证的统一理论，说明受限观察者如何严格区分这些障碍，并根据僵局的成因选择符合条件的行动。第一，我们形式化了环境可达性的三个坐标：当前语言中的可表达性（$\mathcal{X}$）、通过被动观测窗口的可区分性（$\mathcal{D}$），以及通过干预的操作可识别性（$\mathcal{J}$），并在统一模型中证明三者的完整分离。第二，我们证明在多符号词上，队列式流记忆（FIFO）与指定的任意容量栈求值器族（LIFO）无条件分离，并构建了可计算的伪传感器扩展检测器，以排除不提供新判别信息的传感器。第三，我们把六种基本步骤（探测、语言扩展、传感器扩展、外科式干预、基于 $e$ 值的随机拒绝及记忆迁移）纳入同一控制器，采用五维向量预算和权限分离：缺少结构证书时，资源超时信号必然被拦截，无法导致错误的模型升级。第四，我们以 Rule~110 为例，将记忆迁移和行动选择与环境动力学联系起来。当环境记录给出了迁移所需的前提时，迁移检查接受固定邻元胞端口模型的令牌。该模型不同于对自由演化以太环的观测。在另一个因果视界关闭的实例中（$t^*=3,\ \Delta t=2$），控制器选择立即修复，而不是等待探测结果。在无外部库的条件下，全部 27 个定理均经 Lean~4.36.0 内核验证（\texttt{exit 0}，0 个 \texttt{sorryAx}，0 次 \texttt{native\_decide}；10 个不依赖公理，17 个仅依赖标准公理 \texttt{propext}、\texttt{Classical.choice}、\texttt{Quot.sound}），Python~3 参考包可复现有限验证实例。
+\end{abstract}
+
+\section{问题设定：受限观测下僵局的四种成因}
+
+当研究程序或自主控制器在资源有限、仅部分可观测的环境中运行时，任何停滞从外部看起来都一样：没有实现当前目标。然而，表面上的失败可源于四类相互正交的障碍，需要截然不同的应对~\cite{reiter1987,pearl2009,wolpert2008}：
+\begin{enumerate}
+  \item \textbf{充分模型内部的信息不确定性。}当前假设语言 $H$ 已包含正确描述，当前传感端口 $\Pi$ 也能区分竞争的可能世界 $W$；但还需进行一次探测 $q$ 以缩小 $W$。
+  \item \textbf{表征的结构性不足（$\neg\mathcal{X}$）。}环境的目标规律根本无法在当前记忆类别 $H$ 中表达（例如，环境按 FIFO 队列规则复制数据流，而观察者只在有限自动机或 LIFO 下推栈中搜索假设）。此时新探测和传感器扩展都只会消耗预算；必须切换到更丰富的语言层级 $H\mapsto H'$。
+  \item \textbf{被动观测端口的盲区（$\neg\mathcal{D}$）或机制碰撞（$\neg\mathcal{J}$）。}语言 $H$ 足够丰富，但目标属性取值相反的两个世界 $w_1,w_2\in W$ 在当前端口上的读数相同：$\Pi(w_1)=\Pi(w_2)$。此时改变语言 $H$ 无济于事：需要加入一个非平凡的新传感器 $\Pi\mapsto\Pi'$，或施加可区分隐藏机制的主动外科式干预 $do(a)$。
+  \item \textbf{因果时间视界的关闭。}在相互作用以有限速度传播的演化环境 $T:\Omega\to\Omega$ 中，等待探测 $\Delta t>0$ 个时步即可完全识别世界（$|W'_{q,y}|=1$），但到 $t+\Delta t$ 时，执行器的可作用区域已落在目标截至截止时刻 $t^*$ 的反向光锥之外。在此情形下，「先查明，再行动」会导致不可逆的故障：控制器必须在 $t=0$ 立即行动。
+\end{enumerate}
+
+本文旨在将上述四种障碍的诊断及响应步骤的选择规则，整合到一个具有可由 Lean~4.36.0 机器检查之证书的形式系统中。
+
+\section{环境可达性的三个坐标及其完整分离}
+
+设观察者的认知状态为 $E = \langle W, H, \mathrm{eval}_H, \Pi, A, \mathrm{apply}_A, \Phi^*\rangle$，其中 $W$ 是相容世界的有限列表，$H$ 是当前可用的假设类，语义为 $\mathrm{eval}_H:H\to\Omega\to\mathrm{Bool}$；$\Pi:\Omega\to\mathcal{O}$ 是被动观测端口，$A$ 是可用干预，其作用为 $\mathrm{apply}_A:A\to\Omega\to\Omega$；$\Phi^*:\Omega\to\mathrm{Bool}$ 是目标不变量。
+
+\begin{definition}[认知可达性的三坐标剖面 $\mathcal{E}(E)$]
+为状态 $E$ 定义三个布尔坐标：
+\begin{align}
+  \mathcal{X}_E (\text{可表达性}) &:\iff \exists h\in H,\ \forall w\in W:\ \mathrm{eval}_H(h,w) = \Phi^*(w), \\
+  \mathcal{D}_E (\text{可区分性}) &:\iff \forall w_1,w_2\in W:\ \Phi^*(w_1)\ne\Phi^*(w_2) \implies \Pi(w_1)\ne\Pi(w_2), \\
+  \mathcal{J}_E (\text{可识别性}) &:\iff \mathcal{X}_E \land \mathcal{D}_E \land \Bigl(\forall w_1,w_2\in W:\ \Phi^*(w_1)\ne\Phi^*(w_2) \nonumber\\
+  &\qquad\quad \implies \exists a\in A:\ \Pi(\mathrm{apply}_A(a,w_1)) \ne \Pi(\mathrm{apply}_A(a,w_2))\Bigr).
+\end{align}
+\end{definition}
+
+在先前的形式化版本中，坐标 $\mathcal{X}_E$、$\mathcal{D}_E$ 和 $\mathcal{J}_E$ 的独立性检查分布在类型签名不同的模块中。在统一模块 \texttt{certified\_strategy\_selection\_v2\_6\_1.lean} 中，我们在同一个基础世界空间 $\Omega=\mathrm{Bool}$ 上构造四个状态 $E_1,E_2,E_3,E_4$，并证明完整的分离定理。
+
+\begin{theorem}[三个可达性坐标的完整分离与蕴含关系]
+\label{thm:h1_separation}
+在底层为 $\Omega=\mathrm{Bool}$ 的统一模型中（\texttt{H1\_three\_\allowbreak coordinate\_\allowbreak strict\_\allowbreak separation}）：
+\begin{enumerate}
+  \item 成立如下严格蕴含：$\mathcal{J}_E \implies \mathcal{X}_E$ 及 $\mathcal{J}_E \implies \mathcal{D}_E$（\texttt{H1\_identifiable\_\allowbreak implies\_\allowbreak expressible}、\texttt{H1\_identifiable\_\allowbreak implies\_\allowbreak distinguishable}）。
+  \item 可表达性不蕴含可区分性（$\mathcal{X}_{E_1} \land \neg\mathcal{D}_{E_1}$，\texttt{H1\_E1\_expressible\_\allowbreak not\_\allowbreak distinguishable}）：语言 $H$ 丰富而端口 $\Pi(w)=\mathrm{const}$ 存在盲区时，目标可表达，但世界不可区分。
+  \item 可区分性不蕴含可表达性（$\mathcal{D}_{E_2} \land \neg\mathcal{X}_{E_2}$，\texttt{H1\_E2\_distinguishable\_\allowbreak not\_\allowbreak expressible}）：精确端口 $\Pi(w)=w$ 区分所有世界，但语义为 $\mathrm{eval}_H(h_0,w)=\mathsf{false}$ 的退化假设类 $H=\{h_0\}$ 无法表达 $\Phi^*(w)=w$。
+  \item 若可用干预抹去可观测的差别（$\mathrm{apply}_A(a,w)=\mathsf{false}$），则同时具有可表达性和被动可区分性也不蕴含操作可识别性（$\mathcal{X}_{E_3} \land \mathcal{D}_{E_3} \land \neg\mathcal{J}_{E_3}$，\texttt{H1\_E3\_expr\_\allowbreak and\_\allowbreak dist\_\allowbreak not\_\allowbreak identifiable}）。
+\end{enumerate}
+\end{theorem}
+
+\section{队列式记忆与任意深度的栈的分离及伪传感器检测}
+
+为使语言切换 $H\mapsto H'$ 和端口扩展 $\Pi\mapsto\Pi'$ 依据可计算证书而非启发式方法，需要解决两个构造性问题：（a）怎样证明多符号流上的任务确实需要从栈式记忆（LIFO）切换到队列（FIFO）；（b）怎样用算法区分有效的传感器扩展和伪扩展（只有噪声或重复信息）。
+
+\subsection{多符号队列自动机与任意容量的栈}
+
+考虑三符号字母表 $\Sigma=\{\mathtt{0},\mathtt{1},\mathtt{\#}\}$ 和形如 $u\mathtt{\#}v$ 的流式词，其中 $u,v\in\{\mathtt{0},\mathtt{1}\}^*$。我们在纯 Lean~4 内核中定义两种操作自动机，带有缓冲区 $\mathrm{buf}\in\mathrm{List\ Bool}$、比特反相参数 $\mathrm{inv}\in\mathrm{Bool}$ 和缓冲容量 $\mathrm{cap}\in\mathbb{N}$：
+\begin{itemize}
+  \item \textbf{队列自动机 $\mathrm{evalQueue}(\mathrm{inv},\mathrm{cap},w)$（层级 $L_4$，FIFO）：}遇到分隔符 $\mathtt{\#}$ 之前，把比特写到列表\emph{末尾}，$\mathrm{buf}\mapsto\mathrm{buf}\mathbin{+\!+}[b]$（限 $|\mathrm{buf}|<\mathrm{cap}$）；在 $\mathtt{\#}$ 之后，从列表\emph{开头}取出首元素（$h::\mathrm{tl}$），检查 $b = h \oplus \mathrm{inv}$ 是否成立。
+  \item \textbf{栈自动机 $\mathrm{evalStack}(\mathrm{inv},\mathrm{cap},w)$（层级 $L_3$，LIFO）：}遇到分隔符 $\mathtt{\#}$ 之前，把比特压到\emph{栈顶}，$\mathrm{buf}\mapsto b::\mathrm{buf}$；在 $\mathtt{\#}$ 之后，从同一栈顶弹出比特（$h::\mathrm{tl}$），并检查 $b = h \oplus \mathrm{inv}$。
+\end{itemize}
+
+测试对 $w_{00}=\mathtt{00\#00}$（对称重复）和 $w_{01}=\mathtt{01\#01}$（非对称 FIFO 流复制）对这种栈构成根本障碍：读完前缀 $\mathtt{01\#}$ 后，LIFO 栈顶是 $\mathtt{1}$，而 $w_{01}$ 在分隔符后第一个符号是 $\mathtt{0}$。栈若不反相比特（$\mathrm{inv}=\mathsf{false}$），则无论容量 $\mathrm{cap}\in\mathbb{N}$ 如何，都拒绝 $w_{01}$；若反相比特（$\mathrm{inv}=\mathsf{true}$），则无论容量 $\mathrm{cap}\in\mathbb{N}$ 如何，都拒绝对称词 $w_{00}=\mathtt{00\#00}$。
+
+\begin{theorem}[队列与任意深度的栈的无条件分离]
+\label{thm:h2_queue_vs_stack}
+队列自动机 $\mathrm{evalQueue}(\mathsf{false},3,\cdot)$ 接受流复制 $w_{00}=\mathtt{00\#00}$、$w_{01}=\mathtt{01\#01}$、$w_{101}=\mathtt{101\#101}$，但拒绝逆序词 $w_{\mathrm{rev}}=\mathtt{01\#10}$（\texttt{H2\_queue\_\allowbreak recognizes\_\allowbreak fifo\_\allowbreak copy}）。而对于\textbf{任意}布尔变换 $\mathrm{inv}\in\{\mathsf{false},\mathsf{true}\}$ 和\textbf{任意}栈容量 $\mathrm{cap}\in\mathbb{N}$（\texttt{H2\_gate13\_\allowbreak queue\_\allowbreak separates\_\allowbreak from\_\allowbreak arbitrary\_\allowbreak stack}），有：
+\begin{equation}
+  \neg\begin{aligned}[t]
+    \Bigl(&\mathrm{evalStack}(\mathrm{inv},\mathrm{cap},w_{00}) = \mathrm{evalQueue}(\mathsf{false},3,w_{00}) \\
+          &\land\; \mathrm{evalStack}(\mathrm{inv},\mathrm{cap},w_{01}) = \mathrm{evalQueue}(\mathsf{false},3,w_{01})\Bigr).
+  \end{aligned}
+\end{equation}
+\end{theorem}
+
+定理~\ref{thm:h2_queue_vs_stack} 为升级到队列层级 $L_4$ 给出了认证，不必预先假设真值表，也无需人为限制栈深度 $\mathrm{cap}$。
+
+\subsection{伪传感器扩展的可计算检测器}
+
+设基础观测端口给出响应 $\Pi_{\mathrm{base}}:Q\to\Omega\to\mathcal{O}_1$，候选扩展端口则返回有序对 $\Pi_{\mathrm{ext}}:Q\to\Omega\to\mathcal{O}_1\times\mathcal{O}_2$。若在有限探测基 $Q$ 和活跃世界 $W$ 上，$\Pi_{\mathrm{ext}}$ 的第一分量等于 $\Pi_{\mathrm{base}}$，且任意区分 $\Pi_{\mathrm{ext}}(q,w_1)\ne\Pi_{\mathrm{ext}}(q,w_2)$ 只出现在基础端口\emph{已经}能区分的世界对 $(w_1,w_2)\in W\times W$（$\Pi_{\mathrm{base}}(q,w_1)\ne\Pi_{\mathrm{base}}(q,w_2)$）上，则称此扩展为\emph{伪扩展}（$\mathrm{IsSpuriousSemantic}$）。
+
+我们不在数据结构中预设全称量词，而是定义枚举 $Q\times W\times W$ 的纯布尔函数 $\mathrm{checkSpuriousFin}(W,Q,\Pi_{\mathrm{base}},\Pi_{\mathrm{ext}})\in\mathrm{Bool}$。
+
+\begin{theorem}[可计算伪传感器检测器的可靠性]
+\label{thm:h3_spurious}
+对任何有限的世界列表 $W$ 与探测列表 $Q$，若响应相等关系可判定，则（\texttt{H3\_checkSpuriousFin\_sound}）：
+\begin{equation}
+  \mathrm{checkSpuriousFin}(W,Q,\Pi_{\mathrm{base}},\Pi_{\mathrm{ext}}) = \mathsf{true} \implies \mathrm{IsSpuriousSemantic}(W,Q,\Pi_{\mathrm{base}},\Pi_{\mathrm{ext}}).
+\end{equation}
+在三级测试平台上，检测器准确地排除确定性的奇偶性哈希副本（$\mathsf{true}$），并放行能读取隐藏最高位的传感器（$\mathsf{false}$，\texttt{H3\_detector\_\allowbreak separates\_\allowbreak spurious\_\allowbreak from\_\allowbreak genuine}）。
+\end{theorem}
+
+\section{采用五维预算与权限分离的统一控制器}
+
+现在把观察者的所有允许操作整合为单一归纳转移关系 $\mathrm{LicensedStep}(\mathcal{T}, s, s')$，参数为固定的正成本表 $\mathcal{T} = (c_q, c_s, c_p, c_v, c_m) > 0$，并满足记忆的摊销条件 $c_m < c_s$。控制器状态 $s\in\mathrm{UnifiedState}$ 存储活跃世界数 $|W_s|$、活跃假设数 $|H_s|$、当前语言层级 $\mathrm{tier}(s)\in\{L_0,\dots,L_4\}$、传感端口秩 $\mathrm{portRank}(s)$、干预秩 $\mathrm{intRank}(s)$、累计证书计数 $\mathrm{knowledgeCount}(s)$、五维资源消耗向量 $\mathrm{spent}(s)\in\mathbb{N}^5$，以及预算上限向量 $B\in\mathbb{N}^5$。
+
+控制器恰好允许六种转移构造器，每一种都受各自的结构证书和逐分量的向量预算检查 $\mathrm{spent}(s') \le B$ 约束：
+\begin{enumerate}
+  \item \texttt{probe}：信息探测，要求世界集合严格收缩（$0 < |W_{s'}| < |W_s|$），并扣除成本 $c_q$。
+  \item \texttt{escalateLang}：升级语言层级 $\mathrm{tier}(s) < \mathrm{tier}(s')$，要求提供结构性不可满足信号 $\mathrm{hasStructCert}(\mathrm{sig})=\mathsf{true}$，并扣除 $c_s$。
+  \item \texttt{escalatePort}：扩展传感端口 $\mathrm{portRank}(s')=\mathrm{portRank}(s)+1$，要求提供结构障碍证书以及伪扩展检测器的否定判定（定理~\ref{thm:h3_spurious} 中的 $\mathrm{isSpurious}=\mathsf{false}$），并扣除 $c_p$。
+  \item \texttt{intervene}：主动外科式干预，要求证书 $\mathrm{Gate15Cert}$（被动观测碰撞、控制掩码正交性 $K(do(I)(x))=K(x)$，以及非零交换子 $[T_L,T_R]\ne 0$），并扣除 $c_v$。
+  \item \texttt{stochasticReject}：根据序贯 $e$ 值进行随机假设拒绝，要求证书 $\mathrm{Gate16Cert}$（分母 $0<\mathrm{den}$ 和总质量 $0<\mathrm{totalMass}$ 显式为正，具有一致的间隙界 $\mathrm{hasGapBound}=\mathsf{true}$，并达到阈值 $\mathrm{eValueNum}\ge \alpha^{-1}\cdot\mathrm{eValueDen}$），并扣除 $c_q$。
+  \item \texttt{recoverMemory}：从修正记忆中恢复先前已认证的表征，要求迁移前提 $\mathrm{precondOk}=\mathsf{true}$ 成立，并扣除较低成本 $c_m < c_s$。
+\end{enumerate}
+
+\begin{theorem}[统一控制器的可靠性、权限分离和严格进展]
+\label{thm:h4_h7_controller}
+对任何正成本表 $\mathcal{T}$ 及任一获准转移 $\mathrm{LicensedStep}(\mathcal{T}, s, s')$：
+\begin{enumerate}
+  \item \textbf{向量预算不变量（\texttt{H4\_licensed\_\allowbreak step\_\allowbreak preserves\_\allowbreak vector\_\allowbreak budget}）：}对全部五个坐标 $(c_q,c_s,c_p,c_v,c_m)$，均有 $\mathrm{spent}(s') \le B$。
+  \item \textbf{权限分离（\texttt{H4\_privilege\_\allowbreak separation\_\allowbreak blocks\_\allowbreak timeout\_\allowbreak escalation}）：}缺少结构性证据 $\mathrm{certifiedUnsat}$ 时，资源超时信号 $\mathrm{resourceTimeout}$ 无法通过守卫 $\mathrm{hasStructCert}=\mathsf{true}$，也无法触发 \texttt{escalateLang} 或 \texttt{escalatePort}。
+  \item \textbf{拦截伪端口及无效证书（\texttt{H5\_spurious\_\allowbreak port\_\allowbreak blocked}，\texttt{H6\_gate15\_\allowbreak and\_\allowbreak gate16\_\allowbreak certificates\_\allowbreak enforced}）：}若 $\mathrm{isSpurious}=\mathsf{true}$，则端口扩展门返回 $\mathsf{none}$；步骤 \texttt{intervene} 和 \texttt{stochasticReject} 则保证全部代数与概率守卫成立。
+  \item \textbf{严格单调进展（\texttt{H7\_licensed\_\allowbreak step\_\allowbreak strict\_\allowbreak epistemic\_\allowbreak progress}）：}每一步都严格增加总认知进展指数 $\mathcal{P}(s) = \mathrm{tier}(s) + \mathrm{portRank}(s) + \mathrm{intRank}(s) + \mathrm{knowledgeCount}(s)$，从而排除「永远未知」的退化策略及伪传感器循环。
+\end{enumerate}
+\end{theorem}
+
+\section{区分特征的算法合成与类型化迁移记忆}
+
+\subsection{选择区分轴的算法算子}
+
+设来自不同领域的候选项 $d\in M$ 带有 $k$ 比特的结构特征签名 $\mathrm{features}(d):\mathrm{Fin}\,k\to\mathrm{Bool}$。我们定义三个算子，无需人工编排探测菜单：特征投影 $\mathrm{projFeature}(a,d)=d.\mathrm{features}(a)$、轴向划分检查
+\begin{equation}
+  \mathrm{isAxialSplit}(M, a) :\iff \bigl(\exists d_0\in M:\ \neg\mathrm{projFeature}(a,d_0)\bigr) \;\land\; \bigl(\exists d_1\in M:\ \mathrm{projFeature}(a,d_1)\bigr),
+\end{equation}
+及冻结探测的算子 $\mathrm{freezeAxisQuery}(a,M,b) = \{\,d\in M \mid \mathrm{projFeature}(a,d)=b\,\}$，其保证的极小极大增益为
+\begin{equation}
+  \mathrm{minimaxGain}(M,a) := |M| - \max_{b\in\{\mathsf{false},\mathsf{true}\}}\bigl|\mathrm{freezeAxisQuery}(a,M,b)\bigr|.
+\end{equation}
+
+\begin{theorem}[算法合成探测的保证极小极大增益]
+\label{thm:h8_metasynset}
+对任一有限的跨领域对象列表 $M$ 和任一结构轴 $a\in\mathrm{Fin}\,k$：
+\begin{enumerate}
+  \item （\texttt{H8\_partition\_\allowbreak length\_\allowbreak conservation}）各分支长度之和等于原列表长度：$|\mathrm{freezeAxisQuery}(a,M,\mathsf{false})| + |\mathrm{freezeAxisQuery}(a,M,\mathsf{true})| = |M|$。
+  \item （\texttt{H8\_algorithmic\_\allowbreak metasynset\_\allowbreak minimax\_\allowbreak gain\_\allowbreak ge\_1}）若 $\mathrm{isAxialSplit}(M,a)=\mathsf{true}$，则两个分支都严格缩小候选列表，且 $\mathrm{minimaxGain}(M,a)\ge 1$。
+\end{enumerate}
+\end{theorem}
+
+\subsection{类型化迁移记忆与 Rule~110 的两类背景}
+
+修正记忆令牌 $\tau\in\mathrm{RevisionToken}$ 存储来源领域、端口宽度 $\mathrm{portWidth}$、允许的外部接缝输入数 $\mathrm{requiredSeamInputs}$、剩余间隙的界 $\Delta(T)$、从头发现的成本 $c_s$ 和迁移成本 $c_m$。迁移到新环境 $E_{\mathrm{env}}$ 时，函数 $\mathrm{verifyTransferPrecond}(\tau,E_{\mathrm{env}})$ 检查端口宽度是否一致、端口在新背景下是否自主（$\mathrm{isPortAutonomous}=\mathsf{true}$）、外部接缝输入数是否不超过允许值（$\mathrm{actualSeamInputs}\le\mathrm{requiredSeamInputs}$）、间隙容限以及不等式 $c_m < c_s$。
+
+为说明验证环境物理背景对安全迁移至关重要，考虑元胞自动机 Rule~110 的 14 元胞环上的四元胞观测窗口 $W=\{3,4,5,6\}$（$f_{110}(l,c,r)=c\oplus r\oplus cr\oplus lcr$）：
+\begin{itemize}
+  \item 在\textbf{边界固定模型}中，按定义每一步都保持 $x_2=1$ 和 $x_7=0$。端口 $W$ 由封闭的映射 $\mathrm{etherAutomaton}:\mathrm{Bit4}\to\mathrm{Bit4}$ 更新，无须外部输入。这是模型的边界条件，并非自由演化以太环的性质。
+  \item 对于初始配置为 $\mathtt{00010011011111}$ 的\textbf{自由演化的 14 元胞以太环}（从左到右自 0 编号），邻元胞对 $(x_2,x_7)$ 随时间变化。直接计算得到以下端口轨道：
+\[
+\mathtt{1001}\to\mathtt{1011}\to\mathtt{1110}\to\mathtt{0010}\to
+\mathtt{0110}\to\mathtt{1111}\to\mathtt{1000}\to\mathtt{1001}.
+\]
+  七个互异的端口词仅在此轨道上构成自主的查表更新。特别地，自由以太环上有 $\mathtt{1011}\to\mathtt{1110}$，而边界固定模型给出 $\mathtt{1011}\to\mathtt{1111}$。因此，若将边界固定模型的检测器用于这一步正常的自由演化，就会误报异常。这一计算不是新的 Lean 定理，也不证明端口在任意扰动下保持自主。
+  \item 在\textbf{全零背景检查}中，其余输入保持为零时，改变右邻元胞 $x_7\in\{0,1\}$ 会在一步后改变元胞~6 的状态。这是端口不具自主性的可检验反例。环境记录中的 $\mathrm{actualSeamInputs}=4$ 是迁移测试的给定值；该测试并不证明接缝输入的最小数量为 4。
+\end{itemize}
+
+\begin{theorem}[记忆迁移的可靠性、流式摊销和错误迁移的拦截]
+\label{thm:h9_h11_memory}
+对令牌恢复算子 $\mathrm{recoverToken}(\mathrm{mem}, E_{\mathrm{env}})$：
+\begin{enumerate}
+  \item （\texttt{H9\_recoverToken\_\allowbreak preserves\_\allowbreak provenance\_\allowbreak and\_\allowbreak gap}）任何恢复的令牌 $\tau$ 都属于记忆 $\mathrm{mem}$、保持端口宽度，并满足端口自主性、接缝输入数和剩余间隙 $\Delta(T)$ 的全部约束。
+  \item （\texttt{H10\_memory\_\allowbreak transfer\_\allowbreak strict\_\allowbreak stream\_\allowbreak amortization}）在任意由 $k\ge 2$ 个相容情节组成的序列上，使用记忆的总成本严格小于不使用记忆的成本：
+  \begin{equation}
+    c_s + (k-1)c_m < k\cdot c_s.
+  \end{equation}
+  \item （\texttt{H11\_unsound\_\allowbreak transfer\_\allowbreak blocked\_\allowbreak on\_\allowbreak r110\_\allowbreak zero\_\allowbreak bg\_\allowbreak and\_\allowbreak d4\_\allowbreak shortcut}）对于给定的环境记录 \texttt{envR110EtherRing}，其中 $\mathrm{isPortAutonomous}=\mathsf{true}$ 且 $\mathrm{actualSeamInputs}=0$，迁移检查返回 \texttt{some r110EtherPortToken}。对于另外两个记录（Rule~110 全零背景和带捷径边的图 $D_4$），检查返回 \texttt{none}。H11 检查的是这些记录上的返回结果，并不推导自由演化以太环的端口自主性。
+\end{enumerate}
+\end{theorem}
+
+\section{认知修正与修复视界的综合}
+
+最后一步将认知行动的选择与演化环境 $T:\Omega\to\Omega$ 的物理时间联系起来。假设必须在截止时刻 $t^*$ 前保证目标不变量 $\mathcal{I}:\Omega\to\mathrm{Bool}$，而局部执行器有可用干预集合 $A_{\mathrm{loc}}$。按动态修复理论，在时刻 $t\le t^*$ 施行且能够在截止时刻前达成目标的干预集合为
+\begin{equation}
+  \RepairReach(W,t,t^*) = \bigl\{\, a\in A_{\mathrm{loc}} \;\big|\; \forall w\in W:\ \mathcal{I}\bigl(T^{t^*-t}(a(w))\bigr)=\mathsf{true} \,\bigr\}.
+\end{equation}
+
+静态控制器的被动端口出现观测碰撞（$\Pi(w_0)=\Pi(w_1)$）时，自然的做法是启动一个具有延迟 $\Delta t>0$ 的探测，以便在演化后的分支 $T^{\Delta t}(W_{q,y})$ 上区分世界。但在信号传播速度有限的环境中，等待 $\Delta t$ 个时步可能使所有分支 $y$ 上的集合 $\RepairReach(T^{\Delta t}(W_{q,y}),\, t+\Delta t,\, t^*)$ 都为空。
+
+当 $W$ 非空时，选择器 \texttt{selectCausalEpistemicAction} 检查等待是否超出截止时刻，以及每个可达分支是否仍有可行修复。若等待未通过这一检查，但当前存在共同干预 $a^*\in\RepairReach(W,t,t^*)$，则选择立即修复。该选择器本身不比较信息增益或不同策略的成本。
+
+\begin{theorem}[Rule~110 六元胞环上的因果认知抢占与主体异常检测]
+\label{thm:h12_synthesis}
+考虑 Rule~110 的六元胞环上的两个世界 $W=\{\omega_0=(1,0,0,0,1,0),\ \omega_1=(1,0,0,1,1,0)\}$、截止时刻 $t^*=3$、设于元胞 $1$ 且延迟为 $\Delta t=2$ 的被动端口、设于元胞 $2$ 的执行器，以及目标 $w_0(3)=0$：
+\begin{enumerate}
+  \item （\texttt{H12\_causal\_\allowbreak epistemic\_\allowbreak horizon\_\allowbreak synthesis}）在时步 $t=0$，被动端口无法区分两世界（$\Pi_1(\omega_0)=\Pi_1(\omega_1)=\mathsf{false}$）；等待 $\Delta t=2$ 后，可完全识别两世界（$\Pi_1(T^2\omega_0)=\mathsf{false},\ \Pi_1(T^2\omega_1)=\mathsf{true}$）。然而，在时步 $t=2$，两个分支上的修复视界均已关闭（$\RepairReach=\varnothing$）；而在 $t=0$，动作 \texttt{set2To1} 能挽救两个世界，故统一控制器选择 $\texttt{immediateSurgicalRepair\ set2To1}$。
+  \item （\texttt{H12\_rule110\_\allowbreak algebraic\_\allowbreak xor\_\allowbreak gate}、\texttt{H12\_temporal\_\allowbreak subject\_\allowbreak period2\_\allowbreak and\_\allowbreak anomaly\_\allowbreak trigger}）左邻元胞为 1 时，Rule~110 的局部更新精确实现时序主体的代数门 $f_{110}(1,z,k)=z\oplus k$。在边界固定的四比特模型中，状态 $\mathtt{0111}$ 经两个时步返回自身，且正常的第一步不触发异常信号（$\mathrm{subjectDetectsAnomaly}=\mathsf{false}$）；而用 $\mathtt{1111}$ 替代预期的下一状态则会触发异常标志（$\mathsf{true}$），但该标志本身并不能证明修复可获许可或能够成功。
+\end{enumerate}
+\end{theorem}
+
+\begin{remark}[$H_{12}$ 系列定理的准确范围及与 \texttt{v1.5} 的关系]
+\label{rem:h12_scope}
+定理 \texttt{H12\_temporal\_\allowbreak subject\_\allowbreak period2\_\allowbreak and\_\allowbreak anomaly\_\allowbreak trigger} 形式化证明：边界固定的四比特模型的状态 $\mathtt{0111}$ 经两个时步返回自身（$\mathrm{etherAutomaton}^2(\mathtt{0111})=\mathtt{0111}$，这一结果不描述自由演化的以太轨道）；状态 $\mathtt{1111}$ 则立即触发异常标志。定理 \texttt{H12\_causal\_\allowbreak epistemic\_\allowbreak horizon\_\allowbreak synthesis} 形式化了截止时刻 $t^*=3$ 时视界关闭的情形（$\Delta t=2$）。与截止时刻 $t^*=4$ 的对比（等待后仍有 $\RepairReach\neq\varnothing$，探测因此成为必要步骤）、$V_{\mathrm{dyn}}$ 与计划树的一般等价性，以及无限格点 $\mathbb{Z}$ 上的参数化手性边界 $3m\to 2m$，则在配套模块 \texttt{causal\_dynamic\_repair\_v1\_5\_fixed.lean} 中给出。
+\end{remark}
+
+\section{Lean~4.36.0 机器验证、可复现性及适用范围}
+
+第 2 至第 6 节的所有定义和 27 个定理均在同一个自包含文件 \texttt{certified\_\allowbreak strategy\_\allowbreak selection\_\allowbreak v2\_6\_1.lean} 中形式化（1253 行，59\,667 字节，纯 LF 换行、无 BOM、0 个外部导入、无 Mathlib，命名空间 \texttt{CertifiedStrategySelectionV26}；SHA-256：\texttt{4c76155e475a7964\ldots{}f9cf9c77}）。该模块已由 \texttt{Lean 4.36.0} 内核编译并检查（\texttt{arm64-apple-darwin24.6.0}，提交 \texttt{611c117b}）：\texttt{exit 0}，0 错误，0 警告，0 个 \texttt{sorryAx}，0 个 \texttt{Lean.ofReduceBool}（未使用 \texttt{native\_decide}）。表~\ref{tab:axioms_v26} 根据日志 \texttt{V2\_6\_1\_VERIFICATION.log} 列出了完整的公理依赖分布。
+
+\begin{table}[!htbp]
+\centering
+\caption{\texttt{certified\_strategy\_selection\_v2\_6\_1.lean} 中 27 个定理的实际 \texttt{\#print axioms} 结果（Lean~4.36.0，\texttt{exit 0}，0 个 \texttt{sorryAx}，0 次 \texttt{native\_decide}）。}
+\label{tab:axioms_v26}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}l >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{\texttt{\#print axioms} 公理依赖} & \textbf{已验证定理（27/27）} \\
+\midrule
+无公理（10） & \texttt{H1\_identifiable\_\allowbreak implies\_\allowbreak expressible}, \texttt{H1\_identifiable\_\allowbreak implies\_\allowbreak distinguishable}, \texttt{H2\_queue\_\allowbreak recognizes\_\allowbreak fifo\_\allowbreak copy}, \texttt{H2\_stack\_\allowbreak recognizes\_\allowbreak lifo\_\allowbreak palindrome}, \texttt{H3\_detector\_\allowbreak separates\_\allowbreak spurious\_\allowbreak from\_\allowbreak genuine}, \texttt{H8\_cross\_\allowbreak domain\_\allowbreak instance\_\allowbreak verified}, \texttt{H11\_unsound\_\allowbreak transfer\_\allowbreak blocked\_\allowbreak on\_\allowbreak r110\_\allowbreak zero\_\allowbreak bg\_\allowbreak and\_\allowbreak d4\_\allowbreak shortcut}, \texttt{H12\_causal\_\allowbreak epistemic\_\allowbreak horizon\_\allowbreak synthesis}, \texttt{H12\_rule110\_\allowbreak algebraic\_\allowbreak xor\_\allowbreak gate}, \texttt{H12\_temporal\_\allowbreak subject\_\allowbreak period2\_\allowbreak and\_\allowbreak anomaly\_\allowbreak trigger} \\
+\texttt{[propext]} (6) & \texttt{H1\_E2\_distinguishable\_\allowbreak not\_\allowbreak expressible}, \texttt{H3\_checkSpuriousFin\_sound}, \texttt{H4\_licensed\_\allowbreak step\_\allowbreak preserves\_\allowbreak vector\_\allowbreak budget}, \texttt{H4\_privilege\_\allowbreak separation\_\allowbreak blocks\_\allowbreak timeout\_\allowbreak escalation}, \texttt{H5\_spurious\_\allowbreak port\_\allowbreak blocked}, \texttt{H6\_gate15\_\allowbreak and\_\allowbreak gate16\_\allowbreak certificates\_\allowbreak enforced} \\
+\texttt{[propext, Quot.sound]} (7) & \texttt{H1\_E1\_expressible\_\allowbreak not\_\allowbreak distinguishable}, \texttt{H1\_E3\_expr\_\allowbreak and\_\allowbreak dist\_\allowbreak not\_\allowbreak identifiable}, \texttt{H1\_three\_\allowbreak coordinate\_\allowbreak strict\_\allowbreak separation}, \texttt{H2\_stack\_\allowbreak inv\_\allowbreak false\_\allowbreak rejects\_\allowbreak w01}, \texttt{H2\_stack\_\allowbreak inv\_\allowbreak true\_\allowbreak rejects\_\allowbreak w00}, \texttt{H2\_gate13\_\allowbreak queue\_\allowbreak separates\_\allowbreak from\_\allowbreak arbitrary\_\allowbreak stack}, \texttt{H8\_partition\_\allowbreak length\_\allowbreak conservation} \\
+\texttt{[propext, Classical.choice, Quot.sound]} (4) & \texttt{H7\_licensed\_\allowbreak step\_\allowbreak strict\_\allowbreak epistemic\_\allowbreak progress}, \texttt{H8\_algorithmic\_\allowbreak metasynset\_\allowbreak minimax\_\allowbreak gain\_\allowbreak ge\_1}, \texttt{H9\_recoverToken\_\allowbreak preserves\_\allowbreak provenance\_\allowbreak and\_\allowbreak gap}, \texttt{H10\_memory\_\allowbreak transfer\_\allowbreak strict\_\allowbreak stream\_\allowbreak amortization} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+配套参考包仅使用 Python~3 标准库（\texttt{certified\_\allowbreak strategy\_\allowbreak selection\_\allowbreak v2\_6.py}，SHA-256：\texttt{3dbdf0e5\ldots}；在 \texttt{repair\_reach} 中显式检查 $W\neq\varnothing$；\texttt{test\_v2\_6.py}，SHA-256：\texttt{963d89ff\ldots}）。它执行全部 12 个验证场景，以及默认拒绝的审计器 \texttt{S0} 的反例测试（拒绝分母为 $\mathrm{den}=0$、满足 $\mathrm{isSpurious}=\mathsf{true}$、控制掩码不正交或带有信号 $\mathrm{resourceTimeout}$ 的伪造证书），并生成确定性报告 \texttt{v2\_6\_witness\_report.json}（SHA-256：\texttt{2ddf09ec\ldots}）。
+
+\paragraph{适用范围。}
+所证明的定理适用于各离散决策时刻的有限活跃世界列表 $W$ 和有限探测基 $Q$。例外是定理~\ref{thm:h2_queue_vs_stack} 对所有 $\mathrm{cap}\in\mathbb{N}$ 量化，定理~\ref{thm:h8_metasynset} 至~\ref{thm:h9_h11_memory} 对候选列表长度 $|M|$ 及情节序列长度 $k\ge 2$ 作全称量化。具体而言：（1）定理~\ref{thm:h2_queue_vs_stack} 将队列 $\mathrm{evalQueue}$ 与一个具体的单参数、容量任意的栈求值器 $\mathrm{evalStack}(\mathrm{inv},\mathrm{cap})$ 分离，并非与任意有限控制的下推自动机（PDA）分离；（2）定理~\ref{thm:h4_h7_controller} 保证在 $\mathrm{LicensedStep}$ 步骤中逐坐标保持五维预算 $\mathrm{spent}(s')\le B$，但并不求解不可比较预算下的多目标帕累托优化问题；（3）如注~\ref{rem:h12_scope} 所述，本模块的 $H_{12}$ 固定截止时刻 $t^*=3$ 及边界固定模型中状态 $\mathtt{0111}$ 的两步循环，而与 $t^*=4$ 的对比和 $\mathbb{Z}$ 上的手性边界见 \texttt{causal\_dynamic\_repair\_v1\_5\_fixed.lean}。环境 $T$ 本身的随机动力学以及连续观测空间不在此次形式化范围内，将留待下一阶段研究。
+
+\begin{thebibliography}{9}
+\small\setlength{\itemsep}{2pt}
+
+\bibitem{cook2004}
+M.\,Cook. Universality in Elementary Cellular Automata. \emph{Complex Systems}, 15(1):1--40, 2004.
+
+\bibitem{martinez2006}
+G.\,J.\,Mart\'inez, H.\,V.\,McIntosh, J.\,C.\,Seck-Tuoh-Mora. Gliders in Rule~110. \emph{International Journal of Unconventional Computing}, 2(1):1--49, 2006.
+
+\bibitem{reiter1987}
+R.\,Reiter. \href{https://doi.org/10.1016/0004-3702(87)90062-2}{A Theory of Diagnosis from First Principles}. \emph{Artificial Intelligence}, 32(1):57--95, 1987.
+
+\bibitem{hyafil1976}
+L.\,Hyafil, R.\,L.\,Rivest. \href{https://www.sciencedirect.com/science/article/abs/pii/0020019076900958}{Constructing Optimal Binary Decision Trees Is NP-Complete}. \emph{Information Processing Letters}, 5(1):15--17, 1976.
+
+\bibitem{wolpert2008}
+D.\,H.\,Wolpert. \href{https://doi.org/10.1016/j.physd.2008.03.040}{Physical Limits of Inference}. \emph{Physica D: Nonlinear Phenomena}, 237(9):1257--1281, 2008.
+
+\bibitem{pearl2009}
+J.\,Pearl. \emph{Causality: Models, Reasoning, and Inference}, 2nd ed. Cambridge University Press, 2009.
+
+\end{thebibliography}
+
+\end{document}
