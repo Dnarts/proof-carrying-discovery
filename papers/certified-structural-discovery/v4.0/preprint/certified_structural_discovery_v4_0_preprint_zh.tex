@@ -1,0 +1,242 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage{babel}
+\babelprovide[import, main]{chinese}
+\babelprovide[import]{english}
+\babelfont{rm}{Noto Serif CJK SC}
+\babelfont{sf}{Noto Sans CJK SC}
+\babelfont{tt}[Scale=0.86]{DejaVu Sans Mono}
+
+\usepackage[a4paper,margin=19mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,tabularx,array}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+\definecolor{primary}{RGB}{24,62,115}
+\definecolor{muted}{RGB}{90,98,110}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  citecolor=primary,
+  urlcolor=primary,
+  pdftitle={认证结构发现 (v4.0)},
+  pdfauthor={A. Strand}
+}
+
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+\setlength{\parindent}{0pt}
+\emergencystretch=2.5em
+
+\newcommand{\code}[1]{\nolinkurl{#1}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}A. Strand \textperiodcentered\ 认证结构发现 (v4.0)}
+\fancyhead[R]{\small\color{muted}预印本，2026年11月25日}
+\fancyfoot[C]{\small\color{muted}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{13.6pt}
+
+\newtheorem{definition}{定义}[section]
+\newtheorem{theorem}{定理}[section]
+
+\newcommand{\takeaway}[2]{%
+  \vspace{4pt}\noindent\colorbox{primary!7}{%
+    \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
+      \vspace{3pt}\textbf{\color{primary}#1：}\hspace{0.3em}#2\vspace{3pt}%
+    }%
+  }\vspace{4pt}%
+}
+
+\title{\textbf{\Large 认证结构发现：}\\[4pt]
+\large 自主跨域粘合合成、安全绕过与可验证方法迁移}
+
+\author{A. Strand\\
+\small 独立研究者 \textperiodcentered\ 版本 v4.0（2026年11月25日）}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+在前期工作《可达性的认识变形》（v3.2）中，我们形式化证明了不可逆非目标陷阱（$G_1$）、线性状态不可区分性（$G_2$）与侵入式探针（$G_4$）三者的联合作用会在所有有限步长 $k \in \mathbb{N}$ 上阻断保证可达性，且对任意真子域均严格不可约。然而在 v3.2 中，跨域对应关系（\code{InterfaceGlue}）仍由人工给出。在本预印本（v4.0）中，跨域粘合 $\gamma = (\sigma_{12}, \sigma_{13})$ 成为\emph{未知搜索对象}：三个冻结域库建立在两两不相交的不透明状态空间 $S_1, S_2, S_3$ 之上并接受独立标识符置换，发现过程被正交分解为联合不可约性认证（\code{CrossVerdict}）与许可修订菜单内不改变原任务的安全绕过合成（\code{BypassVerdict}）。本文提出零外部导入的纯 Lean~4.36.0 形式化内核（18/18 条验证声明，0~\code{sorryAx}，0~\code{ofReduceBool}，0~\code{Classical.choice}，其中 15/18 完全无公理；SHA-256 \code{1bf6ce8a...}）、物理隔离的零信任验证器、可复现基准套件 \texttt{X0}--\texttt{X4b}（包含 $\mathbb{Z}/6\mathbb{Z}$ 上的 6 单元 Wolfram 规则~110 环子自动机以及向循环 SCC 陷阱与 $\mathbb{F}_3^2$ 端口的迁移）以及 12/12 项强制阴性对照。
+\end{abstract}
+
+\section{问题转向：从粘合验证到自主发现}
+
+Blackwell 实验比较定理~\cite{blackwell1953,howard1966} 保证了在观测不扰动系统动力学的条件下，免费信息具有非负价值（$\mathrm{VoI} \ge 0$）。但在带侵入式探针的确定性认识规划中~\cite{fagin1995,vanditmarsch2007,kaelbling1998,strand2026v32}，该原则在结构上失效：吸收非目标陷阱（$D_1$）、具非平凡核的线性投影（$D_2$）与状态变形探针（$D_3$）联合阻断一切有限步长 $k \in \mathbb{N}$ 上的保证可达性，而移除其中任一域均可恢复必胜策略。
+
+v4.0 的架构跃迁将人工构造粘合改为「自动合成 + 独立零信任校验」：
+\begin{align}\label{eq:pipeline}
+\text{跃迁 1（发现联合障碍）：}\quad &
+(D_1, D_2, D_3) \xrightarrow{\;\mathrm{DiscoverGlue}\;} \bigl(\gamma^\star,\, \mathcal{L},\, \{T_{C_1}, T_{C_2}, T_{C_4}\}\bigr), \\
+\text{跃迁 2（在菜单 $\mathcal{M}$ 中合成绕过）：}\quad &
+(\gamma^\star, \mathcal{M}) \xrightarrow{\;\mathrm{DiscoverBypass}\;} \bigl(\rho^\star,\, T_{\mathrm{bypass}} \;\text{或}\; \{\mathcal{L}_\sigma\}_{\sigma \in \mathrm{Bij}}\bigr).
+\end{align}
+输入为三个冻结的独立域库 $(D_1, D_2, D_3)$，其不透明状态空间满足\emph{两两不相交}：
+\[
+S_1 \cap S_2 = \varnothing, \qquad S_1 \cap S_3 = \varnothing, \qquad S_2 \cap S_3 = \varnothing.
+\]
+发现器无法依赖共享状态名，必须显式合成双射 $\sigma_{12}: S_1 \to S_2$ 与 $\sigma_{13}: S_1 \to S_3$，并输出自包含 JSON 证书，交由物理隔离的零信任验证器单向前向校验。
+
+\takeaway{v4.0 核心区分}{联合障碍被认证为不可约（\code{IRREDUCIBLE}）并不意味着存在安全绕过（\code{BYPASSABLE}）。此外，缩小初始信念集合 $B_0$（\code{RestrictScope}）解决的是\emph{另一个}问题，与保持 $B_0$ 和目标集 $G$ 不变的许可修订（\code{RefinePort}、\code{ReplaceProbe}）在形式上严格分离。}
+
+\section{形式化模型与 18 条 Lean~4.36.0 验证声明}
+
+形式化内核位于 \code{lean/certified_structural_discovery_v4_0.lean}（909 行，40,346 字节，0 外部导入，Lean~4.36.0 编译通过，SHA-256 \code{1bf6ce8aedabb3ce...}）。
+
+\subsection{安全信念可达性与 A4 可靠性}
+
+带被动观测端口与侵入式探针的确定性世界由五元组 $W = (\delta, G, \pi, U_p, Y_p)$ 给出，其中 $\delta: S \times \mathrm{Act} \to S$，$G \subseteq S$，$\pi: S \to \mathrm{Obs}$，$U_p: S \to S$，$Y_p: S \to \mathrm{PObs}$。滤除已达目标状态后的活跃信念后继定义为：
+\begin{align*}
+\mathrm{actSucc}(W, B, a, o) &= \{ s' \in S \setminus G \mid \exists s \in B,\; \delta(s, a) = s' \land \pi(s') = o \}, \\
+\mathrm{probeSucc}(W, B, y)  &= \{ s' \in S \setminus G \mid \exists s \in B,\; U_p(s) = s' \land Y_p(s) = y \}.
+\end{align*}
+关键在于 $\mathrm{probeSucc}$ 采用\emph{前态观测语义}：探针返回变形前状态 $s$ 的观测 $Y_p(s)$（已在 Lean、发现器与验证器之间完全对齐，并由回归对照 \code{nc11} 守卫）。归纳谓词 $\mathrm{SafeBeliefReach}(W, k, B)$ 刻画深度 $\le k$ 的必胜计划，而 $\mathrm{SafeBeliefReachInit}(W, k, B_0) \equiv \forall o,\; \mathrm{SafeBeliefReach}(W, k, B_0 \cap \pi^{-1}(o) \setminus G)$ 计入 $t=0$ 时的被动观测划分。
+
+\begin{definition}[封闭必败不变式]\label{def:clr}
+信念族 $\mathcal{L} \subseteq \mathcal{P}(S)$ 称为\emph{封闭必败区域}（\code{IsClosedLosingRegion}），当且仅当：
+(i) 对每个 $B \in \mathcal{L}$ 存在 $s \in B \setminus G$；
+(ii) 对每个 $B \in \mathcal{L}$ 与 $a \in \mathrm{Act}$，存在 $o \in \mathrm{Obs}$ 使 $\mathrm{actSucc}(W,B,a,o) \in \mathcal{L}$；
+(iii) 对每个 $B \in \mathcal{L}$，存在 $y \in \mathrm{PObs}$ 使 $\mathrm{probeSucc}(W,B,y) \in \mathcal{L}$。
+\end{definition}
+
+\begin{theorem}[A4 全步长可靠性，Lean 定理 1--2]\label{thm:a4}
+若 $\mathcal{L}$ 是 $W$ 中的封闭必败区域且 $\exists o \in \mathrm{Obs},\; \mathrm{initBranch}(W, B_0, o) \in \mathcal{L}$，则 $\forall k \in \mathbb{N},\; \neg\mathrm{SafeBeliefReachInit}(W, k, B_0)$。
+\end{theorem}
+
+定理~\ref{thm:a4} 将最小不动点求解器 \code{A4} 输出的有限 JSON 必败区域 $\mathcal{L}$ 转化为覆盖\emph{全部}有限步长 $k \in \mathbb{N}$ 的不可达证明，验证复杂度仅为 $O(|\mathcal{L}|\cdot|\mathrm{Act}|\cdot|S|)$ 且无需搜索。
+
+\subsection{结构连接完备性（H16）与三方独立置换等变性（H18）}
+
+给定独立域 $D_1 = (\delta, G)$、$D_2 = (\pi)$、$D_3 = (U_p, Y_p)$，粘合 $\gamma = (\sigma_{12}, \sigma_{13}, T_1, s_0, s_1, t)$ 指定显式双射 $\sigma_{12}: S_1 \to S_2$、$\sigma_{13}: S_1 \to S_3$、非空封闭陷阱 $T_1 \subseteq S_1 \setminus G$（点汇 $|T_1|=1$ 或循环强连通分量 SCC $|T_1| \ge 2$）以及在 $D_2$ 下碰撞的对 $s_0 \ne s_1$（其中 $t \in \{s_0, s_1\}$ 被探针送入 $T_1$）。
+
+\begin{theorem}[名称无关结构索引完备性 H16，Lean 定理 3 与 9]\label{thm:h16}
+任意结构合法粘合 $\gamma$（无论是点汇 \code{ValidGlue} 还是集合陷阱 \code{ValidSetGlue}）必然满足与状态名无关的结构索引谓词 $I_1(D_1)$、$I_2(D_2)$ 与 $I_3(D_3)$。因此在完整模式下，索引连接 \code{A1} 不会遗漏穷举搜索 \code{A0} 中的任何合法粘合（$\mathrm{Accepted}(A_1) = \mathrm{Accepted}(A_0)$）。
+\end{theorem}
+
+\begin{theorem}[三方独立置换等变性 H18，Lean 定理 4 与 \code{transport_validGlue}]\label{thm:h18}
+对任意三个\emph{独立}重命名双射 $p_1: S_1 \to S'_1$、$p_2: S_2 \to S'_2$、$p_3: S_3 \to S'_3$，迁移后的粘合 $\gamma' = (p_2 \circ \sigma_{12} \circ p_1^{-1},\; p_3 \circ \sigma_{13} \circ p_1^{-1},\; \dots)$ 严格保持 \code{ValidGlue} 以及 $\mathrm{SafeBeliefReachInit}(W_\gamma, k, B_0) \iff \mathrm{SafeBeliefReachInit}(W'_{\gamma'}, k, B_0 \circ p_1^{-1})$。
+\end{theorem}
+
+\subsection{诚实安全绕过（H14）、全称 UNBYPASSABLE 可靠性与方法迁移（H19--H20）}
+
+定义 $\mathrm{SolveOriginalTask}(W, B_0) \equiv \exists k,\; \mathrm{SafeBeliefReachInit}(W, k, B_0)$ 与 $\mathrm{SolveRestrictedTask}(W, B_0) \equiv \exists B_{\mathrm{sub}} \subseteq B_0,\; (B_{\mathrm{sub}} \ne \varnothing) \land \mathrm{SolveOriginalTask}(W, B_{\mathrm{sub}})$。
+\begin{itemize}
+\item \textbf{任务严格分离（H14，定理 5--6）：} 在 4 状态见证 \code{witnessEDR4} 上证明 $\mathrm{SolveRestrictedTask} \land \neg\mathrm{SolveOriginalTask}$：限制到 $\{s_0\}$ 一步即胜，而 $\{s_0, s_1\}$ 上的原任务对所有 $k \in \mathbb{N}$ 不可解。
+\item \textbf{UNBYPASSABLE 全称量词可靠性（定理 7a--7b）：} 排除备选端口 $D'_2$ 或探针 $D'_3$ 不能只提供单个失败双射，而必须覆盖\emph{全部}双射 $\sigma \in \mathrm{Bij}(S_1, S'_2)$（或 $\mathrm{Bij}(S_1, S'_3)$）的封闭必败族 $\{\mathcal{L}_\sigma\}$，彻底封堵存在量词伪造漏洞。
+\item \textbf{循环 SCC 陷阱分离（H20，定理 8a--8b）：} 含吸收二周期 $q_0 \leftrightarrow q_1$ 的 5 状态见证 \code{witnessCyclic5} 不含任何点汇（$\neg\mathrm{HasPointTrap}$），但无需修改 \code{IsClosedLosingRegion} 内核即可证明其对所有 $k \in \mathbb{N}$ 不可达。
+\item \textbf{前置条件门控与条件摊销界（H19、B6，定理 10--11）：} 定理~10（\code{transferMethod_blocks_mismatched_scope}）形式化验证失败关闭门控的有限决策表（在循环 SCC 与 $\mathbb{F}_3$ 目标库上拦截 \code{pointSinkF2}，放行 \code{quotientSCCMod}）；定理~11（\code{transferMethod_stream_amortization}）在声明的模式归纳代价模型 $(c_s, c_m)$ 下给出条件摊销界 $c_s + (k-1)c_m < k c_s$（$c_m < c_s, k \ge 2$）。
+\end{itemize}
+
+\begin{table}[!htbp]
+\centering
+\caption{Lean~4.36.0 中 \code{certified_structural_discovery_v4_0.lean} 全部 18 条声明的逐一审计（SHA-256 \code{1bf6ce8a...}，\code{exit=0}，0 错误，0 警告，0~\code{sorryAx}，0~\code{ofReduceBool}，0~\code{Classical.choice}）。}
+\label{tab:lean-audit}
+\footnotesize
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{6.5cm}>{\raggedright\arraybackslash}Xll@{}}
+\toprule
+\textbf{Lean 声明} & \textbf{作用与精确边界} & \textbf{类别} & \textbf{公理} \\
+\midrule
+\code{Bijection.injective}, \code{.inv_injective} & 双射及其逆的单射性（2 条引理） & 基础引理 & \code{none} \\
+\code{closedLosingRegion_not_safeBeliefReach} & \code{IsClosedLosingRegion} 单步可靠性 & 全称定理 & \code{none} \\
+\code{closedLosingRegion_not_safeBeliefReachInit} & \code{A4} 全步长可靠性（$\forall k \in \mathbb{N}$） & 全称定理 & \code{none} \\
+\code{structuralJoin_complete} & 点陷阱结构索引完备性 \code{H16} & 全称定理 & \code{none} \\
+\code{transport_validGlue} & $(p_1, p_2, p_3)$ 下 \code{ValidGlue} 不变性 & 全称定理 & \code{none} \\
+\code{safeBeliefReach_iso} & \code{SafeBeliefReach} 的同构迁移 & 全称定理 & \texttt{propext}, \texttt{Quot.sound} \\
+\code{safeBeliefReachInit_equivariant_three_way} & 三方独立置换等变性 \code{H18} & 全称定理 & \texttt{propext}, \texttt{Quot.sound} \\
+\code{solveOriginal_implies_solveRestricted} & 原任务 $\Rightarrow$ 受限任务（\code{H14}） & 全称定理 & \code{none} \\
+\code{L_witness_is_closed} & 4 状态见证上 $\mathcal{L}$ 的封闭性 & 构造见证 & \code{none} \\
+\code{solveRestricted_not_implies_solveOriginal} & \code{H14} 严格分离 & 构造见证 & \code{none} \\
+\code{unbypassableViaPort_of_forall_closedLosing} & \code{UNBYPASSABLE} 全称可靠性（端口） & 全称定理 & \code{none} \\
+\code{unbypassableViaProbe_of_forall_closedLosing} & \code{UNBYPASSABLE} 全称可靠性（探针） & 全称定理 & \code{none} \\
+\code{L_cyclic5_is_closed} & 二周期 \code{witnessCyclic5} 上 $\mathcal{L}$ 封闭性 & 构造见证 & \code{none} \\
+\code{pointTrap_absent_yet_cyclicTrap_impossible} & 循环 SCC 与点汇分离（\code{H20}） & 构造见证 & \code{none} \\
+\code{setTrap_structuralJoin_complete} & 集合/SCC 陷阱广义完备性 \code{H16+H19} & 全称定理 & \code{none} \\
+\code{transferMethod_blocks_mismatched_scope} & 失败关闭前置条件门控表（\code{H19}） & 门控表 & \code{none} \\
+\code{transferMethod_stream_amortization} & 条件流摊销 $c_s+(k-1)c_m<kc_s$ & 全称定理 & \code{propext} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{可执行内核与零信任验证器架构}
+
+Python~3 标准库实现物理拆分为两个独立模块：
+\begin{enumerate}
+\item \textbf{发现引擎（\code{certified_structural_discovery_v4_0.py}）：} 实现全双射对穷举 \code{A0}（$\mathrm{Bij}(S_1, S_2) \times \mathrm{Bij}(S_1, S_3)$）、名称无关结构连接 \code{A1}（$I_1 \bowtie I_2 \bowtie I_3$，并在 \code{CostVector} 中计入索引构建与内存开销）、最小不动点求解器 \code{A4}（输出有限 \code{PlanTree} 或 \code{ClosedLosingRegion}）、安全绕过合成 \code{DiscoverBypass} 以及 \code{MethodToken} 迁移。
+\item \textbf{独立零信任验证器（\code{independent_verifier_v4_0.py}）：} \emph{不导入}任何发现代码，零搜索，仅对序列化 JSON 证书做前向校验：验证 $(\sigma_{12}, \sigma_{13})$ 的双射性、\code{trap_set_s1} 的极小吸收强连通性、$D_2$ 在 $(\mathbb{Z}/m\mathbb{Z})^d$ 上的同态线性性、\code{verify_closed_losing_region} 全步长不可达性、三棵消融树 $C_1, C_2, C_4$（由于已验证 \code{trap_set_s1} 强连通，在 $C_1$ 中打开 \code{sorted(trap_set)[0]} 的单条出边即可打破整个循环陷阱），以及 \code{BYPASSABLE} 计划树或 \code{UNBYPASSABLE} 的全部 $n!$ 双射必败族。
+\end{enumerate}
+
+\section{实验验证：基准套件 X0--X4b 与 12 项阴性对照}
+
+全部基准经 \texttt{python3 test\_v4\_0.py} 复现，输出与 \code{v4_0_hardened_report.json}（SHA-256 \code{0c7497c6...}）逐字节一致。各基准均使用三组独立随机种子生成两两不相交的 $S_1, S_2, S_3$。
+
+\begin{table}[!htbp]
+\centering
+\caption{\texttt{X0}--\texttt{X4b} 实证结果汇总。\texttt{X0, X1, X2, X4a} 验证全双射完备性 \texttt{A1 == A0}（\code{canonical_tail_only=False}）；\texttt{X3, X4b} 采用代表尾部见证模式（\code{canonical_tail_only=True}）。}
+\label{tab:benchmarks}
+\footnotesize
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}Xcccc@{}}
+\toprule
+\textbf{基准} & \textbf{配置与代数结构} & \textbf{\code{H16} 模式} & \textbf{代价 \code{A0} / \code{A1}} & \textbf{加速比} & \textbf{结论 / 验证} \\
+\midrule
+\textbf{X0} & 4 状态，$\mathbb{F}_2^2$，无备选菜单 & 完备（16 = 16） & 1,440 / 221 & \textbf{6.52$\times$} & \code{UNBYPASSABLE} / \code{ACC} \\
+\textbf{X1} & 4 状态，$\mathbb{F}_2^2$，含修订菜单 & 完备（32 = 32） & 7,520 / 458 & \textbf{16.42$\times$} & \code{BYPASSABLE} / \code{ACC} \\
+\textbf{X1\_H18} & 3 组独立种子 $(707,808,909)$ & 完备（32 = 32） & 7,520 / 458 & \textbf{16.42$\times$} & 严格 \code{H18} / \code{ACC} \\
+\textbf{X2} & 36 三元组 / 20,736 双射对 & 完备（32 = 32） & 22,112 / 668 & \textbf{33.10$\times$} & \code{BYPASSABLE} / \code{ACC} \\
+\textbf{X3} & 6 单元规则~110 环子自动机（$\mathbb{Z}/6\mathbb{Z}$） & 见证（12） & --- / 194 & --- & \code{BYPASSABLE} / \code{ACC} \\
+\textbf{X4a} & 5 状态，$\mathbb{F}_3^2$，二周期 SCC，0 点汇 & 完备（288 = 288） & 36,288 / 2,047 & \textbf{17.73$\times$} & \code{BYPASSABLE} / \code{ACC} \\
+\textbf{X4b} & 9 状态 = 完整 $\mathbb{F}_3^2$，2 周期 + 3 周期诱饵 & 见证（252） & $5.27{\cdot}10^{11}$ / 3,353 & --- & \code{BYPASSABLE} / \code{ACC} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Wolfram 规则~110 环子自动机（\code{X3}）。}
+$c_0 = (1,1,0,0,1,0)$、$c_1 = (0,0,1,0,1,0)$ 与真空 $q_{\mathrm{vac}} = (0,0,0,0,0,0)$ 的转移由 6 单元环 $\mathbb{Z}/6\mathbb{Z}$ 上 Wolfram 规则~110~\cite{wolfram1983,cook2004} 的 2 步同步演化直接算得（先对第 0 或第 3 单元施加置 1 脉冲）：脉冲 3 将 $c_0$ 湮灭为 $q_{\mathrm{vac}}$，脉冲 0 将 $c_1$ 湮灭为 $q_{\mathrm{vac}}$，而反向脉冲分别到达活性目标 $g_0 = (0,1,1,1,0,0)$ 与 $g_1 = (1,1,1,1,1,0)$。吸收终态 $g_0, g_1$ 与辅助态 $c_{\mathrm{aux}}$ 封闭该 6 状态有限子自动机；本文不对无限格点上的规则~110 不可逆性作外推。
+
+\paragraph{向循环 SCC 与 $\mathbb{F}_3^2$ 的认证迁移（\texttt{X4a}--\texttt{X4b}，\code{B6}）。}
+\code{X4a}（$n=5$，28,800 双射对，精确完备 288 = 288，加速 $17.73\times$）与 \code{X4b}（$n=9$，完整 $\mathbb{F}_3^2$ 向量空间，0 点汇，活跃 2 周期 + 孤立 3 周期诱饵）验证两项核心性质：(i) 同一 \code{verify_closed_losing_region} 内核无需修改即可认证循环陷阱（3 信念不变式 $\{\{s_0,s_1\},\{q_0\},\{q_1\}\}$）；(ii) 失败关闭门控（\code{nc12}）拦截狭义令牌 \code{PointSink_F2}，仅允许 \code{QuotientSCC_ModP} 迁移。在 \code{X4b} 的 \code{B6} 对比中，\code{WithMemory}（单次 3,353；3 独立库流 10,089）严格低于 \code{NoMemory}（3,383 与 10,149）。
+
+\paragraph{强制阴性对照（12/12 PASS）。}
+全部 12 项通过：\code{nc1}（三方 ID 置换）、\code{nc2}（\code{X2} 孤立陷阱与 \code{X4b} 3 周期诱饵剪枝）、\code{nc3}（单射端口剪枝）、\code{nc4}（反通胀 \code{INFLATED_CLAIM} 检出）、\code{nc5}（\code{DEGENERATE}）、\code{nc6}（\code{REDUCIBLE}）、\code{nc7}（\code{X0} 菜单外禁止绕过）、\code{nc8}（预算耗尽失败关闭为 \code{UNKNOWN}）、\code{nc9}（篡改证书拒收）、\code{nc10}（单双射伪造 \code{UNBYPASSABLE} 拒收）、\code{nc11}（前态探针双分支 \texttt{\{"0","1"\}} 校验）及 \code{nc12}（\code{X4} 上拦截 \code{PointSink_F2}）。
+
+\section{主张边界与局限性}
+
+为保持严格的认识论诚实，显式界定 v4.0 的五条边界：
+\begin{enumerate}
+\item \textbf{\code{B6} 代价模型（定理~11）：} 单次节省 $3,353 < 3,383$（30 单位）源于声明的模式归纳附加费（$c_s = 32$）与缓存读取费（$c_m = 2$）之差，而非从无结构程序空间涌现算法。
+\item \textbf{\code{H16} 的两种模式：} 穷举完备性 $\mathrm{Accepted}(A_1) = \mathrm{Accepted}(A_0)$ 在 \texttt{X0, X1, X2, X4a}（$n \le 5$）上完全验证；\texttt{X3, X4b}（$n=6,9$）采用 \code{canonical_tail_only=True} 寻找经零信任 100\% 认证的见证，并不穷举 $4\cdot(9!)^2 \approx 5.27\cdot 10^{11}$ 个双射。
+\item \textbf{\code{UNBYPASSABLE} 证书规模：} 显式 $n!$ 全双射证书（定理 7a--7b）适用于 $n \le 6$；更大规模需按自同构群 $\mathrm{Aut}(D_2), \mathrm{Aut}(D_3)$ 做商约简。
+\item \textbf{定理~10 的定位：} \code{transferMethod_blocks_mismatched_scope} 是面向两个具体令牌的有限决策表机器检查定理，与全称元定理（定理 2、3、4、7a/7b、9）互补。
+\item \textbf{\code{X5} 延后边界：} 有界随机 LLM 发现器外壳（\code{X5}）位于确定性 v4.0 内核之外，作为独立外部评估层保留。
+\end{enumerate}
+
+\section{可复现性}
+
+完整多语言发布包包含全部 Python 源码、Lean~4.36.0 内核、\code{V4_0_VERIFICATION.log}、多语预印本及 \code{SHA256SUMS.txt}。三条命令即可完整复现：
+\begin{center}
+\small\texttt{shasum -a 256 -c SHA256SUMS.txt \&\& python3 python/test\_v4\_0.py \&\& bash lean/verify\_v4\_0.sh}
+\end{center}
+
+\begin{thebibliography}{99}
+\small
+\bibitem{blackwell1953} D.~Blackwell. Equivalent comparisons of experiments. \emph{Annals of Mathematical Statistics}, 24(2):265--272, 1953.
+\bibitem{howard1966} R.~A. Howard. Information value theory. \emph{IEEE Transactions on Systems Science and Cybernetics}, 2(1):22--26, 1966.
+\bibitem{fagin1995} R.~Fagin, J.~Y. Halpern, Y.~Moses, and M.~Y. Vardi. \emph{Reasoning About Knowledge}. MIT Press, 1995.
+\bibitem{vanditmarsch2007} H.~van Ditmarsch, W.~van der Hoek, and B.~Kooi. \emph{Dynamic Epistemic Logic}. Springer, 2007.
+\bibitem{kaelbling1998} L.~P. Kaelbling, M.~L. Littman, and A.~R. Cassandra. Planning and acting in partially observable stochastic domains. \emph{Artificial Intelligence}, 101(1--2):99--134, 1998.
+\bibitem{aubin1991} J.-P. Aubin. \emph{Viability Theory}. Birkh\"auser, 1991.
+\bibitem{wolfram1983} S.~Wolfram. Statistical mechanics of cellular automata. \emph{Reviews of Modern Physics}, 55(3):601--644, 1983.
+\bibitem{cook2004} M.~Cook. Universality in elementary cellular automata. \emph{Complex Systems}, 15(1):1--40, 2004.
+\bibitem{demoura2021} L.~de Moura and S.~Ullrich. The Lean 4 theorem prover and programming language. In \emph{CADE-28}, LNCS 12699, pp.~625--635. Springer, 2021.
+\bibitem{strand2026v32} A.~Strand. Epistemic Deformation of Reachability: Logical Irreducibility of Observation, Irreversibility, and Intervention Constraints. Preprint v3.2 (Lean~4.36.0, 27/27 declarations, SHA-256 \code{0a215b66...}), November 25, 2026.
+\end{thebibliography}
+
+\end{document}

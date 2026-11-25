@@ -8,7 +8,15 @@ Evidence-scoped program discovery, finite model-class refutation, controlled rep
 
 [**All preprints: English · Русский · 简体中文 · עברית**](papers/hebrew/README.md)
 
-## Latest preprint: Epistemic Deformation of Reachability v3.2 (25 November 2026)
+## Latest preprint: Certified Structural Discovery v4.0 (25 November 2026)
+
+An executable search for cross-domain state correspondences and safe bypasses, with independently checked certificates and method transfer on finite benchmarks. The stochastic LLM evaluation layer is outside this release’s deterministic core.
+
+[**English PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_en.pdf) · [**Русский PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_ru.pdf) · [**简体中文 PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_zh.pdf) · [**עברית PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_he.pdf) · [Release ZIP](papers/certified-structural-discovery/v4.0/certified_structural_discovery_v4_0_MULTILINGUAL_FINAL.zip) · [Source and verification records](papers/certified-structural-discovery/v4.0/)
+
+To run the supplied Python suite from the release directory: `python3 python/test_v4_0.py`.
+
+## Epistemic Deformation of Reachability v3.2 (25 November 2026)
 
 A finite deterministic model in which a diagnostic probe can reveal the hidden state while irreversibly closing the path to the goal. Includes an unbounded-horizon impossibility result, a belief-space characterization, and a negative value-of-information example.
 
@@ -99,7 +107,11 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 
 Основная линия: **найти программу → проверить идентифицируемость → опровергнуть недостаточный класс → сменить представление → синтезировать решение → формально проверить его поведение.**
 
-## Новый препринт: «Эпистемическая деформация достижимости» v3.2
+## Новый препринт: Certified Structural Discovery v4.0
+
+Поиск соответствий между моделями, проверка сертификатов и перенос методов на конечных тестах. [**English PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_en.pdf) · [**Русский PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_ru.pdf) · [**简体中文 PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_zh.pdf) · [**עברית PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_he.pdf) · [Release ZIP](papers/certified-structural-discovery/v4.0/certified_structural_discovery_v4_0_MULTILINGUAL_FINAL.zip) · [Source and verification records](papers/certified-structural-discovery/v4.0/)
+
+## «Эпистемическая деформация достижимости» v3.2
 
 Когда диагностический зонд раскрывает скрытое состояние, но необратимо закрывает путь к цели. [**English PDF**](papers/epistemic-deformation-reachability/v3.2/epistemic_deformation_reachability_v3_2_preprint_en.pdf) · [**Русский PDF**](papers/epistemic-deformation-reachability/v3.2/epistemic_deformation_reachability_v3_2_preprint_ru.pdf) · [Release ZIP](papers/epistemic-deformation-reachability/v3.2/epistemic_deformation_reachability_v3_2_BILINGUAL_FINAL.zip) · [Source and verification records](papers/epistemic-deformation-reachability/v3.2/)
 
@@ -153,7 +165,9 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 
 **本项目的核心问题：何时有证据支持改变假设语言，如何独立核验这种改变？**
 
-最新预印本：《可达性的认知形变》v3.2（[English PDF](papers/epistemic-deformation-reachability/v3.2/epistemic_deformation_reachability_v3_2_preprint_en.pdf) · [俄文 PDF](papers/epistemic-deformation-reachability/v3.2/epistemic_deformation_reachability_v3_2_preprint_ru.pdf)）。
+最新预印本：Certified Structural Discovery v4.0（[**English PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_en.pdf) · [**Русский PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_ru.pdf) · [**简体中文 PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_zh.pdf) · [**עברית PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_he.pdf) · [Release ZIP](papers/certified-structural-discovery/v4.0/certified_structural_discovery_v4_0_MULTILINGUAL_FINAL.zip) · [Source and verification records](papers/certified-structural-discovery/v4.0/)）。
+
+《可达性的认知形变》v3.2（[English PDF](papers/epistemic-deformation-reachability/v3.2/epistemic_deformation_reachability_v3_2_preprint_en.pdf) · [俄文 PDF](papers/epistemic-deformation-reachability/v3.2/epistemic_deformation_reachability_v3_2_preprint_ru.pdf)）。
 
 观察、改变表征，还是行动（v2.6.1 修订版）。[简体中文 PDF](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1_zh.pdf) · [עברית PDF](papers/hebrew/certified_strategy_selection_preprint_v2_6_1_he.pdf) · [English PDF](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1_en.pdf) · [俄文 PDF](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1.pdf) · [源代码与验证记录](papers/certified-strategy-selection/v2.6.1/)。
 

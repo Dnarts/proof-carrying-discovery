@@ -1,0 +1,243 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage{babel}
+\babelprovide[import, main]{russian}
+\babelprovide[import]{english}
+\babelfont{rm}{Noto Serif}
+\babelfont{sf}{Noto Sans}
+\babelfont{tt}[Scale=0.86]{DejaVu Sans Mono}
+
+\usepackage[a4paper,margin=19mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,tabularx,array}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+\definecolor{primary}{RGB}{24,62,115}
+\definecolor{muted}{RGB}{90,98,110}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  citecolor=primary,
+  urlcolor=primary,
+  pdftitle={Сертифицированное структурное открытие (v4.0)},
+  pdfauthor={А. Странд}
+}
+
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+\setlength{\parindent}{0pt}
+\emergencystretch=2.5em
+
+\newcommand{\code}[1]{\nolinkurl{#1}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}А. Странд \textperiodcentered\ Сертифицированное структурное открытие (v4.0)}
+\fancyhead[R]{\small\color{muted}Препринт, 25 ноября 2026 г.}
+\fancyfoot[C]{\small\color{muted}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{13.6pt}
+
+\newtheorem{definition}{Определение}[section]
+\newtheorem{theorem}{Теорема}[section]
+
+\newcommand{\takeaway}[2]{%
+  \vspace{4pt}\noindent\colorbox{primary!7}{%
+    \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
+      \vspace{3pt}\textbf{\color{primary}#1:}\hspace{0.4em}#2\vspace{3pt}%
+    }%
+  }\vspace{4pt}%
+}
+
+\title{\textbf{\Large Сертифицированное структурное открытие:}\\[4pt]
+\large Автономный синтез междоменных стыковок, безопасный обход ограничений\\
+и верифицированный перенос методов}
+
+\author{А. Странд\\
+\small Независимый исследователь \textperiodcentered\ Релиз v4.0 (25 ноября 2026 г.)}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+В работе \emph{«Эпистемическая деформация достижимости»} (v3.2) было формально доказано, что совместное действие необратимой ловушки ($G_1$), линейной неразличимости состояний ($G_2$) и вмешивающегося наблюдения ($G_4$) исключает гарантированное достижение цели на всех конечных горизонтах $k \in \mathbb{N}$ при полной несводимости к собственным подмножествам доменов. Однако в v3.2 само междоменное отождествление (\code{InterfaceGlue}) задавалось вручную. В настоящем препринте (v4.0) стыковка $\gamma = (\sigma_{12}, \sigma_{13})$ переводится в ранг \emph{неизвестного объекта поиска} над попарно непересекающимися пространствами состояний $S_1, S_2, S_3$ с независимыми перестановками идентификаторов, а задача раскладывается на два ортогональных результата: сертификацию совместной несводимости (\code{CrossVerdict}) и синтез безопасного обхода в лицензированном меню ревизий без подмены исходной задачи (\code{BypassVerdict}). Мы представляем формальное ядро на чистом Lean~4.36.0 (18/18 деклараций, 0 внешних импортов, 0~\code{sorryAx}, 0~\code{ofReduceBool}, 0~\code{Classical.choice}, из них 15/18 полностью безаксиомны; SHA-256 \code{1bf6ce8a...}), физически изолированный zero-trust верификатор и воспроизводимый набор стендов \texttt{X0}--\texttt{X4b} (включая 6-клеточный подавтомат правила Вольфрама~110 на $\mathbb{Z}/6\mathbb{Z}$ и перенос на циклические SCC-ловушки с портами над $\mathbb{F}_3^2$), а также 12/12 обязательных негативных контролей.
+\end{abstract}
+
+\section{Постановка задачи: от проверки стыковки к её открытию}
+
+Классический принцип Блэкуэлла~\cite{blackwell1953,howard1966} гарантирует неотрицательность ценности бесплатной информации ($\mathrm{VoI} \ge 0$), пока наблюдение не меняет динамику мира. В эпистемическом планировании и детерминированных системах с вмешивающимися зондами~\cite{fagin1995,vanditmarsch2007,kaelbling1998,strand2026v32} это свойство нарушается: минимальная тройка независимых механизмов~--- поглощающая нецелевая ловушка ($D_1$), линейная проекция с нетривиальным ядром ($D_2$) и деформирующий зонд ($D_3$)~--- делает гарантированную достижимость невозможной на всех горизонтах $k \in \mathbb{N}$, тогда как удаление любого одного фактора восстанавливает выигрышную стратегию.
+
+Принципиальный сдвиг версии~v4.0 состоит в перераспределении ролей между человеком, поисковым автоматом и независимым проверяющим:
+\begin{align}\label{eq:pipeline}
+\text{Сдвиг 1 (открытие ограничения):}\quad &
+(D_1, D_2, D_3) \xrightarrow{\;\mathrm{DiscoverGlue}\;} \bigl(\gamma^\star,\, \mathcal{L},\, \{T_{C_1}, T_{C_2}, T_{C_4}\}\bigr), \\
+\text{Сдвиг 2 (поиск обхода в меню $\mathcal{M}$):}\quad &
+(\gamma^\star, \mathcal{M}) \xrightarrow{\;\mathrm{DiscoverBypass}\;} \bigl(\rho^\star,\, T_{\mathrm{bypass}} \;\text{или}\; \{\mathcal{L}_\sigma\}_{\sigma \in \mathrm{Bij}}\bigr).
+\end{align}
+На входе даны три замороженные библиотеки независимых доменных артефактов $(D_1, D_2, D_3)$ с \emph{попарно непересекающимися непрозрачными множествами состояний}:
+\[
+S_1 \cap S_2 = \varnothing, \qquad S_1 \cap S_3 = \varnothing, \qquad S_2 \cap S_3 = \varnothing.
+\]
+Поисковик не имеет доступа к общим именам состояний и обязан синтезировать явные биекции $\sigma_{12}: S_1 \to S_2$ и $\sigma_{13}: S_1 \to S_3$, а затем выдать самодостаточный сериализуемый сертификат, который проверяется физически изолированным zero-trust верификатором без повторного поиска.
+
+\takeaway{Центральное разграничение v4.0}{Наличие сертифицированного совместного ограничения (\code{IRREDUCIBLE}) не гарантирует существования безопасного обхода (\code{BYPASSABLE}). Более того, сужение множества стартовых состояний $B_0$ (\code{RestrictScope}) решает \emph{другую} задачу и формально отделено от лицензированного обхода (\code{RefinePort}, \code{ReplaceProbe}), сохраняющего $B_0$ и целевое множество $G$ неизменными.}
+
+\section{Формальная модель и 18 верифицированных деклараций Lean~4.36.0}
+
+Формальное ядро реализовано в самодостаточном файле \code{lean/certified_structural_discovery_v4_0.lean} (909 строк, 40\,346 байт, 0 внешних импортов, компилятор Lean~4.36.0, SHA-256 \code{1bf6ce8aedabb3ce...}).
+
+\subsection{Безопасная достижимость состояний веры и звучность A4}
+
+Детерминированный мир с пассивным портом и активным зондом задаётся пятёркой $W = (\delta, G, \pi, U_p, Y_p)$ над носителем $S$, где $\delta: S \times \mathrm{Act} \to S$, $G \subseteq S$, $\pi: S \to \mathrm{Obs}$, $U_p: S \to S$ и $Y_p: S \to \mathrm{PObs}$. Для активного состояния веры $B \subseteq S$ определим ветви преемников с отсечением уже достигнутых целей:
+\begin{align*}
+\mathrm{actSucc}(W, B, a, o) &= \{ s' \in S \setminus G \mid \exists s \in B,\; \delta(s, a) = s' \land \pi(s') = o \}, \\
+\mathrm{probeSucc}(W, B, y)  &= \{ s' \in S \setminus G \mid \exists s \in B,\; U_p(s) = s' \land Y_p(s) = y \}.
+\end{align*}
+Принципиально важно, что в $\mathrm{probeSucc}$ зонд возвращает наблюдение \emph{исходного} состояния $Y_p(s)$ до деформации $U_p(s)$ (в ходе аудита v4.0 это правило было синхронизировано между Lean, поисковиком и верификатором с регрессионным тестом \code{nc11}). Индуктивный предикат $\mathrm{SafeBeliefReach}(W, k, B)$ задаёт существование гарантированного плана глубины $\le k$, а $\mathrm{SafeBeliefReachInit}(W, k, B_0) \equiv \forall o,\; \mathrm{SafeBeliefReach}(W, k, B_0 \cap \pi^{-1}(o) \setminus G)$ учитывает пассивное разбиение в момент $t=0$.
+
+\begin{definition}[Замкнутый проигрышный инвариант]\label{def:clr}
+Семейство $\mathcal{L} \subseteq \mathcal{P}(S)$ называется \emph{замкнутым проигрышным регионом} (\code{IsClosedLosingRegion}), если:
+(i) для каждого $B \in \mathcal{L}$ существует $s \in B \setminus G$;
+(ii) для каждого $B \in \mathcal{L}$ и каждого $a \in \mathrm{Act}$ существует $o \in \mathrm{Obs}$ с $\mathrm{actSucc}(W,B,a,o) \in \mathcal{L}$;
+(iii) для каждого $B \in \mathcal{L}$ существует $y \in \mathrm{PObs}$ с $\mathrm{probeSucc}(W,B,y) \in \mathcal{L}$.
+\end{definition}
+
+\begin{theorem}[Звучность \code{A4} на всех горизонтах, Теоремы 1--2 в Lean]\label{thm:a4}
+Если $\mathcal{L}$~--- замкнутый проигрышный регион в $W$ и $\exists o \in \mathrm{Obs},\; \mathrm{initBranch}(W, B_0, o) \in \mathcal{L}$, то $\forall k \in \mathbb{N},\; \neg\mathrm{SafeBeliefReachInit}(W, k, B_0)$.
+\end{theorem}
+
+Теорема~\ref{thm:a4} превращает конечный JSON-сертификат $\mathcal{L}$, выдаваемый алгоритмом наименьшей неподвижной точки \code{A4}, в строгое доказательство невозможности на \emph{всех} горизонтах $k \in \mathbb{N}$, проверяемое за $O(|\mathcal{L}|\cdot|\mathrm{Act}|\cdot|S|)$ без поиска.
+
+\subsection{Полнота структурного соединения (H16) и трёхсторонняя эквивариантность (H18)}
+
+Пусть $D_1 = (\delta, G)$ на $S_1$, $D_2 = (\pi)$ на $S_2$ и $D_3 = (U_p, Y_p)$ на $S_3$. Стыковка $\gamma = (\sigma_{12}, \sigma_{13}, T_1, s_0, s_1, t)$ задаёт явные биекции $\sigma_{12}: S_1 \to S_2$, $\sigma_{13}: S_1 \to S_3$, непустую замкнутую ловушку $T_1 \subseteq S_1 \setminus G$ (размера $|T_1|=1$ для точечного стока и $|T_1| \ge 2$ для циклической сильно связной компоненты SCC) и коллидирующую пару $s_0 \ne s_1$ с $t \in \{s_0, s_1\}$, переводимым зондом в $T_1$.
+
+\begin{theorem}[Полнота инвариантных индексов \code{H16}, Теоремы 3 и 9 в Lean]\label{thm:h16}
+Всякая структурно допустимая стыковка $\gamma$ (как для точечной ловушки \code{ValidGlue}, так и для произвольного замкнутого ловушечного множества \code{ValidSetGlue}) необходимо удовлетворяет независимым от имён структурным предикатам $I_1(D_1)$, $I_2(D_2)$ и $I_3(D_3)$. Следовательно, индексированное соединение \code{A1} в полном режиме не теряет ни одной допустимой стыковки из полного перебора \code{A0} ($\mathrm{Accepted}(A_1) = \mathrm{Accepted}(A_0)$).
+\end{theorem}
+
+\begin{theorem}[Трёхсторонняя независимая эквивариантность \code{H18}, Теорема 4 и \code{transport_validGlue}]\label{thm:h18}
+Для любых трёх \emph{независимых} биекций переименования $p_1: S_1 \to S'_1$, $p_2: S_2 \to S'_2$, $p_3: S_3 \to S'_3$ перенос стыковки $\gamma' = (p_2 \circ \sigma_{12} \circ p_1^{-1},\; p_3 \circ \sigma_{13} \circ p_1^{-1},\; \dots)$ сохраняет как структурную допустимость \code{ValidGlue}, так и предикат достижимости $\mathrm{SafeBeliefReachInit}(W_\gamma, k, B_0) \iff \mathrm{SafeBeliefReachInit}(W'_{\gamma'}, k, B_0 \circ p_1^{-1})$.
+\end{theorem}
+
+\subsection{Честный обход (H14), кванторная звучность UNBYPASSABLE и перенос (H19--H20)}
+
+Определим $\mathrm{SolveOriginalTask}(W, B_0) \equiv \exists k,\; \mathrm{SafeBeliefReachInit}(W, k, B_0)$ и $\mathrm{SolveRestrictedTask}(W, B_0) \equiv \exists B_{\mathrm{sub}} \subseteq B_0,\; (B_{\mathrm{sub}} \ne \varnothing) \land \mathrm{SolveOriginalTask}(W, B_{\mathrm{sub}})$.
+\begin{itemize}
+\item \textbf{Строгое разделение (\code{H14}, Теоремы 5--6):} на 4-состоятельном свидетеле \code{witnessEDR4} доказано $\mathrm{SolveRestrictedTask} \land \neg\mathrm{SolveOriginalTask}$: сужение до $\{s_0\}$ выигрывает за 1 шаг, тогда как исходная задача на $\{s_0, s_1\}$ невозможна при всех $k \in \mathbb{N}$.
+\item \textbf{Универсальная звучность \code{UNBYPASSABLE} (Теоремы 7a--7b):} чтобы сертифицировать невозможность обхода через альтернативный порт $D'_2$ или зонд $D'_3$, недостаточно предъявить одну неудачную биекцию~--- требуется семейство замкнутых проигрышных регионов $\{\mathcal{L}_\sigma\}$ по \emph{всем} биекциям $\sigma \in \mathrm{Bij}(S_1, S'_2)$ (соответственно $\mathrm{Bij}(S_1, S'_3)$).
+\item \textbf{Циклические SCC-ловушки (\code{H20}, Теоремы 8a--8b):} 5-состоятельный свидетель \code{witnessCyclic5} с 2-циклом $q_0 \leftrightarrow q_1$ не содержит ни одного точечного стока ($\neg\mathrm{HasPointTrap}$), но сертифицируется как невозможный при всех $k \in \mathbb{N}$ тем же самым ядром \code{IsClosedLosingRegion} без каких-либо изменений его определения.
+\item \textbf{Гейт предусловий и условная амортизация переноса (\code{H19}, \code{B6}, Теоремы 10--11):} Теорема~10 (\code{transferMethod_blocks_mismatched_scope}) проверяет конечную таблицу решений гейта (блокировка токена \code{pointSinkF2} на циклических SCC и $\mathbb{F}_3$ при допуске \code{quotientSCCMod}), а Теорема~11 (\code{transferMethod_stream_amortization}) фиксирует условную границу амортизации $c_s + (k-1)c_m < k c_s$ при $c_m < c_s$ и $k \ge 2$ в рамках заданной модели стоимости вывода схемы $(c_s, c_m)$.
+\end{itemize}
+
+\begin{table}[!htbp]
+\centering
+\caption{Полный аудит всех 18 деклараций \code{certified_structural_discovery_v4_0.lean} в Lean~4.36.0 (SHA-256 \code{1bf6ce8a...}, \code{exit=0}, 0 ошибок, 0 предупреждений, 0~\code{sorryAx}, 0~\code{ofReduceBool}, 0~\code{Classical.choice}).}
+\label{tab:lean-audit}
+\footnotesize
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{6.5cm}>{\raggedright\arraybackslash}Xll@{}}
+\toprule
+\textbf{Декларация Lean} & \textbf{Роль и статус утверждения} & \textbf{Класс} & \textbf{Аксиомы} \\
+\midrule
+\code{Bijection.injective}, \code{.inv_injective} & Инъективность биекций и обратных (2 леммы) & Лемма & \code{none} \\
+\code{closedLosingRegion_not_safeBeliefReach} & Звучность \code{IsClosedLosingRegion} (шаг) & Универс. & \code{none} \\
+\code{closedLosingRegion_not_safeBeliefReachInit} & Звучность \code{A4} для всех $k \in \mathbb{N}$ & Универс. & \code{none} \\
+\code{structuralJoin_complete} & Полнота индексов \code{H16} (точечные ловушки) & Универс. & \code{none} \\
+\code{transport_validGlue} & Сохранение \code{ValidGlue} при $(p_1, p_2, p_3)$ & Универс. & \code{none} \\
+\code{safeBeliefReach_iso} & Изоморфный перенос \code{SafeBeliefReach} & Универс. & \texttt{propext}, \texttt{Quot.sound} \\
+\code{safeBeliefReachInit_equivariant_three_way} & Трёхсторонняя эквивариантность \code{H18} & Универс. & \texttt{propext}, \texttt{Quot.sound} \\
+\code{solveOriginal_implies_solveRestricted} & Вложение \code{Original} $\Rightarrow$ \code{Restricted} (\code{H14}) & Универс. & \code{none} \\
+\code{L_witness_is_closed} & Замкнутость $\mathcal{L}$ на 4-сост.\ свидетеле & Свидетель & \code{none} \\
+\code{solveRestricted_not_implies_solveOriginal} & Строгое разделение \code{H14} & Свидетель & \code{none} \\
+\code{unbypassableViaPort_of_forall_closedLosing} & Универсальная $\forall$-звучность (порт) & Универс. & \code{none} \\
+\code{unbypassableViaProbe_of_forall_closedLosing} & Универсальная $\forall$-звучность (зонд) & Универс. & \code{none} \\
+\code{L_cyclic5_is_closed} & Замкнутость $\mathcal{L}$ на 2-цикле \code{witnessCyclic5} & Свидетель & \code{none} \\
+\code{pointTrap_absent_yet_cyclicTrap_impossible} & Отделение циклических SCC (\code{H20}) & Свидетель & \code{none} \\
+\code{setTrap_structuralJoin_complete} & Обобщённая полнота \code{H16+H19} (SCC) & Универс. & \code{none} \\
+\code{transferMethod_blocks_mismatched_scope} & Таблица решений fail-closed гейта (\code{H19}) & Гейт & \code{none} \\
+\code{transferMethod_stream_amortization} & Условная амортизация $c_s+(k-1)c_m<kc_s$ & Универс. & \code{propext} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Архитектура исполняемого ядра и zero-trust верификатора}
+
+Исполняемый артефакт строго разделён на два физически независимых модуля на стандартной библиотеке Python~3:
+\begin{enumerate}
+\item \textbf{Поисковое ядро (\code{certified_structural_discovery_v4_0.py}):} реализует полный перебор всех пар биекций \code{A0} ($\mathrm{Bij}(S_1, S_2) \times \mathrm{Bij}(S_1, S_3)$), индексированное структурное соединение \code{A1} ($I_1 \bowtie I_2 \bowtie I_3$ с полным учётом стоимости построения индексов и памяти в \code{CostVector}), точный расчёт наименьшей неподвижной точки \code{A4} (возвращающий дерево \code{PlanTree} при выигрыше или замкнутый проигрышный регион $\mathcal{L}$ при проигрыше), синтез безопасного обхода \code{DiscoverBypass} и механизм переноса токенов \code{MethodToken}.
+\item \textbf{Изолированный zero-trust верификатор (\code{independent_verifier_v4_0.py}):} \emph{не импортирует} поисковик, не выполняет перебора и проверяет только сериализованный JSON-сертификат: корректность биекций $(\sigma_{12}, \sigma_{13})$, минимальность и сильную связность ловушки \code{trap_set_s1}, гомоморфность проекции над $(\mathbb{Z}/m\mathbb{Z})^d$, совместную невозможность через \code{verify_closed_losing_region}, три дерева абляции $C_1, C_2, C_4$ (в $C_1$ достаточно открыть одно ребро из \code{sorted(trap_set)[0]} именно благодаря проверенной сильной связности SCC) и свидетельство \code{BYPASSABLE} или полное $n!$-семейство проигрышных регионов для \code{UNBYPASSABLE}.
+\end{enumerate}
+
+\section{Эмпирическая верификация: стенды X0--X4b и 12 негативных контролей}
+
+Все эксперименты воспроизведены командой \texttt{python3 test\_v4\_0.py} со 100\% совпадением отчёта \code{v4_0_hardened_report.json} (SHA-256 \code{0c7497c6...}). Во всех стендах множества состояний $S_1, S_2, S_3$ попарно непересекаемы и порождены тремя независимыми генераторами перестановок.
+
+\begin{table}[!htbp]
+\centering
+\caption{Сводка эмпирических результатов на стендах \texttt{X0}--\texttt{X4b}. На \texttt{X0, X1, X2, X4a} проверяется точная переборная полнота \texttt{A1 == A0} (\code{canonical_tail_only=False}); на \texttt{X3, X4b} применяется представительный поиск свидетелей (\code{canonical_tail_only=True}).}
+\label{tab:benchmarks}
+\footnotesize
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}Xcccc@{}}
+\toprule
+\textbf{Стенд} & \textbf{Конфигурация и алгебра} & \textbf{Режим \code{H16}} & \textbf{Цена \code{A0} / \code{A1}} & \textbf{Ускор.} & \textbf{Вердикт / Вериф.} \\
+\midrule
+\textbf{X0} & 4 сост., $\mathbb{F}_2^2$, без альт.\ меню & Полный (16 = 16) & 1\,440 / 221 & \textbf{6.52$\times$} & \code{UNBYPASSABLE} / \code{ACC} \\
+\textbf{X1} & 4 сост., $\mathbb{F}_2^2$, с меню ревизий & Полный (32 = 32) & 7\,520 / 458 & \textbf{16.42$\times$} & \code{BYPASSABLE} / \code{ACC} \\
+\textbf{X1\_H18} & 3 независимых seed $(707,808,909)$ & Полный (32 = 32) & 7\,520 / 458 & \textbf{16.42$\times$} & Совпадение \code{H18} / \code{ACC} \\
+\textbf{X2} & 36 троек / 20\,736 пар биекций в \code{A0} & Полный (32 = 32) & 22\,112 / 668 & \textbf{33.10$\times$} & \code{BYPASSABLE} / \code{ACC} \\
+\textbf{X3} & 6-клеточный подавтомат Rule~110 ($\mathbb{Z}/6\mathbb{Z}$) & Представ.\ (12) & --- / 194 & --- & \code{BYPASSABLE} / \code{ACC} \\
+\textbf{X4a} & 5 сост., $\mathbb{F}_3^2$, 2-цикл SCC, 0 стоков & Полный (288 = 288) & 36\,288 / 2\,047 & \textbf{17.73$\times$} & \code{BYPASSABLE} / \code{ACC} \\
+\textbf{X4b} & 9 сост.\ = полное $\mathbb{F}_3^2$, 2-цикл + 3-цикл decoy & Представ.\ (252) & $5.27{\cdot}10^{11}$ / 3\,353 & --- & \code{BYPASSABLE} / \code{ACC} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Подавтомат правила Вольфрама~110 (\code{X3}).}
+В отличие от синтетических графов \texttt{X0}--\texttt{X2}, переходы из скрытых конфигураций $c_0 = (1,1,0,0,1,0)$, $c_1 = (0,0,1,0,1,0)$ и вакуума $q_{\mathrm{vac}} = (0,0,0,0,0,0)$ в \code{X3} вычисляются напрямую двумя синхронными шагами элементарного клеточного автомата Rule~110~\cite{wolfram1983,cook2004} на 6-клеточном кольце $\mathbb{Z}/6\mathbb{Z}$ после локального импульса (установки бита в 1) в клетке 0 или 3: импульс в клетке 3 аннигилирует $c_0$ в вакуум $q_{\mathrm{vac}}$, а импульс в клетке 0 аннигилирует $c_1$ в $q_{\mathrm{vac}}$, тогда как противоположные импульсы переводят их в живые целевые конфигурации $g_0 = (0,1,1,1,0,0)$ и $g_1 = (1,1,1,1,1,0)$. Поглощающие терминальные цели $g_0, g_1$ и вспомогательное состояние $c_{\mathrm{aux}}$ замыкают конечный 6-состоятельный подавтомат; претензии на необратимость бесконечной решётки Rule~110 не выдвигаются.
+
+\paragraph{Перенос метода на циклические SCC и $\mathbb{F}_3^2$ (\texttt{X4a}--\texttt{X4b}, \code{B6}).}
+Стенды \code{X4a} ($n=5$, 28\,800 пар биекций в \code{A0}, точная полнота 288 = 288, ускорение $17.73\times$) и \code{X4b} ($n=9$, полное векторное пространство $\mathbb{F}_3^2$, 0 точечных стоков, активный 2-цикл + ложный 3-цикл) демонстрируют два свойства переноса: (i)~то же ядро верификатора \code{verify_closed_losing_region} сертифицирует циклические ловушки без изменений (3-элементный инвариант $\{\{s_0,s_1\}, \{q_0\}, \{q_1\}\}$); (ii)~fail-closed гейт (\code{nc12}) блокирует перенос узкого токена \code{PointSink_F2} на \code{X4a}/\code{X4b}, пропуская только обобщённый \code{QuotientSCC_ModP}. В эксперименте \code{B6} на \code{X4b} стоимость \code{WithMemory} (3\,353 за эпизод; 10\,089 за поток из 3 независимых библиотек) строго ниже \code{NoMemory} (3\,383 и 10\,149).
+
+\paragraph{Обязательные негативные контроли (12/12 PASS).}
+Пройдены: \code{nc1} (трёхсторонняя перестановка ID), \code{nc2} (отсев отключённой ловушки в \code{X2} и ложного 3-цикла в \code{X4b}), \code{nc3} (отсев инъективных портов), \code{nc4} (поимка антиинфляционных зондов \code{INFLATED_CLAIM}), \code{nc5} (\code{DEGENERATE}), \code{nc6} (\code{REDUCIBLE}), \code{nc7} (запрет обхода вне меню в \code{X0}), \code{nc8} (отказ при исчерпании бюджета строго в \code{UNKNOWN}), \code{nc9} (отклонение поддельных сертификатов верификатором), \code{nc10} (блокировка экзистенциальной подделки \code{UNBYPASSABLE} с одной биекцией вместо всех $n!$), \code{nc11} (проверка обеих ветвей \texttt{\{"0","1"\}} наблюдения исходного состояния \code{probe_obs[s]}) и \code{nc12} (блокировка несовместимого токена \code{PointSink_F2} на \code{X4}).
+
+\section{Границы притязаний и ограничения}
+
+В соответствии с протоколом эпистемической гигиены фиксируем пять явных границ настоящего релиза:
+\begin{enumerate}
+\item \textbf{Модель стоимости \code{B6} (Теорема~11):} разница $3\,353 < 3\,383$ (30 единиц за эпизод) отражает заданную модель стоимости вывода схемы ($c_s = 32$ против цены чтения токена $c_m = 2$), а не эмерджентный синтез алгоритма из неструктурированного пространства программ.
+\item \textbf{Два режима полноты \code{H16}:} исчерпывающее равенство $\mathrm{Accepted}(A_1) = \mathrm{Accepted}(A_0)$ проверено на \texttt{X0, X1, X2, X4a} ($n \le 5$). На \code{X3} ($n=6$) и \code{X4b} ($n=9$) используется представительный режим \code{canonical_tail_only=True}: все найденные стыковки 100\% сертифицированы zero-trust верификатором, но перебор всех $4\cdot(9!)^2 \approx 5.27\cdot 10^{11}$ биекций не выполняется.
+\item \textbf{Масштабируемость \code{UNBYPASSABLE}:} явные $n!$-сертификаты по всем биекциям (Теоремы 7a--7b) практичны для $n \le 6$; при $n \ge 9$ ($9! = 362\,880$) потребуется факторизация по группам автоморфизмов $\mathrm{Aut}(D_2), \mathrm{Aut}(D_3)$.
+\item \textbf{Статус Теоремы~10:} \code{transferMethod_blocks_mismatched_scope} формально верифицирует конечную таблицу решений гейта на двух конкретных токенах, дополняя универсальные Теоремы~2, 3, 4, 7a/7b и 9.
+\item \textbf{Область \code{X5}:} стохастическая LLM-обвязка поисковика (\code{X5}) вынесена за пределы детерминированного ядра v4.0 и остаётся отдельным внешним слоем оценки.
+\end{enumerate}
+
+\section{Воспроизводимость}
+
+Полный двуязычный релиз включает все исходные файлы Python, формальное ядро Lean~4.36.0, протокол верификации \code{V4_0_VERIFICATION.log} и манифест \code{SHA256SUMS.txt}. Проверка выполняется тремя командами:
+\begin{center}
+\small\texttt{shasum -a 256 -c SHA256SUMS.txt \&\& python3 python/test\_v4\_0.py \&\& bash lean/verify\_v4\_0.sh}
+\end{center}
+
+\begin{thebibliography}{99}
+\small
+\bibitem{blackwell1953} D.~Blackwell. Equivalent comparisons of experiments. \emph{Annals of Mathematical Statistics}, 24(2):265--272, 1953.
+\bibitem{howard1966} R.~A. Howard. Information value theory. \emph{IEEE Transactions on Systems Science and Cybernetics}, 2(1):22--26, 1966.
+\bibitem{fagin1995} R.~Fagin, J.~Y. Halpern, Y.~Moses, and M.~Y. Vardi. \emph{Reasoning About Knowledge}. MIT Press, 1995.
+\bibitem{vanditmarsch2007} H.~van Ditmarsch, W.~van der Hoek, and B.~Kooi. \emph{Dynamic Epistemic Logic}. Springer, 2007.
+\bibitem{kaelbling1998} L.~P. Kaelbling, M.~L. Littman, and A.~R. Cassandra. Planning and acting in partially observable stochastic domains. \emph{Artificial Intelligence}, 101(1--2):99--134, 1998.
+\bibitem{aubin1991} J.-P. Aubin. \emph{Viability Theory}. Birkh\"auser, 1991.
+\bibitem{wolfram1983} S.~Wolfram. Statistical mechanics of cellular automata. \emph{Reviews of Modern Physics}, 55(3):601--644, 1983.
+\bibitem{cook2004} M.~Cook. Universality in elementary cellular automata. \emph{Complex Systems}, 15(1):1--40, 2004.
+\bibitem{demoura2021} L.~de Moura and S.~Ullrich. The Lean 4 theorem prover and programming language. In \emph{CADE-28}, LNCS 12699, pp.~625--635. Springer, 2021.
+\bibitem{strand2026v32} А.~Странд. Эпистемическая деформация достижимости: логическая несводимость ограничений наблюдения, необратимости и вмешательства. Препринт v3.2 (Lean~4.36.0, 27/27 деклараций, SHA-256 \code{0a215b66...}), 25 ноября 2026~г.
+\end{thebibliography}
+
+\end{document}

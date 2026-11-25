@@ -1,0 +1,47 @@
+==============================================================================
+VERIFICATION LOG — certified_structural_discovery_v4_0.lean
+==============================================================================
+Timestamp (local) : 2026-11-25 09:06:28+02:00
+Toolchain         : Lean (version 4.36.0, arm64-apple-darwin24.6.0, commit 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9, Release)
+
+1. INTEGRITY — shasum -a 256 -c SHA256SUMS.txt
+   certified_structural_discovery_v4_0.lean: OK
+   SHA-256 : 1bf6ce8aedabb3ce6e74b866c30af0af0f212722ddd62ec014d041854260291f
+   pure LF, no BOM, 40346 bytes, 909 lines
+
+2. LEAN 4.36.0 VERIFICATION
+   command   : bash lean/verify_v4_0.sh
+   exit code : 0
+   errors    : 0
+   warnings  : 0
+
+3. #print axioms — ALL 18 DECLARATIONS (CertifiedStructuralDiscoveryV40)
+   Bijection.injective                                        none
+   Bijection.inv_injective                                    none
+   closedLosingRegion_not_safeBeliefReach                     none
+   closedLosingRegion_not_safeBeliefReachInit                 none
+   structuralJoin_complete                                    none
+   transport_validGlue                                        none
+   safeBeliefReach_iso                                        propext, Quot.sound
+   safeBeliefReachInit_equivariant_three_way                  propext, Quot.sound
+   solveOriginal_implies_solveRestricted                      none
+   L_witness_is_closed                                        none
+   solveRestricted_not_implies_solveOriginal                  none
+   unbypassableViaPort_of_forall_closedLosing                 none
+   unbypassableViaProbe_of_forall_closedLosing                none
+   L_cyclic5_is_closed                                        none
+   pointTrap_absent_yet_cyclicTrap_impossible                 none
+   setTrap_structuralJoin_complete                            none
+   transferMethod_blocks_mismatched_scope                     none
+   transferMethod_stream_amortization                        propext
+
+   sorryAx present       : NONE (0/18)
+   ofReduceBool          : absent -> native_decide unused (0/18)
+   Classical.choice      : NONE (0/18)
+   axiom-free            : 15 of 18
+   [propext]             : 1 of 18
+   [propext, Quot.sound] : 2 of 18
+
+VERDICT: VERIFIED (exit 0, 0 errors, 0 warnings, 18/18 declarations sorry-free, 0 Classical.choice, 15/18 axiom-free).
+         Hash to cite: 1bf6ce8aedabb3ce6e74b866c30af0af0f212722ddd62ec014d041854260291f
+==============================================================================

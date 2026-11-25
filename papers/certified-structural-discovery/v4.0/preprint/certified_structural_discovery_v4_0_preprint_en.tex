@@ -1,0 +1,242 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage{babel}
+\babelprovide[import, main]{english}
+\babelfont{rm}{Noto Serif}
+\babelfont{sf}{Noto Sans}
+\babelfont{tt}[Scale=0.86]{DejaVu Sans Mono}
+
+\usepackage[a4paper,margin=19mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,tabularx,array}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+\definecolor{primary}{RGB}{24,62,115}
+\definecolor{muted}{RGB}{90,98,110}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  citecolor=primary,
+  urlcolor=primary,
+  pdftitle={Certified Structural Discovery (v4.0)},
+  pdfauthor={A. Strand}
+}
+
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+\setlength{\parindent}{0pt}
+\emergencystretch=2.5em
+
+\newcommand{\code}[1]{\nolinkurl{#1}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}A. Strand \textperiodcentered\ Certified Structural Discovery (v4.0)}
+\fancyhead[R]{\small\color{muted}Preprint, November 25, 2026}
+\fancyfoot[C]{\small\color{muted}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{13.6pt}
+
+\newtheorem{definition}{Definition}[section]
+\newtheorem{theorem}{Theorem}[section]
+
+\newcommand{\takeaway}[2]{%
+  \vspace{4pt}\noindent\colorbox{primary!7}{%
+    \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
+      \vspace{3pt}\textbf{\color{primary}#1:}\hspace{0.4em}#2\vspace{3pt}%
+    }%
+  }\vspace{4pt}%
+}
+
+\title{\textbf{\Large Certified Structural Discovery:}\\[4pt]
+\large Autonomous Cross-Domain Glue Synthesis, Safe Bypass,\\
+and Verified Method Transfer}
+
+\author{A. Strand\\
+\small Independent Researcher \textperiodcentered\ Release v4.0 (November 25, 2026)}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Prior work on \emph{Epistemic Deformation of Reachability} (v3.2) formally proved that the conjunction of an absorbing non-goal trap ($G_1$), linear state indistinguishability ($G_2$), and an intrusive probe ($G_4$) precludes guaranteed goal reachability across all finite horizons $k \in \mathbb{N}$ while remaining strictly irreducible to proper domain subsets. In v3.2, however, the cross-domain identification (\code{InterfaceGlue}) was supplied manually. In this preprint (v4.0), the cross-domain glue $\gamma = (\sigma_{12}, \sigma_{13})$ becomes the \emph{unknown object of autonomous search} over pairwise disjoint opaque state spaces $S_1, S_2, S_3$ with independent identifier permutations, and discovery is factored into two orthogonal outputs: certifying joint irreducibility (\code{CrossVerdict}) and synthesizing a safe revision within a licensed menu without altering the original task (\code{BypassVerdict}). We present a zero-import Lean~4.36.0 kernel (18/18 verified declarations, 0~\code{sorryAx}, 0~\code{ofReduceBool}, 0~\code{Classical.choice}, 15/18 axiom-free; SHA-256 \code{1bf6ce8a...}), a physically isolated zero-trust verifier, reproducible benchmarks \texttt{X0}--\texttt{X4b} (including a 6-cell Wolfram Rule~110 ring sub-automaton on $\mathbb{Z}/6\mathbb{Z}$ and transfer to cyclic SCC traps with $\mathbb{F}_3^2$ ports), and 12/12 mandatory negative controls.
+\end{abstract}
+
+\section{From Verification to Discovery}
+
+Blackwell's classical theorem on the comparison of experiments~\cite{blackwell1953,howard1966} guarantees non-negative value of costless information ($\mathrm{VoI} \ge 0$) whenever observation leaves system dynamics intact. In deterministic epistemic planning with intrusive probes~\cite{fagin1995,vanditmarsch2007,kaelbling1998,strand2026v32}, this principle fails structurally: combining an irreversible non-goal trap ($D_1$), a lossy linear projection ($D_2$), and a state-deforming probe ($D_3$) eliminates guaranteed reachability across all finite horizons $k \in \mathbb{N}$, whereas dropping any single domain restores a winning plan.
+
+The architectural shift in v4.0 moves from human-supplied glue verification to autonomous synthesis paired with independent zero-trust checking:
+\begin{align}\label{eq:pipeline}
+\text{Shift 1 (discovering an obstruction):}\quad &
+(D_1, D_2, D_3) \xrightarrow{\;\mathrm{DiscoverGlue}\;} \bigl(\gamma^\star,\, \mathcal{L},\, \{T_{C_1}, T_{C_2}, T_{C_4}\}\bigr), \\
+\text{Shift 2 (safe bypass in menu $\mathcal{M}$):}\quad &
+(\gamma^\star, \mathcal{M}) \xrightarrow{\;\mathrm{DiscoverBypass}\;} \bigl(\rho^\star,\, T_{\mathrm{bypass}} \;\text{or}\; \{\mathcal{L}_\sigma\}_{\sigma \in \mathrm{Bij}}\bigr).
+\end{align}
+Three frozen domain libraries $(D_1, D_2, D_3)$ are presented over \emph{pairwise disjoint opaque state spaces}:
+\[
+S_1 \cap S_2 = \varnothing, \qquad S_1 \cap S_3 = \varnothing, \qquad S_2 \cap S_3 = \varnothing.
+\]
+The discoverer cannot rely on shared state names; it must synthesize explicit bijections $\sigma_{12}: S_1 \to S_2$ and $\sigma_{13}: S_1 \to S_3$ and emit a self-contained JSON certificate checked forward-only by a standalone zero-trust verifier.
+
+\takeaway{Core Separation in v4.0}{Certifying a joint cross-domain obstruction (\code{IRREDUCIBLE}) does not imply the existence of a safe revision (\code{BYPASSABLE}). Furthermore, shrinking the initial belief set $B_0$ (\code{RestrictScope}) solves a \emph{different} problem and is formally separated from licensed bypasses (\code{RefinePort}, \code{ReplaceProbe}) that preserve both $B_0$ and the goal set $G$.}
+
+\section{Formal Model and 18 Verified Lean~4.36.0 Declarations}
+
+The formal kernel resides in \code{lean/certified_structural_discovery_v4_0.lean} (909 lines, 40,346 bytes, 0 external imports, compiled on Lean~4.36.0, SHA-256 \code{1bf6ce8aedabb3ce...}).
+
+\subsection{Safe Belief Reachability and A4 Soundness}
+
+A deterministic world with a passive port and an intrusive probe is a tuple $W = (\delta, G, \pi, U_p, Y_p)$ over state type $S$, where $\delta: S \times \mathrm{Act} \to S$, $G \subseteq S$, $\pi: S \to \mathrm{Obs}$, $U_p: S \to S$, and $Y_p: S \to \mathrm{PObs}$. Active belief successors with goal filtering are defined by
+\begin{align*}
+\mathrm{actSucc}(W, B, a, o) &= \{ s' \in S \setminus G \mid \exists s \in B,\; \delta(s, a) = s' \land \pi(s') = o \}, \\
+\mathrm{probeSucc}(W, B, y)  &= \{ s' \in S \setminus G \mid \exists s \in B,\; U_p(s) = s' \land Y_p(s) = y \}.
+\end{align*}
+Crucially, $\mathrm{probeSucc}$ enforces \emph{pre-state observation semantics}: the probe reports $Y_p(s)$ of the pre-deformation state $s$ (synchronized across Lean, the discoverer, and the verifier, with regression control \code{nc11}). Inductive reachability $\mathrm{SafeBeliefReach}(W, k, B)$ captures guaranteed horizon-$\le k$ plans, and $\mathrm{SafeBeliefReachInit}(W, k, B_0) \equiv \forall o,\; \mathrm{SafeBeliefReach}(W, k, B_0 \cap \pi^{-1}(o) \setminus G)$ incorporates initial passive splitting at $t=0$.
+
+\begin{definition}[Closed Losing Region]\label{def:clr}
+A belief family $\mathcal{L} \subseteq \mathcal{P}(S)$ is a \emph{closed losing region} (\code{IsClosedLosingRegion}) if:
+(i) every $B \in \mathcal{L}$ contains some $s \in B \setminus G$;
+(ii) for every $B \in \mathcal{L}$ and $a \in \mathrm{Act}$, there exists $o \in \mathrm{Obs}$ with $\mathrm{actSucc}(W,B,a,o) \in \mathcal{L}$;
+(iii) for every $B \in \mathcal{L}$, there exists $y \in \mathrm{PObs}$ with $\mathrm{probeSucc}(W,B,y) \in \mathcal{L}$.
+\end{definition}
+
+\begin{theorem}[All-Horizon Soundness of \code{A4}, Lean Theorems 1--2]\label{thm:a4}
+If $\mathcal{L}$ is a closed losing region in $W$ and $\exists o \in \mathrm{Obs},\; \mathrm{initBranch}(W, B_0, o) \in \mathcal{L}$, then $\forall k \in \mathbb{N},\; \neg\mathrm{SafeBeliefReachInit}(W, k, B_0)$.
+\end{theorem}
+
+Theorem~\ref{thm:a4} turns the finite JSON losing region $\mathcal{L}$ emitted by least-fixed-point solver \code{A4} into an all-horizon impossibility proof verifiable in $O(|\mathcal{L}|\cdot|\mathrm{Act}|\cdot|S|)$ without search.
+
+\subsection{Structural Join Completeness (H16) and Three-Way Equivariance (H18)}
+
+Given independent domains $D_1 = (\delta, G)$ on $S_1$, $D_2 = (\pi)$ on $S_2$, and $D_3 = (U_p, Y_p)$ on $S_3$, a glue $\gamma = (\sigma_{12}, \sigma_{13}, T_1, s_0, s_1, t)$ specifies explicit bijections $\sigma_{12}: S_1 \to S_2$ and $\sigma_{13}: S_1 \to S_3$, a non-empty closed trap $T_1 \subseteq S_1 \setminus G$ (point sink $|T_1|=1$ or cyclic strongly connected component $|T_1| \ge 2$), and a colliding pair $s_0 \ne s_1$ with $t \in \{s_0, s_1\}$ deformed into $T_1$.
+
+\begin{theorem}[Completeness of Name-Invariant Structural Indices \code{H16}, Lean Theorems 3 \& 9]\label{thm:h16}
+Every structurally valid glue $\gamma$ (both point-sink \code{ValidGlue} and general set-trap \code{ValidSetGlue}) necessarily satisfies the name-invariant structural index predicates $I_1(D_1)$, $I_2(D_2)$, and $I_3(D_3)$. Hence full-mode indexed join \code{A1} drops zero valid glues relative to exhaustive bijection search \code{A0} ($\mathrm{Accepted}(A_1) = \mathrm{Accepted}(A_0)$).
+\end{theorem}
+
+\begin{theorem}[Three-Way Independent Permutation Equivariance \code{H18}, Lean Theorem 4 \& \code{transport_validGlue}]\label{thm:h18}
+For any three \emph{independent} renaming bijections $p_1: S_1 \to S'_1$, $p_2: S_2 \to S'_2$, $p_3: S_3 \to S'_3$, transporting $\gamma$ to $\gamma' = (p_2 \circ \sigma_{12} \circ p_1^{-1},\; p_3 \circ \sigma_{13} \circ p_1^{-1},\; \dots)$ preserves both \code{ValidGlue} and $\mathrm{SafeBeliefReachInit}(W_\gamma, k, B_0) \iff \mathrm{SafeBeliefReachInit}(W'_{\gamma'}, k, B_0 \circ p_1^{-1})$.
+\end{theorem}
+
+\subsection{Honest Bypass (H14), Universal UNBYPASSABLE Soundness, and Transfer (H19--H20)}
+
+Let $\mathrm{SolveOriginalTask}(W, B_0) \equiv \exists k,\; \mathrm{SafeBeliefReachInit}(W, k, B_0)$ and $\mathrm{SolveRestrictedTask}(W, B_0) \equiv \exists B_{\mathrm{sub}} \subseteq B_0,\; (B_{\mathrm{sub}} \ne \varnothing) \land \mathrm{SolveOriginalTask}(W, B_{\mathrm{sub}})$.
+\begin{itemize}
+\item \textbf{Strict Task Separation (\code{H14}, Theorems 5--6):} On the 4-state witness \code{witnessEDR4}, Lean proves $\mathrm{SolveRestrictedTask} \land \neg\mathrm{SolveOriginalTask}$: restricting to $\{s_0\}$ wins in 1 step, whereas the original task on $\{s_0, s_1\}$ is impossible for all $k \in \mathbb{N}$.
+\item \textbf{Universal \code{UNBYPASSABLE} Soundness (Theorems 7a--7b):} Ruling out a licensed alternative port $D'_2$ or probe $D'_3$ requires a family of closed losing regions $\{\mathcal{L}_\sigma\}$ indexed over \emph{all} bijections $\sigma \in \mathrm{Bij}(S_1, S'_2)$ (or $\mathrm{Bij}(S_1, S'_3)$), eliminating existential-for-universal quantifier forgery.
+\item \textbf{Cyclic SCC Trap Separation (\code{H20}, Theorems 8a--8b):} The 5-state witness \code{witnessCyclic5} with absorbing 2-cycle $q_0 \leftrightarrow q_1$ has zero point sinks ($\neg\mathrm{HasPointTrap}$) yet is proved impossible for all $k \in \mathbb{N}$ by the \emph{exact same} \code{IsClosedLosingRegion} kernel with zero modifications.
+\item \textbf{Precondition Gate \& Conditional Stream Amortization (\code{H19}, \code{B6}, Theorems 10--11):} Theorem~10 (\code{transferMethod_blocks_mismatched_scope}) verifies the finite decision table of the fail-closed gate (blocking \code{pointSinkF2} on cyclic SCC / $\mathbb{F}_3$ scopes while admitting \code{quotientSCCMod}), and Theorem~11 (\code{transferMethod_stream_amortization}) proves the conditional amortization bound $c_s + (k-1)c_m < k c_s$ for $c_m < c_s$ and $k \ge 2$ under a declared schema-induction cost model $(c_s, c_m)$.
+\end{itemize}
+
+\begin{table}[!htbp]
+\centering
+\caption{Complete 1-to-1 audit of all 18 declarations in \code{certified_structural_discovery_v4_0.lean} under Lean~4.36.0 (SHA-256 \code{1bf6ce8a...}, \code{exit=0}, 0 errors, 0 warnings, 0~\code{sorryAx}, 0~\code{ofReduceBool}, 0~\code{Classical.choice}).}
+\label{tab:lean-audit}
+\footnotesize
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{6.5cm}>{\raggedright\arraybackslash}Xll@{}}
+\toprule
+\textbf{Lean Declaration} & \textbf{Scope and Exact Statement Role} & \textbf{Class} & \textbf{Axioms} \\
+\midrule
+\code{Bijection.injective}, \code{.inv_injective} & Injectivity of bijections and inverses (2 lemmas) & Helper & \code{none} \\
+\code{closedLosingRegion_not_safeBeliefReach} & Soundness of \code{IsClosedLosingRegion} (step) & Universal & \code{none} \\
+\code{closedLosingRegion_not_safeBeliefReachInit} & All-horizon \code{A4} soundness ($\forall k \in \mathbb{N}$) & Universal & \code{none} \\
+\code{structuralJoin_complete} & Structural index completeness \code{H16} (point traps) & Universal & \code{none} \\
+\code{transport_validGlue} & Preservation of \code{ValidGlue} under $(p_1, p_2, p_3)$ & Universal & \code{none} \\
+\code{safeBeliefReach_iso} & Isomorphic transport of \code{SafeBeliefReach} & Universal & \texttt{propext}, \texttt{Quot.sound} \\
+\code{safeBeliefReachInit_equivariant_three_way} & Three-way independent equivariance \code{H18} & Universal & \texttt{propext}, \texttt{Quot.sound} \\
+\code{solveOriginal_implies_solveRestricted} & Inclusion \code{Original} $\Rightarrow$ \code{Restricted} (\code{H14}) & Universal & \code{none} \\
+\code{L_witness_is_closed} & Closure of $\mathcal{L}$ on 4-state witness & Witness & \code{none} \\
+\code{solveRestricted_not_implies_solveOriginal} & Strict separation \code{H14} & Witness & \code{none} \\
+\code{unbypassableViaPort_of_forall_closedLosing} & Universal $\forall$-soundness for \code{UNBYPASSABLE} (port) & Universal & \code{none} \\
+\code{unbypassableViaProbe_of_forall_closedLosing} & Universal $\forall$-soundness for \code{UNBYPASSABLE} (probe) & Universal & \code{none} \\
+\code{L_cyclic5_is_closed} & Closure of $\mathcal{L}$ on 2-cycle \code{witnessCyclic5} & Witness & \code{none} \\
+\code{pointTrap_absent_yet_cyclicTrap_impossible} & Cyclic SCC separation from point sinks (\code{H20}) & Witness & \code{none} \\
+\code{setTrap_structuralJoin_complete} & Generalized set-trap completeness \code{H16+H19} & Universal & \code{none} \\
+\code{transferMethod_blocks_mismatched_scope} & Fail-closed precondition gate table (\code{H19}) & Gate & \code{none} \\
+\code{transferMethod_stream_amortization} & Conditional amortization $c_s+(k-1)c_m<kc_s$ & Universal & \code{propext} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Executable Core and Zero-Trust Verifier Architecture}
+
+The executable implementation is physically split into two Python~3 standard-library modules:
+\begin{enumerate}
+\item \textbf{Discovery Engine (\code{certified_structural_discovery_v4_0.py}):} implements exhaustive bijection-pair enumeration \code{A0} over $\mathrm{Bij}(S_1, S_2) \times \mathrm{Bij}(S_1, S_3)$, name-invariant structural join \code{A1} ($I_1 \bowtie I_2 \bowtie I_3$ with full index and memory accounting in \code{CostVector}), exact least-fixed-point solver \code{A4} emitting finite \code{PlanTree}s or \code{ClosedLosingRegion}s, \code{DiscoverBypass}, and \code{MethodToken} transfer.
+\item \textbf{Standalone Zero-Trust Verifier (\code{independent_verifier_v4_0.py}):} imports \emph{no} discovery code, performs zero search, and forward-checks serialized JSON certificates: bijection validity of $(\sigma_{12}, \sigma_{13})$, minimality and strong connectivity of \code{trap_set_s1}, $(\mathbb{Z}/m\mathbb{Z})^d$-linearity of $D_2$, all-horizon impossibility via \code{verify_closed_losing_region}, three ablation \code{PlanTree}s $C_1, C_2, C_4$ (opening a single exit from \code{sorted(trap_set)[0]} breaks the entire cyclic trap precisely because strong connectivity of \code{trap_set_s1} is verified), and either a licensed \code{BYPASSABLE} \code{PlanTree} or a complete $n!$-bijection family for \code{UNBYPASSABLE}.
+\end{enumerate}
+
+\section{Empirical Verification: Benchmarks X0--X4b and 12 Negative Controls}
+
+All benchmarks were reproduced via \texttt{python3 test\_v4\_0.py} with byte-identical match to \code{v4_0_hardened_report.json} (SHA-256 \code{0c7497c6...}). Across every benchmark, $S_1, S_2, S_3$ are pairwise disjoint and generated by three independent permutation seeds.
+
+\begin{table}[!htbp]
+\centering
+\caption{Empirical results across \texttt{X0}--\texttt{X4b}. Exact full-bijection completeness \texttt{A1 == A0} (\code{canonical_tail_only=False}) is verified on \texttt{X0, X1, X2, X4a}; representative-tail witness mode (\code{canonical_tail_only=True}) is used on \texttt{X3, X4b}.}
+\label{tab:benchmarks}
+\footnotesize
+\renewcommand{\arraystretch}{1.12}
+\begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}Xcccc@{}}
+\toprule
+\textbf{Bench.} & \textbf{Configuration \& Algebra} & \textbf{\code{H16} Mode} & \textbf{Cost \code{A0} / \code{A1}} & \textbf{Speedup} & \textbf{Verdict / Verif.} \\
+\midrule
+\textbf{X0} & 4 states, $\mathbb{F}_2^2$, no alt.\ menu & Exact (16 = 16) & 1,440 / 221 & \textbf{6.52$\times$} & \code{UNBYPASSABLE} / \code{ACC} \\
+\textbf{X1} & 4 states, $\mathbb{F}_2^2$, with revision menu & Exact (32 = 32) & 7,520 / 458 & \textbf{16.42$\times$} & \code{BYPASSABLE} / \code{ACC} \\
+\textbf{X1\_H18} & 3 independent seeds $(707,808,909)$ & Exact (32 = 32) & 7,520 / 458 & \textbf{16.42$\times$} & Exact \code{H18} / \code{ACC} \\
+\textbf{X2} & 36 triples / 20,736 bijection pairs & Exact (32 = 32) & 22,112 / 668 & \textbf{33.10$\times$} & \code{BYPASSABLE} / \code{ACC} \\
+\textbf{X3} & 6-cell Rule~110 ring sub-automaton ($\mathbb{Z}/6\mathbb{Z}$) & Witness (12) & --- / 194 & --- & \code{BYPASSABLE} / \code{ACC} \\
+\textbf{X4a} & 5 states, $\mathbb{F}_3^2$, 2-cycle SCC, 0 sinks & Exact (288 = 288) & 36,288 / 2,047 & \textbf{17.73$\times$} & \code{BYPASSABLE} / \code{ACC} \\
+\textbf{X4b} & 9 states = full $\mathbb{F}_3^2$, 2-cycle + 3-cycle decoy & Witness (252) & $5.27{\cdot}10^{11}$ / 3,353 & --- & \code{BYPASSABLE} / \code{ACC} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Wolfram Rule~110 Ring Sub-Automaton (\code{X3}).}
+Transitions from $c_0 = (1,1,0,0,1,0)$, $c_1 = (0,0,1,0,1,0)$, and the vacuum $q_{\mathrm{vac}} = (0,0,0,0,0,0)$ are computed directly by two synchronous steps of Wolfram Rule~110~\cite{wolfram1983,cook2004} on $\mathbb{Z}/6\mathbb{Z}$ after setting bit 0 or 3 to 1: pulsing cell 3 annihilates $c_0$ to $q_{\mathrm{vac}}$ and pulsing cell 0 annihilates $c_1$ to $q_{\mathrm{vac}}$, while the opposite pulses yield live target states $g_0 = (0,1,1,1,0,0)$ and $g_1 = (1,1,1,1,1,0)$. Absorbing terminal goal states $g_0, g_1$ and auxiliary state $c_{\mathrm{aux}}$ close the finite 6-state sub-automaton; no claim of infinite-lattice irreversibility is made.
+
+\paragraph{Certified Transfer to Cyclic SCCs and $\mathbb{F}_3^2$ (\texttt{X4a}--\texttt{X4b}, \code{B6}).}
+Benchmarks \code{X4a} ($n=5$, 28,800 bijection pairs in \code{A0}, exact completeness 288 = 288, $17.73\times$ speedup) and \code{X4b} ($n=9$, complete $\mathbb{F}_3^2$ vector space, 0 point sinks, active 2-cycle SCC + disconnected 3-cycle decoy SCC) establish two transfer properties: (i)~the exact same \code{verify_closed_losing_region} verifier certifies cyclic traps unchanged (3-belief invariant $\{\{s_0,s_1\}, \{q_0\}, \{q_1\}\}$); (ii)~the fail-closed precondition gate (\code{nc12}) blocks narrow \code{PointSink_F2} tokens on \code{X4a}/\code{X4b} while admitting \code{QuotientSCC_ModP}. Under \code{B6} on \code{X4b}, \code{WithMemory} (3,353 single episode; 10,089 across a 3-episode stream) strictly undercuts \code{NoMemory} (3,383 and 10,149).
+
+\paragraph{Mandatory Negative Controls (12/12 PASS).}
+All 12 negative controls pass: \code{nc1} (three-way ID permutation), \code{nc2} (disconnected trap pruning in \code{X2} and 3-cycle decoy in \code{X4b}), \code{nc3} (injective port pruning), \code{nc4} (anti-inflation \code{INFLATED_CLAIM} detection), \code{nc5} (\code{DEGENERATE}), \code{nc6} (\code{REDUCIBLE}), \code{nc7} (out-of-menu \code{UNBYPASSABLE} in \code{X0}), \code{nc8} (budget exhaustion fails closed to \code{UNKNOWN}), \code{nc9} (tampered certificate rejection), \code{nc10} (existential \code{UNBYPASSABLE} forgery rejection), \code{nc11} (pre-state probe observation branches \texttt{\{"0","1"\}}), and \code{nc12} (mismatched \code{PointSink_F2} token blocked on \code{X4}).
+
+\section{Scope Boundaries and Limitations}
+
+To preserve strict epistemic hygiene, we explicitly record five boundaries of release v4.0:
+\begin{enumerate}
+\item \textbf{\code{B6} Cost Model (Theorem~11):} The per-episode saving $3,353 < 3,383$ (30 units) reflects the declared schema-induction surcharge ($c_s = 32$) versus cached token lookup ($c_m = 2$), not emergent algorithm synthesis from an unstructured program space.
+\item \textbf{Two \code{H16} Modes:} Exhaustive completeness $\mathrm{Accepted}(A_1) = \mathrm{Accepted}(A_0)$ is verified on \texttt{X0, X1, X2, X4a} ($n \le 5$). On \code{X3} ($n=6$) and \code{X4b} ($n=9$), \code{canonical_tail_only=True} finds witness glues that are 100\% zero-trust verified without exhaustively enumerating all $4\cdot(9!)^2 \approx 5.27\cdot 10^{11}$ bijections.
+\item \textbf{\code{UNBYPASSABLE} Certificate Scaling:} Explicit $n!$-bijection certificates (Theorems 7a--7b) are practical for $n \le 6$; larger $n$ require quotienting by domain automorphism groups $\mathrm{Aut}(D_2), \mathrm{Aut}(D_3)$.
+\item \textbf{Scope of Theorem~10:} \code{transferMethod_blocks_mismatched_scope} is a machine-checked finite decision-table gate theorem on two concrete tokens, complementing the universal metatheorems (Theorems 2, 3, 4, 7a/7b, and 9).
+\item \textbf{Deferred Layer \code{X5}:} A bounded stochastic LLM discoverer harness (\code{X5}) lies outside the deterministic v4.0 core and remains an optional external evaluation layer.
+\end{enumerate}
+
+\section{Reproducibility}
+
+The complete bilingual release bundles all Python sources, the Lean~4.36.0 kernel, \code{V4_0_VERIFICATION.log}, both preprints, and \code{SHA256SUMS.txt}. Full reproduction requires three commands:
+\begin{center}
+\small\texttt{shasum -a 256 -c SHA256SUMS.txt \&\& python3 python/test\_v4\_0.py \&\& bash lean/verify\_v4\_0.sh}
+\end{center}
+
+\begin{thebibliography}{99}
+\small
+\bibitem{blackwell1953} D.~Blackwell. Equivalent comparisons of experiments. \emph{Annals of Mathematical Statistics}, 24(2):265--272, 1953.
+\bibitem{howard1966} R.~A. Howard. Information value theory. \emph{IEEE Transactions on Systems Science and Cybernetics}, 2(1):22--26, 1966.
+\bibitem{fagin1995} R.~Fagin, J.~Y. Halpern, Y.~Moses, and M.~Y. Vardi. \emph{Reasoning About Knowledge}. MIT Press, 1995.
+\bibitem{vanditmarsch2007} H.~van Ditmarsch, W.~van der Hoek, and B.~Kooi. \emph{Dynamic Epistemic Logic}. Springer, 2007.
+\bibitem{kaelbling1998} L.~P. Kaelbling, M.~L. Littman, and A.~R. Cassandra. Planning and acting in partially observable stochastic domains. \emph{Artificial Intelligence}, 101(1--2):99--134, 1998.
+\bibitem{aubin1991} J.-P. Aubin. \emph{Viability Theory}. Birkh\"auser, 1991.
+\bibitem{wolfram1983} S.~Wolfram. Statistical mechanics of cellular automata. \emph{Reviews of Modern Physics}, 55(3):601--644, 1983.
+\bibitem{cook2004} M.~Cook. Universality in elementary cellular automata. \emph{Complex Systems}, 15(1):1--40, 2004.
+\bibitem{demoura2021} L.~de Moura and S.~Ullrich. The Lean 4 theorem prover and programming language. In \emph{CADE-28}, LNCS 12699, pp.~625--635. Springer, 2021.
+\bibitem{strand2026v32} A.~Strand. Epistemic Deformation of Reachability: Logical Irreducibility of Observation, Irreversibility, and Intervention Constraints. Preprint v3.2 (Lean~4.36.0, 27/27 declarations, SHA-256 \code{0a215b66...}), November 25, 2026.
+\end{thebibliography}
+
+\end{document}

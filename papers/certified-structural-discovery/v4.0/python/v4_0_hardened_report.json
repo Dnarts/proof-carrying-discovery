@@ -1,0 +1,205 @@
+{
+  "package": "certified_structural_discovery_v4_0_complete_X0_to_X4",
+  "X0": {
+    "benchmark": "X0_4state_disjoint_UNBYPASSABLE",
+    "disjoint_state_spaces": true,
+    "irreducible_bijection_glues_found": 16,
+    "H16_completeness_A1_eq_A0": true,
+    "A0_total_cost": 1440,
+    "A1_total_cost": 221,
+    "A0_cost_breakdown": {
+      "observations": 96,
+      "synthesis": 1152,
+      "port_revision": 0,
+      "verification": 192,
+      "memory": 0,
+      "total": 1440
+    },
+    "A1_cost_breakdown": {
+      "observations": 32,
+      "synthesis": 56,
+      "port_revision": 0,
+      "verification": 128,
+      "memory": 5,
+      "total": 221
+    },
+    "H17_speedup_ratio": 6.52,
+    "bypass_verdicts_unique": [
+      "UNBYPASSABLE"
+    ],
+    "inflated_claims_caught_A0": 64,
+    "zero_trust_verifier_all_accepted": true
+  },
+  "X1": {
+    "benchmark": "X1_4state_disjoint_BYPASSABLE",
+    "disjoint_state_spaces": true,
+    "irreducible_bijection_glues_found": 32,
+    "H16_completeness_A1_eq_A0": true,
+    "A0_total_cost": 7520,
+    "A1_total_cost": 458,
+    "A0_cost_breakdown": {
+      "observations": 192,
+      "synthesis": 6912,
+      "port_revision": 32,
+      "verification": 384,
+      "memory": 0,
+      "total": 7520
+    },
+    "A1_cost_breakdown": {
+      "observations": 64,
+      "synthesis": 100,
+      "port_revision": 32,
+      "verification": 256,
+      "memory": 6,
+      "total": 458
+    },
+    "H17_speedup_ratio": 16.42,
+    "bypass_verdicts_unique": [
+      "BYPASSABLE"
+    ],
+    "inflated_claims_caught_A0": 128,
+    "zero_trust_verifier_all_accepted": true
+  },
+  "X1_H18_three_way_perm": {
+    "benchmark": "X1_H18_three_way_independent_perm",
+    "disjoint_state_spaces": true,
+    "irreducible_bijection_glues_found": 32,
+    "H16_completeness_A1_eq_A0": true,
+    "A0_total_cost": 7520,
+    "A1_total_cost": 458,
+    "A0_cost_breakdown": {
+      "observations": 192,
+      "synthesis": 6912,
+      "port_revision": 32,
+      "verification": 384,
+      "memory": 0,
+      "total": 7520
+    },
+    "A1_cost_breakdown": {
+      "observations": 64,
+      "synthesis": 100,
+      "port_revision": 32,
+      "verification": 256,
+      "memory": 6,
+      "total": 458
+    },
+    "H17_speedup_ratio": 16.42,
+    "bypass_verdicts_unique": [
+      "BYPASSABLE"
+    ],
+    "inflated_claims_caught_A0": 128,
+    "zero_trust_verifier_all_accepted": true
+  },
+  "X2_expanded": {
+    "benchmark": "X2_expanded_decoys_36triples",
+    "disjoint_state_spaces": true,
+    "irreducible_bijection_glues_found": 32,
+    "H16_completeness_A1_eq_A0": true,
+    "A0_total_cost": 22112,
+    "A1_total_cost": 668,
+    "A0_cost_breakdown": {
+      "observations": 384,
+      "synthesis": 20736,
+      "port_revision": 32,
+      "verification": 960,
+      "memory": 0,
+      "total": 22112
+    },
+    "A1_cost_breakdown": {
+      "observations": 128,
+      "synthesis": 180,
+      "port_revision": 32,
+      "verification": 320,
+      "memory": 8,
+      "total": 668
+    },
+    "H17_speedup_ratio": 33.1,
+    "bypass_verdicts_unique": [
+      "BYPASSABLE"
+    ],
+    "inflated_claims_caught_A0": 256,
+    "zero_trust_verifier_all_accepted": true
+  },
+  "X3_Rule110": {
+    "benchmark": "X3_Rule110_6state_disjoint",
+    "disjoint_state_spaces": true,
+    "A1_irreducible_found": 12,
+    "A1_total_cost": 194,
+    "A1_cost_breakdown": {
+      "observations": 36,
+      "synthesis": 66,
+      "port_revision": 12,
+      "verification": 72,
+      "memory": 8,
+      "total": 194
+    },
+    "bypass_verdicts_unique": [
+      "BYPASSABLE"
+    ],
+    "zero_trust_verifier": "ACCEPTED"
+  },
+  "X4a_5state_F3_cyclicSCC_exact": {
+    "benchmark": "X4a_5state_F3_cyclicSCC_exact_H16",
+    "disjoint_state_spaces": true,
+    "irreducible_bijection_glues_found": 288,
+    "H16_completeness_A1_eq_A0": true,
+    "A0_total_cost": 36288,
+    "A1_total_cost": 2047,
+    "A0_cost_breakdown": {
+      "observations": 1152,
+      "synthesis": 28800,
+      "port_revision": 288,
+      "verification": 6048,
+      "memory": 0,
+      "total": 36288
+    },
+    "A1_cost_breakdown": {
+      "observations": 288,
+      "synthesis": 313,
+      "port_revision": 288,
+      "verification": 1152,
+      "memory": 6,
+      "total": 2047
+    },
+    "H17_speedup_ratio": 17.73,
+    "bypass_verdicts_unique": [
+      "BYPASSABLE"
+    ],
+    "inflated_claims_caught_A0": 576,
+    "zero_trust_verifier_all_accepted": true
+  },
+  "X4b_9state_full_F3_squared_transfer": {
+    "benchmark": "X4b_9state_full_F3_squared_cyclicSCC_transfer",
+    "disjoint_state_spaces": true,
+    "modulus": 3,
+    "point_sinks_in_D1": 0,
+    "trap_scc_sizes_in_D1": [
+      2,
+      3
+    ],
+    "A0_theoretical_bijection_pairs": 526727577600,
+    "A1_irreducible_found": 252,
+    "B6_single_episode_WithMemory_cost": 3353,
+    "B6_single_episode_NoMemory_cost": 3383,
+    "B6_stream_3episodes_WithMemory_cost": 10089,
+    "B6_stream_3episodes_NoMemory_cost": 10149,
+    "bypass_verdicts_unique": [
+      "BYPASSABLE"
+    ],
+    "zero_trust_verifier": "ACCEPTED"
+  },
+  "negative_controls": {
+    "nc1_three_way_independent_ID_permutation_H18": true,
+    "nc2_disconnected_trap_pruned_in_X2_and_3cycle_in_X4b": true,
+    "nc3_injective_ports_pruned_in_X2_and_X4": true,
+    "nc4_anti_inflation_caught": true,
+    "nc5_degenerate_goal_in_pair_rejected": true,
+    "nc6_reducible_redundant_domain_rejected": true,
+    "nc7_out_of_menu_unbypassable_X0": true,
+    "nc8_tiny_budget_returns_UNKNOWN": true,
+    "nc9_zero_trust_verifier_rejects_tampered_certs": true,
+    "nc10_forged_existential_unbypassable_rejected": true,
+    "nc11_pre_state_probe_obs_both_branches_verified": true,
+    "nc12_mismatched_point_sink_f2_token_blocked_on_X4": true
+  }
+}

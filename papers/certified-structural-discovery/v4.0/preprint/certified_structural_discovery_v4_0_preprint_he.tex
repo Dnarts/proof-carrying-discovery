@@ -1,0 +1,256 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage[bidi=basic]{babel}
+\babelprovide[import, main]{hebrew}
+\babelprovide[import]{english}
+\directlua{luaotfload.add_fallback("latin", {"Noto Serif:mode=harf;"})}
+\babelfont{rm}[Renderer=HarfBuzz, RawFeature={fallback=latin}]{Noto Serif Hebrew}
+\babelfont{sf}[Renderer=HarfBuzz, RawFeature={fallback=latin}]{Noto Sans Hebrew}
+\babelfont[english]{rm}{Noto Serif}
+\babelfont[english]{sf}{Noto Sans}
+\babelfont{tt}[Scale=0.86]{DejaVu Sans Mono}
+\DeclareSymbolFont{operators}{OT1}{lmr}{m}{n}
+\SetSymbolFont{operators}{bold}{OT1}{lmr}{bx}{n}
+\DeclareMathAlphabet{\mathrm}{OT1}{lmr}{m}{n}
+
+\usepackage[a4paper,margin=19mm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,tabularx,array}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+
+\definecolor{primary}{RGB}{24,62,115}
+\definecolor{muted}{RGB}{90,98,110}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  citecolor=primary,
+  urlcolor=primary,
+  pdftitle={Certified Structural Discovery (v4.0) - Hebrew},
+  pdfauthor={A. Strand}
+}
+
+\setlength{\parskip}{5pt plus 2pt minus 1pt}
+\setlength{\parindent}{0pt}
+\emergencystretch=2.5em
+
+\newcommand{\code}[1]{\foreignlanguage{english}{\nolinkurl{#1}}}
+\newcommand{\ltr}[1]{\foreignlanguage{english}{#1}}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[R]{\small\color{muted}א. סטרנד \textperiodcentered\ גילוי מבני מאושר (\ltr{v4.0})}
+\fancyhead[L]{\small\color{muted}טרום-פרסום, 25 בנובמבר 2026}
+\fancyfoot[C]{\small\color{muted}\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\setlength{\headheight}{13.6pt}
+
+\newtheorem{definition}{הגדרה}[section]
+\newtheorem{theorem}{משפט}[section]
+
+\newcommand{\takeaway}[2]{%
+  \vspace{4pt}\noindent\colorbox{primary!7}{%
+    \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
+      \vspace{3pt}\textbf{\color{primary}#1:}\hspace{0.4em}#2\vspace{3pt}%
+    }%
+  }\vspace{4pt}%
+}
+
+\title{\textbf{\Large גילוי מבני מאושר:}\\[4pt]
+\large סינתזה אוטונומית של חיבורים בין-תחומיים, עקיפה בטוחה\\
+והעברה מאומתת של שיטות}
+
+\author{א. סטרנד (\ltr{A. Strand})\\
+\small חוקר עצמאי \textperiodcentered\ גרסה \ltr{v4.0} (25 בנובמבר 2026)}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+בעבודה הקודמת \emph{«עיוות אפיסטמי של הישגיות»} (\ltr{v3.2}) הוכח פורמלית כי הצירוף של מלכודת בולעת שאינה יעד ($G_1$), אי-הבחנה ליניארית בין מצבים ($G_2$) ומדידה מתערבת ($G_4$) שולל הישגיות מובטחת בכל אופק סופי $k \in \mathbb{N}$, תוך אי-פריקות מלאה לכל תת-קבוצה ממש של התחומים. ואולם בגרסה \ltr{v3.2} ההתאמה הבין-תחומית (\code{InterfaceGlue}) סופקה ידנית. בטרום-פרסום זה (\ltr{v4.0}), החיבור $\gamma = (\sigma_{12}, \sigma_{13})$ הופך ל\emph{אובייקט חיפוש בלתי ידוע} מעל מרחבי מצבים זרים בזוגות $S_1, S_2, S_3$ בעלי תמורות מזהים בלתי תלויות, והתהליך מתפרק לשני פלטים אורתוגונליים: אישור אי-פריקות משותפת (\code{CrossVerdict}) וסינתזה של עקיפה בטוחה בתפריט מורשה מבלי לשנות את המשימה המקורית (\code{BypassVerdict}). אנו מציגים גרעין פורמלי נקי ב-\ltr{Lean 4.36.0} (\ltr{18/18} הצהרות מאומתות, 0 ייבואים חיצוניים, \ltr{0} \code{sorryAx}, \ltr{0} \code{ofReduceBool}, \ltr{0} \code{Classical.choice}, מהן \ltr{15/18} ללא אקסיומות כלל; \ltr{SHA-256} \code{1bf6ce8a...}), מאמת אפס-אמון (\ltr{zero-trust}) מבודד פיזית, סדרת אמות מידה \ltr{X0--X4b} (כולל תת-אוטומט טבעתי בן 6 תאים של כלל וולפרם 110 על $\mathbb{Z}/6\mathbb{Z}$ והעברה למלכודות \ltr{SCC} מחזוריות עם פורטים מעל $\mathbb{F}_3^2$) וכן \ltr{12/12} בקרות שליליות מחייבות.
+\end{abstract}
+
+\section{מאימות חיבור לגילוי אוטונומי}
+
+משפט בלקוול הקלאסי להשוואת ניסויים~\cite{blackwell1953,howard1966} מבטיח ערך אי-שלילי למידע חינמי ($\mathrm{VoI} \ge 0$) כל עוד התצפית אינה משנה את דינמיקת המערכת. בתכנון אפיסטמי דטרמיניסטי עם גשושים מתערבים~\cite{fagin1995,vanditmarsch2007,kaelbling1998,strand2026v32} עיקרון זה נשבר מבנית: צירוף של מלכודת בלתי הפיכה ($D_1$), הטלה ליניארית מאבדת מידע ($D_2$) וגשוש מעוות-מצב ($D_3$) שולל הישגיות מובטחת לכל $k \in \mathbb{N}$, בעוד הסרת כל תחום יחיד מחזירה אסטרטגיה מנצחת.
+
+המעבר הארכיטקטוני ב-\ltr{v4.0} מחליף חיבור ידני בסינתזה אוטונומית ואימות חיצוני בלתי תלוי:
+\begin{align}\label{eq:pipeline}
+\text{\ltr{Shift 1 (DiscoverGlue):}}\quad &
+(D_1, D_2, D_3) \xrightarrow{\;\mathrm{DiscoverGlue}\;} \bigl(\gamma^\star,\, \mathcal{L},\, \{T_{C_1}, T_{C_2}, T_{C_4}\}\bigr), \\
+\text{\ltr{Shift 2 (DiscoverBypass):}}\quad &
+(\gamma^\star, \mathcal{M}) \xrightarrow{\;\mathrm{DiscoverBypass}\;} \bigl(\rho^\star,\, T_{\mathrm{bypass}} \;\text{\ltr{or}}\; \{\mathcal{L}_\sigma\}_{\sigma \in \mathrm{Bij}}\bigr).
+\end{align}
+שלוש ספריות קפואות $(D_1, D_2, D_3)$ ניתנות מעל \emph{מרחבי מצבים אטומים וזרים בזוגות}:
+\[
+S_1 \cap S_2 = \varnothing, \qquad S_1 \cap S_3 = \varnothing, \qquad S_2 \cap S_3 = \varnothing.
+\]
+מנוע הגילוי אינו יכול להסתמך על שמות מצבים משותפים; עליו לסנתז במפורש התאמות חד-חד-ערכיות ועל $\sigma_{12}: S_1 \to S_2$ ו-$\sigma_{13}: S_1 \to S_3$, ולהפיק תעודת \ltr{JSON} עצמאית הנבדקת קדימה בלבד בידי מאמת אפס-אמון נפרד.
+
+\takeaway{ההפרדה המרכזית ב-\ltr{v4.0}}{אישור חסימה בין-תחומית אי-פריקה (\code{IRREDUCIBLE}) אינו גורר קיום עקיפה בטוחה (\code{BYPASSABLE}). יתרה מזו, צמצום קבוצת המצבים ההתחלתית $B_0$ (\code{RestrictScope}) פותר משימה \emph{אחרת} ומופרד פורמלית מעקיפות מורשות (\code{RefinePort}, \code{ReplaceProbe}) המשמרות את $B_0$ ואת קבוצת היעדים $G$.}
+
+\section{המודל הפורמלי ו-18 הצהרות מאומתות ב-Lean 4.36.0}
+
+הגרעין הפורמלי מצוי בקובץ \code{lean/certified_structural_discovery_v4_0.lean} (909 שורות, 40,346 בתים, 0 ייבואים חיצוניים, הידור נקי ב-\ltr{Lean 4.36.0}, \ltr{SHA-256} \code{1bf6ce8aedabb3ce...}).
+
+\subsection{הישגיות אמונה בטוחה ונאותות A4}
+
+עולם דטרמיניסטי עם פורט פסיבי וגשוש מתערב מוגדר כחמישייה $W = (\delta, G, \pi, U_p, Y_p)$ מעל קבוצת המצבים $S$, כאשר $\delta: S \times \mathrm{Act} \to S$, $G \subseteq S$, $\pi: S \to \mathrm{Obs}$, $U_p: S \to S$ ו-$Y_p: S \to \mathrm{PObs}$. עוקבי אמונה פעילים לאחר סינון מצבי יעד מוגדרים כך:
+\begin{align*}
+\mathrm{actSucc}(W, B, a, o) &= \{ s' \in S \setminus G \mid \exists s \in B,\; \delta(s, a) = s' \land \pi(s') = o \}, \\
+\mathrm{probeSucc}(W, B, y)  &= \{ s' \in S \setminus G \mid \exists s \in B,\; U_p(s) = s' \land Y_p(s) = y \}.
+\end{align*}
+נקודה מהותית היא ש-$\mathrm{probeSucc}$ אוכפת \emph{סמנטיקת תצפית קדם-שינוי}: הגשוש מחזיר את התצפית $Y_p(s)$ של המצב המקורי לפני העיוות $U_p(s)$ (מסונכרן בין \ltr{Lean}, מנוע הגילוי והמאמת, ונבדק בבקרת הרגרסיה \code{nc11}). הפרדיקט האינדוקטיבי $\mathrm{SafeBeliefReach}(W, k, B)$ מבטא קיום תוכנית מנצחת בעומק $\le k$, ו-$\mathrm{SafeBeliefReachInit}(W, k, B_0) \equiv \forall o,\; \mathrm{SafeBeliefReach}(W, k, B_0 \cap \pi^{-1}(o) \setminus G)$ משקלל את הפיצול הפסיבי בזמן $t=0$.
+
+\begin{definition}[אזור הפסד סגור]\label{def:clr}
+משפחת אמונות $\mathcal{L} \subseteq \mathcal{P}(S)$ נקראת \emph{אזור הפסד סגור} (\code{IsClosedLosingRegion}) אם:
+(i) לכל $B \in \mathcal{L}$ קיים $s \in B \setminus G$;
+(ii) לכל $B \in \mathcal{L}$ וכל $a \in \mathrm{Act}$ קיים $o \in \mathrm{Obs}$ כך ש-$\mathrm{actSucc}(W,B,a,o) \in \mathcal{L}$;
+(iii) לכל $B \in \mathcal{L}$ קיים $y \in \mathrm{PObs}$ כך ש-$\mathrm{probeSucc}(W,B,y) \in \mathcal{L}$.
+\end{definition}
+
+\begin{theorem}[נאותות A4 לכל האופקים, משפטי 1--2 ב-Lean]\label{thm:a4}
+אם $\mathcal{L}$ הוא אזור הפסד סגור ב-$W$ וקיים $o \in \mathrm{Obs}$ כך ש-$\mathrm{initBranch}(W, B_0, o) \in \mathcal{L}$, אז לכל $k \in \mathbb{N}$ מתקיים $\neg\mathrm{SafeBeliefReachInit}(W, k, B_0)$.
+\end{theorem}
+
+משפט~\ref{thm:a4} הופך את אזור ההפסד הסופי $\mathcal{L}$ שמפיק פותר נקודת השבת המינימלית \code{A4} להוכחת אי-אפשרות לכל $k \in \mathbb{N}$, הניתנת לבדיקה בסיבוכיות $O(|\mathcal{L}|\cdot|\mathrm{Act}|\cdot|S|)$ ללא חיפוש.
+
+\subsection{שלמות הצטרפות מבנית (H16) ואקוויוואריאנטיות תלת-כיוונית (H18)}
+
+עבור תחומים בלתי תלויים $D_1 = (\delta, G)$ על $S_1$, $D_2 = (\pi)$ על $S_2$ ו-$D_3 = (U_p, Y_p)$ על $S_3$, חיבור $\gamma = (\sigma_{12}, \sigma_{13}, T_1, s_0, s_1, t)$ מגדיר בייקציות מפורשות $\sigma_{12}: S_1 \to S_2$ ו-$\sigma_{13}: S_1 \to S_3$, מלכודת סגורה לא ריקה $T_1 \subseteq S_1 \setminus G$ (מלכודת נקודתית $|T_1|=1$ או רכיב קשיר היטב מחזורי $|T_1| \ge 2$) וזוג מתנגש $s_0 \ne s_1$ שבו $t \in \{s_0, s_1\}$ מועבר אל $T_1$ על ידי הגשוש.
+
+\begin{theorem}[שלמות אינדקסים אינווריאנטיים לשמות H16, משפטים 3 ו-9 ב-Lean]\label{thm:h16}
+כל חיבור תקין מבנית $\gamma$ (הן עבור מלכודות נקודתיות \code{ValidGlue} והן עבור מלכודות קבוצה \code{ValidSetGlue}) מקיים בהכרח את פרדיקטי האינדקס $I_1(D_1)$, $I_2(D_2)$ ו-$I_3(D_3)$. לפיכך ההצטרפות המבנית \code{A1} במצב מלא אינה מאבדת אף חיבור תקין מהחיפוש הממצה \code{A0} ($\mathrm{Accepted}(A_1) = \mathrm{Accepted}(A_0)$).
+\end{theorem}
+
+\begin{theorem}[אקוויוואריאנטיות תלת-כיוונית בלתי תלויה H18, משפט 4 ו-transport\_validGlue]\label{thm:h18}
+לכל שלוש בייקציות שינוי-שמות \emph{בלתי תלויות} $p_1: S_1 \to S'_1$, $p_2: S_2 \to S'_2$, $p_3: S_3 \to S'_3$, ההעברה $\gamma' = (p_2 \circ \sigma_{12} \circ p_1^{-1},\; p_3 \circ \sigma_{13} \circ p_1^{-1},\; \dots)$ משמרת הן את \code{ValidGlue} והן את $\mathrm{SafeBeliefReachInit}(W_\gamma, k, B_0) \iff \mathrm{SafeBeliefReachInit}(W'_{\gamma'}, k, B_0 \circ p_1^{-1})$.
+\end{theorem}
+
+\subsection{עקיפה הוגנת (H14), נאותות אוניברסלית של UNBYPASSABLE והעברה (H19--H20)}
+
+נגדיר $\mathrm{SolveOriginalTask}(W, B_0) \equiv \exists k,\; \mathrm{SafeBeliefReachInit}(W, k, B_0)$ וכן $\mathrm{SolveRestrictedTask}(W, B_0) \equiv \exists B_{\mathrm{sub}} \subseteq B_0,\; (B_{\mathrm{sub}} \ne \varnothing) \land \mathrm{SolveOriginalTask}(W, B_{\mathrm{sub}})$.
+\begin{itemize}
+\item \textbf{הפרדה קשיחה (\ltr{H14}, משפטים 5--6):} בעד בן 4 מצבים \code{witnessEDR4} מוכח $\mathrm{SolveRestrictedTask} \land \neg\mathrm{SolveOriginalTask}$: צמצום ל-$\{s_0\}$ מנצח בצעד אחד, בעוד המשימה המקורית על $\{s_0, s_1\}$ בלתי אפשרית לכל $k \in \mathbb{N}$.
+\item \textbf{נאותות אוניברסלית ל-\ltr{UNBYPASSABLE} (משפטים \ltr{7a--7b}):} שלילת פורט חלופי $D'_2$ או גשוש $D'_3$ דורשת משפחת אזורי הפסד סגורים $\{\mathcal{L}_\sigma\}$ על פני \emph{כל} הבייקציות $\sigma \in \mathrm{Bij}(S_1, S'_2)$ (או $\mathrm{Bij}(S_1, S'_3)$), וחוסמת זיוף כמת קיומי.
+\item \textbf{הפרדת מלכודות \ltr{SCC} מחזוריות (\ltr{H20}, משפטים \ltr{8a--8b}):} העד בן 5 המצבים \code{witnessCyclic5} בעל מחזור-2 בולע $q_0 \leftrightarrow q_1$ נטול מלכודות נקודתיות ($\neg\mathrm{HasPointTrap}$), אך מוכח כבלתי אפשרי לכל $k \in \mathbb{N}$ באמצעות אותו גרעין \code{IsClosedLosingRegion} ללא כל שינוי.
+\item \textbf{שער תנאי-קדם ואמורטיזציה מותנית (\ltr{H19}, \ltr{B6}, משפטים 10--11):} משפט 10 (\code{transferMethod_blocks_mismatched_scope}) מאמת את טבלת ההחלטה הסופית של שער התנאים (חסימת \code{pointSinkF2} על \ltr{SCC} מחזוריים ו-$\mathbb{F}_3$ ואישור \code{quotientSCCMod}), ומשפט 11 (\code{transferMethod_stream_amortization}) מוכיח $c_s + (k-1)c_m < k c_s$ לכל $c_m < c_s$ ו-$k \ge 2$ תחת מודל עלות מוצהר $(c_s, c_m)$.
+\end{itemize}
+
+\begin{table}[!htbp]
+\centering
+\caption{ביקורת מלאה של כל 18 ההצהרות ב-\code{certified_structural_discovery_v4_0.lean} תחת \ltr{Lean 4.36.0} (\ltr{SHA-256} \code{1bf6ce8a...}, \code{exit=0}, 0 שגיאות, 0 אזהרות, 0~\code{sorryAx}, 0~\code{ofReduceBool}, 0~\code{Classical.choice}).}
+\label{tab:lean-audit}
+\footnotesize
+\renewcommand{\arraystretch}{1.12}
+\begin{otherlanguage}{english}
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{6.5cm}>{\raggedright\arraybackslash}Xll@{}}
+\toprule
+\textbf{Lean Declaration} & \textbf{Scope and Exact Role} & \textbf{Class} & \textbf{Axioms} \\
+\midrule
+\nolinkurl{Bijection.injective}, \nolinkurl{.inv_injective} & Injectivity of bijections and inverses (2 lemmas) & Helper & \nolinkurl{none} \\
+\nolinkurl{closedLosingRegion_not_safeBeliefReach} & Soundness of \nolinkurl{IsClosedLosingRegion} (step) & Universal & \nolinkurl{none} \\
+\nolinkurl{closedLosingRegion_not_safeBeliefReachInit} & All-horizon A4 soundness ($\forall k \in \mathbb{N}$) & Universal & \nolinkurl{none} \\
+\nolinkurl{structuralJoin_complete} & Structural index completeness H16 (point traps) & Universal & \nolinkurl{none} \\
+\nolinkurl{transport_validGlue} & Preservation of \nolinkurl{ValidGlue} under $(p_1, p_2, p_3)$ & Universal & \nolinkurl{none} \\
+\nolinkurl{safeBeliefReach_iso} & Isomorphic transport of \nolinkurl{SafeBeliefReach} & Universal & \texttt{propext}, \texttt{Quot.sound} \\
+\nolinkurl{safeBeliefReachInit_equivariant_three_way} & Three-way independent equivariance H18 & Universal & \texttt{propext}, \texttt{Quot.sound} \\
+\nolinkurl{solveOriginal_implies_solveRestricted} & Inclusion Original $\Rightarrow$ Restricted (H14) & Universal & \nolinkurl{none} \\
+\nolinkurl{L_witness_is_closed} & Closure of $\mathcal{L}$ on 4-state witness & Witness & \nolinkurl{none} \\
+\nolinkurl{solveRestricted_not_implies_solveOriginal} & Strict separation H14 & Witness & \nolinkurl{none} \\
+\nolinkurl{unbypassableViaPort_of_forall_closedLosing} & Universal $\forall$-soundness for UNBYPASSABLE (port) & Universal & \nolinkurl{none} \\
+\nolinkurl{unbypassableViaProbe_of_forall_closedLosing} & Universal $\forall$-soundness for UNBYPASSABLE (probe) & Universal & \nolinkurl{none} \\
+\nolinkurl{L_cyclic5_is_closed} & Closure of $\mathcal{L}$ on 2-cycle \nolinkurl{witnessCyclic5} & Witness & \nolinkurl{none} \\
+\nolinkurl{pointTrap_absent_yet_cyclicTrap_impossible} & Cyclic SCC separation from point sinks (H20) & Witness & \nolinkurl{none} \\
+\nolinkurl{setTrap_structuralJoin_complete} & Generalized set-trap completeness H16+H19 & Universal & \nolinkurl{none} \\
+\nolinkurl{transferMethod_blocks_mismatched_scope} & Fail-closed precondition gate table (H19) & Gate & \nolinkurl{none} \\
+\nolinkurl{transferMethod_stream_amortization} & Conditional amortization $c_s+(k-1)c_m<kc_s$ & Universal & \nolinkurl{propext} \\
+\bottomrule
+\end{tabularx}
+\end{otherlanguage}
+\end{table}
+
+\section{ארכיטקטורת הליבה המבצעת ומאמת אפס-אמון}
+
+המימוש ב-\ltr{Python 3} (ספרייה תקנית בלבד) מופרד פיזית לשני מודולים:
+\begin{enumerate}
+\item \textbf{מנוע הגילוי (\code{certified_structural_discovery_v4_0.py}):} מממש חיפוש ממצה של כל זוגות הבייקציות \code{A0} ($\mathrm{Bij}(S_1,S_2)\times\mathrm{Bij}(S_1,S_3)$), הצטרפות מבנית אינווריאנטית לשמות \code{A1} ($I_1 \bowtie I_2 \bowtie I_3$ עם רישום מלא של עלות האינדוקס והזיכרון ב-\code{CostVector}), פותר נקודת שבת \code{A4} (המפיק \code{PlanTree} או \code{ClosedLosingRegion}), סינתזת עקיפה \code{DiscoverBypass} והעברת אסימוני שיטה \code{MethodToken}.
+\item \textbf{מאמת אפס-אמון עצמאי (\code{independent_verifier_v4_0.py}):} \emph{אינו מייבא} את מנוע הגילוי, אינו מבצע חיפוש, ובודק קדימה תעודות \ltr{JSON}: תקינות הבייקציות $(\sigma_{12},\sigma_{13})$, מינימליות וקשירות חזקה של \code{trap_set_s1}, הומומורפיות מודולרית מעל $(\mathbb{Z}/m\mathbb{Z})^d$, אי-אפשרות לכל אופק באמצעות \code{verify_closed_losing_region}, שלוש תוכניות אבלציה $C_1, C_2, C_4$ (פתיחת יציאה אחת מ-\code{sorted(trap_set)[0]} שוברת את מלוא המחזור בזכות הקשירות החזקה המאומתת של ה-\ltr{SCC}), וכן \code{PlanTree} מורשה עבור \code{BYPASSABLE} או משפחת כל $n!$ הבייקציות עבור \code{UNBYPASSABLE}.
+\end{enumerate}
+
+\section{אימות אמפירי: אמות מידה X0--X4b ו-12 בקרות שליליות}
+
+כל הניסויים שוחזרו באמצעות \ltr{\texttt{python3 test\_v4\_0.py}} בהתאמה זהה לבית מול \code{v4_0_hardened_report.json} (\ltr{SHA-256} \code{0c7497c6...}). בכל אמות המידה מרחבי המצבים $S_1, S_2, S_3$ זרים בזוגות ומחוללים משלושה גרעיני אקראיות בלתי תלויים.
+
+\begin{table}[!htbp]
+\centering
+\caption{תוצאות אמפיריות ב-\ltr{X0--X4b}. שלמות בייקציות מלאה \ltr{\texttt{A1 == A0}} (\code{canonical_tail_only=False}) מאומתת ב-\ltr{X0, X1, X2, X4a}; מצב עדים מייצג (\code{canonical_tail_only=True}) מופעל ב-\ltr{X3, X4b}.}
+\label{tab:benchmarks}
+\footnotesize
+\renewcommand{\arraystretch}{1.12}
+\begin{otherlanguage}{english}
+\begin{tabularx}{\linewidth}{@{}l>{\raggedright\arraybackslash}Xcccc@{}}
+\toprule
+\textbf{Bench.} & \textbf{Configuration \& Algebra} & \textbf{H16 Mode} & \textbf{Cost A0 / A1} & \textbf{Speedup} & \textbf{Verdict / Verif.} \\
+\midrule
+\textbf{X0} & 4 states, $\mathbb{F}_2^2$, no alt.\ menu & Exact (16 = 16) & 1,440 / 221 & \textbf{6.52$\times$} & \nolinkurl{UNBYPASSABLE} / \nolinkurl{ACC} \\
+\textbf{X1} & 4 states, $\mathbb{F}_2^2$, with revision menu & Exact (32 = 32) & 7,520 / 458 & \textbf{16.42$\times$} & \nolinkurl{BYPASSABLE} / \nolinkurl{ACC} \\
+\textbf{X1\_H18} & 3 independent seeds $(707,808,909)$ & Exact (32 = 32) & 7,520 / 458 & \textbf{16.42$\times$} & Exact H18 / \nolinkurl{ACC} \\
+\textbf{X2} & 36 triples / 20,736 bijection pairs & Exact (32 = 32) & 22,112 / 668 & \textbf{33.10$\times$} & \nolinkurl{BYPASSABLE} / \nolinkurl{ACC} \\
+\textbf{X3} & 6-cell Rule~110 ring sub-automaton ($\mathbb{Z}/6\mathbb{Z}$) & Witness (12) & --- / 194 & --- & \nolinkurl{BYPASSABLE} / \nolinkurl{ACC} \\
+\textbf{X4a} & 5 states, $\mathbb{F}_3^2$, 2-cycle SCC, 0 sinks & Exact (288 = 288) & 36,288 / 2,047 & \textbf{17.73$\times$} & \nolinkurl{BYPASSABLE} / \nolinkurl{ACC} \\
+\textbf{X4b} & 9 states = full $\mathbb{F}_3^2$, 2-cycle + 3-cycle decoy & Witness (252) & $5.27{\cdot}10^{11}$ / 3,353 & --- & \nolinkurl{BYPASSABLE} / \nolinkurl{ACC} \\
+\bottomrule
+\end{tabularx}
+\end{otherlanguage}
+\end{table}
+
+\paragraph{תת-אוטומט טבעתי של כלל וולפרם 110 (\code{X3}).}
+המעברים מ-$c_0 = (1,1,0,0,1,0)$, $c_1 = (0,0,1,0,1,0)$ ומהוואקום $q_{\mathrm{vac}} = (0,0,0,0,0,0)$ מחושבים ישירות בשני צעדים סינכרוניים של כלל וולפרם 110~\cite{wolfram1983,cook2004} על $\mathbb{Z}/6\mathbb{Z}$ לאחר פולס הדלקת סיבית בתא 0 או 3: פולס בתא 3 מאיין את $c_0$ אל $q_{\mathrm{vac}}$ ופולס בתא 0 מאיין את $c_1$ אל $q_{\mathrm{vac}}$, ואילו הפולסים ההפוכים מובילים למצבי היעד החיים $g_0 = (0,1,1,1,0,0)$ ו-$g_1 = (1,1,1,1,1,0)$. מצבי היעד הבולעים $g_0, g_1$ ומצב העזר $c_{\mathrm{aux}}$ סוגרים את תת-האוטומט הסופי בן 6 המצבים; אין טענה לגבי אי-הפיכות על סריג אינסופי.
+
+\paragraph{העברה מאושרת ל-\ltr{SCC} מחזוריים ול-$\mathbb{F}_3^2$ (\ltr{X4a--X4b}, \code{B6}).}
+אמות המידה \code{X4a} ($n=5$, 28,800 זוגות בייקציות ב-\code{A0}, שלמות מדויקת \ltr{288 = 288}, האצה $17.73\times$) ו-\code{X4b} ($n=9$, מרחב $\mathbb{F}_3^2$ מלא, 0 מלכודות נקודתיות, מחזור-2 פעיל ומחזור-3 הטעיה) מדגימות שתי תכונות: (i) אותו מאמת \code{verify_closed_losing_region} מאשר מלכודות מחזוריות ללא שינוי (אינווריאנט בן 3 אמונות $\{\{s_0,s_1\},\{q_0\},\{q_1\}\}$); (ii) השער \code{nc12} חוסם את האסימון הצר \code{PointSink_F2} ומאשר רק את \code{QuotientSCC_ModP}. תחת \code{B6} ב-\code{X4b}, עלות \code{WithMemory} (3,353 לאפיזודה; 10,089 לזרם בן 3 ספריות) נמוכה ממש מ-\code{NoMemory} (3,383 ו-10,149).
+
+\paragraph{בקרות שליליות מחייבות (\ltr{12/12 PASS}).}
+כל 12 הבקרות עברו: \code{nc1} (תמורה תלת-כיוונית), \code{nc2} (גיזום מלכודת מנותקת ב-\code{X2} ומחזור-3 ב-\code{X4b}), \code{nc3} (גיזום פורטים חח"ע), \code{nc4} (לכידת \code{INFLATED_CLAIM}), \code{nc5} (\code{DEGENERATE}), \code{nc6} (\code{REDUCIBLE}), \code{nc7} (חסימת עקיפה מחוץ לתפריט ב-\code{X0}), \code{nc8} (כישלון בטוח ל-\code{UNKNOWN} במיצוי תקציב), \code{nc9} (דחיית תעודה מזויפת), \code{nc10} (דחיית זיוף קיומי של \code{UNBYPASSABLE}), \code{nc11} (אימות שני ענפי התצפית קדם-שינוי \ltr{\texttt{\{"0","1"\}}}) ו-\code{nc12} (חסימת \code{PointSink_F2} ב-\code{X4}).
+
+\section{גבולות טענה ומגבלות}
+
+לשם היגיינה אפיסטמית קפדנית, נציין חמישה גבולות מפורשים של גרסה \ltr{v4.0}:
+\begin{enumerate}
+\item \textbf{מודל העלות \code{B6} (משפט 11):} החיסכון $3,353 < 3,383$ (30 יחידות) משקף את היטל הסקת הסכימה המוצהר ($c_s = 32$) מול עלות שליפה מזיכרון ($c_m = 2$), ולא גילוי אלגוריתמי מתפרץ.
+\item \textbf{שני מצבי \code{H16}:} שלמות ממצה $\mathrm{Accepted}(A_1) = \mathrm{Accepted}(A_0)$ מאומתת ב-\ltr{X0, X1, X2, X4a} ($n \le 5$). ב-\ltr{X3, X4b} ($n=6,9$) פועל מצב עדים \code{canonical_tail_only=True} המאומת ב-100\% בידי מאמת אפס-אמון ללא סריקת כל $4\cdot(9!)^2 \approx 5.27\cdot 10^{11}$ הבייקציות.
+\item \textbf{סקיילביליות של \code{UNBYPASSABLE}:} תעודות $n!$ מפורשות (משפטים \ltr{7a--7b}) מעשיות ל-$n \le 6$; מעבר לכך נדרשת חלוקה לפי חבורות אוטומורפיזמים $\mathrm{Aut}(D_2), \mathrm{Aut}(D_3)$.
+\item \textbf{מעמד משפט 10:} \code{transferMethod_blocks_mismatched_scope} הוא אימות ממוכן של טבלת שער סופית לשני אסימונים קונקרטיים, המשלים את המשפטים האוניברסליים (2, 3, 4, \ltr{7a/7b}, 9).
+\item \textbf{שכבת \code{X5}:} מעטפת מנוע \ltr{LLM} סטוכסטי (\code{X5}) נשארת שכבת הערכה חיצונית מחוץ לגרעין הדטרמיניסטי \ltr{v4.0}.
+\end{enumerate}
+
+\section{שחזור מלא}
+
+חבילת השחרור הרב-לשונית כוללת את קוד ה-\ltr{Python}, גרעין ה-\ltr{Lean 4.36.0}, יומן \code{V4_0_VERIFICATION.log}, כל ארבעת טרומי-הפרסום ומניפסט \code{SHA256SUMS.txt}:
+\begin{center}
+\small\ltr{\texttt{shasum -a 256 -c SHA256SUMS.txt \&\& python3 python/test\_v4\_0.py \&\& bash lean/verify\_v4\_0.sh}}
+\end{center}
+
+\begin{otherlanguage}{english}
+\begin{thebibliography}{99}
+\small
+\bibitem{blackwell1953} D.~Blackwell. Equivalent comparisons of experiments. \emph{Annals of Mathematical Statistics}, 24(2):265--272, 1953.
+\bibitem{howard1966} R.~A. Howard. Information value theory. \emph{IEEE Transactions on Systems Science and Cybernetics}, 2(1):22--26, 1966.
+\bibitem{fagin1995} R.~Fagin, J.~Y. Halpern, Y.~Moses, and M.~Y. Vardi. \emph{Reasoning About Knowledge}. MIT Press, 1995.
+\bibitem{vanditmarsch2007} H.~van Ditmarsch, W.~van der Hoek, and B.~Kooi. \emph{Dynamic Epistemic Logic}. Springer, 2007.
+\bibitem{kaelbling1998} L.~P. Kaelbling, M.~L. Littman, and A.~R. Cassandra. Planning and acting in partially observable stochastic domains. \emph{Artificial Intelligence}, 101(1--2):99--134, 1998.
+\bibitem{aubin1991} J.-P. Aubin. \emph{Viability Theory}. Birkh\"auser, 1991.
+\bibitem{wolfram1983} S.~Wolfram. Statistical mechanics of cellular automata. \emph{Reviews of Modern Physics}, 55(3):601--644, 1983.
+\bibitem{cook2004} M.~Cook. Universality in elementary cellular automata. \emph{Complex Systems}, 15(1):1--40, 2004.
+\bibitem{demoura2021} L.~de Moura and S.~Ullrich. The Lean 4 theorem prover and programming language. In \emph{CADE-28}, LNCS 12699, pp.~625--635. Springer, 2021.
+\bibitem{strand2026v32} A.~Strand. Epistemic Deformation of Reachability: Logical Irreducibility of Observation, Irreversibility, and Intervention Constraints. Preprint v3.2 (Lean~4.36.0, 27/27 declarations, SHA-256 \nolinkurl{0a215b66...}), November 25, 2026.
+\end{thebibliography}
+\end{otherlanguage}
+
+\end{document}
