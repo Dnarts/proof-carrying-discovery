@@ -1,0 +1,386 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage{babel}
+\babelprovide[import, main]{russian}
+\babelfont{rm}[Ligatures=TeX]{Noto Sans}
+\babelfont{sf}[Ligatures=TeX]{Noto Sans}
+\babelfont{tt}[AutoFakeBold=1.5,AutoFakeSlant=0.15]{Noto Mono}
+\renewcommand{\familydefault}{\sfdefault}
+
+\emergencystretch=3em
+\tolerance=1400
+\hfuzz=0.5pt
+\setlength{\parskip}{5.5pt plus 2pt minus 1pt}
+\setlength{\parindent}{0pt}
+
+\AtBeginDocument{%
+  \directlua{
+    local lid = tex.language
+    local l = lang.new(lid)
+    local cur = lang.patterns(l)
+    if (not cur) or (string.len(cur) < 100) then
+      local f = io.open("/opt/spark/local/lib/python3.11/dist-packages/pyphen/dictionaries/hyph_ru_RU.dic", "r")
+      if f then
+        local pats = {}
+        for line in f:lines() do
+          if (not (line == "UTF-8")) and (not (line == "")) then
+            table.insert(pats, line)
+          end
+        end
+        f:close()
+        lang.patterns(l, table.concat(pats, " "))
+        tex.lefthyphenmin = 2
+        tex.righthyphenmin = 2
+      end
+    end
+  }%
+}
+
+\usepackage[a4paper,top=19mm,bottom=19mm,left=20mm,right=20mm,headheight=14pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,tabularx}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{microtype}
+\usepackage[colorlinks=true,linkcolor=accent,citecolor=accent,urlcolor=accent]{hyperref}
+
+\definecolor{accent}{RGB}{22,66,118}
+\definecolor{muted}{RGB}{90,100,114}
+\definecolor{boxbg}{RGB}{244,247,251}
+
+\newtheoremstyle{cleanthm}{7pt}{7pt}{\itshape}{}{\bfseries\color{accent}}{.}{.5em}{}
+\newtheoremstyle{cleandef}{7pt}{7pt}{\normalfont}{}{\bfseries\color{accent}}{.}{.5em}{}
+\theoremstyle{cleanthm}
+\newtheorem{theorem}{Теорема}[section]
+\newtheorem{lemma}[theorem]{Лемма}
+\theoremstyle{cleandef}
+\newtheorem{definition}{Определение}[section]
+\newtheorem{remark}[theorem]{Замечание}
+
+\newcommand{\callout}[2]{%
+  \vspace{5pt}\noindent\colorbox{boxbg}{%
+    \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
+      \vspace{3pt}\textbf{\color{accent}#1.}\hspace{0.4em}#2\vspace{3pt}%
+    }%
+  }\vspace{5pt}%
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}Эпистемическая деформация достижимости (v3.2)}
+\fancyhead[R]{\small\color{muted}А. Странд}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\DeclareMathOperator{\Win}{Win}
+\DeclareMathOperator{\Act}{Act}
+\DeclareMathOperator{\ObsAct}{ObsAct}
+\DeclareMathOperator{\WinAct}{WinAct}
+\DeclareMathOperator{\Reach}{Reach}
+\DeclareMathOperator{\GuaranteedWin}{GuaranteedWin}
+\DeclareMathOperator{\Irreducible}{Irreducible}
+\DeclareMathOperator{\Hom}{Hom}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries Эпистемическая деформация достижимости:\\[3pt]
+  логическая несводимость ограничений наблюдения,\\[2pt]
+  необратимости и вмешательства}\\[8pt]
+  {\large\color{muted} Раздельные сигнатуры, мосты выполнимости, контрмодели абляции и теорема антиинфляции}\\[9pt]
+  {\normalsize Александр Странд}\\[3pt]
+  {\small\color{muted} 25 ноября 2026\,г.\,$\cdot$\,препринт v3.2\,$\cdot$\,Lean~4.36.0 (27/27, 0~\texttt{sorryAx}, 0~\texttt{ofReduceBool}) и Python-эталон}
+\end{center}
+
+\vspace{4pt}
+\begin{abstract}
+\noindent
+Представим устройство, которое находится в одном из двух скрытых состояний. Если нажать кнопку~$L$, оно починится в первом состоянии, но необратимо сломается во втором; кнопка~$R$ действует ровно наоборот. У инженера есть и третья возможность — запустить диагностику: она точно покажет, в каком состоянии находится устройство, но во втором состоянии сама диагностика необратимо выведет его из строя. Возникает парадоксальная ситуация: для каждого состояния в отдельности ремонт существует, но \emph{единой стратегии}, гарантирующей успех без знания исходного состояния, не существует вовсе — и никакое дополнительное время, память или вычисления не помогут. Причём здесь нет ни шума, ни квантовых эффектов: речь идёт об обычном конечном детерминированном автомате. Главный сдвиг состоит в том, что \textbf{способность получить знание и способность воспользоваться им перестают совпадать}: сам процесс получения информации может уничтожить возможность действовать (\textbf{эпистемическая деформация достижимости}, $L_H^{\mathrm{EDR}}$). Это ставит два фундаментальных вопроса теории решений и этики действия: \emph{стоит ли вообще пытаться узнать правду, если сам акт познания необратимо меняет мир и закрывает путь к правильному выбору?} И \emph{как меняется рациональная ответственность, когда выбор начинается ещё до действия и даже до получения фактов?}
+
+Формально работа исследует не сходство между областями знаний, а \emph{логическую несводимость совместного вывода} $\Theta_M\models h$ при $\forall A\subsetneq M:\ \Theta_A\not\models h$: препятствие возникает только при совместном действии трёх ограничений — необратимой ловушки ($G_1$), неразличимости состояний через пассивный порт ($G_2$) и разрушительного воздействия наблюдения ($G_4$), а удаление любого одного из них возвращает гарантированную выигрышную стратегию (контрмодели $C_1,C_2,C_4$). В самодостаточном модуле Lean~4.36.0 (\texttt{epistemic\_\allowbreak deformation\_\allowbreak reachability\_\allowbreak v3\_\allowbreak 2.lean}, 27~деклараций, 0~импортов, \texttt{exit 0}, 0~\texttt{sorryAx}, 0~\texttt{native\_\allowbreak decide}) доказаны: редукция несводимости к максимальным подмножествам (\texttt{CrossCore}), три раздельные доменные сигнатуры (\texttt{SinkGraph}, \texttt{LinearProjectionF2}, \texttt{AuditBackAction}) с точными мостами выполнимости (\texttt{Satisfaction\allowbreak Bridge}) и стыковкой (\texttt{InterfaceGlue}), невозможность выигрыша на любом горизонте $k\in\mathbb{N}$ (\texttt{joint\_\allowbreak entailment\_\allowbreak all\_\allowbreak horizons}, аксиомы \texttt{propext}, \texttt{Quot.sound}), булева независимость всех 8~векторов $\Phi_3'$, \textbf{теорема антиинфляции} ($U_P(s_1)=s_0$), общая теорема-характеристика \texttt{SafeBeliefReach} для произвольных конечных автоматов и строго отрицательная вероятностная ценность информации ($\mathrm{VoI}_{\mathrm{EDR}}=-1/3<0$) на фоне дискретной монотонности Блэкуэлла. Результат имеет строгую лицензию \texttt{FORMAL\_\allowbreak CROSS\_\allowbreak IRREDUCIBILITY} и отделён от более сильного статуса \texttt{INDEPENDENT\_\allowbreak CROSS\_\allowbreak DISCOVERY}.
+\end{abstract}
+
+\section{Постановка задачи: два предела принципа «знать больше \texorpdfstring{$\not\Rightarrow$}{не влечёт} мочь больше»}
+
+В статической теории решений дополнительное наблюдение (эксперимент в смысле Блэкуэлла~\cite{blackwell1953}) уточняет разбиение состояний мира и не ухудшает достижимость цели. Нарушение этого принципа в операционных системах имеет по крайней мере две ортогональные природы:
+\begin{enumerate}
+  \item \textbf{Каузально-временное закрытие окна (\texttt{v1.5} / \texttt{v2.6.1}).} Наблюдение само по себе не портит объект, но занимает время $\Delta t>0$, в течение которого среда эволюционирует, и актуатор выпадает из обратного светового конуса цели к дедлайну $t^*$. При снятии дедлайна это препятствие исчезает.
+  \item \textbf{Эпистемическая деформация достижимости (\texttt{v3.2}).} Дедлайна нет вовсе ($k\in\mathbb{N}$ произвольно велик), но акт наблюдения $P$ обладает обратным воздействием на состояние ($U_P\ne\mathrm{id}$). Если неполная проекция ($G_2$) вынуждает агента различать скрытые состояния через пробу, а проба переводит одно из них в состояние назначения ($G_4$), которое динамически является поглощающей ловушкой ($G_1$), то гарантированное достижение цели становится невозможным на \emph{любом} горизонте.
+\end{enumerate}
+
+\paragraph{Наглядный пример: когда диагностика ломает объект.}
+Рассмотрим устройство в одном из двух скрытых состояний ($s_0$ или $s_1$) и три доступных шага:
+
+\begin{table}[!htbp]
+\centering
+\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{38mm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Действие} & \textbf{Состояние $s_0$} & \textbf{Состояние $s_1$} \\
+\midrule
+Управление $L$ & Успешный ремонт ($w$) & Необратимая поломка ($q$) \\
+Управление $R$ & Необратимая поломка ($q$) & Успешный ремонт ($w$) \\
+Диагностика $P$ & Показывает $0$, состояние сохраняется ($s_0$) & Показывает $1$, но необратимо ломает устройство ($q$) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Без диагностики первое действие вслепую ($L$ или $R$) ломает один из двух миров; с диагностикой $P$ исследователь точно узнаёт мир, но в состоянии $s_1$ чинить уже нечего. При этом, если убрать \emph{любое одно} из трёх ограничений — разрешить откат из $q$ (убрать $G_1$), сделать $s_0$ и $s_1$ сразу различимыми (убрать $G_2$) или сделать диагностику безопасной (убрать $G_4$) — гарантированная стратегия сразу появляется.
+
+Чтобы исключить подмену междоменного синтеза словесной аналогией~\cite{gentner1983}, мы формулируем критерий не через «сходство доменов», а через \emph{логическую несводимость совместного вывода} и требуем раздельных исходных сигнатур с проверяемым условием сохранения выполнимости~\cite{goguen1992}.
+
+\section{Общая сигнатура \texorpdfstring{$L_H^{\mathrm{EDR}}$}{L\_H\^{}EDR} и редукция несводимости (\texorpdfstring{\texttt{CrossCore}}{CrossCore})}
+
+\begin{definition}[Монотонное следование и логическая несводимость]
+Пусть $D$ — тип идентификаторов доменов с разрешимым равенством, а $E = (\mathrm{entails}, \mathrm{mono})$ — монотонное отношение следования над конечными списками доменов ($A\subseteq B \implies E.\mathrm{entails}(A)\to E.\mathrm{entails}(B)$). Назовём $A$ собственным подмножеством $M$ ($\mathrm{IsProperSubset}(A,M)$), если $\forall x\in A,\ x\in M$ и $\exists d\in M,\ d\notin A$. Набор $M$ \emph{логически несводим} ($\mathrm{IsIrreducible}(E,M)$), если $E.\mathrm{entails}(M)$ и для любого собственного подмножества $A\subsetneq M$ выполняется $\neg E.\mathrm{entails}(A)$.
+\end{definition}
+
+\begin{theorem}[Редукция несводимости к максимальным подмножествам, \texttt{crossCore\_\allowbreak irreducible\_\allowbreak iff\_\allowbreak maximal}]
+\label{thm:crosscore}
+Для любого монотонного отношения следования $E$ и списка доменов $M$:
+\begin{equation}
+  \mathrm{IsIrreducible}(E,M) \iff \Bigl(E.\mathrm{entails}(M) \;\land\; \forall d\in M:\ \neg E.\mathrm{entails}(M\setminus\{d\})\Bigr).
+\end{equation}
+\end{theorem}
+
+Для $n$ доменов Теорема~\ref{thm:crosscore} (доказана в Lean~4 с единственной аксиомой \texttt{propext}) сводит проверку всех $2^n-1$ собственных подмножеств к предъявлению $n$ контрмоделей для максимальных подмножеств $M\setminus\{d\}$. Чтобы исключить тривиальное следование из противоречия (\emph{ex falso}), в \texttt{CrossCore} введён предикат \texttt{IsConsistentIrreducible}, требующий совместной непротиворечивости $\mathrm{Consistent}(M)$ (что структурно двойственно минимальным невыполнимым ядрам MUS и минимальным диагнозам~\cite{reiter1987}).
+
+Зафиксируем теперь общую конечную сигнатуру исследуемой среды
+\begin{equation}
+  \Sigma = \langle S,\ O,\ \Act,\ \ObsAct,\ \Win,\ \pi,\ \delta,\ \omega_{\mathrm{obs}} \rangle,
+\end{equation}
+где $S=\{s_0,s_1,w,q\}$, $O=\mathrm{Bool}$, $\Act=\{L,R\}$, $\ObsAct=\{P\}$, $\Win:S\to\mathrm{Bool}$, пассивная проекция $\pi:S\to\mathrm{Bool}$, управление $\delta:S\times\Act\to S$ и активная проба $\omega_{\mathrm{obs}}(s,P)=(U_P(s), Y_P(s))$. Детерминированная политика с памятью истории имеет тип $\mathrm{Policy} := (\mathrm{Bool}\times\mathrm{List}(\mathrm{Decision}\times\mathrm{Bool}))\to\mathrm{Decision}$, где $\mathrm{Decision}\in\{\mathrm{act}(L),\mathrm{act}(R),\mathrm{probe},\mathrm{stop}\}$. Политика никогда не получает скрытое состояние $s\in S$: на шаге $0$ ей доступно только начальное наблюдение $\pi(s)$, далее — история собственных решений и полученных наблюдений.
+
+Для фиксированного начального множества миров $B_0=\{s_0,s_1\}$ предикат $\GuaranteedWin(W,\mathrm{pol},k)$ означает, что запуск $\mathrm{pol}$ из обоих стартовых миров $s_0$ и $s_1$ достигает $\Win=\mathsf{true}$ не более чем за $k$ шагов. Целевое утверждение невозможности на горизонте $k$ есть $h_k(W) :\iff \forall\mathrm{pol}:\ \neg\GuaranteedWin(W,\mathrm{pol},k)$, а на всех горизонтах — $\mathrm{ClaimHAll}(W) :\iff \forall k\in\mathbb{N},\ h_k(W)$.
+
+\section{Три раздельные доменные сигнатуры, \texorpdfstring{\texttt{Satisfaction\allowbreak Bridge}}{SatisfactionBridge} и \texorpdfstring{\texttt{InterfaceGlue}}{InterfaceGlue}}
+
+Чтобы отделить доменные свойства от общей таблицы переходов, в \texttt{epistemic\_\allowbreak deformation\_\allowbreak reachability\_\allowbreak v3\_\allowbreak 2.lean} заданы три независимые исходные структуры:
+\begin{itemize}
+  \item \textbf{$G_1$ (\texttt{SinkGraph}):} конечный граф $(S,\mathrm{AllowedAct},\mathrm{step},\mathrm{win},\mathrm{trap})$ без проекции и без семантики пробы. Аксиома $\mathrm{IsAbsorbingTrap}$ требует $\mathrm{win}(\mathrm{trap})=\mathsf{false}$ и замкнутости $\mathrm{trap}$ под \emph{всеми} разрешёнными действиями (управлением и пробой). Теорема \texttt{sinkGraph\_\allowbreak trap\_\allowbreak never\_\allowbreak reaches\_\allowbreak win} (0~аксиом) доказывает по индукции, что никакая конечная последовательность действий из $\mathrm{trap}$ не достигает $\mathrm{win}$.
+  \item \textbf{$G_2$ (\texttt{LinearProjectionF2}):} проекция $\mathrm{proj}:\mathbb{F}_2^2\to\mathbb{F}_2$ на каноническом кодировании $s_0=(0,0),\ s_1=(0,1),\ q=(1,0),\ w=(1,1)$ (биекция \texttt{decode\_\allowbreak encode\_\allowbreak bit2}, \texttt{encode\_\allowbreak decode\_\allowbreak bit2}, 0~аксиом). В \texttt{v3.2} переносимая аксиома $G_2$ (\texttt{IsLinearCollision}) включает саму линейность над $\mathbb{F}_2^2$ (с алгебраической леммой \texttt{linearProjectionF2\_\allowbreak ker\_\allowbreak iff\_\allowbreak eq}, 0~аксиом: $\pi(u_0\oplus u_1)=0\iff\pi(u_0)=\pi(u_1)$); теорема \texttt{linearProjectionF2\_\allowbreak kernel\_\allowbreak vs\_\allowbreak specific\_\allowbreak collision} (0~аксиом) устанавливает, что обе проекции $\pi_1,\pi_2$ имеют нетривиальное ядро, но лишь $\pi_1$ склеивает $(s_0,s_1)$.
+  \item \textbf{$G_4$ (\texttt{AuditBackAction}):} структура $(\delta, U_P, Y_P, \mathrm{designated})$ с явно разведёнными предикатами $C_4^{\mathrm{change}}$ ($U_P\ne\mathrm{id}$), $C_4^{\mathrm{order}}$ ($\exists s,a:\ U_P(\delta(s,a))\ne\delta(U_P(s),a)$) и $C_4^{\mathrm{entry}}$ ($U_P(s_1)=\mathrm{designated}$). Внутри собственной сигнатуры $G_4$ состояние $\mathrm{designated}$ не объявляется ловушкой.
+\end{itemize}
+
+Перенос аксиом из каждой доменной сигнатуры в общую сигнатуру \texttt{EDRWorld} оформлен структурой \texttt{Satisfaction\allowbreak Bridge} с обязательным условием сохранения выполнимости на \emph{всём} классе моделей $m\in\mathrm{EDRWorld}$:
+\begin{equation}
+  m\models_\Sigma \alpha_i(\varphi) \;\iff\; \beta_i(m)\models_{\Sigma_i} \varphi \qquad (i\in\{1,2,4\}).
+\end{equation}
+Теорема \texttt{all\_\allowbreak three\_\allowbreak satisfaction\_\allowbreak bridges\_\allowbreak hold} (0~аксиом) доказывает это условие для всех трёх редуктов $\beta_1=\mathrm{reductG1}$, $\beta_2=\mathrm{reductG2}$, $\beta_4=\mathrm{reductG4}$. Отдельная структура \texttt{InterfaceGlue} выступает явным параметром всех трёх редуктов, мостов и теоремы \texttt{joint\_\allowbreak entailment\_\allowbreak all\_\allowbreak horizons}: её равенство \texttt{trapEqDesignated} ($\mathrm{g4Designated}=\mathrm{g1TrapState}$) непосредственно используется в доказательстве ветви пробы. Кроме того, \texttt{InterfaceGlue} фиксирует двухуровневую лицензию \texttt{CrossDiscoveryLicense} со статусом \texttt{FORMAL\_\allowbreak CROSS\_\allowbreak IRREDUCIBILITY} (без автоматического повышения до \texttt{INDEPENDENT\_\allowbreak CROSS\_\allowbreak DISCOVERY}).
+
+\section{Совместная невозможность на любом горизонте и контрмодели абляции}
+
+Общая базовая теория $\Theta_0(W)$, фиксированная во всех абляциях, задаёт $s_0,s_1\notin\Win$, $w\in\Win$, переходы $s_0\xrightarrow{L}w$, $s_0\xrightarrow{R}q$, $s_1\xrightarrow{L}q$, $s_1\xrightarrow{R}w$, поглощающую цель $w\xrightarrow{L,R}w$ и информативные отклики пробы $Y_P(s_0)=\mathsf{false}$, $Y_P(s_1)=\mathsf{true}$. Три перенесённые доменные аксиомы в общей сигнатуре:
+\begin{equation}
+  \Theta_1:\ q\text{ — поглощающая ловушка},\qquad
+  \Theta_2:\ \pi\in\Hom(\mathbb{F}_2^2,\mathbb{F}_2)\ \land\ s_0\oplus s_1\in\ker(\pi),\qquad
+  \Theta_4:\ U_P(s_1)=q.
+\end{equation}
+
+\begin{theorem}[Совместная невозможность для всех горизонтов и полная логическая несводимость]
+\label{thm:joint_and_irr}
+В модуле \texttt{EpistemicDeformationReachabilityV32} верифицированы следующие утверждения:
+\begin{enumerate}
+  \item \textbf{Совместная выполнимость (\texttt{sat\_\allowbreak joint\_\allowbreak model\_\allowbreak worldAll}, \texttt{[propext]}):} существует конкретная модель с четырьмя состояниями \texttt{worldAll}, удовлетворяющая $\Theta_0\land\Theta_1\land\Theta_2\land\Theta_4$.
+  \item \textbf{Невозможность при любом горизонте (\texttt{joint\_\allowbreak entailment\_\allowbreak all\_\allowbreak horizons}, \texttt{[propext, Quot.sound]}):} для \emph{любой} модели $W$, удовлетворяющей $\Theta_0\land\Theta_1\land\Theta_2\land\Theta_4$, \emph{любого} горизонта $k\in\mathbb{N}$ и \emph{любой} детерминированной политики с памятью истории выполняется $\neg\GuaranteedWin(W,\mathrm{pol},k)$.
+  \item \textbf{Конструктивные контрмодели абляции (\texttt{countermodel\_\allowbreak C1/C2/C4}, \texttt{[propext]}):} удаление любой одной аксиомы из $\{\Theta_1,\Theta_2,\Theta_4\}$ (при сохранении $\Theta_0$ и неизменном $B_0=\{s_0,s_1\}$) допускает конструктивную выигрышную политику (Таблица~\ref{tab:countermodels}).
+  \item \textbf{Непротиворечивая полная логическая несводимость (\texttt{edr\_\allowbreak full\_\allowbreak logical\_\allowbreak irreducibility}, \texttt{[propext, Quot.sound]}):} для монотонного следования \texttt{edrEntailment} выполняется $\mathrm{IsConsistentIrreducible}(\allowbreak\mathrm{edrEntailment},\allowbreak\mathrm{edrConsistent},\allowbreak [G_1,G_2,G_4])$ относительно свойства $\forall k\in\mathbb{N},\ h_k$.
+\end{enumerate}
+\end{theorem}
+
+\begin{table}[!htbp]
+\centering
+\caption{Сводка совместной модели и трёх контрмоделей абляции (фиксированное $B_0=\{s_0,s_1\}$). Утверждение «для всех $k\in\mathbb{N}$» обеспечивается теоремой \texttt{joint\_\allowbreak entailment\_\allowbreak all\_\allowbreak horizons} в Lean; Python-перебор проверяет $k\in\{1,2,3,4\}$.}
+\label{tab:countermodels}
+\small
+\begin{tabularx}{\linewidth}{@{}l >{\raggedright\arraybackslash}X c c >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Модель} & \textbf{Единственное изменение от \texttt{worldAll}} & \textbf{$k=1$} & \textbf{$k\ge 2$} & \textbf{Конструктивная политика} \\
+\midrule
+\texttt{worldAll} & Нет ($\Theta_0\land\Theta_1\land\Theta_2\land\Theta_4$) & нет & нет & Отсутствует ($\forall k\in\mathbb{N}$ в Lean) \\
+\texttt{worldC1} (без $G_1$) & $\delta(q,L)=w$ (снята ловушка) & нет & \textbf{да} & $\mathrm{act}(L)\to\mathrm{act}(L)$ \\
+\texttt{worldC2} (без $G_2$) & $\pi=\pi_2$ ($\pi(s_0)=0,\ \pi(s_1)=1$) & \textbf{да} & да & $0\mapsto\mathrm{act}(L),\ 1\mapsto\mathrm{act}(R)$ \\
+\texttt{worldC4} (без $G_4$) & $U_P(s_1)=s_1$ (проба без сдвига) & нет & \textbf{да} & $\mathrm{probe}\to(0:\mathrm{act}(L),\ 1:\mathrm{act}(R))$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Булева независимость \texorpdfstring{$\Phi_3'$}{Phi3'} и теорема антиинфляции}
+
+В ходе изолированного аудита ранней формулировки $\Phi_3$ была выявлена скрытая импликация $C_1\implies C_2$ (если в $C_2$ не требовать $x\ne y$ и непустоту одношаговых выигрышных действий $\WinAct_1$). В модуле \texttt{v3.2} используется исправленная тройка разрешимых диагностических предикатов: $C_1$ (существует невыигрышная поглощающая ловушка), $C'_2$ (существуют $x\ne y$ с $\pi(x)=\pi(y)$ и непустыми непересекающимися $\WinAct_1(x),\WinAct_1(y)$) и $C_4^{\mathrm{order}}$ ($\exists s,a:\ U_P(\delta(s,a))\ne\delta(U_P(s),a)$).
+
+\begin{theorem}[Булева независимость и антиинфляция]
+\label{thm:bool_anti}
+\begin{enumerate}
+  \item \textbf{Все 8 булевых векторов (\texttt{phi3\_\allowbreak prime\_\allowbreak all\_\allowbreak 8\_\allowbreak boolean\_\allowbreak vectors\_\allowbreak realized}, \texttt{[propext]}):} параметрическое семейство \texttt{diagWorld(b1,b2,b4)} реализует все $2^3=8$ булевых комбинаций $(b_1,b_2,b_4)\in\{0,1\}^3$ диагностических предикатов $(C_1,C'_2,C_4^{\mathrm{order}})$.
+  \item \textbf{Теорема антиинфляции (\texttt{anti\_\allowbreak inflation\_\allowbreak diagnostics\_\allowbreak do\_\allowbreak not\_\allowbreak imply\_\allowbreak impossibility}, \texttt{[propext]}):} на модели \texttt{worldAntiInflation}, отличающейся от \texttt{worldAll} ровно одним переходом $U_P(s_1)=s_0$ вместо $q$, все три диагностических предиката истинны — $(C_1,C'_2,C_4^{\mathrm{order}})=(1,1,1)$, однако политика $\mathrm{probe}\to\mathrm{act}(L)$ гарантированно выигрывает за $k=2$ шага:
+  \begin{equation}
+    C_1 \land C'_2 \land C_4^{\mathrm{order}} \;\not\models\; h_k.
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+
+Теорема~\ref{thm:bool_anti} фиксирует принципиальную границу: сами по себе «три диагностические галочки» (ловушка + коллизия + некоммутативность) не влекут невозможности управления. Несущей связкой является именно попадание образа зонда в поглощающую область ($C_4^{\mathrm{entry}}$ + \texttt{InterfaceGlue}).
+
+\section{Общая характеристика \texorpdfstring{\texttt{SafeBeliefReach}}{SafeBeliefReach} и отрицательная вероятностная ценность информации}
+
+Чтобы перейти от единичного примера с четырьмя состояниями к общему критерию управляемости при возмущающих наблюдениях, в расширении \texttt{v3.2} введены два новых модуля.
+
+\subsection{Характеризационная теорема на пространстве веры и мост \texorpdfstring{\texttt{PlanTree}~$\leftrightarrow$~\texttt{Policy}}{PlanTree <-> Policy}}
+
+Для произвольной конечной системы $\mathrm{GenEDRWorld}(S,O,\Act,\ObsAct)$ с \emph{пассивным портом наблюдения} $\pi:S\to O$, переходами $\delta$, возмущением зонда $U_p$ и откликом $Y_p$ определим фильтрацию ещё не выигравших состояний $B_{\mathrm{act}}=\{s\in B\mid\Win(s)=\mathsf{false}\}$ и рекурсивную AND--OR игру достижимости (конечногоризонтный аналог ядра жизнеспособности~\cite{aubin1991,bonet2000}):
+\begin{align}
+  \mathrm{SafeBeliefReach}(W,0,B) &:\iff \forall s\in B,\ \Win(s)=\mathsf{true}, \\
+  \mathrm{SafeBeliefReach}(W,k+1,B) &:\iff (\forall s\in B,\ \Win(s)=\mathsf{true}) \nonumber\\
+  &\quad\lor\; \bigl(\exists a\in\Act:\ \forall y\in O,\ \mathrm{SafeBeliefReach}(W,k,B_{a,y}^{\mathrm{act}})\bigr) \nonumber\\
+  &\quad\lor\; \bigl(\exists p\in\ObsAct:\ \forall y\in O,\ \mathrm{SafeBeliefReach}(W,k,B_{p,y}^{\mathrm{prb}})\bigr),
+\end{align}
+где $\mathrm{SafeBeliefReachInit}(W,k,B) :\iff \forall o\in O,\ \mathrm{SafeBeliefReach}(W,k,B_{\pi=o})$.
+
+\begin{theorem}[Характеристика управляемости и мост \texttt{PlanTree} $\leftrightarrow$ \texttt{Policy}]
+\label{thm:sbr}
+\begin{enumerate}
+  \item \textbf{Общая эквивалентность (\texttt{safeBeliefReach\_\allowbreak iff\_\allowbreak exists\_\allowbreak validPlan}, \texttt{[Classical.choice]}):} для любой системы $W$ с пассивным портом $\pi$, любого горизонта $k\in\mathbb{N}$ и веры $B$ предикат $\mathrm{SafeBeliefReach}(W,k,B)$ равносилен существованию конечного дерева решений $t:\mathrm{PlanTree}(\Act,\ObsAct,O)$.
+  \item \textbf{Формальный мост к функциональным политикам (\texttt{safeBeliefReachInit\_\allowbreak iff\_\allowbreak exists\_\allowbreak policy}, \texttt{[propext,}\\\texttt{Classical.choice,}\\\texttt{Quot.sound]}):} для любой модели $W:\mathrm{EDRWorld}$ и любого $k\in\mathbb{N}$ условие $\mathrm{SafeBeliefReachInit}(\allowbreak\mathrm{toGenEDR}\,W,\allowbreak k,\allowbreak [s_0,s_1])$ равносильно существованию детерминированной политики с памятью истории $\mathrm{pol}:\mathrm{Hist}\to\mathrm{Decision}$, удовлетворяющей $\GuaranteedWin(\allowbreak\mathrm{edrInterfaceGlue},\allowbreak W,\allowbreak \mathrm{pol},\allowbreak k)$.
+  \item \textbf{Полное разделение всех 5 моделей (\texttt{safeBeliefReachInit\_\allowbreak separates\_\allowbreak all\_\allowbreak models}):} $\mathrm{SafeBeliefReachInit}$ ложно для \texttt{worldAll} при любом $k\in\mathbb{N}$, но истинно для \texttt{worldC1} ($k=2$), \texttt{worldC2} ($k=1$, благодаря сохранению $\pi$), \texttt{worldC4} ($k=2$) и \texttt{worldAntiInflation} ($k=2$).
+\end{enumerate}
+\end{theorem}
+
+\subsection{Монотонность Блэкуэлла против строго отрицательной ценности информации}
+
+В классической теории экспериментов (Блэкуэлл~\cite{blackwell1953}) и аксиоматике Сэвиджа~\cite{savage1954} (при независимости состояний от актов) пассивное наблюдение ($U_P=\mathrm{id}$) не может ухудшить ожидаемую вероятность успеха. При эпистемической деформации это неравенство обращается. Рассмотрим систему с тремя скрытыми состояниями \texttt{voiWorld3} с равномерным априором $\mu=(1,1,1)$ на $\{s_0,s_1,s_2\}$: действие $L$ чинит $s_0$ и $s_1$ (и ломает $s_2$), действие $R$ чинит только $s_2$, а проба $P$ безошибочно различает все три мира ($o_0,o_1,o_2$), но переводит $s_1$ и $s_2$ в поглощающую ловушку $q$.
+
+\begin{theorem}[Монотонность Блэкуэлла и строго отрицательная $\mathrm{VoI}_{\mathrm{EDR}}$]
+\label{thm:voi}
+\begin{enumerate}
+  \item \textbf{Дискретная монотонность Блэкуэлла (\texttt{passive\_\allowbreak probe\_\allowbreak voi\_\allowbreak nonneg}, \texttt{[propext, Quot.sound]}):} для любого списка состояний $B$, любых целых весов априора $\mu:S\to\mathbb{N}$ и любого пассивного бинарного зонда $p:S\to\mathrm{Bool}$ ($U_p=\mathrm{id}$) оптимальная масса выигрыша после пробы не меньше слепой массы: $\mathrm{bestBlindMass}(B)\le\mathrm{bestBlindMass}(B_{p=1})+\mathrm{bestBlindMass}(B_{p=0})$ ($\mathrm{VoI}\ge 0$).
+  \item \textbf{Строго отрицательная ценность информации (\texttt{deforming\_\allowbreak probe\_\allowbreak strict\_\allowbreak negative\_\allowbreak voi}, \texttt{[propext, Quot.sound]}):} на \texttt{voiWorld3} проба $P$ инъективна на $\{s_0,s_1,s_2\}$ (полная идентификация), однако слепое действие $L$ даёт массу выигрыша $2/3$, тогда как после пробы ветвь $o_0$ выигрывает ($1/3$), а ветви $o_1,o_2$ проигрывают на \emph{любом} горизонте $k\in\mathbb{N}$, откуда $\mathrm{VoI}_{\mathrm{EDR}}=1/3-2/3=-1/3<0$.
+  \item \textbf{Доминирование рандомизированных слепых смесей (\texttt{randomized\_\allowbreak blind\_\allowbreak beats\_\allowbreak post\_\allowbreak probe\_\allowbreak ceiling}, \texttt{[propext, Quot.sound]}):} для любой точной рациональной смеси $(p_L,p_R)$ с $p_L>0$ ожидаемый выигрыш вслепую $2p_L+p_R$ строго превосходит универсальный потолок после пробы $p_L+p_R$.
+\end{enumerate}
+\end{theorem}
+
+\section{Философский и прикладной контекст (внеформальная интерпретация)}
+
+\emph{Граница статуса.} Настоящий раздел носит интерпретационный характер: перечисленные ниже этические, игровые и прикладные аналоги \textbf{не} формализованы в Lean~4 и \textbf{не} являются новыми мостами \texttt{Satisfaction\allowbreak Bridge}. Их цель — точно расположить формальный механизм \texttt{v3.0}--\texttt{v3.2} относительно известных барьеров теории решений и отделить его от смежных задач.
+
+\subsection{Вагонетка второго порядка и отличие от дилеммы узника}
+
+Классическая проблема вагонетки исследует \emph{конфликт ценностей при полном знании}: все факты известны заранее, а наблюдение считается бесплатным и нейтральным. Эпистемическая деформация переносит выбор на шаг раньше — в «вагонетку второго порядка». Представим два пути, на одном из которых находятся пять человек, а на другом никого нет, но наблюдатель не знает, на каком именно; имеется сканер, безошибочно показывающий картину, но в одном из состояний его запуск сам необратимо блокирует стрелку в опасном положении. Выбор распадается на три уровня: решать ли вообще наблюдать, какое действие выбрать после этого и отвечать за ту часть мира, которую изменил сам акт наблюдения. На языке причинности Перла~\cite{pearl2009} наблюдение перестаёт быть пассивным чтением и становится интервенцией $\mathrm{do}(P)$.
+
+В одношаговой \emph{дилемме узника} препятствие имеет иную природу — это \emph{конфликт стимулов между двумя агентами}: даже зная выбор партнёра, каждый участник имеет строго доминирующую стратегию предать. В эпистемической деформации есть лишь один агент и одна бесспорная цель (без конфликта интересов и морального спора), а барьер возникает не из денежной или временной цены теста, а из структурного перестроения пространства достижимых состояний (вплоть до $\mathrm{VoI}_{\mathrm{EDR}}=-1/3<0$ в Теореме~\ref{thm:voi}).
+
+\begin{table}[!htbp]
+\centering
+\caption{Сопоставление трёх барьеров рационального выбора (внеформальная карта контекста).}
+\label{tab:trolley_pd_edr}
+\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{38mm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Постановка} & \textbf{Природа препятствия} & \textbf{Ключевой вопрос} \\
+\midrule
+Классическая вагонетка & Конфликт ценностей при полном знании & Какое действие выбрать? \\
+Дилемма узника (1 шаг) & Конфликт стимулов между агентами (доминирующие стратегии) & Как действовать, когда личная выгода ломает общий исход? \\
+Эпистемическая деформация (\texttt{v3.0}--\texttt{v3.2}) & Конфликт между актом познания и достижимостью у одного агента & Стоит ли узнавать, если сам акт познания закрывает путь к цели? \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Смежные прикладные связи и границы отличия}
+
+\begin{table}[!htbp]
+\centering
+\caption{Четыре смежные области, их структурная связь с \texttt{v3.2} и границы отличия.}
+\label{tab:adjacent_domains}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{38mm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Смежная область} & \textbf{Структурная связь с \texttt{v3.2}} & \textbf{Граница отличия} \\
+\midrule
+Разрушающий контроль и клиническая диагностика (инвазивная биопсия) & Тест даёт точный диагноз, но в части состояний наносит необратимый ущерб объекту или пациенту ($\mathrm{VoI}<0$). & В прикладном анализе вред обычно вводят аддитивным штрафом $U-c$; в \texttt{v3.2} штрафа нет — потеря чисто топологическая (ловушка $Q_{\mathrm{trap}}$ через \texttt{InterfaceGlue}). \\
+Безопасное исследование в Safe~RL / POMDP~\cite{bonet2000,moldovan2012,aubin1991} и онтико-эпистемическом планировании DEL~\cite{vanditmarsch2007,bolander2011} & Информационный шаг ради сужения неопределённости заводит агента в необратимую «мёртвую зону»; \texttt{SafeBeliefReach} — детерминированный аналог ядра жизнеспособности на пространстве веры. & Стандартная теория POMDP не формулирует 3-стороннюю логическую несводимость раздельных теорий (\texttt{CrossCore} + \texttt{Satisfaction\allowbreak Bridge}) и теорему антиинфляции ($U_P(s_1)=s_0$). \\
+Закон Гудхарта и критика Лукаса (аудит, экономика, AI~Alignment) & Сам акт измерения/аудита сдвигает режим работы системы ($U_P\ne\mathrm{id}$), ломая прежнюю политику управления. & Обычно объясняется стратегической реакцией контрагента; \texttt{v3.2} показывает $\mathrm{VoI}_{\mathrm{EDR}}<0$ на одном детерминированном автомате без противника. \\
+Спор EDT против CDT (задача Ньюкома) & Разведение информационной ценности шага (что он показывает) и его каузального эффекта $\mathrm{do}(P)$ (что он меняет). & В задаче Ньюкома парадокс опирается на предсказателя в прошлом; в \texttt{v3.2} нет обратной причинности — только прямое воздействие зонда на будущее состояние. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Вклад относительно POMDP, Safe~RL и разрушающего контроля.}
+Формальная корректность в Lean сама по себе не доказывает концептуальной новизны, поэтому зафиксируем три точных отличия настоящей постановки от классических моделей: (1)~в POMDP и Safe~RL динамика задаётся одной монолитной таблицей переходов, тогда как здесь предметом доказательства выступает \emph{логическая несводимость композиции трёх раздельных сигнатур} через \texttt{Satisfaction\allowbreak Bridge}, \texttt{InterfaceGlue} и контрмодели абляции; (2)~в отличие от анализа разрушающего контроля с аддитивным штрафом $U-c$, здесь функция цели чисто булева, а теорема антиинфляции ($U_P(s_1)=s_0$) формально отделяет наличие опасных признаков от фактической невозможности; (3)~в связке с \texttt{v1.5} строго разведены два механизма отрицательной $\mathrm{VoI}$ — временное закрытие окна при пассивной пробе и не ограниченная дедлайном деформация самой пробой.
+
+\section{Машинная верификация, воспроизводимость и границы v3.2}
+
+Модуль \texttt{epistemic\_\allowbreak deformation\_\allowbreak reachability\_\allowbreak v3\_\allowbreak 2.lean} (56\,468~байт, 1342~строки, чистый LF без BOM, 0~импортов, SHA-256 \texttt{0a215b6673a27802\ldots{}128ff39f}) проверен ядром Lean~4.36.0 (\texttt{arm64-apple-darwin24.6.0}, commit \texttt{611c117b}) через fail-closed гейт (\texttt{exit=0}, \texttt{errors=0}, \texttt{warnings=0}, \texttt{sorryAx=0}, \texttt{ofReduceBool=0}, \texttt{decls=27/27}). Полный реестр аксиом по протоколу \texttt{V3\_\allowbreak 2\_\allowbreak VERIFICATION.log} приведён в Таблице~\ref{tab:axioms_v32}.
+
+\begin{table}[!htbp]
+\centering
+\caption{Фактический профиль \texttt{\#print axioms} для всех 27~деклараций в \texttt{epistemic\_\allowbreak deformation\_\allowbreak reachability\_\allowbreak v3\_\allowbreak 2.lean} (Lean~4.36.0, \texttt{exit 0}, 0~\texttt{sorryAx}, 0~\texttt{ofReduceBool}).}
+\label{tab:axioms_v32}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{45mm} >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Профиль \texttt{\#print axioms}} & \textbf{Верифицированные декларации (27/27)} \\
+\midrule
+Без аксиом (6) & \texttt{sinkGraph\_\allowbreak trap\_\allowbreak never\_\allowbreak reaches\_\allowbreak win}, \texttt{linearProjectionF2\_\allowbreak ker\_\allowbreak iff\_\allowbreak eq}, \texttt{linearProjectionF2\_\allowbreak kernel\_\allowbreak vs\_\allowbreak specific\_\allowbreak collision}, \texttt{decode\_\allowbreak encode\_\allowbreak bit2}, \texttt{encode\_\allowbreak decode\_\allowbreak bit2}, \texttt{all\_\allowbreak three\_\allowbreak satisfaction\_\allowbreak bridges\_\allowbreak hold} \\
+\texttt{[propext]} (10) & \texttt{crossCore\_\allowbreak irreducible\_\allowbreak iff\_\allowbreak maximal}, \texttt{edr\_\allowbreak trap\_\allowbreak never\_\allowbreak reachesWin}, \texttt{sat\_\allowbreak joint\_\allowbreak model\_\allowbreak worldAll}, \texttt{countermodel\_\allowbreak C1\_\allowbreak refutes\_\allowbreak without\_\allowbreak G1}, \texttt{countermodel\_\allowbreak C2\_\allowbreak refutes\_\allowbreak without\_\allowbreak G2}, \texttt{countermodel\_\allowbreak C4\_\allowbreak refutes\_\allowbreak without\_\allowbreak G4}, \texttt{phi3\_\allowbreak prime\_\allowbreak all\_\allowbreak 8\_\allowbreak boolean\_\allowbreak vectors\_\allowbreak realized}, \texttt{anti\_\allowbreak inflation\_\allowbreak diagnostics\_\allowbreak do\_\allowbreak not\_\allowbreak imply\_\allowbreak impossibility}, \texttt{runTree\_\allowbreak policyToTree}, \texttt{reachesWin\_\allowbreak eq\_\allowbreak runTree\_\allowbreak of\_\allowbreak agrees} \\
+\texttt{[Classical.choice]} (1) & \texttt{safeBeliefReach\_\allowbreak iff\_\allowbreak exists\_\allowbreak validPlan} \\
+\texttt{[propext, Quot.sound]} (8) & \texttt{joint\_\allowbreak entailment\_\allowbreak all\_\allowbreak horizons}, \texttt{edr\_\allowbreak full\_\allowbreak logical\_\allowbreak irreducibility}, \texttt{validPlan\_\allowbreak iff\_\allowbreak forall\_\allowbreak runTree}, \texttt{actWinMass\_\allowbreak filter\_\allowbreak partition}, \texttt{passive\_\allowbreak probe\_\allowbreak voi\_\allowbreak nonneg}, \texttt{voiWorld3\_\allowbreak trap\_\allowbreak never\_\allowbreak wins}, \texttt{deforming\_\allowbreak probe\_\allowbreak strict\_\allowbreak negative\_\allowbreak voi}, \texttt{randomized\_\allowbreak blind\_\allowbreak beats\_\allowbreak post\_\allowbreak probe\_\allowbreak ceiling} \\
+\texttt{[propext,}\\\texttt{Classical.choice,}\\\texttt{Quot.sound]} (2) & \texttt{safeBeliefReachInit\_\allowbreak iff\_\allowbreak exists\_\allowbreak policy}, \texttt{safeBeliefReachInit\_\allowbreak separates\_\allowbreak all\_\allowbreak models} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Эталонный пакет на чистом stdlib Python~3 (\texttt{epistemic\_\allowbreak deformation\_\allowbreak reachability\_\allowbreak v3\_\allowbreak 2.py}, SHA-256 \texttt{920f75f6\ldots}; \texttt{test\_\allowbreak v3\_\allowbreak 2.py}, SHA-256 \texttt{10aed8e7\ldots}) воспроизводит все 12~модулей (включая разбиение по $\pi$ после каждого управляющего шага и совпадение \texttt{safe\_\allowbreak belief\_\allowbreak reach\_\allowbreak init} с решателем политик на всех 5~моделях) и формирует детерминированный отчёт \texttt{v3\_\allowbreak 2\_\allowbreak witness\_\allowbreak report.json} (SHA-256 \texttt{5a3ebcd5\ldots}).
+
+\callout{Чем эта работа не является и точные границы v3.2}{%
+Верификация закрывает статус \textbf{\texttt{FORMAL\_\allowbreak CROSS\_\allowbreak IRREDUCIBILITY}} (в базовых 16~декларациях и вероятностном блоке \texttt{0 Classical.choice}; аксиома выбора локализована строго в сколемизации ветвей дерева в \texttt{safeBeliefReach\_\allowbreak iff\_\allowbreak exists\_\allowbreak validPlan} и мосте \texttt{PlanTree}~$\leftrightarrow$~\texttt{Policy}). Зафиксируем три оставшиеся границы: (1)~раздельные сигнатуры и параметризованные по \texttt{InterfaceGlue} мосты \texttt{Satisfaction\allowbreak Bridge} удостоверяют корректность формальной композиции, но \emph{не доказывают} независимого исторического происхождения моделей из разных наук (\texttt{INDEPENDENT\_\allowbreak CROSS\_\allowbreak DISCOVERY}); (2)~монотонность \texttt{passive\_\allowbreak probe\_\allowbreak voi\_\allowbreak nonneg} доказана для одношагового бинарного пассивного зонда над $\{L,R\}$, а \texttt{randomized\_\allowbreak blind\_\allowbreak beats\_\allowbreak post\_\allowbreak probe\_\allowbreak ceiling} устанавливает точное арифметическое доминирование над потолком ловушки $1/3$ без формализации общего типа вероятностных политик по деревьям мер; (3)~непрерывные пространства, стохастическая динамика среды и зашумлённые датчики остаются предметом следующего этапа.}
+
+\begin{thebibliography}{14}
+\small\setlength{\itemsep}{2pt}
+
+\bibitem{goguen1992}
+J.\,A.\,Goguen, R.\,M.\,Burstall. \href{https://doi.org/10.1145/147508.147524}{Institutions: Abstract Model Theory for Specification and Programming}. \emph{Journal of the ACM}, 39(1):95--146, 1992.
+
+\bibitem{gentner1983}
+D.\,Gentner. \href{https://doi.org/10.1207/s15516709cog0702_3}{Structure-Mapping: A Theoretical Framework for Analogy}. \emph{Cognitive Science}, 7(2):155--170, 1983.
+
+\bibitem{blackwell1953}
+D.\,Blackwell. \href{https://doi.org/10.1214/aoms/1177729032}{Equivalent Comparisons of Experiments}. \emph{Annals of Mathematical Statistics}, 24(2):265--272, 1953.
+
+\bibitem{savage1954}
+L.\,J.\,Savage. \emph{The Foundations of Statistics}. Wiley, New York, 1954.
+
+\bibitem{reiter1987}
+R.\,Reiter. \href{https://doi.org/10.1016/0004-3702(87)90062-2}{A Theory of Diagnosis from First Principles}. \emph{Artificial Intelligence}, 32(1):57--95, 1987.
+
+\bibitem{aubin1991}
+J.-P.\,Aubin. \emph{Viability Theory}. Birkh\"auser, Boston, 1991.
+
+\bibitem{bonet2000}
+B.\,Bonet, H.\,Geffner. Planning with Incomplete Information as Heuristic Search in Belief Space. In \emph{Proc.\ AIPS 2000}, pp.\,52--61, 2000.
+
+\bibitem{vanditmarsch2007}
+H.\,van Ditmarsch, W.\,van der Hoek, B.\,Kooi. \emph{Dynamic Epistemic Logic}. Springer, 2007.
+
+\bibitem{pearl2009}
+J.\,Pearl. \emph{Causality: Models, Reasoning, and Inference}, 2nd ed. Cambridge University Press, 2009.
+
+\bibitem{bolander2011}
+T.\,Bolander, M.\,B.\,Andersen. Epistemic Planning for Single- and Multi-Agent Systems. \emph{Journal of Applied Non-Classical Logics}, 21(1):9--34, 2011.
+
+\bibitem{moldovan2012}
+T.\,M.\,Moldovan, P.\,Abbeel. Safe Exploration in Markov Decision Processes. In \emph{Proc.\ ICML 2012}, pp.\,1451--1458, 2012.
+
+\bibitem{strand_v25}
+А.\,Странд. \emph{Мета-синсет и инвариант: типизированная система ревизии исследовательских представлений}, препринт v2.5 (Lean~4.36.0, 48~деклараций), 2026.
+
+\bibitem{strand_v15}
+А.\,Странд. \emph{Каузально-динамическая достаточность ремонта}, препринт v1.5 (\texttt{causal\_\allowbreak dynamic\_\allowbreak repair\_\allowbreak v1\_\allowbreak 5\_\allowbreak fixed.lean}, SHA-256 \texttt{19d49e88\ldots}, 20~деклараций), 2026.
+
+\bibitem{strand_v261}
+А.\,Странд. \emph{Наблюдать, менять представление или действовать: сертифицированный выбор стратегии при ограничениях памяти, бюджета и времени}, препринт v2.6.1 (\texttt{certified\_\allowbreak strategy\_\allowbreak selection\_\allowbreak v2\_\allowbreak 6\_\allowbreak 1.lean}, SHA-256 \texttt{4c76155e\ldots}, 27~деклараций), 2026.
+
+\end{thebibliography}
+
+\end{document}

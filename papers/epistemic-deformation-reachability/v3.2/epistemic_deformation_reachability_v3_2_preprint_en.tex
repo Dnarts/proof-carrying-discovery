@@ -1,0 +1,359 @@
+\documentclass[10pt,a4paper]{article}
+
+\usepackage{fontspec}
+\usepackage[english]{babel}
+\setmainfont[Ligatures=TeX]{Noto Sans}
+\setsansfont[Ligatures=TeX]{Noto Sans}
+\setmonofont[AutoFakeBold=1.5,AutoFakeSlant=0.15]{Noto Mono}
+\renewcommand{\familydefault}{\sfdefault}
+
+\emergencystretch=3em
+\tolerance=1400
+\hfuzz=0.5pt
+\setlength{\parskip}{5.5pt plus 2pt minus 1pt}
+\setlength{\parindent}{0pt}
+
+\usepackage[a4paper,top=19mm,bottom=19mm,left=20mm,right=20mm,headheight=14pt]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,tabularx}
+\usepackage{xcolor}
+\usepackage{fancyhdr}
+\usepackage{microtype}
+\usepackage[colorlinks=true,linkcolor=accent,citecolor=accent,urlcolor=accent]{hyperref}
+
+\definecolor{accent}{RGB}{22,66,118}
+\definecolor{muted}{RGB}{90,100,114}
+\definecolor{boxbg}{RGB}{244,247,251}
+
+\newtheoremstyle{cleanthm}{7pt}{7pt}{\itshape}{}{\bfseries\color{accent}}{.}{.5em}{}
+\newtheoremstyle{cleandef}{7pt}{7pt}{\normalfont}{}{\bfseries\color{accent}}{.}{.5em}{}
+\theoremstyle{cleanthm}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{cleandef}
+\newtheorem{definition}{Definition}[section]
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\callout}[2]{%
+  \vspace{5pt}\noindent\colorbox{boxbg}{%
+    \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
+      \vspace{3pt}\textbf{\color{accent}#1.}\hspace{0.4em}#2\vspace{3pt}%
+    }%
+  }\vspace{5pt}%
+}
+
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[L]{\small\color{muted}Epistemic Deformation of Reachability (v3.2)}
+\fancyhead[R]{\small\color{muted}A. Strand}
+\fancyfoot[C]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\renewcommand{\footrulewidth}{0pt}
+
+\DeclareMathOperator{\Win}{Win}
+\DeclareMathOperator{\Act}{Act}
+\DeclareMathOperator{\ObsAct}{ObsAct}
+\DeclareMathOperator{\WinAct}{WinAct}
+\DeclareMathOperator{\Reach}{Reach}
+\DeclareMathOperator{\GuaranteedWin}{GuaranteedWin}
+\DeclareMathOperator{\Hom}{Hom}
+
+\begin{document}
+
+\begin{center}
+  {\LARGE\bfseries Epistemic Deformation of Reachability:\\[3pt]
+  Logical Irreducibility of Observation, Irreversibility,\\[2pt]
+  and Intervention Constraints}\\[8pt]
+  {\large\color{muted} Separate Signatures, Satisfaction Bridges, Ablation Countermodels, and the Anti-Inflation Theorem}\\[9pt]
+  {\normalsize Alexander Strand}\\[3pt]
+  {\small\color{muted} November 25, 2026\,$\cdot$\,preprint v3.2\,$\cdot$\,Lean~4.36.0 (27/27, 0~\texttt{sorryAx}, 0~\texttt{ofReduceBool}) and Python reference}
+\end{center}
+
+\vspace{4pt}
+\begin{abstract}
+\noindent
+Consider a device sitting in one of two hidden states. Pressing button~$L$ repairs it in the first state but irreversibly breaks it in the second; button~$R$ does the exact opposite. The engineer also has a third option—running a diagnostic probe: it reveals the true state without error, yet in the second state the diagnostic procedure itself irreversibly breaks the device. A striking paradox emerges: a repair exists for each individual state, yet \emph{no single strategy} guarantees success without prior knowledge of the state—and no amount of additional time, memory, or computation can overcome this barrier. There is no noise and no quantum mechanics here: the entire system is an ordinary finite deterministic automaton. The core shift is that \textbf{the ability to acquire knowledge and the ability to act upon it decouple}: the very act of acquiring information can destroy the ability to reach the goal (\textbf{epistemic deformation of reachability}, $L_H^{\mathrm{EDR}}$). This raises two foundational questions in decision theory and the ethics of action: \emph{is it worth trying to learn the truth when the act of learning irreversibly alters the world and closes the path to the right action?} And \emph{how does rational responsibility change when choice begins before action—and even before the facts are obtained?}
+
+Formally, this paper studies not surface similarity across domains, but the \emph{consistent logical irreducibility of a joint entailment} $\Theta_M\models h$ with $\forall A\subsetneq M:\ \Theta_A\not\models h$: impossibility arises only when three constraints compose—an irreversible trap ($G_1$), observational indistinguishability through a passive port ($G_2$), and state-deforming observation ($G_4$)—whereas removing any single one restores a constructive winning policy (ablation countermodels $C_1,C_2,C_4$). In a self-contained, zero-import Lean~4.36.0 module (\texttt{epistemic\_\allowbreak deformation\_\allowbreak reachability\_\allowbreak v3\_\allowbreak 2.lean}, 27~declarations, \texttt{exit 0}, 0~\texttt{sorryAx}, 0~\texttt{native\_\allowbreak decide}), we prove: (1)~reduction of consistent irreducibility to maximal proper subsets (\texttt{CrossCore}); (2)~three separate native domain signatures (\texttt{SinkGraph}, \texttt{LinearProjectionF2} with $\mathbb{F}_2^2$-linearity, and \texttt{AuditBackAction}) linked by glue-parameterized \texttt{Satisfaction\allowbreak Bridge}s and a load-bearing \texttt{InterfaceGlue}; (3)~unbounded-horizon impossibility across all $k\in\mathbb{N}$ (\texttt{joint\_\allowbreak entailment\_\allowbreak all\_\allowbreak horizons}, axioms \texttt{propext}, \texttt{Quot.sound}); (4)~Boolean independence of all 8~vectors of $\Phi_3'$ and the \textbf{anti-inflation theorem} ($U_P(s_1)=s_0$); (5)~a general belief-space characterization \texttt{SafeBeliefReach} with a closed formal bridge \texttt{PlanTree}~$\leftrightarrow$~\texttt{Policy} preserving the passive port $\pi$; and (6)~strictly negative probabilistic value of information ($\mathrm{VoI}_{\mathrm{EDR}}=-1/3<0$) contrasted against discrete Blackwell monotonicity. The verified result carries the strict license \texttt{FORMAL\_\allowbreak CROSS\_\allowbreak IRREDUCIBILITY} and is kept explicitly separate from \texttt{INDEPENDENT\_\allowbreak CROSS\_\allowbreak DISCOVERY}.
+\end{abstract}
+
+\section{Problem Statement: Two Limits of ``Knowing More \texorpdfstring{$\not\Rightarrow$}{Does Not Imply} Doing More''}
+
+In classical statistical decision theory (Blackwell~\cite{blackwell1953}) and Savage's axiomatization~\cite{savage1954}, a free experiment refines the partition of hidden states without shrinking the set of achievable outcomes ($\mathrm{VoI}\ge 0$). Violations of this monotonicity in operational systems have at least two orthogonal sources:
+\begin{enumerate}
+  \item \textbf{Causal-temporal horizon closure (\texttt{v1.5} / \texttt{v2.6.1}~\cite{strand_v15,strand_v261}).} Observation does not deform the state directly, but takes time $\Delta t>0$ during which the environment evolves, pushing the actuator outside the backward light cone of the target by deadline $t^*$. Removing the deadline removes the barrier.
+  \item \textbf{Epistemic deformation of reachability (\texttt{v3.2}).} There is no deadline at all ($k\in\mathbb{N}$ is arbitrarily large), yet the observation probe $P$ induces state back-action ($U_P\ne\mathrm{id}$). When an incomplete passive projection ($G_2$) forces the agent to disambiguate hidden states via probing, and probing moves one state to a designated destination ($G_4$) that is dynamically an absorbing trap ($G_1$), guaranteed goal achievement becomes impossible at \emph{every} horizon.
+\end{enumerate}
+
+\paragraph{Intuitive example: when diagnostics break the device.}
+Consider a device in one of two hidden states ($s_0$ or $s_1$) with three available operations:
+
+\begin{table}[!htbp]
+\centering
+\small
+\begin{tabularx}{\linewidth}{@{}l >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Operation} & \textbf{State $s_0$} & \textbf{State $s_1$} \\
+\midrule
+Control $L$ & Successful repair ($w$) & Irreversible failure ($q$) \\
+Control $R$ & Irreversible failure ($q$) & Successful repair ($w$) \\
+Diagnostic probe $P$ & Reports $0$, state preserved ($s_0$) & Reports $1$, but irreversibly breaks device ($q$) \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+Acting blindly on the first step ($L$ or $R$) breaks one of the two worlds; running diagnostics $P$ identifies the world without error, yet in state $s_1$ nothing remains repairable. Removing \emph{any single} constraint—allowing recovery from $q$ (dropping $G_1$), separating $s_0$ and $s_1$ passively (dropping $G_2$), or making $P$ non-destructive (dropping $G_4$)—immediately restores a winning strategy.
+
+To avoid conflating cross-domain synthesis with verbal analogy~\cite{gentner1983}, we formulate the criterion via \emph{consistent logical irreducibility} over separate native signatures connected by satisfaction-preserving bridges in the spirit of institutions~\cite{goguen1992}.
+
+\section{Common Signature \texorpdfstring{$L_H^{\mathrm{EDR}}$}{L\_H\^{}EDR} and Irreducibility Reduction (\texorpdfstring{\texttt{CrossCore}}{CrossCore})}
+
+\begin{definition}[Monotone Entailment and Consistent Logical Irreducibility]
+Let $D$ be a type of domain identifiers with decidable equality, and let $E=(\mathrm{entails},\mathrm{mono})$ be a monotone entailment relation over finite lists of domains ($A\subseteq B\implies E.\mathrm{entails}(A)\to E.\mathrm{entails}(B)$). A list $A$ is a proper subset of $M$ ($\mathrm{IsProperSubset}(A,M)$) if $\forall x\in A,\ x\in M$ and $\exists d\in M,\ d\notin A$. We say $M$ is \emph{logically irreducible} ($\mathrm{IsIrreducible}(E,M)$) if $E.\mathrm{entails}(M)$ and $\forall A,\ \mathrm{IsProperSubset}(A,M)\to\neg E.\mathrm{entails}(A)$, and \emph{consistently irreducible} ($\mathrm{IsConsistentIrreducible}(E,\mathrm{Consistent},M)$) if in addition $\mathrm{Consistent}(M)$ holds.
+\end{definition}
+
+\begin{theorem}[Reduction of Irreducibility to Maximal Proper Subsets, \texttt{crossCore\_\allowbreak irreducible\_\allowbreak iff\_\allowbreak maximal}]
+\label{thm:crosscore}
+For any monotone entailment $E$ and domain list $M$:
+\begin{equation}
+  \mathrm{IsIrreducible}(E,M) \iff \Bigl(E.\mathrm{entails}(M) \;\land\; \forall d\in M:\ \neg E.\mathrm{entails}(M\setminus\{d\})\Bigr).
+\end{equation}
+\end{theorem}
+
+For $n$ domains, Theorem~\ref{thm:crosscore} (proved in Lean~4 using only \texttt{propext}) reduces checking all $2^n-1$ proper subsets to exhibiting $n$ countermodels for maximal proper subsets $M\setminus\{d\}$. Pairing this with $\mathrm{Consistent}(M)$ in \texttt{IsConsistentIrreducible} rules out vacuous \emph{ex falso} minimal inconsistent sets (structurally dual to minimal unsatisfiable subsets and Reiter's minimal diagnoses~\cite{reiter1987}).
+
+We fix the common finite signature
+\begin{equation}
+  \Sigma = \langle S,\ O,\ \Act,\ \ObsAct,\ \Win,\ \pi,\ \delta,\ \omega_{\mathrm{obs}} \rangle,
+\end{equation}
+where $S=\{s_0,s_1,w,q\}$, $O=\mathrm{Bool}$, $\Act=\{L,R\}$, $\ObsAct=\{P\}$, $\Win:S\to\mathrm{Bool}$, passive projection $\pi:S\to\mathrm{Bool}$, control transition $\delta:S\times\Act\to S$, and active probe $\omega_{\mathrm{obs}}(s,P)=(U_P(s),Y_P(s))$. A deterministic history-dependent policy has type $\mathrm{Policy}:=(\mathrm{Bool}\times\mathrm{List}(\mathrm{Decision}\times\mathrm{Bool}))\to\mathrm{Decision}$, where $\mathrm{Decision}\in\{\mathrm{act}(L),\mathrm{act}(R),\mathrm{probe},\mathrm{stop}\}$. Policies never observe the hidden state $s\in S$: they receive $\pi(s)$ initially and the sequence of past decisions and observations thereafter.
+
+For a fixed initial belief $B_0=\{s_0,s_1\}$, $\GuaranteedWin(\mathrm{glue},W,\mathrm{pol},k)$ asserts that executing $\mathrm{pol}$ from both aligned initial states reaches $\Win=\mathsf{true}$ within $\le k$ steps. Horizon-$k$ impossibility is $h_k(W):\iff\forall\mathrm{pol}:\ \neg\GuaranteedWin(\mathrm{glue},W,\mathrm{pol},k)$, and unbounded-horizon impossibility is $\mathrm{ClaimHAll}(\mathrm{glue},W):\iff\forall k\in\mathbb{N},\ h_k(W)$.
+
+\section{Three Separate Domain Signatures, \texorpdfstring{\texttt{InterfaceGlue}}{InterfaceGlue}, and \texorpdfstring{\texttt{Satisfaction\allowbreak Bridge}}{SatisfactionBridge}}
+
+To separate domain properties from a monolithic transition table, \texttt{epistemic\_\allowbreak deformation\_\allowbreak reachability\_\allowbreak v3\_\allowbreak 2.lean} defines three independent native structures:
+\begin{itemize}
+  \item \textbf{$G_1$ (\texttt{SinkGraph}):} a finite transition graph $(S,\mathrm{AllowedAct},\mathrm{step},\mathrm{win},\mathrm{trap})$ with no observation port and no probe semantics. The native axiom $\mathrm{IsAbsorbingTrap}$ requires $\mathrm{win}(\mathrm{trap})=\mathsf{false}$ and closure of $\mathrm{trap}$ under \emph{all} allowed actions (controls and probes). Theorem \texttt{sinkGraph\_\allowbreak trap\_\allowbreak never\_\allowbreak reaches\_\allowbreak win} (0~axioms) proves by induction that no finite action sequence leaves $\mathrm{trap}$.
+  \item \textbf{$G_2$ (\texttt{LinearProjectionF2}):} a map $\mathrm{proj}:\mathbb{F}_2^2\to\mathbb{F}_2$ over the canonical encoding $s_0=(0,0),\ s_1=(0,1),\ q=(1,0),\ w=(1,1)$ (bijection \texttt{decode\_\allowbreak encode\_\allowbreak bit2}, \texttt{encode\_\allowbreak decode\_\allowbreak bit2}, 0~axioms). The native axiom \texttt{IsLinearCollision} requires both $\mathbb{F}_2^2$-linearity (with algebraic lemma \texttt{linearProjectionF2\_\allowbreak ker\_\allowbreak iff\_\allowbreak eq}, 0~axioms: $\pi(u_0\oplus u_1)=0\iff\pi(u_0)=\pi(u_1)$) and specific collision on $(s_0,s_1)$. Theorem \texttt{linearProjectionF2\_\allowbreak kernel\_\allowbreak vs\_\allowbreak specific\_\allowbreak collision} (0~axioms) proves that both $\pi_1(x,y)=x$ and $\pi_2(x,y)=y$ are linear with non-trivial kernel, yet only $\pi_1$ collides on $(s_0,s_1)$.
+  \item \textbf{$G_4$ (\texttt{AuditBackAction}):} a structure $(\delta,U_P,Y_P,\mathrm{designated})$ separating three predicates: $C_4^{\mathrm{change}}$ ($U_P\ne\mathrm{id}$), $C_4^{\mathrm{order}}$ ($\exists s,a:\ U_P(\delta(s,a))\ne\delta(U_P(s),a)$), and $C_4^{\mathrm{entry}}$ ($U_P(s_1)=\mathrm{designated}$). Inside $G_4$'s native signature, $\mathrm{designated}$ is not labeled as a trap.
+\end{itemize}
+
+An explicit, load-bearing structure \texttt{InterfaceGlue} aligns $G_1$'s trap with $G_4$'s destination ($\mathrm{trapEqDesignated}:\mathrm{g4Designated}=\mathrm{g1TrapState}$) and fixes $G_2$'s distinct pair ($\mathrm{g2First}\ne\mathrm{g2Second}$), while recording the two-tier license \texttt{CrossDiscoveryLicense} (\texttt{FORMAL\_\allowbreak CROSS\_\allowbreak IRREDUCIBILITY} vs.\ \texttt{INDEPENDENT\_\allowbreak CROSS\_\allowbreak DISCOVERY}). All three reducts $\beta_i(\mathrm{glue})$, bridges \texttt{Satisfaction\allowbreak Bridge}, and the main entailment theorem are parameterized directly by \texttt{glue}:
+\begin{equation}
+  m\models_\Sigma \alpha_i(\varphi) \;\iff\; \beta_i(\mathrm{glue},m)\models_{\Sigma_i} \varphi \qquad (i\in\{1,2,4\}).
+\end{equation}
+Theorem \texttt{all\_\allowbreak three\_\allowbreak satisfaction\_\allowbreak bridges\_\allowbreak hold} (0~axioms) proves exact satisfaction preservation across the entire model class $\mathrm{EDRWorld}$ for any \texttt{glue}.
+
+\section{Unbounded-Horizon Impossibility and Ablation Countermodels}
+
+The shared base theory $\Theta_0(\mathrm{glue},W)$, held fixed across all ablations, fixes $s_0,s_1\notin\Win$, $w\in\Win$, transitions $s_0\xrightarrow{L}w$, $s_0\xrightarrow{R}q$, $s_1\xrightarrow{L}q$, $s_1\xrightarrow{R}w$, absorbing target $w\xrightarrow{L,R}w$, and informative probe outcomes $Y_P(s_0)=\mathsf{false}$, $Y_P(s_1)=\mathsf{true}$. The three translated domain axioms are:
+\begin{equation}
+  \Theta_1:\ q\text{ is an absorbing trap},\quad
+  \Theta_2:\ \pi\in\Hom(\mathbb{F}_2^2,\mathbb{F}_2)\ \land\ s_0\oplus s_1\in\ker(\pi),\quad
+  \Theta_4:\ U_P(s_1)=q.
+\end{equation}
+
+\begin{theorem}[Unbounded-Horizon Impossibility and Consistent Logical Irreducibility]
+\label{thm:joint_and_irr}
+In module \texttt{EpistemicDeformationReachabilityV32}, the following are verified:
+\begin{enumerate}
+  \item \textbf{Joint satisfiability (\texttt{sat\_\allowbreak joint\_\allowbreak model\_\allowbreak worldAll}, \texttt{[propext]}):} the 4-state model \texttt{worldAll} satisfies $\Theta_0\land\Theta_1\land\Theta_2\land\Theta_4$.
+  \item \textbf{Unbounded-horizon impossibility (\texttt{joint\_\allowbreak entailment\_\allowbreak all\_\allowbreak horizons}, \texttt{[propext, Quot.sound]}):} for \emph{any} \texttt{glue}, \emph{any} model $W$ satisfying $\Theta_0\land\Theta_1\land\Theta_2\land\Theta_4$, \emph{any} horizon $k\in\mathbb{N}$, and \emph{any} deterministic history-dependent policy $\mathrm{pol}$, $\neg\GuaranteedWin(\mathrm{glue},W,\mathrm{pol},k)$ holds (the probe branch explicitly rewrites via \texttt{glue.trapEqDesignated}).
+  \item \textbf{Constructive ablation countermodels (\texttt{countermodel\_\allowbreak C1/C2/C4}, \texttt{[propext]}):} dropping any one axiom from $\{\Theta_1,\Theta_2,\Theta_4\}$ (holding $\Theta_0$ and $B_0=\{s_0,s_1\}$ fixed) yields a constructive winning policy (Table~\ref{tab:countermodels}).
+  \item \textbf{Consistent full logical irreducibility (\texttt{edr\_\allowbreak full\_\allowbreak logical\_\allowbreak irreducibility}, \texttt{[propext, Quot.sound]}):} $\mathrm{IsConsistentIrreducible}(\allowbreak\mathrm{edrEntailment},\allowbreak\mathrm{edrConsistent},\allowbreak [G_1,G_2,G_4])$ holds for $\forall k\in\mathbb{N},\ h_k$.
+\end{enumerate}
+\end{theorem}
+
+\begin{table}[!htbp]
+\centering
+\caption{Joint model and three ablation countermodels (fixed $B_0=\{s_0,s_1\}$). Unbounded impossibility ($\forall k\in\mathbb{N}$) is proved by \texttt{joint\_\allowbreak entailment\_\allowbreak all\_\allowbreak horizons} in Lean; Python exhaustively verifies $k\in\{1,2,3,4\}$.}
+\label{tab:countermodels}
+\small
+\begin{tabularx}{\linewidth}{@{}l >{\raggedright\arraybackslash}X c c >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Model} & \textbf{Single modification from \texttt{worldAll}} & \textbf{$k=1$} & \textbf{$k\ge 2$} & \textbf{Constructive winning policy} \\
+\midrule
+\texttt{worldAll} & None ($\Theta_0\land\Theta_1\land\Theta_2\land\Theta_4$) & no & no & None ($\forall k\in\mathbb{N}$ in Lean) \\
+\texttt{worldC1} (no $G_1$) & $\delta(q,L)=w$ (trap removed) & no & \textbf{yes} & $\mathrm{act}(L)\to\mathrm{act}(L)$ \\
+\texttt{worldC2} (no $G_2$) & $\pi=\pi_2$ ($\pi(s_0)=0,\ \pi(s_1)=1$) & \textbf{yes} & yes & $0\mapsto\mathrm{act}(L),\ 1\mapsto\mathrm{act}(R)$ \\
+\texttt{worldC4} (no $G_4$) & $U_P(s_1)=s_1$ (non-destructive probe) & no & \textbf{yes} & $\mathrm{probe}\to(0:\mathrm{act}(L),\ 1:\mathrm{act}(R))$ \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\section{Boolean Independence of \texorpdfstring{$\Phi_3'$}{Phi3'} and the Anti-Inflation Theorem}
+
+We define three decidable diagnostic predicates on $\mathrm{EDRWorld}$: $C_1$ (existence of a non-winning absorbing trap closed under $L,R,P$), $C'_2$ (existence of $x\ne y$ with $\pi(x)=\pi(y)$ and non-empty disjoint 1-step winning action sets $\WinAct_1(x),\WinAct_1(y)$), and $C_4^{\mathrm{order}}$ ($\exists s,a:\ U_P(\delta(s,a))\ne\delta(U_P(s),a)$).
+
+\begin{theorem}[Boolean Independence and Anti-Inflation]
+\label{thm:bool_anti}
+\begin{enumerate}
+  \item \textbf{All 8 Boolean vectors (\texttt{phi3\_\allowbreak prime\_\allowbreak all\_\allowbreak 8\_\allowbreak boolean\_\allowbreak vectors\_\allowbreak realized}, \texttt{[propext]}):} the parametric family \texttt{diagWorld(b1,b2,b4)} realizes all $2^3=8$ Boolean combinations $(b_1,b_2,b_4)\in\{0,1\}^3$ of $(C_1,C'_2,C_4^{\mathrm{order}})$.
+  \item \textbf{Anti-inflation theorem (\texttt{anti\_\allowbreak inflation\_\allowbreak diagnostics\_\allowbreak do\_\allowbreak not\_\allowbreak imply\_\allowbreak impossibility}, \texttt{[propext]}):} on \texttt{worldAntiInflation}, identical to \texttt{worldAll} except $U_P(s_1)=s_0$ instead of $q$, all three diagnostic predicates hold—$(C_1,C'_2,C_4^{\mathrm{order}})=(1,1,1)$—yet the policy $\mathrm{probe}\to\mathrm{act}(L)$ wins from both $s_0$ and $s_1$ in $k=2$ steps:
+  \begin{equation}
+    C_1 \land C'_2 \land C_4^{\mathrm{order}} \;\not\models\; h_k.
+  \end{equation}
+\end{enumerate}
+\end{theorem}
+
+Theorem~\ref{thm:bool_anti} establishes a sharp boundary: the three diagnostic checklists (trap + passive collision + non-commutation) do not entail impossibility. Non-commutation can even act as a benign reset operator $\{s_0,s_1\}\mapsto\{s_0\}$; impossibility requires entry into the absorbing core ($C_4^{\mathrm{entry}}$ + \texttt{InterfaceGlue}).
+
+\section{General \texorpdfstring{\texttt{SafeBeliefReach}}{SafeBeliefReach} Characterization and Negative Probabilistic Value of Information}
+
+\subsection{Belief-Space Characterization and the Formal \texorpdfstring{\texttt{PlanTree}~$\leftrightarrow$~\texttt{Policy}}{PlanTree <-> Policy} Bridge}
+
+For any finite system $\mathrm{GenEDRWorld}(S,O,\Act,\ObsAct)$ equipped with a \emph{passive observation port} $\pi:S\to O$, transitions $\delta$, probe back-action $U_p$, and probe outcome $Y_p$, we filter active (not-yet-won) states $B_{\mathrm{act}}=\{s\in B\mid\Win(s)=\mathsf{false}\}$ and define a recursive belief-space AND--OR reachability game (a finite-horizon deterministic viability kernel~\cite{aubin1991,bonet2000}):
+\begin{align}
+  \mathrm{SafeBeliefReach}(W,0,B) &:\iff \forall s\in B,\ \Win(s)=\mathsf{true}, \\
+  \mathrm{SafeBeliefReach}(W,k+1,B) &:\iff (\forall s\in B,\ \Win(s)=\mathsf{true}) \nonumber\\
+  &\quad\lor\; \bigl(\exists a\in\Act:\ \forall y\in O,\ \mathrm{SafeBeliefReach}(W,k,B_{a,y}^{\mathrm{act}})\bigr) \nonumber\\
+  &\quad\lor\; \bigl(\exists p\in\ObsAct:\ \forall y\in O,\ \mathrm{SafeBeliefReach}(W,k,B_{p,y}^{\mathrm{prb}})\bigr),
+\end{align}
+where $\mathrm{SafeBeliefReachInit}(W,k,B):\iff\forall o\in O,\ \mathrm{SafeBeliefReach}(W,k,B_{\pi=o})$.
+
+\begin{theorem}[Controllability Characterization and \texttt{PlanTree} $\leftrightarrow$ \texttt{Policy} Bridge]
+\label{thm:sbr}
+\begin{enumerate}
+  \item \textbf{General equivalence (\texttt{safeBeliefReach\_\allowbreak iff\_\allowbreak exists\_\allowbreak validPlan}, \texttt{[Classical.choice]}):} for any system $W$ with passive port $\pi$, horizon $k\in\mathbb{N}$, and belief $B$, $\mathrm{SafeBeliefReach}(W,k,B)$ holds iff there exists a valid finite decision tree $t:\mathrm{PlanTree}(\Act,\ObsAct,O)$.
+  \item \textbf{Formal bridge to functional policies (\texttt{safeBeliefReachInit\_\allowbreak iff\_\allowbreak exists\_\allowbreak policy}, \texttt{[propext, Classical.choice, Quot.sound]}):} for any $W:\mathrm{EDRWorld}$ and $k\in\mathbb{N}$, $\mathrm{SafeBeliefReachInit}(\allowbreak\mathrm{toGenEDR}\,W,\allowbreak k,\allowbreak [s_0,s_1])$ holds iff there exists a deterministic history-dependent policy $\mathrm{pol}:\mathrm{Hist}\to\mathrm{Decision}$ satisfying $\GuaranteedWin(\allowbreak\mathrm{edrInterfaceGlue},\allowbreak W,\allowbreak \mathrm{pol},\allowbreak k)$.
+  \item \textbf{Full 5-model separation (\texttt{safeBeliefReachInit\_\allowbreak separates\_\allowbreak all\_\allowbreak models}):} $\mathrm{SafeBeliefReachInit}$ fails for \texttt{worldAll} at every $k\in\mathbb{N}$, and holds for \texttt{worldC1} ($k=2$), \texttt{worldC2} ($k=1$, via preserved $\pi$), \texttt{worldC4} ($k=2$), and \texttt{worldAntiInflation} ($k=2$).
+\end{enumerate}
+\end{theorem}
+
+\subsection{Discrete Blackwell Monotonicity vs.\ Strictly Negative Value of Information}
+
+Under Blackwell's theorem~\cite{blackwell1953} and Savage's state-act independence~\cite{savage1954}, passive observation ($U_P=\mathrm{id}$) never reduces expected success. Under epistemic deformation, this inequality reverses. Consider the 3-world system \texttt{voiWorld3} with uniform prior $\mu=(1,1,1)$ on $\{s_0,s_1,s_2\}$: action $L$ repairs $s_0,s_1$ (and breaks $s_2$), action $R$ repairs only $s_2$, and probe $P$ identifies all three worlds ($o_0,o_1,o_2$) with 100\% accuracy while sending $s_1$ and $s_2$ into absorbing trap $q$.
+
+\begin{theorem}[Blackwell Monotonicity and Strictly Negative $\mathrm{VoI}_{\mathrm{EDR}}$]
+\label{thm:voi}
+\begin{enumerate}
+  \item \textbf{Discrete Blackwell monotonicity (\texttt{passive\_\allowbreak probe\_\allowbreak voi\_\allowbreak nonneg}, \texttt{[propext, Quot.sound]}):} for any state list $B$, integer prior weights $\mu:S\to\mathbb{N}$, and binary passive probe $p:S\to\mathrm{Bool}$ ($U_p=\mathrm{id}$), $\mathrm{bestBlindMass}(B)\le\mathrm{bestBlindMass}(B_{p=1})+\mathrm{bestBlindMass}(B_{p=0})$ ($\mathrm{VoI}\ge 0$).
+  \item \textbf{Strictly negative value of information (\texttt{deforming\_\allowbreak probe\_\allowbreak strict\_\allowbreak negative\_\allowbreak voi}, \texttt{[propext, Quot.sound]}):} on \texttt{voiWorld3}, probe $P$ is injective on $\{s_0,s_1,s_2\}$, yet blind $L$ wins mass $2/3$, whereas post-probe branch $o_0$ wins ($1/3$) and branches $o_1,o_2$ fail at \emph{every} horizon $k\in\mathbb{N}$, giving $\mathrm{VoI}_{\mathrm{EDR}}=1/3-2/3=-1/3<0$.
+  \item \textbf{Randomized blind dominance (\texttt{randomized\_\allowbreak blind\_\allowbreak beats\_\allowbreak post\_\allowbreak probe\_\allowbreak ceiling}, \texttt{[propext, Quot.sound]}):} for any exact rational blind mixture $(p_L,p_R)$ with $p_L>0$, expected blind winning mass $2p_L+p_R$ strictly exceeds the universal post-probe trap ceiling $p_L+p_R$.
+\end{enumerate}
+\end{theorem}
+
+\section{Philosophical and Applied Context (Informal Interpretation)}
+
+\emph{Scope disclaimer.} This section is purely interpretive: the ethical, game-theoretic, and applied connections below are \textbf{not} formalized in Lean~4 and are \textbf{not} additional \texttt{Satisfaction\allowbreak Bridge}s. They situate the verified mechanism relative to established decision-theoretic barriers.
+
+\subsection{The Second-Order Trolley Problem and Contrast with the Prisoner's Dilemma}
+
+The classical trolley problem examines a \emph{conflict of values under complete knowledge}: all facts are known in advance, and observation is free and neutral. Epistemic deformation moves the dilemma one step earlier—into a ``second-order trolley problem.'' Suppose five people are on one track and none on the other, but the agent does not know which track is which; a scanner reveals the truth with certainty, yet in one state running the scanner itself locks the switch onto the fatal track. Responsibility splits into three layers: whether to observe at all, which action to take afterward, and accountability for the part of the world altered by the observation. In Pearl's causal language~\cite{pearl2009}, observation ceases to be passive reading and becomes an intervention $\mathrm{do}(P)$.
+
+In the one-shot \emph{Prisoner's Dilemma}, the obstacle is a \emph{conflict of incentives between two agents}: even knowing the partner's move, each player has a strictly dominant strategy to defect. In epistemic deformation there is a single agent and a single undisputed goal, and the barrier arises not from monetary or temporal test cost, but from structural deformation of the reachable state space (down to $\mathrm{VoI}_{\mathrm{EDR}}=-1/3<0$ in Theorem~\ref{thm:voi}).
+
+\begin{table}[!htbp]
+\centering
+\caption{Comparison of three barriers to rational choice (informal contextual map).}
+\label{tab:trolley_pd_edr}
+\small
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{38mm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Setting} & \textbf{Nature of the obstacle} & \textbf{Core question} \\
+\midrule
+Classical trolley problem & Conflict of values under full knowledge & Which action is right? \\
+One-shot Prisoner's Dilemma & Conflict of incentives (dominant strategies) & How to act when individual gain ruins joint outcome? \\
+Epistemic deformation (\texttt{v3.2}) & Conflict between learning and reachability for one agent & Is learning worth it when learning itself closes the path to the goal? \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\subsection{Adjacent Applied Domains and Exact Boundaries of Difference}
+
+\begin{table}[!htbp]
+\centering
+\caption{Four adjacent areas, their structural link to \texttt{v3.2}, and exact boundaries of difference.}
+\label{tab:adjacent_domains}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{40mm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{Adjacent area} & \textbf{Structural link to \texttt{v3.2}} & \textbf{Boundary of difference} \\
+\midrule
+Destructive testing and clinical diagnostics (invasive biopsy) & A test provides an exact diagnosis but irreversibly damages the specimen or patient in some states ($\mathrm{VoI}<0$). & Applied decision analysis usually models harm as an additive penalty $U-c$; in \texttt{v3.2} there is no penalty—loss is purely topological ($Q_{\mathrm{trap}}$ via \texttt{InterfaceGlue}). \\
+Safe exploration in Safe~RL / POMDP~\cite{bonet2000,moldovan2012,aubin1991} and ontic-epistemic DEL planning~\cite{vanditmarsch2007,bolander2011} & Information-gathering actions can push an agent into irreversible dead-ends; \texttt{SafeBeliefReach} is a deterministic belief-space viability kernel. & Standard POMDP / DEL formulations do not establish 3-way logical irreducibility of separate signatures (\texttt{CrossCore} + \texttt{Satisfaction\allowbreak Bridge}) or the anti-inflation theorem ($U_P(s_1)=s_0$). \\
+Goodhart's Law and Lucas Critique (audit, economics, AI~Alignment) & Measuring or auditing a system shifts its operating regime ($U_P\ne\mathrm{id}$), breaking prior control policies. & Usually explained via strategic adversary adaptation; \texttt{v3.2} obtains $\mathrm{VoI}_{\mathrm{EDR}}<0$ on a single deterministic automaton with no adversary. \\
+EDT vs.\ CDT (Newcomb's problem) & Separates the evidential value of a step (what it reveals) from its causal effect $\mathrm{do}(P)$ (what it changes). & Newcomb's paradox relies on a past predictor; \texttt{v3.2} has no backward causation—only forward causal back-action of probing. \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{Contribution relative to POMDP, Safe~RL, and destructive testing.}
+Formal soundness in Lean does not by itself prove conceptual novelty, so we state three exact differentiators: (1)~in POMDP and Safe~RL, dynamics are given by a single monolithic transition table, whereas here the theorem establishes \emph{consistent logical irreducibility across three separate native signatures} via glue-parameterized \texttt{Satisfaction\allowbreak Bridge}s and ablation countermodels; (2)~unlike penalty-based destructive testing ($U-c$), the objective is purely Boolean and the anti-inflation theorem ($U_P(s_1)=s_0$) separates diagnostic warning signs from true impossibility; (3)~together with \texttt{v1.5}~\cite{strand_v15}, the program cleanly separates deadline-driven negative $\mathrm{VoI}$ under passive probing from deadline-free deformation caused by probing itself.
+
+\section{Machine Verification, Reproducibility, and Boundaries of v3.2}
+
+The self-contained Lean~4.36.0 module \texttt{epistemic\_\allowbreak deformation\_\allowbreak reachability\_\allowbreak v3\_\allowbreak 2.lean} (56,468~bytes, 1,342~lines, pure LF, no BOM, 0~imports, SHA-256 \texttt{0a215b6673a27802\ldots{}128ff39f}) is verified by \texttt{Lean 4.36.0} (\texttt{arm64-apple-darwin24.6.0}, commit \texttt{611c117b}) through the fail-closed gate \texttt{verify\_\allowbreak lean.sh} (\texttt{exit=0}, \texttt{errors=0}, \texttt{warnings=0}, \texttt{sorryAx=0}, \texttt{ofReduceBool=0}, \texttt{decls=27/27}). Table~\ref{tab:axioms_v32} reports the exact \texttt{\#print axioms} ledger from \texttt{V3\_\allowbreak 2\_\allowbreak VERIFICATION.log}.
+
+\begin{table}[!htbp]
+\centering
+\caption{Exact \texttt{\#print axioms} profile for all 27~declarations in \texttt{epistemic\_\allowbreak deformation\_\allowbreak reachability\_\allowbreak v3\_\allowbreak 2.lean} (Lean~4.36.0, \texttt{exit 0}, 0~\texttt{sorryAx}, 0~\texttt{ofReduceBool}).}
+\label{tab:axioms_v32}
+\footnotesize
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{45mm} >{\raggedright\arraybackslash}X@{}}
+\toprule
+\textbf{\texttt{\#print axioms} profile} & \textbf{Verified declarations (27/27)} \\
+\midrule
+Axiom-free (6) & \texttt{sinkGraph\_\allowbreak trap\_\allowbreak never\_\allowbreak reaches\_\allowbreak win}, \texttt{linearProjectionF2\_\allowbreak ker\_\allowbreak iff\_\allowbreak eq}, \texttt{linearProjectionF2\_\allowbreak kernel\_\allowbreak vs\_\allowbreak specific\_\allowbreak collision}, \texttt{decode\_\allowbreak encode\_\allowbreak bit2}, \texttt{encode\_\allowbreak decode\_\allowbreak bit2}, \texttt{all\_\allowbreak three\_\allowbreak satisfaction\_\allowbreak bridges\_\allowbreak hold} \\
+\texttt{[propext]} (10) & \texttt{crossCore\_\allowbreak irreducible\_\allowbreak iff\_\allowbreak maximal}, \texttt{edr\_\allowbreak trap\_\allowbreak never\_\allowbreak reachesWin}, \texttt{sat\_\allowbreak joint\_\allowbreak model\_\allowbreak worldAll}, \texttt{countermodel\_\allowbreak C1\_\allowbreak refutes\_\allowbreak without\_\allowbreak G1}, \texttt{countermodel\_\allowbreak C2\_\allowbreak refutes\_\allowbreak without\_\allowbreak G2}, \texttt{countermodel\_\allowbreak C4\_\allowbreak refutes\_\allowbreak without\_\allowbreak G4}, \texttt{phi3\_\allowbreak prime\_\allowbreak all\_\allowbreak 8\_\allowbreak boolean\_\allowbreak vectors\_\allowbreak realized}, \texttt{anti\_\allowbreak inflation\_\allowbreak diagnostics\_\allowbreak do\_\allowbreak not\_\allowbreak imply\_\allowbreak impossibility}, \texttt{runTree\_\allowbreak policyToTree}, \texttt{reachesWin\_\allowbreak eq\_\allowbreak runTree\_\allowbreak of\_\allowbreak agrees} \\
+\texttt{[Classical.choice]} (1) & \texttt{safeBeliefReach\_\allowbreak iff\_\allowbreak exists\_\allowbreak validPlan} \\
+\texttt{[propext, Quot.sound]} (8) & \texttt{joint\_\allowbreak entailment\_\allowbreak all\_\allowbreak horizons}, \texttt{edr\_\allowbreak full\_\allowbreak logical\_\allowbreak irreducibility}, \texttt{validPlan\_\allowbreak iff\_\allowbreak forall\_\allowbreak runTree}, \texttt{actWinMass\_\allowbreak filter\_\allowbreak partition}, \texttt{passive\_\allowbreak probe\_\allowbreak voi\_\allowbreak nonneg}, \texttt{voiWorld3\_\allowbreak trap\_\allowbreak never\_\allowbreak wins}, \texttt{deforming\_\allowbreak probe\_\allowbreak strict\_\allowbreak negative\_\allowbreak voi}, \texttt{randomized\_\allowbreak blind\_\allowbreak beats\_\allowbreak post\_\allowbreak probe\_\allowbreak ceiling} \\
+\texttt{[propext,}\\\texttt{Classical.choice,}\\\texttt{Quot.sound]} (2) & \texttt{safeBeliefReachInit\_\allowbreak iff\_\allowbreak exists\_\allowbreak policy}, \texttt{safeBeliefReachInit\_\allowbreak separates\_\allowbreak all\_\allowbreak models} \\
+\bottomrule
+\end{tabularx}
+\end{table}
+
+The accompanying pure-stdlib Python~3 package (\texttt{epistemic\_\allowbreak deformation\_\allowbreak reachability\_\allowbreak v3\_\allowbreak 2.py}, \texttt{test\_\allowbreak v3\_\allowbreak 2.py}) reproduces all 12~modules—including post-action passive $\pi$-splitting and exact agreement between \texttt{safe\_\allowbreak belief\_\allowbreak reach\_\allowbreak init} and the policy solver across all 5~models—and generates the deterministic witness report \texttt{v3\_\allowbreak 2\_\allowbreak witness\_\allowbreak report.json}.
+
+\callout{What This Work Is Not and Exact Boundaries of v3.2}{%
+Verification establishes strictly \textbf{\texttt{FORMAL\_\allowbreak CROSS\_\allowbreak IRREDUCIBILITY}} (the core 16~declarations and the entire probabilistic VoI block use \texttt{0 Classical.choice}; choice is localized strictly to Skolemizing tree branches in \texttt{safeBeliefReach\_\allowbreak iff\_\allowbreak exists\_\allowbreak validPlan} and the \texttt{PlanTree}~$\leftrightarrow$~\texttt{Policy} bridge). Three explicit boundaries remain: (1)~separate signatures and glue-parameterized \texttt{Satisfaction\allowbreak Bridge}s certify formal composition, but do \emph{not} prove independent historical discovery of the domain models from separate sciences (\texttt{INDEPENDENT\_\allowbreak CROSS\_\allowbreak DISCOVERY}); (2)~\texttt{passive\_\allowbreak probe\_\allowbreak voi\_\allowbreak nonneg} is proved for 1-step binary passive probes over $\{L,R\}$, and \texttt{randomized\_\allowbreak blind\_\allowbreak beats\_\allowbreak post\_\allowbreak probe\_\allowbreak ceiling} establishes exact rational arithmetic dominance over the deterministic trap ceiling $1/3$ without formalizing a general measure-theoretic randomized policy type; (3)~continuous spaces, stochastic environment dynamics, and noisy sensors remain future work.}
+
+\begin{thebibliography}{14}
+\small\setlength{\itemsep}{2pt}
+
+\bibitem{goguen1992}
+J.\,A.\,Goguen, R.\,M.\,Burstall. \href{https://doi.org/10.1145/147508.147524}{Institutions: Abstract Model Theory for Specification and Programming}. \emph{Journal of the ACM}, 39(1):95--146, 1992.
+
+\bibitem{gentner1983}
+D.\,Gentner. \href{https://doi.org/10.1207/s15516709cog0702_3}{Structure-Mapping: A Theoretical Framework for Analogy}. \emph{Cognitive Science}, 7(2):155--170, 1983.
+
+\bibitem{blackwell1953}
+D.\,Blackwell. \href{https://doi.org/10.1214/aoms/1177729032}{Equivalent Comparisons of Experiments}. \emph{Annals of Mathematical Statistics}, 24(2):265--272, 1953.
+
+\bibitem{savage1954}
+L.\,J.\,Savage. \emph{The Foundations of Statistics}. Wiley, New York, 1954.
+
+\bibitem{reiter1987}
+R.\,Reiter. \href{https://doi.org/10.1016/0004-3702(87)90062-2}{A Theory of Diagnosis from First Principles}. \emph{Artificial Intelligence}, 32(1):57--95, 1987.
+
+\bibitem{aubin1991}
+J.-P.\,Aubin. \emph{Viability Theory}. Birkh\"auser, Boston, 1991.
+
+\bibitem{bonet2000}
+B.\,Bonet, H.\,Geffner. Planning with Incomplete Information as Heuristic Search in Belief Space. In \emph{Proc.\ AIPS 2000}, pp.\,52--61, 2000.
+
+\bibitem{vanditmarsch2007}
+H.\,van Ditmarsch, W.\,van der Hoek, B.\,Kooi. \emph{Dynamic Epistemic Logic}. Springer, 2007.
+
+\bibitem{pearl2009}
+J.\,Pearl. \emph{Causality: Models, Reasoning, and Inference}, 2nd ed. Cambridge University Press, 2009.
+
+\bibitem{bolander2011}
+T.\,Bolander, M.\,B.\,Andersen. Epistemic Planning for Single- and Multi-Agent Systems. \emph{Journal of Applied Non-Classical Logics}, 21(1):9--34, 2011.
+
+\bibitem{moldovan2012}
+T.\,M.\,Moldovan, P.\,Abbeel. Safe Exploration in Markov Decision Processes. In \emph{Proc.\ ICML 2012}, pp.\,1451--1458, 2012.
+
+\bibitem{strand_v25}
+A.\,Strand. \emph{Meta-Synset and Invariant: A Typed System for Revising Research Representations}, preprint v2.5 (Lean~4.36.0, 48~declarations), 2026.
+
+\bibitem{strand_v15}
+A.\,Strand. \emph{Causal-Dynamic Sufficiency of Repair}, preprint v1.5 (\texttt{causal\_\allowbreak dynamic\_\allowbreak repair\_\allowbreak v1\_\allowbreak 5\_\allowbreak fixed.lean}, SHA-256 \texttt{19d49e88\ldots}, 20~declarations), 2026.
+
+\bibitem{strand_v261}
+A.\,Strand. \emph{Observe, Change Representation, or Act: Certified Strategy Selection under Memory, Budget, and Time Constraints}, preprint v2.6.1 (\texttt{certified\_\allowbreak strategy\_\allowbreak selection\_\allowbreak v2\_\allowbreak 6\_\allowbreak 1.lean}, SHA-256 \texttt{4c76155e\ldots}, 27~declarations), 2026.
+
+\end{thebibliography}
+
+\end{document}

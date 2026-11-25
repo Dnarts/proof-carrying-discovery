@@ -1,0 +1,41 @@
+==============================================================================
+VERIFICATION LOG — epistemic_deformation_reachability_v3_2.lean
+==============================================================================
+Timestamp (local) : 2026-11-25 07:08:18+0200
+Toolchain         : Lean (version 4.36.0, arm64-apple-darwin24.6.0, commit 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9, Release)
+SHA-256           : 0a215b6673a27802b28ff5abe59fff9d8f90219afb5c2d5950561958128ff39f
+Size              : 56468 bytes, 1342 lines
+Gate              : PASS (exit=0 | errors=0 | warnings=0 | sorryAx=0 | ofReduceBool=0 | decls=27/27)
+
+'EpistemicDeformationReachabilityV32.crossCore_irreducible_iff_maximal' depends on axioms: [propext]
+'EpistemicDeformationReachabilityV32.sinkGraph_trap_never_reaches_win' does not depend on any axioms
+'EpistemicDeformationReachabilityV32.linearProjectionF2_ker_iff_eq' does not depend on any axioms
+'EpistemicDeformationReachabilityV32.linearProjectionF2_kernel_vs_specific_collision' does not depend on any axioms
+'EpistemicDeformationReachabilityV32.decode_encode_bit2' does not depend on any axioms
+'EpistemicDeformationReachabilityV32.encode_decode_bit2' does not depend on any axioms
+'EpistemicDeformationReachabilityV32.all_three_satisfaction_bridges_hold' does not depend on any axioms
+'EpistemicDeformationReachabilityV32.edr_trap_never_reachesWin' depends on axioms: [propext]
+'EpistemicDeformationReachabilityV32.joint_entailment_all_horizons' depends on axioms: [propext, Quot.sound]
+'EpistemicDeformationReachabilityV32.sat_joint_model_worldAll' depends on axioms: [propext]
+'EpistemicDeformationReachabilityV32.countermodel_C1_refutes_without_G1' depends on axioms: [propext]
+'EpistemicDeformationReachabilityV32.countermodel_C2_refutes_without_G2' depends on axioms: [propext]
+'EpistemicDeformationReachabilityV32.countermodel_C4_refutes_without_G4' depends on axioms: [propext]
+'EpistemicDeformationReachabilityV32.edr_full_logical_irreducibility' depends on axioms: [propext, Quot.sound]
+'EpistemicDeformationReachabilityV32.phi3_prime_all_8_boolean_vectors_realized' depends on axioms: [propext]
+'EpistemicDeformationReachabilityV32.anti_inflation_diagnostics_do_not_imply_impossibility' depends on axioms: [propext]
+'EpistemicDeformationReachabilityV32.safeBeliefReach_iff_exists_validPlan' depends on axioms: [Classical.choice]
+'EpistemicDeformationReachabilityV32.validPlan_iff_forall_runTree' depends on axioms: [propext, Quot.sound]
+'EpistemicDeformationReachabilityV32.runTree_policyToTree' depends on axioms: [propext]
+'EpistemicDeformationReachabilityV32.reachesWin_eq_runTree_of_agrees' depends on axioms: [propext]
+'EpistemicDeformationReachabilityV32.safeBeliefReachInit_iff_exists_policy' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'EpistemicDeformationReachabilityV32.safeBeliefReachInit_separates_all_models' depends on axioms: [propext,
+ Classical.choice,
+ Quot.sound]
+'EpistemicDeformationReachabilityV32.actWinMass_filter_partition' depends on axioms: [propext, Quot.sound]
+'EpistemicDeformationReachabilityV32.passive_probe_voi_nonneg' depends on axioms: [propext, Quot.sound]
+'EpistemicDeformationReachabilityV32.voiWorld3_trap_never_wins' depends on axioms: [propext, Quot.sound]
+'EpistemicDeformationReachabilityV32.deforming_probe_strict_negative_voi' depends on axioms: [propext, Quot.sound]
+'EpistemicDeformationReachabilityV32.randomized_blind_beats_post_probe_ceiling' depends on axioms: [propext, Quot.sound]
+==============================================================================

@@ -8,7 +8,13 @@ Evidence-scoped program discovery, finite model-class refutation, controlled rep
 
 [**All preprints: English · Русский · 简体中文 · עברית**](papers/hebrew/README.md)
 
-## Latest preprint: Observe, Change Representation, or Act (v2.6.1, corrected edition, 24 November 2026)
+## Latest preprint: Epistemic Deformation of Reachability v3.2 (25 November 2026)
+
+A finite deterministic model in which a diagnostic probe can reveal the hidden state while irreversibly closing the path to the goal. Includes an unbounded-horizon impossibility result, a belief-space characterization, and a negative value-of-information example.
+
+[**English PDF**](papers/epistemic-deformation-reachability/v3.2/epistemic_deformation_reachability_v3_2_preprint_en.pdf) · [**Русский PDF**](papers/epistemic-deformation-reachability/v3.2/epistemic_deformation_reachability_v3_2_preprint_ru.pdf) · [Release ZIP](papers/epistemic-deformation-reachability/v3.2/epistemic_deformation_reachability_v3_2_BILINGUAL_FINAL.zip) · [Source and verification records](papers/epistemic-deformation-reachability/v3.2/)
+
+## Observe, Change Representation, or Act (v2.6.1, corrected edition, 24 November 2026)
 
 Certified strategy selection under memory, budget, and time constraints. The release distinguishes when to probe, change representation or observation port, or act before a causal deadline.
 
@@ -93,7 +99,11 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 
 Основная линия: **найти программу → проверить идентифицируемость → опровергнуть недостаточный класс → сменить представление → синтезировать решение → формально проверить его поведение.**
 
-## Новый препринт: «Наблюдать, менять представление или действовать» v2.6.1 (исправленная редакция)
+## Новый препринт: «Эпистемическая деформация достижимости» v3.2
+
+Когда диагностический зонд раскрывает скрытое состояние, но необратимо закрывает путь к цели. [**English PDF**](papers/epistemic-deformation-reachability/v3.2/epistemic_deformation_reachability_v3_2_preprint_en.pdf) · [**Русский PDF**](papers/epistemic-deformation-reachability/v3.2/epistemic_deformation_reachability_v3_2_preprint_ru.pdf) · [Release ZIP](papers/epistemic-deformation-reachability/v3.2/epistemic_deformation_reachability_v3_2_BILINGUAL_FINAL.zip) · [Source and verification records](papers/epistemic-deformation-reachability/v3.2/)
+
+## «Наблюдать, менять представление или действовать» v2.6.1 (исправленная редакция)
 
 [**Русский PDF**](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1.pdf) · [English PDF](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1_en.pdf) · [简体中文 PDF](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1_zh.pdf) · [עברית PDF](papers/hebrew/certified_strategy_selection_preprint_v2_6_1_he.pdf) · [Исходники, Lean, Python и журнал проверки](papers/certified-strategy-selection/v2.6.1/) · [Исправленный ZIP](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_v2_6_1_FINAL_RELEASE.zip)
 
@@ -143,7 +153,9 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 
 **本项目的核心问题：何时有证据支持改变假设语言，如何独立核验这种改变？**
 
-最新预印本：观察、改变表征，还是行动（v2.6.1 修订版）。[简体中文 PDF](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1_zh.pdf) · [עברית PDF](papers/hebrew/certified_strategy_selection_preprint_v2_6_1_he.pdf) · [English PDF](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1_en.pdf) · [俄文 PDF](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1.pdf) · [源代码与验证记录](papers/certified-strategy-selection/v2.6.1/)。
+最新预印本：《可达性的认知形变》v3.2（[English PDF](papers/epistemic-deformation-reachability/v3.2/epistemic_deformation_reachability_v3_2_preprint_en.pdf) · [俄文 PDF](papers/epistemic-deformation-reachability/v3.2/epistemic_deformation_reachability_v3_2_preprint_ru.pdf)）。
+
+观察、改变表征，还是行动（v2.6.1 修订版）。[简体中文 PDF](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1_zh.pdf) · [עברית PDF](papers/hebrew/certified_strategy_selection_preprint_v2_6_1_he.pdf) · [English PDF](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1_en.pdf) · [俄文 PDF](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1.pdf) · [源代码与验证记录](papers/certified-strategy-selection/v2.6.1/)。
 
 目标相关的信息充分性与研究修复原子 v1.3。[简体中文 PDF](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3_zh.pdf) · [עברית PDF](papers/hebrew/repair_budget_atom_preprint_v1_3_he.pdf) · [English PDF](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3_en.pdf) · [俄文 PDF](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3.pdf) · [源代码与验证记录](papers/repair-budget-atom/v1.3/)。
 
