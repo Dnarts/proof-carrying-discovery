@@ -6,31 +6,31 @@ Evidence-scoped program discovery, finite model-class refutation, controlled rep
 
 **English** · [Русский](#русский) · [简体中文](#中文简介)
 
-[**All preprints in EN / RU / 简体中文**](docs/PREPRINT_LANGUAGES.md)
+[**All preprints: English · Русский · 简体中文 · עברית**](papers/hebrew/README.md)
 
 ## Latest preprint: Observe, Change Representation, or Act (v2.6.1, corrected edition, 24 November 2026)
 
 Certified strategy selection under memory, budget, and time constraints. The release distinguishes when to probe, change representation or observation port, or act before a causal deadline.
 
-[**English PDF**](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1_en.pdf) · [**Русский PDF**](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1.pdf) · [**简体中文 PDF**](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1_zh.pdf) · [Source, Lean, Python and verification records](papers/certified-strategy-selection/v2.6.1/) · [Corrected release ZIP](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_v2_6_1_FINAL_RELEASE.zip)
+[**English PDF**](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1_en.pdf) · [**Русский PDF**](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1.pdf) · [**简体中文 PDF**](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1_zh.pdf) · [עברית PDF](papers/hebrew/certified_strategy_selection_preprint_v2_6_1_he.pdf) · [Source, Lean, Python and verification records](papers/certified-strategy-selection/v2.6.1/) · [Corrected release ZIP](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_v2_6_1_FINAL_RELEASE.zip)
 
 ## Goal-Relative Information Sufficiency and the Research Repair Atom v1.3 (24 November 2026)
 
 A finite worst-case model of when observations suffice to guarantee an action within a hard budget, without identifying the world. The release includes a scalar Lean kernel and a bounded local cellular-automaton benchmark.
 
-[**English PDF**](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3_en.pdf) · [**Русский PDF**](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3.pdf) · [**简体中文 PDF**](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3_zh.pdf) · [Source, code and verification records](papers/repair-budget-atom/v1.3/)
+[**English PDF**](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3_en.pdf) · [**Русский PDF**](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3.pdf) · [**简体中文 PDF**](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3_zh.pdf) · [עברית PDF](papers/hebrew/repair_budget_atom_preprint_v1_3_he.pdf) · [Source, code and verification records](papers/repair-budget-atom/v1.3/)
 
 ## Meta-Synset and Invariant v2.5 (23 November 2026)
 
 **A Typed System for Revising Research Representations.** Cross-domain transfer is proposed as a heuristic; Lean verifies the typed checking protocol under stated assumptions.
 
-[**English PDF**](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_en.pdf) · [**Русский PDF**](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5.pdf) · [**简体中文 PDF**](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_zh.pdf) · [English source ZIP](papers/hypothesis-language/meta-synset-v2.5/meta_synset_v2_5_english_source.zip) · [Lean sources and verification logs](papers/hypothesis-language/meta-synset-v2.5/evidence/)
+[**English PDF**](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_en.pdf) · [**Русский PDF**](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5.pdf) · [**简体中文 PDF**](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_zh.pdf) · [עברית PDF](papers/hebrew/meta_synset_invariant_preprint_v2_5_he.pdf) · [English source ZIP](papers/hypothesis-language/meta-synset-v2.5/meta_synset_v2_5_english_source.zip) · [Lean sources and verification logs](papers/hypothesis-language/meta-synset-v2.5/evidence/)
 
 ## Gate 11–12 (23 November 2026)
 
 **Hypothesis Languages and Proof-Carrying Representation Escalation.** Previous paper in the hypothesis-language series.
 
-**Preprint PDFs:** [English](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf) · [Русский](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [简体中文](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.pdf)
+**Preprint PDFs:** [English](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf) · [Русский](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [简体中文](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.pdf) · [עברית PDF](papers/hebrew/hypothesis_language_gate12_he.pdf)
 
 [Original Russian LaTeX](papers/hypothesis-language/gate11-gate12-v12.3/src/hypothesis_language_gate12_ru.tex) · [reproducible ZIP](papers/hypothesis-language/gate11-gate12-v12.3/gate12_reproducible_bundle.zip) · [Lean sources](papers/hypothesis-language/gate11-gate12-v12.3/gate12/) · [evidence and limits](papers/hypothesis-language/gate11-gate12-v12.3/README.md)
 
@@ -50,9 +50,9 @@ This is not a proof that a finite unknown-oracle transcript establishes nonregul
 
 | Stage | Scientific question | Research artifact |
 |---|---|---|
-| **1 — Cumulative discovery (v1.1)** | When do acquired macros, inferred invariants, and transfer actually reduce total work once acquisition and audit costs are counted? | [Original EN PDF](PREPRINT_v1.1.en.pdf) · [RU PDF](PREPRINT_v1.1.ru.pdf) · [clean editions](papers/cumulative-search/) · [code/results](v1_1/) |
+| **1 — Cumulative discovery (v1.1)** | When do acquired macros, inferred invariants, and transfer actually reduce total work once acquisition and audit costs are counted? | [Original EN PDF](PREPRINT_v1.1.en.pdf) · [RU PDF](PREPRINT_v1.1.ru.pdf) · [עברית PDF](papers/hebrew/CUMULATIVE_SEARCH.he.pdf) · [clean editions](papers/cumulative-search/) · [code/results](v1_1/) |
 | **2 — Controlled representation change (Lean)** | When is escalation justified by a sound impossibility witness, and what does it cost? | [Formal results EN](docs/FORMAL_RESULTS.en.md) · [RU](docs/FORMAL_RESULTS.ru.md) · [Lean](formal/) |
-| **3 — Model-relative identification (Gate 4B–5)** | How do language-relative uniqueness, discriminating/falsifying queries, channel checks, and origin uncertainty differ? | [Methods paper EN](papers/hypothesis-language/HYPOTHESIS_LANGUAGE.en.md) · [RU](papers/hypothesis-language/HYPOTHESIS_LANGUAGE.ru.md) · [finite Lean source](papers/hypothesis-language/formal/) |
+| **3 — Model-relative identification (Gate 4B–5)** | How do language-relative uniqueness, discriminating/falsifying queries, channel checks, and origin uncertainty differ? | [Methods paper EN](papers/hypothesis-language/HYPOTHESIS_LANGUAGE.en.md) · [עברית PDF](papers/hebrew/HYPOTHESIS_LANGUAGE.he.pdf) · [RU](papers/hypothesis-language/HYPOTHESIS_LANGUAGE.ru.md) · [finite Lean source](papers/hypothesis-language/formal/) |
 | **4 — Proof-carrying escalation (Gate 11–12)** | Can the old bounded class be refuted and the generated replacement proved for **all words** in a declared formal family? | [Gate 11–12 preprint](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [verified source bundle](papers/hypothesis-language/gate11-gate12-v12.3/) |
 
 Gate 6–10 explored representation changes and competing operators in finite settings; **complete independently replicated packages for every intermediate Gate are not all present in this repository**. Their research history is not silently promoted to the status of the Gate 11–12 Lean theorems.
@@ -95,21 +95,21 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 
 ## Новый препринт: «Наблюдать, менять представление или действовать» v2.6.1 (исправленная редакция)
 
-[**Русский PDF**](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1.pdf) · [English PDF](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1_en.pdf) · [简体中文 PDF](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1_zh.pdf) · [Исходники, Lean, Python и журнал проверки](papers/certified-strategy-selection/v2.6.1/) · [Исправленный ZIP](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_v2_6_1_FINAL_RELEASE.zip)
+[**Русский PDF**](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1.pdf) · [English PDF](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1_en.pdf) · [简体中文 PDF](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1_zh.pdf) · [עברית PDF](papers/hebrew/certified_strategy_selection_preprint_v2_6_1_he.pdf) · [Исходники, Lean, Python и журнал проверки](papers/certified-strategy-selection/v2.6.1/) · [Исправленный ZIP](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_v2_6_1_FINAL_RELEASE.zip)
 
 ## «Целевая достаточность информации и атом исследовательского ремонта» v1.3
 
-[**Оригинал PDF**](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3.pdf) · [English PDF](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3_en.pdf) · [简体中文 PDF](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3_zh.pdf) · [Исходники, код и журналы проверки](papers/repair-budget-atom/v1.3/)
+[**Оригинал PDF**](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3.pdf) · [English PDF](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3_en.pdf) · [简体中文 PDF](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3_zh.pdf) · [עברית PDF](papers/hebrew/repair_budget_atom_preprint_v1_3_he.pdf) · [Исходники, код и журналы проверки](papers/repair-budget-atom/v1.3/)
 
 ## «Мета-синсет и инвариант» v2.5
 
-[Оригинал PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5.pdf) · [Английский PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_en.pdf) · [Китайский PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_zh.pdf) · [Lean и журналы проверки](papers/hypothesis-language/meta-synset-v2.5/evidence/)
+[Оригинал PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5.pdf) · [Английский PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_en.pdf) · [Китайский PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_zh.pdf) · [עברית PDF](papers/hebrew/meta_synset_invariant_preprint_v2_5_he.pdf) · [Lean и журналы проверки](papers/hypothesis-language/meta-synset-v2.5/evidence/)
 
 ## Gate 11–12
 
 **«Языки гипотез и доказательная эскалация представления»**, 10 страниц на русском.
 
-**Препринт:** [English PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf) · [Русский PDF](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [中文 PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.pdf)
+**Препринт:** [English PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf) · [Русский PDF](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [中文 PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.pdf) · [עברית PDF](papers/hebrew/hypothesis_language_gate12_he.pdf)
 
 [Русский LaTeX](papers/hypothesis-language/gate11-gate12-v12.3/src/hypothesis_language_gate12_ru.tex) · [Бандл ZIP](papers/hypothesis-language/gate11-gate12-v12.3/gate12_reproducible_bundle.zip) · [Lean](papers/hypothesis-language/gate11-gate12-v12.3/gate12/) · [Границы и аудит](papers/hypothesis-language/gate11-gate12-v12.3/README.md).
 
@@ -123,9 +123,9 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 
 | Этап | Что установлено | Ссылки |
 |---|---|---|
-| **v1.1 — накопительное открытие** | NAND/XOR, стоимость приобретения макросов и законов, условия переноса | [EN PDF](PREPRINT_v1.1.en.pdf) · [RU PDF](PREPRINT_v1.1.ru.pdf) · [код](v1_1/) |
+| **v1.1 — накопительное открытие** | NAND/XOR, стоимость приобретения макросов и законов, условия переноса | [EN PDF](PREPRINT_v1.1.en.pdf) · [RU PDF](PREPRINT_v1.1.ru.pdf) · [עברית PDF](papers/hebrew/CUMULATIVE_SEARCH.he.pdf) · [код](v1_1/) |
 | **Формальная смена представления** | Условная безопасность эскалации, разделение заданных DFA/1-DCA | [Теоремы Lean](docs/FORMAL_RESULTS.ru.md) |
-| **Gate 4B–5 — язык и свидетельства** | Семантическая единственность, фальсификация языка, контроль наблюдений | [RU](papers/hypothesis-language/HYPOTHESIS_LANGUAGE.ru.md) · [EN](papers/hypothesis-language/HYPOTHESIS_LANGUAGE.en.md) |
+| **Gate 4B–5 — язык и свидетельства** | Семантическая единственность, фальсификация языка, контроль наблюдений | [RU](papers/hypothesis-language/HYPOTHESIS_LANGUAGE.ru.md) · [EN](papers/hypothesis-language/HYPOTHESIS_LANGUAGE.en.md) · [עברית PDF](papers/hebrew/HYPOTHESIS_LANGUAGE.he.pdf) |
 | **Gate 11–12 — доказательная эскалация** | Недостаточность ограниченного класса + универсальный сертификат найденной программы | [Препринт](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [ZIP](papers/hypothesis-language/gate11-gate12-v12.3/gate12_reproducible_bundle.zip) |
 
 Эксперименты Gate 6–10 связывают эти этапы, но не все имеют самостоятельные независимо перепроверенные пакеты в текущем репозитории. Их статус нельзя отождествлять с доказанными в Lean утверждениями Gate 11–12.
@@ -143,13 +143,13 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 
 **本项目的核心问题：何时有证据支持改变假设语言，如何独立核验这种改变？**
 
-最新预印本：观察、改变表征，还是行动（v2.6.1 修订版）。[简体中文 PDF](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1_zh.pdf) · [English PDF](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1_en.pdf) · [俄文 PDF](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1.pdf) · [源代码与验证记录](papers/certified-strategy-selection/v2.6.1/)。
+最新预印本：观察、改变表征，还是行动（v2.6.1 修订版）。[简体中文 PDF](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1_zh.pdf) · [עברית PDF](papers/hebrew/certified_strategy_selection_preprint_v2_6_1_he.pdf) · [English PDF](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1_en.pdf) · [俄文 PDF](papers/certified-strategy-selection/v2.6.1/certified_strategy_selection_preprint_v2_6_1.pdf) · [源代码与验证记录](papers/certified-strategy-selection/v2.6.1/)。
 
-目标相关的信息充分性与研究修复原子 v1.3。[简体中文 PDF](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3_zh.pdf) · [English PDF](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3_en.pdf) · [俄文 PDF](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3.pdf) · [源代码与验证记录](papers/repair-budget-atom/v1.3/)。
+目标相关的信息充分性与研究修复原子 v1.3。[简体中文 PDF](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3_zh.pdf) · [עברית PDF](papers/hebrew/repair_budget_atom_preprint_v1_3_he.pdf) · [English PDF](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3_en.pdf) · [俄文 PDF](papers/repair-budget-atom/v1.3/repair_budget_atom_preprint_v1_3.pdf) · [源代码与验证记录](papers/repair-budget-atom/v1.3/)。
 
-《元同义词集与不变量：研究表征的类型化修订系统》v2.5。[简体中文 PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_zh.pdf) · [中文源文件 ZIP](papers/hypothesis-language/meta-synset-v2.5/meta_synset_v2_5_chinese_source.zip) · [English PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_en.pdf) · [Русский PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5.pdf)。
+《元同义词集与不变量：研究表征的类型化修订系统》v2.5。[简体中文 PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_zh.pdf) · [עברית PDF](papers/hebrew/meta_synset_invariant_preprint_v2_5_he.pdf) · [中文源文件 ZIP](papers/hypothesis-language/meta-synset-v2.5/meta_synset_v2_5_chinese_source.zip) · [English PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5_en.pdf) · [Русский PDF](papers/hypothesis-language/meta-synset-v2.5/meta_synset_invariant_preprint_v2_5.pdf)。
 
-Gate 11–12 v12.3：《假设语言与携证表征升级》。[English PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf) · [Русский PDF](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [中文 PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.pdf) · [源代码与证据](papers/hypothesis-language/gate11-gate12-v12.3/)。
+Gate 11–12 v12.3：《假设语言与携证表征升级》。[English PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf) · [Русский PDF](papers/hypothesis-language/gate11-gate12-v12.3/hypothesis_language_gate12_ru.pdf) · [中文 PDF](papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_zh.pdf) · [עברית PDF](papers/hebrew/hypothesis_language_gate12_he.pdf) · [源代码与证据](papers/hypothesis-language/gate11-gate12-v12.3/)。
 
 完整研究链条：**累积程序发现 → 语义可识别性检验 → 对有界模型类的有限反证 → 表征升级 → 新程序合成 → 在已声明形式模型中验证其全称规格**。有限观测不能证明任意未知黑箱语言的非正则性；Gate 12 的参数化定理只涵盖满足规范结构条件的两阶段栈程序。历史因果检查针对选定的证据列表，而非全部真实预言机调用。
 
