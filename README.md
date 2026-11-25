@@ -14,6 +14,8 @@ An executable search for cross-domain state correspondences and safe bypasses, w
 
 [**English PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_en.pdf) · [**Русский PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_ru.pdf) · [**简体中文 PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_zh.pdf) · [**עברית PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_he.pdf) · [Release ZIP](papers/certified-structural-discovery/v4.0/certified_structural_discovery_v4_0_MULTILINGUAL_FINAL.zip) · [Source and verification records](papers/certified-structural-discovery/v4.0/)
 
+**Plain-language companion: [No Way Around](papers/certified-structural-discovery/v4.0/explainer/)** · [English PDF](papers/certified-structural-discovery/v4.0/explainer/nobypassstructuraldiscoveryv4popularen.pdf) · [Русский PDF](papers/certified-structural-discovery/v4.0/explainer/nobypassstructuraldiscoveryv4popularru.pdf) · [简体中文 PDF](papers/certified-structural-discovery/v4.0/explainer/nobypassstructuraldiscoveryv4popularzh.pdf) · [עברית PDF](papers/certified-structural-discovery/v4.0/explainer/nobypassstructuraldiscoveryv4popularhe.pdf)
+
 To run the supplied Python suite from the release directory: `python3 python/test_v4_0.py`.
 
 ## Epistemic Deformation of Reachability v3.2 (25 November 2026)
@@ -110,6 +112,8 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 ## Новый препринт: Certified Structural Discovery v4.0
 
 Поиск соответствий между моделями, проверка сертификатов и перенос методов на конечных тестах. [**English PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_en.pdf) · [**Русский PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_ru.pdf) · [**简体中文 PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_zh.pdf) · [**עברית PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_he.pdf) · [Release ZIP](papers/certified-structural-discovery/v4.0/certified_structural_discovery_v4_0_MULTILINGUAL_FINAL.zip) · [Source and verification records](papers/certified-structural-discovery/v4.0/)
+
+Популярный разбор: [«Обхода нет»](papers/certified-structural-discovery/v4.0/explainer/) · [English PDF](papers/certified-structural-discovery/v4.0/explainer/nobypassstructuraldiscoveryv4popularen.pdf) · [Русский PDF](papers/certified-structural-discovery/v4.0/explainer/nobypassstructuraldiscoveryv4popularru.pdf) · [简体中文 PDF](papers/certified-structural-discovery/v4.0/explainer/nobypassstructuraldiscoveryv4popularzh.pdf) · [עברית PDF](papers/certified-structural-discovery/v4.0/explainer/nobypassstructuraldiscoveryv4popularhe.pdf)
 
 ## «Эпистемическая деформация достижимости» v3.2
 
