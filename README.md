@@ -10,7 +10,7 @@ Evidence-scoped program discovery, finite model-class refutation, controlled rep
 
 ## Recursive Switching and Modular Oracle Separations under NP = UP (26 November 2026)
 
-In an oracle model, unique witnesses do not remove the gap between access in one fixed characteristic and access across characteristics. The Lean bundle checks selected components, not the full analytic separation.
+In an oracle model, unique witnesses do not remove the gap between access in one fixed characteristic and access across characteristics.
 
 [English PDF](papers/recursive-switching-np-up/recursive_switching_np_up_en.pdf) · [Русский PDF](papers/recursive-switching-np-up/recursive_switching_np_up_ru.pdf) · [Научпоп (RU)](papers/recursive-switching-np-up/interface_barrier_popular_ru.pdf) · [Full bundle (ZIP)](papers/recursive-switching-np-up/rs_bundle.zip) · [Sources and checksums](papers/recursive-switching-np-up/)
 
