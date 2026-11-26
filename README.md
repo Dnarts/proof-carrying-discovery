@@ -12,7 +12,7 @@ Evidence-scoped program discovery, finite model-class refutation, controlled rep
 
 Information-theoretic bounds on what a finite audit profile can certify, with a separate, partially Lean-formalized oracle result.
 
-[English PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_en.pdf) · [Русский PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_ru.pdf) · [Sources and evidence ZIP](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_sources_and_evidence.zip) · [Overview and checksums](papers/blackbox-auditing/v2.0/)
+[English PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_en.pdf) · [Русский PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_ru.pdf) · [简体中文 PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_zh.pdf) · [עברית PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_he.pdf) · [Sources and evidence ZIP](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_sources_and_evidence.zip) · [Overview and checksums](papers/blackbox-auditing/v2.0/)
 
 ## Certified Structural Discovery v4.0 (25 November 2026)
 
@@ -119,7 +119,7 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 
 Что конечный набор тестов может и не может удостоверить по своему профилю ответов.
 
-[English PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_en.pdf) · [Русский PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_ru.pdf) · [Sources and evidence ZIP](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_sources_and_evidence.zip)
+[English PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_en.pdf) · [Русский PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_ru.pdf) · [简体中文 PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_zh.pdf) · [עברית PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_he.pdf) · [Sources and evidence ZIP](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_sources_and_evidence.zip)
 
 ## Certified Structural Discovery v4.0
 
@@ -179,7 +179,7 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 
 # 中文简介
 
-**有限黑箱审计的信息论盲区 v2.0** · [English PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_en.pdf) · [Русский PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_ru.pdf) · [Sources and evidence ZIP](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_sources_and_evidence.zip)
+**有限黑箱审计的信息论盲区 v2.0** · [English PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_en.pdf) · [Русский PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_ru.pdf) · [简体中文 PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_zh.pdf) · [עברית PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_he.pdf) · [Sources and evidence ZIP](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_sources_and_evidence.zip)
 
 **本项目的核心问题：何时有证据支持改变假设语言，如何独立核验这种改变？**
 

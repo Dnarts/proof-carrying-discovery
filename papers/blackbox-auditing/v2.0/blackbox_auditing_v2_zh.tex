@@ -1,0 +1,262 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[a4paper,top=23mm,bottom=24mm,left=24mm,right=24mm]{geometry}
+\usepackage{fontspec}
+\setmainfont[AutoFakeSlant=.14]{Noto Serif CJK SC}
+\setsansfont{Noto Sans CJK SC}
+\setmonofont{DejaVu Sans Mono}
+\usepackage{amsmath,amsthm,booktabs,tabularx,array,unicode-math}
+\setmathfont{Latin Modern Math}
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip=0pt plus 1pt
+\renewcommand{\abstractname}{摘要}
+\renewcommand{\refname}{参考文献}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\hypersetup{colorlinks=true,linkcolor=blue!45!black,citecolor=blue!45!black,urlcolor=blue!45!black,pdfborder={0 0 0}}
+\usepackage{fancyhdr}
+\usepackage{enumitem}
+\usepackage{titlesec,needspace}
+\widowpenalty=10000
+\clubpenalty=10000
+\setlength{\parindent}{1em}
+\setlength{\parskip}{3pt}
+\setlength{\headheight}{15pt}
+\setlength{\emergencystretch}{2em}
+\raggedbottom
+\definecolor{ink}{HTML}{20364A}
+\titleformat{\section}{\Large\bfseries\color{ink}}{\thesection.}{.55em}{}
+\titleformat{\subsection}{\large\bfseries\color{ink}}{\thesubsection.}{.55em}{}
+\titlespacing*{\section}{0pt}{15pt}{6pt}
+\titlespacing*{\subsection}{0pt}{10pt}{4pt}
+\pagestyle{fancy}\fancyhf{}\fancyhead[L]{\small\sffamily 黑箱审计 / v2.0}\fancyhead[R]{\small\sffamily 2026 年 11 月 25 日}\fancyfoot[C]{\thepage}
+\renewcommand{\headrulewidth}{.35pt}
+\setlist{nosep,leftmargin=1.7em}
+\newcommand{\TC}{\operatorname{TC}}
+\newcommand{\supp}{\operatorname{supp}}
+\newcommand{\bits}{\{0,1\}}
+\newcommand{\PP}{\mathsf{P}}
+\newcommand{\NP}{\mathsf{NP}}
+\newcommand{\UP}{\mathsf{UP}}
+\newcommand{\BB}{\mathsf{BPP}}
+\newcommand{\Atil}{\widetilde A}
+\newcommand{\Prb}{\mathbb P}
+\newcommand{\F}{\mathbb F}
+\newcommand{\Eq}{\mathrel{:=}}
+\newcommand{\gap}{2-\log_2 3}
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcommand{\paperhead}[3]{\begin{center}\vspace*{2mm}{\LARGE\bfseries\color{ink}#1\par}\vspace{4mm}{\large #2\par}\vspace{2mm}{\small #3\par}\end{center}\vspace{3mm}}
+\hypersetup{pdftitle={有限黑箱审计的信息论盲点},pdfkeywords={有限审计；观测等价；总相关；极小极大；预言机复杂性；代数化；Lean 4},pdflang={zh-CN}}
+\newtheorem{theorem}{定理}[section]
+\newtheorem{proposition}[theorem]{命题}
+\newtheorem{corollary}[theorem]{推论}
+\renewcommand{\proofname}{证明}
+\begin{document}
+\paperhead{有限黑箱审计的信息论盲点}{审计画像的精确混叠、相关性界与部分经 Lean 形式化的预言机分离}{修订预印本 v2.0 \quad | \quad 2026 年 11 月 25 日}
+\begin{abstract}
+当被审计对象由许多可能相互依赖的行为坐标描述时，一组固定的有限二元测试能够认证什么？设 $N=2M$ 位配置 $B$ 的各个二位块的边缘分布均匀，确定性审计画像为 $V=\alpha(B)\in\bits^m$，总相关为 $\TC(B)$。我们证明，存在一个支撑于原支持集的分布，既保持 $V$ 的整个联合分布，又能将至少一个块内逻辑或谓词的成功概率从 $3/4$ 降至至多 $2(m+\TC(B))/(N(2-\log_2 3))$。我们利用二元熵收紧这一界，并以能否通过审计画像分解来刻画给定谓词族的精确认证。一个独立的无限序列模型展示了有限观测下持续存在的歧义，以及在可数可加测度下达到最大值的极小极大间隙。最后，在 Aaronson 与 Wigderson 的非对称代数化模型中，我们给出一个直接的预言机构造：由唯一确定的多重线性延拓提供一次查询的聚合操作，且
+\[
+\PP^A\subsetneq\UP^A=\NP^A\subseteq\PP^{\Atil[\mathrm{poly}]}.
+\]
+结合已知的两个端点预言机，每个有限观测柱集中均可实现全部三种容许的非对称画像。代数与对角化组件由分别编译的 Lean 4.36.0 模块支持；集成根定理与标准机器模型的适切性仍未纳入已核查的组合证明。对大型语言模型（LLM）审计的推论以指定的行为模型及备选分布的可实现性为前提。本文不声称进行了 LLM 实验，也不声称解决了 $\PP$ 与 $\NP$ 的关系问题。
+\end{abstract}
+\noindent\textbf{关键词：} 有限审计；观测等价；总相关；极小极大；预言机复杂性；代数化；Lean 4。
+
+\section{一个共同问题，三种不同机制}
+有限黑箱审计记录一组预定查询的答案。在这组查询上表现良好，并不能在缺乏额外结构时认证所有未观测到的性质。这一问题关乎软件验证和模型审计；关于模型刻意压低表现（sandbagging）的实证研究提供了动机，但不构成对本文抽象模型的证明~\cite{taylor}。我们考察画像实际保留了哪些信息、有限相容性是否可延伸至全局，以及更换允许的查询操作后会发生什么变化。
+
+本文区分三种数学上不同的机制。第一种是有限信息损失：两个测度可具有完全相同的观测画像分布，却在目标谓词上不同。第二种是量词之间的间隙：每个有限测试集各自有一个见证，并不意味着它们存在共同见证。第三种是资源受限的访问：如果接口以一次查询的代价提供原本昂贵的聚合运算，相同的底层数据就能支持不同的计算。这三种机制都体现了对象与其可访问表征之间的区别，但没有哪项结果被当作另一项结果未经证明的推论。
+
+\begin{center}
+\small\setlength{\tabcolsep}{7pt}
+\begin{tabularx}{\linewidth}{YYY}
+\toprule
+\textbf{I. 有限审计} & \textbf{II. 全局延伸} & \textbf{III. 访问方式变化}\\
+\midrule
+精确画像分布；熵预算 & 有限柱集；极小极大间隙 & 同一布尔表；代数聚合\\
+$\alpha_*\mu=\alpha_*\nu$ & $\forall Q\,\exists w_Q$ 对比 $\exists w\,\forall Q$ & $\PP^A\subsetneq\UP^A=\NP^A$\\
+\bottomrule
+\end{tabularx}
+\end{center}
+\noindent 这些示例没有建立适用于所有审计形式的普遍下界，预言机结果也不是对非相对化的千禧年大奖问题的一个新证明障碍~\cite{cook}。相对化和代数化限制的是某些证明方法类别~\cite{bgs,aw}；自然证明则在一个密码学假设下，讨论对完整给定的真值表进行资源受限的判别~\cite{rr}。不能仅因三种机制都使用“不可区分”一词就将它们等同。
+
+\section{有限画像混叠与相关性}
+\subsection{在指定支持集上的精确认证}
+设 $S$ 为有限容许配置集，$\mu$ 的支持集为 $S$，$\alpha:S\to\bits^m$ 为确定性审计。记 $S_v=\{s\in S:\alpha(s)=v\}$ 和 $p_v=\mu(S_v)$。本节的备选分布是 $S$ 上的任意概率测度；将其支持集限制在 $S$ 内，比允许任意新配置的要求更强。对布尔目标 $T:S\to\bits$，定义
+\[
+q(T)=\sum_{v:S_v\ne\varnothing}p_v\min_{s\in S_v}T(s).
+\]
+\begin{proposition}[精确混叠与分解]\label{prop:alias}
+在所有满足 $\alpha_*\nu=\alpha_*\mu$ 的 $\nu$ 中，$\mathbb E_\nu T$ 的最小值等于 $q(T)$；将各纤维的质量集中到其最小值代表上即可达到该值。不存在能降低 $\mathbb E_\mu T$ 的此类备选分布，当且仅当 $T$ 在每个非空纤维上恒定。对目标向量 $T=(T_1,\ldots,T_M)$，全部目标得到精确认证，当且仅当存在解码器 $d$ 使 $T=d\circ\alpha$ 在 $S$ 上成立。
+\end{proposition}
+\begin{proof}
+每个纤维的质量固定。其贡献至少为该质量乘以 $T$ 在其中的最小值，且由集中于一点的测度取得。由于 $\mu$ 为 $S$ 中每个元素分配正质量，存在非恒定纤维便可严格降低期望。将标量结论应用于每个分量，得到所述分解。
+\end{proof}
+若可使用任意确定性二元谓词作为测试，在 $S$ 上精确认证指定向量所需的最少测试数为 $\lceil\log_2|T(S)|\rceil$：不同的目标取值模式必须对应不同的画像，而对目标模式作单射的二进制编码即可达到该界。如果全部 $2^M$ 种逻辑或模式都出现，则恰需 $M$ 个测试。该结论针对指定的目标族，而非被审计系统所有潜在性质。
+
+\subsection{相关块的定量界}
+设 $B=(B_1,\ldots,B_M)$、$B_i\in\bits^2$，且 $N=2M$；每个边缘分布 $B_i$ 在四种二位取值上均匀。记其联合分布为 $\mu$，$S=\supp\mu$，$V=\alpha(B)\in\bits^m$。熵均以二为底。定义总相关~\cite{watanabe,cover}和块目标：
+\[
+\TC(B)=\sum_{i=1}^M H(B_i)-H(B),\qquad
+T_i(B)=B_{i,1}\lor B_{i,2}.
+\]
+于是 $\Prb_\mu[T_i=1]=3/4$。不假定块之间或测试之间相互独立。定义条件总相关 $\TC(B\mid V)=\sum_iH(B_i\mid V)-H(B\mid V)\ge0$。因为 $V$ 是确定性的，
+\begin{equation}\label{eq:budget}
+\sum_{i=1}^M I(B_i;V)=H(V)+\TC(B)-\TC(B\mid V)\le m+\TC(B).
+\end{equation}
+\begin{theorem}[经相关性调整的精确画像混叠]\label{thm:alias}
+存在指标 $i$ 以及 $S$ 上的概率测度 $\nu$，使得 $\alpha_*\nu=\alpha_*\mu$ 且
+\begin{equation}\label{eq:linear}
+\Prb_\nu[T_i=1]\le\min\left\{\frac34,\frac{2(m+\TC(B))}{N(\gap)}\right\}.
+\end{equation}
+将 $m$ 替换成 $H(V)$，结论仍成立。
+\end{theorem}
+\begin{proof}
+由式~\eqref{eq:budget}，某个 $i$ 满足 $I(B_i;V)\le (m+\TC(B))/M$。对每个非空纤维，若 $S$ 中存在使 $B_i=00$ 的代表则选取该代表；否则任选。将质量 $p_v$ 分配给它。由此定义的 $\nu$ 精确保留原画像分布。令 $E_i$ 为支持集内的纤维不含第 $i$ 块取值 $00$ 的所有画像构成的集合，令 $q_i=\Prb[V\in E_i]$。于是 $\Prb_\nu[T_i=1]=q_i$，且 $q_i\le3/4$。在 $E_i$ 上，条件块熵至多为 $\log_2 3$；其余情形下至多为 $2$。故 $I(B_i;V)=2-H(B_i\mid V)\ge q_i(2-\log_2 3)$。代入即得所述界。
+\end{proof}
+若要求对于每个 $i$ 和 $S$ 上每个保持画像的备选分布都有 $\mathbb E_\nu T_i\ge\varepsilon$，必要条件为 $m+\TC(B)\ge M\varepsilon(2-\log_2 3)$。特别地，当 $m=o(N)$ 且 $\limsup\TC(B)/N < \tfrac38(2-\log_2 3)\approx0.1556$ 时，原线性界给出一个不消失的下调差距。要使该界衰减为 $o(1)$，须有 $m+\TC(B)=o(N)$；低于阈值的正的常数相关比并不意味着如此衰减。
+
+\subsection{改进的熵阈值}
+保持支持集的构造无需改变审计就能给出更紧的界。记 $h_2$ 为二元熵，并在 $0\le q\le3/4$ 上定义
+\begin{equation}\label{eq:phi}
+\phi(q)=h_2(1/4)-(1-q)h_2\!\left(\frac{1}{4(1-q)}\right).
+\end{equation}
+该函数连续并严格递增，且 $\phi(0)=0$、$\phi(3/4)=h_2(1/4)$。在区间内部，其导数为 $-\log_2(1-1/[4(1-q)])>0$。
+\begin{proposition}[非线性加强]\label{prop:nonlinear}
+定理~\ref{thm:alias} 中相同的指标和构造满足
+\[
+\phi(q_i)\le\frac{H(V)+\TC(B)}{M}.
+\]
+因此，对于任意固定的 $\varepsilon\in(0,3/4]$，若要对所有保持画像的备选分布认证每一个目标都达到 $\mathbb E_\nu T_i\ge\varepsilon$ 的水平，则必须有 $m+\TC(B)\ge M\phi(\varepsilon)$。
+\end{proposition}
+\begin{proof}
+事件 $E_i$ 是 $V$ 的函数并蕴涵 $T_i=1$。令 $Z_i=\mathbf 1_{E_i}$。则 $\Prb[T_i=0\mid Z_i=0]=1/[4(1-q_i)]$；若事件 $Z_i=1$ 的质量为正，则 $H(T_i\mid Z_i=1)=0$。故 $I(T_i;Z_i)=\phi(q_i)$。由数据处理不等式，$\phi(q_i)\le I(B_i;V)$；式~\eqref{eq:budget} 给出所需指标。为满足必要条件，构造所得的备选分布也必须满足 $q_i\ge\varepsilon$。
+\end{proof}
+对独立块与上述范围内任意固定的 $\varepsilon>0$，必要界为 $m\ge (N/2)\phi(\varepsilon)=\Omega(N)$；测试无需独立。当 $m=o(N)$ 且 $\limsup\TC(B)/N<\tfrac12 h_2(1/4)\approx0.4056$ 时，非线性界保证混叠间隙不消失。因此，$0.1556$ 是较简单估计给出的充分阈值，而不是普遍、精确的相变点。即便是改进的熵阈值，也只是一个充分判据，而非仅凭总相关量即可作出的完整分类。命题~\ref{prop:alias} 给出精确认证的判据。高度相关的块可能只有很少的目标模式；例如，若所有块均等于同一个均匀块，一次逻辑或测试就能认证全部块。
+
+\subsection{对 LLM 审计的含义}
+定理适用于二元行为配置上的某个指定联合分布，而不直接适用于模型权重、任意提示或随机评估策略。要应用此定理，必须定义配置总体、固定确定性画像（含任何已冻结的随机种子）、二位块及其边缘分布，以及容许的备选分布族。若 $N_{\rm eff}$ 表示所选行为位的数量，它就是所定义模型的 $N$，而不是一种新的维数估计量。只有在要求的保证涵盖定理中的备选分布，或涵盖已证明包含相关代表的备选族时，才能推出必要的测试数量下界。存在重加权测度并不意味着存在一个单独模型、可行的微调方案，或能产生该测度的 LoRA 适配器。抽象的逻辑或谓词本身也不是安全判据。
+
+\section{有限歧义不等于统一不可区分}
+令 $X$ 为最终恒定的二元序列空间，赋予它从离散坐标的乘积 $\bits^{\mathbb N}$ 继承的子空间拓扑。令 $X_j=\{x:\lim_i x_i=j\}$，$T_i(x)=x_i$。$X_0$ 和 $X_1$ 在 $X$ 中均稠密：任何有限组指定坐标都可以延伸成任一种恒定尾部。因此，取值于离散二点空间的尾部目标 $\theta(x)=\lim_i x_i$ 处处不连续。
+
+这并不能给出从所有有限测试中都能隐藏差异的两个固定概率测度。考虑 $X_1$ 上的可数可加概率测度 $\mu$ 和 $X_0$ 上的可数可加概率测度 $\nu$，以及从 $\mathcal T=\{T_i,1-T_i:i\in\mathbb N\}\cup\{0\}$ 中选择测试的测试者。令 $g(T,\mu,\nu)=\mathbb E_\mu T-\mathbb E_\nu T$，并令 $\lambda$ 遍历测试的可数可加混合策略。
+\begin{theorem}[最大的极小极大间隙]\label{thm:mm}
+\[
+\sup_\lambda\inf_{\mu,\nu}\mathbb E_{T\sim\lambda}g(T,\mu,\nu)=0,\qquad
+\inf_{\mu,\nu}\sup_{T\in\mathcal T}g(T,\mu,\nu)=1.
+\]
+\end{theorem}
+\begin{proof}
+对任意 $\lambda$ 和 $\eta>0$，有限个测试的质量至少为 $1-\eta$。从两类尾部中各选一个在这些测试的坐标上相符的序列。对应的狄拉克测度使收益至多为 $\eta$。恒零测试保证收益为零，故得第一个等式。对每对容许测度，由支配收敛可得 $\mathbb E_\mu T_i\to1$ 及 $\mathbb E_\nu T_i\to0$。上确界为一，因此在所有测度对上取下确界仍为一。
+\end{proof}
+间隙存在于两个指定的博弈之间，而不是同一有限博弈的两个估计之间。两种尾部类别在外部紧致乘积空间中并非闭集。特别地，以这些类别为支持的测度族在那里不弱紧：将恒定尾部不断延后的序列，其狄拉克测度可弱收敛到相反类别中的狄拉克测度。因此，可支持交换极小极大次序的紧致性假设在此并不成立~\cite{sion}。证明依赖可数可加性；未经另行论证，不应将它推广到任意有限可加策略。这个例子单独展示了由有限到全局的见证原理可以失效，而不是把所有复杂性理论的障碍都等同于观测信息损失。
+
+\section{改变访问方式：多重线性预言机实验模型}
+\subsection{非对称模型与最小次数}
+遵循 Aaronson 与 Wigderson（AW）的有限域延拓约定~\cite{aw}，预言机 $A$ 由布尔表 $A_r:\bits^r\to\bits$ 构成。延拓 $\Atil_{r,\F}$ 在布尔立方体上与原表一致，且关于每个变量的次数至多为 $c$。当次数至多为一时，每个有限域上的延拓唯一。显式查询包含所用的域和坐标；域元素采用通常的多项式时间表示。记号 $[\mathrm{poly}]$ 遵循 AW 对查询长度和域规模有界的约定。定义
+\[
+u(A,\Atil)=\mathbf1[\NP^A\subseteq\PP^{\Atil}],\qquad
+v(A,\Atil)=\mathbf1[\NP^{\Atil}\subseteq\PP^A].
+\]
+由于延拓预言机能模拟布尔查询，有 $v\le u$。逻辑上仅容许画像 $00,10,11$。AW 在线预印本中的定理 5.1 和 5.11(i)~\cite{aw} 分别为 $11$ 和 $00$ 提供了多重线性见证；后者通过与 $\BB^{\Atil}$ 的更强分离得到。我们直接构造一个中间画像的见证。我们不声称这加强了 AW 的不可能性结果，也未穷尽考察这一具体中间构造的优先权。
+
+\begin{proposition}[零次情形]\label{prop:degree0}
+如果容许的类别扩展至零次，则对每一对容许的预言机及其延拓均有 $u=v$。
+\end{proposition}
+\begin{proof}
+每张表 $A_r$ 在其布尔立方体上必须恒定。这描述了一个一元语言预言机（tally oracle），它不一定可计算，也不一定平凡。元数为 $r$ 的代数查询返回该恒定值，可用布尔查询 $0^r$ 得到。反过来，布尔查询是代数查询的特例。对所讨论的时间复杂度类，两种模拟都只有多项式开销，因此两个 P 类分别相等，两个 NP 类也分别相等。
+\end{proof}
+这里 $c=0$ 特指零次子类；若 AW 的约定要求次数界是正整数，则这是显式附加的退化情形。这并不是把所有普通布尔预言机访问都等同于零次情形。
+
+\subsection{聚合原语}
+唯一的多重线性延拓由在布尔立方体上的拉格朗日插值得到。令 $x\in\bits^r$，末尾 $s$ 个参数均为 $2\in\F_3$，则
+\begin{equation}\label{eq:aggregate}
+2^s\,\Atil_{r+s,\F_3}(x,\underbrace{2,\ldots,2}_{s})
+=\sum_{y\in\bits^s}A_{r+s}(x,y)\pmod3.
+\end{equation}
+事实上，末尾参数为 $2$ 时，因子 $z$ 和 $1-z$ 在 $\F_3$ 中均等于 $2$；布尔前缀选定相应行，且 $2^{2s}=1$ 在该域中成立。这是已知的多重线性求和原语~\cite{jkrs,aw}。若承诺一行至多有一个非零位，一次查询就能判定该行是否非空，但不能返回该位的地址。要对所有满足承诺的行判定非空性，确定性布尔查询算法在最坏情况下需要 $2^s$ 次查询：全零查询记录仍容许某个未查询位置为一。聚合相对于完整表并不增加独立信息，但改变了访问表的某个函数值的成本。
+
+\subsection{显式中间见证}
+\begin{theorem}[多重线性非对称分离]\label{thm:w10}
+存在布尔预言机 $A$，其在所有有限域上唯一的多重线性延拓满足
+\begin{equation}\label{eq:w10}
+\PP^A\subsetneq\UP^A=\NP^A\subseteq\PP^{\Atil[\mathrm{poly}]}\subseteq\PP^{\Atil}.
+\end{equation}
+特别地，画像 $10$ 在各变量次数至多为一时可实现；若将零次也计入，允许该画像的最小次数界为一。
+\end{theorem}
+\begin{proof}
+采用标准的带时钟预言机机器，查询带起初为空，故运行 $t$ 步至多提出 $t$ 个查询，每个查询的长度至多为 $t$。通过自定界编码
+\[
+e(i,w,t)=0^i1\,0^{|w|}1\,w\,1^t,
+\]
+定义相对化的有界接受语言 $K^A$。其中 $i$ 用标准的有效编码为非确定性机器编号，例如用自然数编码机器的二进制描述。一个此类词属于该语言，当且仅当编号为 $i$ 的机器在 $t$ 步内接受 $w$；格式错误的输入均拒绝。编码长度为 $i+2|w|+t+2>t$，因此对 $|x|=r$，$K^A(x)$ 只依赖预言机中长度小于 $r$ 的表。该语言属于 $\NP^A$，且在多项式时间确定性多对一归约下完备：对任意固定的带时钟机器，将 $w$ 映射至由机器编码、$w$ 及其多项式时间界构成的编码。通用模拟的开销相对于编码输入长度为多项式。
+
+我们逐步扩展已赋值长度的有限前缀来构造 $A$。对正偶数长度 $2r$（$r\ge1$），要求每个 $x\in\bits^r$ 满足
+\begin{equation}\label{eq:gi1}
+\sum_{y\in\bits^r}A(xy)=\mathbf1_{K^A}(x),
+\end{equation}
+其中在整数上求和。每个奇数长度至多有一个取值为一的位。空词固定为零。每一阶段均保持这两个不变量，并与此前所有已赋值长度保持一致。
+
+枚举每一对 $(M_i,p_i)$，其中 $M_i$ 是确定性预言机机器，$p_i$ 是来自一个可数共尾族的多项式时钟，例如 $p_i(n)=(n+2)^k$。假定不超过 $B$ 的全部长度已固定。选取一个奇数 $n>B$、$n\ge3$，使 $2^{\lfloor n/2\rfloor}>p_i(n)$。按顺序填充中间长度：奇数长度全部置零；对于每个偶数长度 $2r$，若 $K^A(x)=0$ 则对应行置零，否则在该行按字典序最先的位置放置唯一的一个一。有界接受的定义只查询较短且已经赋值的长度。
+
+用固定前缀模拟 $M_i$ 在 $1^n$ 上运行至其时钟界，对仍未赋值的查询回答零。记其答案为 $b$（时钟到期则视为拒绝），并令 $Q$ 记录未赋值查询。令 $B'=\max(n,p_i(n))+1$。在长度 $n$ 的表中，将位 $1-b$ 放在第一个未被查询的地址，其余位置均置零。这样的地址存在，因为 $|Q|\le p_i(n)<2^{\lfloor n/2\rfloor}<2^n$。不超过 $B'$ 的其他奇数长度均置零。余下区间的每个偶数长度 $2r$ 按式~\eqref{eq:gi1} 填充各行；需放置一时，使用未被查询的位置：由于 $2r>n$，每行有 $2^r>|Q|$ 个位置。所有赋值按长度递增顺序进行，所以赋值时 $K^A(x)$ 的值已确定。记录中的每个查询均得到与之前完全相同的答案，故由确定性可知运行过程相同，而后续阶段永不改变这些固定长度。该阶段到此完成。
+
+取这些递增前缀的并，得到每个长度上的 $A$。每一步都可以取最小的有限地址及最小的容许长度来实现，因此构造不需要选择公理。定义 $L=\{1^n:n\text{ 为奇数},\ \exists y\in\bits^n\ A(y)=1\}$。每台带时钟机器对应的阶段迫使其答案与 $L$ 不符，故 $L\notin\PP^A$。由奇数长度的唯一性不变量，通过猜测 $y$ 并查询 $A(y)$ 可知 $L\in\UP^A$，因为至多有一条接受分支。同理，式~\eqref{eq:gi1} 给出 $K^A\in\UP^A$。对这些固定确定性归约的封闭性给出 $\NP^A=\UP^A$。由式~\eqref{eq:aggregate}，在 $\F_3$ 上对元数为 $2|x|$ 的 $(x,2,\ldots,2)$ 作一次查询，再检查所得是否非零即可判定 $K^A$（直接处理格式错误的空输入）。结合完备性，有 $\NP^A\subseteq\PP^{\Atil[\mathrm{poly}]}$。由于 $\PP^A\subseteq\UP^A$ 且 $L$ 将两类分离，得到式~\eqref{eq:w10}。画像为 $10$：由包含关系有 $u=1$；又因 $\NP^{\Atil}\supseteq\NP^A\ni L\notin\PP^A$，有 $v=0$。命题~\ref{prop:degree0} 排除了零次情形。
+\end{proof}
+同一中间见证也可使用整数上的多重线性延拓：将整数求值结果模三化简得到式~\eqref{eq:aggregate}；而整数延拓的输出位长是多项式量级，因为元数 $r$ 时插值和至多含 $2^r$ 个乘积，其绝对值不超过 $2^r\prod_j(|z_j|+1)$。这一结果没有证明非相对化的多项式时间机器能从简洁描述计算出聚合值，也没有证明延拓后的 P、NP 两类相等。
+
+\Needspace{9\baselineskip}
+\subsection{任何有限观测都保留三种可能画像}
+\begin{theorem}[持续存在的目标歧义]\label{thm:top}
+令 $\mathcal X$ 为布尔预言机及其唯一多重线性延拓构成的空间，赋予有限普通观测与代数观测所确定的拓扑。每个非空有限观测柱集均包含全部三种画像 $00,10,11$ 的世界。因此，映向离散三点集的画像映射处处不连续。
+\end{theorem}
+\begin{proof}
+若两个布尔预言机在所有大于 $M$ 的长度上一致，则它们的唯一多重线性延拓在这些长度上对每个域均一致。对于有限个较短长度，可用硬编码的有限真值表和插值模拟任意延拓查询，开销相对于显式查询长度为多项式：项数不超过常数 $2^M$，而域运算在显式表示下是高效的。普通查询也可模拟。因此，有限修改保持各 P 类、各 NP 类及非对称画像；有界延拓约定下也一样。固定任意可实现的有限观测记录，并选取一个实现该记录的预言机。可将它不超过最大查询元数的所有表拼接到三个全局见证（定理~\ref{thm:w10} 及 AW 的两个端点结果）上。延拓的唯一性保留每个观测值，有限修改不变性则保留每个见证的画像。于是任一邻域都与全部三个画像类相交，故映射到离散集合时不可能在任何一点连续。
+\end{proof}
+此定理讨论的是预言机世界上的拓扑，而非证明技术的拓扑。它还说明为何式~\eqref{eq:aggregate} 中实用的单次聚合查询，不能用任何固定的有限观测集揭示全局复杂度画像。相对化预言机的分离与非相对化 P 对 NP 问题的任一答案均相容。
+
+\section{机器验证：到底核查了什么}
+所附发行包包含六个独立的 Lean 4.36.0 文件，均无显式外部导入。所附 \texttt{AXIOM\_AUDIT.log} 记录了 40 份声明级报告，其中四份不依赖公理，其余仅依赖 \texttt{propext} 和 \texttt{Quot.sound}。所附 \texttt{RELEASE\_GATE.log} 记录了分别编译成功以及 32 项根声明审计；范围更广的 40 份报告来自另一份独立审计记录。下列 SHA-256 前缀标识随附源文件的版本，并非本预印本重新构建所得到的值。
+\begin{center}\small
+\begin{tabularx}{\linewidth}{@{}l l r Y@{}}
+\toprule
+\textbf{模块} & \textbf{SHA-256 前缀} & \textbf{报告数} & \textbf{涵盖范围}\\
+\midrule
+\texttt{F3Multilinear} & \texttt{eb37a377aa7d} & 4 & 布尔立方体上的一致性、多重线性延拓的唯一性、行解码\\
+\texttt{HiddenRow} & \texttt{8d80d618f611} & 5 & 空闲地址、点更新、唯一性\\
+\texttt{AcyclicKernel} & \texttt{f0d873487b41} & 5 & 编码、解析、严格步数界、局部性\\
+\texttt{OracleDiagonal} & \texttt{7bff2ef97995} & 5 & 无限极限、阶段一致性、GI 不变量、相对于抽象机器模型的对角化\\
+\texttt{AsymmetricCollapse} & \texttt{3e9c83638a54} & 8 & 从 \texttt{VerifiedLevel01} 出发的条件式组合\\
+\texttt{ProfileTopology} & \texttt{f9cf22a3a9ca} & 13 & 画像偏序、零次逻辑、条件式尾部歧义、离散尾部见证\\
+\bottomrule
+\end{tabularx}
+\end{center}
+日志报告错误、警告、\texttt{sorryAx}、\texttt{ofReduceBool} 和 \texttt{Classical.choice} 均为零。这是随附的构建证据，并不是为本次修订独立重新编译而得。前四个模块重复声明部分名称，因而不能原样导入或拼接为同一个库。尤其是，\texttt{asymmetric\_collapse\_root} 以一个 \texttt{VerifiedLevel01} 为参数；目前没有经核查的构造器把这一参数与其他文件衔接起来。相对于标准预言机机器的适切性以及 UP、NP 与代数时间在复杂度类层面的完整桥接，也都未在形式化中闭合。画像拓扑模块将其见证和尾部不变性作为假设。因此，上述定理~\ref{thm:w10} 和~\ref{thm:top} 是由经验证组件支持的解析结论，并非无条件的端到端 Lean 定理。第 2 至第 3 节中的熵及概率证明未由 Lean 验证。
+
+若使用原始发行包复现，先用 \texttt{shasum -a 256 -c SHA256SUMS.txt} 核对完整清单，再在发行目录下用 Lean 4.36.0 运行 \texttt{bash verify\_release.sh}。当前发行门禁并不强制使用精确的工具链版本，不会拒绝每一项警告，也未为所有可能的公理设置白名单，未审计全部 40 项根声明，或核查它们的组合。这些都是明确的发行工程义务，不能仅凭数字审计摘要视为已完成。随附的 README 报告了 \texttt{simp} 与 \texttt{omega} 的局部证明写法对公理依赖的影响；这些是关于特定证明的观察，而非对相应策略的普遍断言。
+
+\section{拟议的实证协议（未运行）}
+检验对 LLM 的适用性，必须区分数学上的混叠与在一个模型族中的可实现性。以下为拟议协议；本文不声称已经进行带时间戳的外部预注册、获得样本或开展测量。
+\begin{enumerate}
+\item 在查看结果前，冻结模型族、无害行为任务、目标块、随机种子、审计套件以及独立的评估划分。定义一个配置为指定协议下的完整响应记录。检查块的边缘分布是否近似均匀；若不是，须显式调整解析模型，或放弃直接迁移定理。
+\item 在有文档说明的联合采样模型下估计 $H(B)$ 和块熵。采用不确定性界，或使用已在总相关已知的合成分布上验证的结构化估计量；仅检验边缘之间的独立性并不能确立总相关较低。报告所得 $m/N$ 与 $\TC(B)/N$ 的范围，不要把 $N_{\rm eff}$ 当作已经实证确定的常数。
+\item 在有限合成模型中，计算命题~\ref{prop:alias} 的精确画像保持最优值，作为阳性对照。另作一个边界独立设定的模型适配实验，检验容许的备选模型能否重现审计画像的分布，同时改变一个预先指定、留出的无害目标。审计数据与留出数据须分开，并与未修改的模型和随机适配的模型对照比较。
+\item 预先指定联合分布距离的容差和目标效应阈值，并给出置信区间。各项测试的平均值相等，不能证明画像的联合分布相等；高维联合分布估计本身也可能不可行。若未能找到可实现的备选，只能据此评价所选模型族及优化过程，而不能反驳有限模型定理。
+\end{enumerate}
+在增加测试、引入新的访问操作、约束模型族之间作实践选择，需要独立的成本及正确性模型。白箱访问并非普遍充分，有限黑箱测试也并非普遍无用。
+
+\section{结论}
+精确保持画像、有限到全局的相容性以及计算访问是不同的研究对象。对有限审计而言，精确分解判据及依赖相关性的估计，确定了在给定支持集和备选测度模型下能认证什么。尾部例子排除了不受限制的见证量词互换。多重线性预言机构造在最小次数界上建立了一个显式的中间非对称情形，阐明了聚合访问操作的能力，即使聚合值完全由同一底层数据所决定。这些结论联结于一个共同的研究问题，并不是将 LLM 安全或 P 对 NP 归约到有限熵不等式。下一项形式化工作是整合根定理的证明并建立与标准机器模型的桥接；下一项实证工作是确定指定的行为假设与可实现性在实际模型族中是否成立。
+
+\begin{thebibliography}{9}\small\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+\bibitem{cook} S. Cook. \emph{The P versus NP Problem}. Clay Mathematics Institute, 2000. \url{https://www.claymath.org/wp-content/uploads/2022/06/pvsnp.pdf}.
+\bibitem{aw} S. Aaronson and A. Wigderson. Algebrization: A New Barrier in Complexity Theory. \emph{ACM Transactions on Computation Theory}, 1(1), 2009. 定理编号沿用在线预印本： \url{https://www.scottaaronson.com/papers/alg.pdf}.
+\bibitem{bgs} T. Baker, J. Gill, and R. Solovay. Relativizations of the P =? NP question. \emph{SIAM Journal on Computing}, 4(4):431--442, 1975.
+\bibitem{jkrs} A. Juma, V. Kabanets, C. Rackoff, and A. Shpilka. The Black-Box Query Complexity of Polynomial Summation. \emph{Computational Complexity}, 18(1):59--79, 2009. \url{https://eccc.weizmann.ac.il/report/2007/125/}.
+\bibitem{rr} A. A. Razborov and S. Rudich. Natural Proofs. \emph{Journal of Computer and System Sciences}, 55(1):24--35, 1997.
+\bibitem{cover} T. M. Cover and J. A. Thomas. \emph{Elements of Information Theory}. 2nd ed., Wiley, 2006.
+\bibitem{watanabe} S. Watanabe. Information theoretical analysis of multivariate correlation. \emph{IBM Journal of Research and Development}, 4(1):66--82, 1960.
+\bibitem{sion} M. Sion. On general minimax theorems. \emph{Pacific Journal of Mathematics}, 8(1):171--176, 1958.
+\bibitem{taylor} J. Taylor et al. Auditing Games for Sandbagging. arXiv:2512.07810, 2025. \url{https://arxiv.org/abs/2512.07810}.
+\end{thebibliography}
+\end{document}
