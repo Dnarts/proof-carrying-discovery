@@ -1,0 +1,380 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[a4paper,margin=22mm]{geometry}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,tabularx}
+\usepackage{xcolor}
+\usepackage{microtype}
+\setlength{\emergencystretch}{3em}
+\usepackage{hyperref}
+
+\definecolor{primary}{RGB}{24,64,122}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  citecolor=primary,
+  urlcolor=primary
+}
+
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\parindent}{0pt}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\newcommand{\Pcl}{\mathsf{P}}
+\newcommand{\NP}{\mathsf{NP}}
+\newcommand{\coNP}{\mathsf{coNP}}
+\newcommand{\UP}{\mathsf{UP}}
+\newcommand{\PP}{\mathsf{PP}}
+\newcommand{\PH}{\mathsf{PH}}
+\newcommand{\RP}{\mathsf{RP}}
+\newcommand{\BPP}{\mathsf{BPP}}
+\newcommand{\Modp}{\mathrm{Mod}_p\mathsf{P}}
+\newcommand{\Modthree}{\mathrm{Mod}_3\mathsf{P}}
+\newcommand{\SharpP}{\#\mathsf{P}}
+\newcommand{\SigTwo}{\Sigma_2^{\mathsf{P}}}
+\newcommand{\DT}{\mathrm{DT}}
+\newcommand{\CDT}{\mathrm{CDT}}
+\newcommand{\OR}{\mathrm{OR}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prb}{\Pr}
+\newcommand{\GI}{GI_1}
+
+\newcommand{\takeaway}[2]{%
+  \vspace{4pt}\noindent\colorbox{primary!7}{%
+    \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
+      \vspace{3pt}\textbf{\color{primary}#1:}\hspace{0.4em}#2\vspace{3pt}%
+    }%
+  }\vspace{4pt}%
+}
+
+\title{\textbf{Recursive Switching and Modular Oracle Separations under $\NP = \UP$}}
+\author{Preprint (arXiv: cs.CC candidate)}
+\date{November 26, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We investigate the tension between eliminating nondeterministic ambiguity ($\NP^A = \UP^A$) and preserving the hardness of higher levels of the polynomial hierarchy against modular counting classes. Building on the acyclic unique-witness oracle encoding $\GI$ of Gla\ss er and Wechsung (2003), we establish a \emph{Uniform Recursive Switching Theorem} that simultaneously collapses all polynomial-time accessible oracle bits across $O(\log m)$ nested $\GI$-layers to decision trees of quasi-polynomial depth $2^{O(\log^4 m)}$ over a residual free base cube of dimension $R \ge 2^{m - O(\log^5 m)}$, while preserving the all-nonempty base world.
+
+Combining this recursive projection with an exact alternating dual functional over $\Z$, we prove analytically that there exists an oracle $A$ satisfying $\GI(A)$ such that $\NP^A = \UP^A$ while a single unary language $\mathcal{L}_A \in \SigTwo{}^{,A}$ lies outside $\bigcup_{p\text{ prime}} \Modp^A$. Moreover, the set of such separating oracles is a dense $G_\delta$ in the compact space $X_{\GI}$ of $\GI$-compatible oracles. For multilinear algebraic oracle access in the framework of Aaronson and Wigderson (2009), this yields an unconditional separation between fixed-characteristic access (even over exponentially growing extension fields $\F_{p^k}$) and multi-characteristic access: $\mathcal{L}_A \in (\SigTwo{}^{,A} \cap \Pcl^{\widetilde{A}[\mathrm{poly}]}) \setminus \bigcup_{p\text{ prime}} \Pcl^{\widetilde{A}^{[p]}}$. Selected combinatorial, algebraic, and finite-bridge components of the proof are machine-verified in seven zero-import Lean~4.36.0 modules (45 audited theorems, zero forbidden axioms); the measure-theoretic induction and infinite oracle diagonalization remain analytic.
+\end{abstract}
+
+\section{Introduction}
+
+Whether unambiguous nondeterminism ($\NP = \UP$) forces a collapse of the polynomial hierarchy is a long-standing structural question in complexity theory. In the relativized setting, Grochow~\cite{Grochow2023} highlights as Open Question~1.2 the problem of constructing an oracle $A$ relative to which $\NP^A = \UP^A$ while $\PH^A$ is infinite, noting that constructions enforcing unique witnesses tend to cause unintended collapses of higher quantifier levels.
+
+Under $\NP^A = \UP^A$, every language in $\NP^A$ is decided by a nondeterministic polynomial-time machine with at most one accepting path on every input, which immediately forces $\NP^A \subseteq \Modp^A$ for every prime $p$. Consequently, classical oracle separations of $\NP$ from modular counting classes cannot occur inside any world with $\NP^A = \UP^A$; furthermore, since $\Pcl^{\Modp^A} = \Modp^A$ for every prime $p$, the entire class $\Delta_2^{\Pcl,A} = \Pcl^{\NP^A}$ also collapses into $\Modp^A$. Thus $\SigTwo{}^{,A}$ is the \emph{exact minimal level} of the polynomial hierarchy where a separation from fixed-prime modular counting is possible under $\NP^A = \UP^A$.
+
+\takeaway{Main Result}{We prove analytically that there exists an oracle $A$ satisfying the acyclic unique-witness invariant $\GI$ such that $\NP^A = \UP^A$ and $\SigTwo{}^{,A} \not\subseteq \bigcup_{p\text{ prime}} \Modp^A$ via a single unary language $\mathcal{L}_A$, and that such oracles form a dense $G_\delta$ in $X_{\GI}$.}
+
+\textbf{Relation to prior work.} The unique-witness coding $\GI$ on even lengths coupled with free odd lengths is not new: it has a direct predecessor in Gla\ss er and Wechsung~\cite{GlasserWechsung2003}, who used acyclic witness preservation to separate $\mathrm{min\text{-}P}^A$ from $\SharpP^A$ under $\NP^A = \UP^A$. On the switching side, large-alphabet random restrictions with staged disclosure were developed by Hirahara and Nanashima~\cite{HiraharaNanashima2021}. Our technical contribution is a recursive switching architecture that preserves both $\GI$ and the all-nonempty base world while controlling the \emph{exact} algebraic degree of all accessible oracle bits across $O(\log m)$ recursive layers, without requiring global compression of positive guard profiles.
+
+\textbf{Epistemic scope.} This work does not resolve Grochow's open question on the infinitude of $\PH^A$ under $\NP^A = \UP^A$, nor does it resolve unrelativized $\Pcl$ vs.\ $\NP$~\cite{Cook2000,RazborovRudich1997}. Seven zero-import Lean~4.36.0 modules (Appendix) machine-verify selected combinatorial, algebraic, and finite-bridge components (45 theorems, zero \texttt{sorryAx}, zero \texttt{Classical.choice}); the probabilistic induction over finite restrictions and the Baire-category oracle construction are proved analytically.
+
+\section{Preliminaries and the Acyclic $\GI$ Oracle Model}
+
+For an oracle $A \subseteq \{0,1\}^*$, write $A_m : \{0,1\}^m \to \{0,1\}$ for its restriction to strings of length $m$. Let $K^A$ be the canonical $\NP^A$-complete language of tuples $\mathrm{encode}(i, u, t) = 0^i 1\, 0^{|u|} 1\, u\, 1^t$ such that the $i$-th nondeterministic oracle Turing machine $N_i^A$ accepts $u$ within $t$ steps. Because $|\mathrm{encode}(i, u, t)| = i + 2|u| + t + 2 > t$, every oracle query $q$ made during the simulation satisfies the \emph{strict acyclicity condition} $|q| < r$ where $r = |\mathrm{encode}(i, u, t)|$.
+
+\begin{definition}[Unique-witness invariant $\GI$ \cite{GlasserWechsung2003}]
+An oracle $A$ satisfies $\GI$ (written $A \in X_{\GI}$) if for every $r \ge 1$ and every $x \in \{0,1\}^r$,
+\[
+  \sum_{y \in \{0,1\}^r} A_{2r}(x, y) = K^A(x) \in \{0,1\}.
+\]
+\end{definition}
+
+When $A \in X_{\GI}$, deciding $x \in K^A$ reduces to guessing the unique witness $y \in \{0,1\}^r$ with $A_{2r}(x, y) = 1$, so $\NP^A = \UP^A$. Moreover, $X_{\GI}$ is a closed (hence compact, completely metrizable) subspace of Cantor space $\{0,1\}^{\mathbb{N}}$, because each $\GI$ constraint at length $2r$ depends only on finitely many bits at lengths $\le 2r$.
+
+For diagonalization at a free odd length $n = 2m + 1$, we view the half-slice $A_n(0uv)$ ($u, v \in \{0,1\}^m$) as an $N \times L$ Boolean matrix with $N = L = 2^m$ in which every row contains at most one~$1$. Define the unary target language
+\[
+  \mathcal{L}_A = \bigl\{\, 1^m : \exists u \in \{0,1\}^m\; \forall v \in \{0,1\}^m,\; A_{2m+1}(0uv) = 0 \,\bigr\} \in \SigTwo{}^{,A}.
+\]
+Setting $b_u = \mathbf{1}[\forall v,\, A_{2m+1}(0uv) = 0]$ turns $\mathcal{L}_A(1^m)$ into $\OR_N(b) = \bigvee_{u} b_u$, where $b = 0^N$ is the all-nonempty base world.
+
+\section{Singleton-Preserving Switching Lemma}
+
+Ordinary H\aa stad switching restrictions~\cite{Hastad1986} fix variables to both $0$ and $1$, which would destroy the all-nonempty world $b = 0^N$. To preserve $b = 0^N$ and row uniqueness simultaneously, we introduce a one-sided projection over row states $\{E, U_j, S_j\}$ ($j \in [L]$): $U_j$ fixes a unique marker at position $j$ ($b_u = 0$), $S_j$ leaves row $u$ free between empty ($b_u = 1$) and marker at $j$ ($b_u = 0$), and $E$ denotes an empty row. Crucially, $E$ is \emph{never} sampled by the projection $\rho$; it appears solely in an auxiliary encoding measure $\mathcal{Q}$.
+
+Let $\mathcal{P}$ sample each row independently as $S_j$ with probability $p/L$ and $U_j$ with probability $(1-p)/L$. Define the auxiliary measure $\mathcal{Q}$ by $\mathcal{Q}(E) = 1/L$, $\mathcal{Q}(U_j) = (1 - p - 1/L)/L$, and $\mathcal{Q}(S_j) = p/L$.
+
+\begin{theorem}[Singleton-Preserving Switching Lemma]
+\label{thm:singleton-switching}
+Let $F$ be a normalized DNF of width at most $w$ over an $N \times L$ singleton-constrained matrix. Suppose $p + 1/L \le 1/2$, $(1 - p)L \ge N/2 + 1$, and $8pw^2 < 1$. Then the canonical decision tree depth $\CDT(F|_\rho)$ satisfies
+\[
+  \Prb_{\rho \sim \mathcal{P}}\bigl[\CDT(F|_\rho) \ge s\bigr]
+  \le e^2 \frac{(8pw^2)^s}{1 - 8pw^2}.
+\]
+In particular, for $p = \frac{1}{32w^2}$ we have $\Prb_\rho[\CDT(F|_\rho) \ge s] \le \frac{4e^2}{3}\, 4^{-s}$.
+\end{theorem}
+
+\begin{proof}
+Order the terms of $F$. Given $\rho$ with $\CDT(F|_\rho) \ge s$, follow the canonical branch of length $t \in [s, s+w-1]$ stopping after the first block reaching depth $\ge s$. At each block, let $\tau$ be the first non-zero term under the current partial restriction. Replace only those free rows $S_j$ on which $\tau$ actually depends under the current partial restriction by their satisfying specialization: $S_j \mapsto U_j$ if $u$ appears positively in $\tau$, and $S_j \mapsto E$ if $u$ appears only negatively in $\tau$. (By normalization and singleton uniqueness, no row has conflicting literals in $\tau$.)
+
+In the negative case $S_j \mapsto E$, the address $j$ must match one of the at most $w$ negative literals of $\tau$ on row $u$, so $j$ is encoded by an index in $[w]$. Recording the row's position in $\tau$ ($\le w$), the negative-literal index ($\le w$), the actual CDT branch bit ($2$), and the end-of-block bit ($2$) uses at most $4w^2$ auxiliary symbols per replaced row.
+
+\emph{Invertibility.} Every replacement $S_j \mapsto U_j$ or $S_j \mapsto E$ is a valid specialization of $S_j$, so every term preceding $\tau$ (identically $0$ under the current restriction) remains identically $0$, while $\tau$ becomes identically $1$. Decoding therefore recovers $\tau$ uniquely as the first satisfied term, restores its free rows and actual branch bits from the auxiliary code, and proceeds inductively to the next block.
+
+\emph{Weight ratio.} On any unchanged $S_j$, $\mathcal{P}(S_j)/\mathcal{Q}(S_j) = 1$. On any replaced row, $p + 1/L \le 1/2$ implies $\mathcal{P}(S_j)/\mathcal{Q}(U_j) = \frac{p}{1 - p - 1/L} \le 2p$ and $\mathcal{P}(S_j)/\mathcal{Q}(E) = p \le 2p$. On at most $N$ unchanged $U_j$ rows, $(1-p)L \ge N/2 + 1$ yields $\bigl(\frac{1-p}{1-p-1/L}\bigr)^N \le e^2$. Thus $\mathcal{P}(\rho) \le e^2 (2p)^t \mathcal{Q}(\eta)$. Summing over all $t \in [s, s+w-1]$ and $(4w^2)^t$ auxiliary codes gives the bound.
+\end{proof}
+
+Applying a union bound over $H$ DNFs of width $\le w$ together with a Chernoff bound on the number of free rows $R$ yields a single projection with $R \ge \frac{N}{64w^2}$ and $\max_{i \le H} \CDT(F_i|_\rho) < s = O(\log H)$.
+
+\section{Persistent Marker Knowledge and Trace Capture}
+
+Extending Theorem~\ref{thm:singleton-switching} across recursive $\GI$-layers faces two obstacles: negative literals on upper coded rows $A_{j,x}(y) = K_{j,x}(A_{<j})\mathbf{1}[y = g_{j,x}]$ cannot be fixed to empty without violating $\GI$, and mixed terms can use positive literals as guards to aim negative queries at hidden markers. We resolve both via persistent marker memory and trace capture.
+
+Fix a layer $h$ with independent uniform markers $g_{h,x} \in [L]$ and a normalized signed DNF $F$ of width $\le w$. Maintain a set $U$ of known true layer-$h$ markers $(x, g_{h,x})$ with $K_{h,x} = 1$, initially $U_0 = \varnothing$. In round $r$:
+\begin{enumerate}
+  \item Select the first term $\tau_r$ of $F$ that is positive-active and not blocked by any marker in $U_{r-1}$;
+  \item Add all positive layer-$h$ markers of $\tau_r$ to $U$;
+  \item Scan the negative layer-$h$ literals of $\tau_r$ in order; if none is an actual blocker ($g_{h,x} = y$ and $K_{h,x} = 1$), return $1$; otherwise add the first actual blocker $(x_r^*, y_r^*)$ to $U$ to form $U_r$.
+\end{enumerate}
+If no eligible term exists, return $0$.
+
+\begin{lemma}[Role Disjointness]
+\label{lem:role-disjoint}
+Over the first $s$ blocking rounds, let $B$ be the set of newly discovered blockers $x_r^*$ and let $P$ be the set of layer-$h$ rows \emph{first} revealed positively (i.e., not already in $U_{r-1}$). Then $|B| = s$ (all blockers are distinct), $|P| \le ws$, and $B \cap P = \varnothing$.
+\end{lemma}
+
+\begin{proof}
+If $x_r^*$ had been discovered as a blocker or revealed positively in a prior round $r' < r$, then $(x_r^*, g_{h,x_r^*}) \in U_{r-1}$, contradicting that $\tau_r$ is not blocked by $U_{r-1}$. It cannot appear positively in $\tau_r$ itself by normalization. If $x_r^*$ is used positively in a later round $r' > r$, it is already in $U_{r'-1}$ and therefore excluded from $P$.
+\end{proof}
+
+\begin{theorem}[Trace Capture]
+\label{thm:trace-capture}
+Independently place each layer-$h$ row into a hidden set $R_{\mathrm{hid}}$ with probability $\theta = \frac{1}{w+1}$ and into $R_{\mathrm{ext}}$ otherwise. Define the restricted process that knows only $g_h|_{R_{\mathrm{ext}}}$ initially, allows positive search only over terms whose positive layer-$h$ rows lie in $R_{\mathrm{ext}} \cup \mathrm{rows}(U)$, and aborts if the first actual blocker lies in $R_{\mathrm{ext}}$. Whenever $B \subseteq R_{\mathrm{hid}}$ and $P \subseteq R_{\mathrm{ext}}$ (which occurs with probability at least $q^s$ for $q = \theta(1-\theta)^w \ge \frac{1}{e(w+1)}$), the restricted process reproduces the exact same $s$ blocking rounds and final state $U_s$.
+\end{theorem}
+
+\begin{proof}
+By induction on $r \le s$, assume $U_{r-1}^{\mathrm{restr}} = U_{r-1}$. Every term allowed by the restricted process is also eligible in the original process, so no term before $\tau_r$ can be selected. Conversely, every positive layer-$h$ row of $\tau_r$ either lies in $\mathrm{rows}(U_{r-1})$ or is revealed positively for the first time and hence lies in $P \subseteq R_{\mathrm{ext}}$; thus $\tau_r$ is selected. Its first actual blocker $x_r^*$ lies in $B \subseteq R_{\mathrm{hid}}$, so the restricted process does not abort and produces $U_r^{\mathrm{restr}} = U_r$.
+\end{proof}
+
+Notice that the restricted eligibility predicate at round $r$ never inspects $g_{h,x}$ for any unrevealed hidden row $x \in R_{\mathrm{hid}} \setminus \mathrm{rows}(U)$. To eliminate the exponential union bound over base worlds $b \in \{0,1\}^R$, we apply an auxiliary $0$-only restriction $\sigma$ of density $p = \frac{1}{4a}$.
+
+\begin{lemma}[Adaptive Reachable-Branch Bound]
+\label{lem:reachable-branch}
+Suppose each round of the restricted process makes at most $a$ queries to base variables $b$ and at most $w$ address checks to unrevealed markers in $R_{\mathrm{hid}}$. Under an independent $0$-only restriction $\sigma$ with free probability $p = \frac{1}{4a}$ and $sw \le L/2$,
+\[
+  \Prb_{\sigma,\, g_h|_{R_{\mathrm{hid}}}}\bigl[\exists b \in \mathrm{Cube}(\sigma) : \text{process completes } s \text{ blocking rounds}\bigr]
+  \le \left(\frac{4w}{L}\right)^s.
+\]
+\end{lemma}
+
+\begin{proof}
+Fix $g_{\mathrm{hid}} = g_h|_{R_{\mathrm{hid}}}$. A winning base transcript $\pi$ querying $d \le sa$ distinct base variables with $u$ ones is reachable after $\sigma$ with probability $p^u$. Under the auxiliary product distribution $\tilde{b}$ with $\Prb[\tilde{b}_i = 1] = \frac{p}{1+p}$ and $\Prb[\tilde{b}_i = 0] = \frac{1}{1+p}$, the same transcript has probability $\frac{p^u}{(1+p)^d} \ge \frac{p^u}{(1+p)^{sa}}$. Summing over all winning leaves and taking expectations over $g_{\mathrm{hid}}$ gives
+\[
+  \Prb[\exists b : \text{wins}] \le \E[\#\text{reachable winning leaves}]
+  \le (1+p)^{sa}\, \Prb_{\tilde{b}, g_{\mathrm{hid}}}[\text{wins on } (\tilde{b}, g_{\mathrm{hid}})].
+\]
+For any fixed $\tilde{b}$, the process is deterministic in $g_{\mathrm{hid}}$; each blocking round discovers a brand-new hidden marker after at most $w$ checks (at most $sw$ non-matches excluded), succeeding with probability $\le \frac{w}{L - sw} \le \frac{2w}{L}$. Since $(1+p)^a \le e^{1/4} < 2$, the product is at most $(4w/L)^s$.
+\end{proof}
+
+\section{Uniform Recursive Switching}
+
+To compose Theorem~\ref{thm:trace-capture} across $h$ nested $\GI$-layers without re-expanding all DNFs back to raw base bits, we replace base expansion by \emph{recursive prefix binary search}. Given an ordered DNF $F = \bigvee_{i=1}^M \tau_i$ of width $\le w$ over layers $\le h$, for each memory $U$ and prefix index $j \le M$, define the prefix predicate
+\[
+  P_{U,j} = \bigl[\,\exists i \le j : \tau_i \text{ is positive-active and not blocked by } U\,\bigr].
+\]
+Fixing the accessible layer-$h$ markers and substituting the DNF definitions $K_{h,x}$ (width $\le T$ over layers $< h$) for positive layer-$h$ literals turns each $P_{U,j}$ into a signed DNF over layers $< h$ of width at most $w' = wT$. Since normalizing terms over $B$ oracle bits yields $M \le M_{\max} := (2B+1)^w$, finding the first eligible term takes at most $v_{\max} := 1 + \lceil \log_2(M_{\max}+1) \rceil$ binary-search queries to $P_{U,j}$ (independent of the specific formula $F$).
+
+\begin{theorem}[Uniform Recursive Switching]
+\label{thm:recursive-switching}
+Consider an $h$-layer acyclic tower over an $N \times L_0$ base singleton matrix, with layer-$j$ kernels of DNF width $\le T$ over layers $< j$, independent uniform markers on $\ge L$ positions per coded row, and at most $B$ total oracle bits. For any parameter tuple $(N, L_0, L, B, T, h, H, w, \delta)$ satisfying the base switching conditions $p_0 + 1/L_0 \le 1/2$, $(1-p_0)L_0 \ge N/2 + 1$ (where $p_0 = \frac{1}{32 w_0^2}$) and the inductive margin conditions $s_j w_j \le L/2$, $4w_j/(q_j L) \le 1/2$ at every layer $j \ge 1$, there is a random $0$-only base projection $\rho_{\le h}$ whose distribution depends \emph{only} on $(N, L, B, T, h, H, w, \delta)$ (not on the specific formulas) such that for every family $\mathcal{F}$ of at most $H$ signed DNFs of width $\le w$,
+\[
+  \Prb_{\rho_{\le h},\, g_{\le h}}\bigl[\exists F \in \mathcal{F} : \DT(F|_{\rho_{\le h}, g_{\le h}}) > d_h\bigr] < \delta.
+\]
+\end{theorem}
+
+\begin{proof}
+We induct on $h$. The base case $h = 0$ is Theorem~\ref{thm:singleton-switching} with $p_0 = \frac{1}{32w_0^2}$ and $d_0 = O(\log H_0 + \log(1/\delta_0) + 1)$.
+
+For the step $h-1 \to h$, set the universal bounds $M_{\max} = (2B+1)^w$ and $v_{\max} = 1 + \lceil \log_2(M_{\max}+1) \rceil$, together with $s = \lceil \log_2(4H/\delta)\rceil$, $\theta = \frac{1}{w+1}$, and $q = \theta(1-\theta)^w$. Along $s$ rounds, $|U| \le (w+1)s$, so the auxiliary lower-layer family has size at most $H' = B + H(M_{\max}+1)(B+1)^{(w+1)s}$, width $w' = wT$, and error budget $\delta' = \frac{\delta q^s}{4}$. Let $(\rho_{<h}, g_{<h})$ be the universal distribution from the induction hypothesis yielding depth $d'$, and let $\sigma_h$ be an independent $0$-only restriction of density $p_h = \frac{1}{4a}$ where $a = (v_{\max} + w)d'$ (depending strictly on the parameters, not on the specific formulas in $\mathcal{F}$).
+
+\emph{Event A (blocking-round bound).} Condition on $(R_{\mathrm{hid}}, g_h|_{R_{\mathrm{ext}}})$. The restricted prefix family has size $\le H'$, width $\le w'$, and is independent of $(\rho_{<h}, g_{<h}, \sigma_h, g_h|_{R_{\mathrm{hid}}})$. By the induction hypothesis and Lemma~\ref{lem:reachable-branch}, the probability of reproducing $s$ blocking rounds is at most $\delta' + H(4w/L)^s$. By Theorem~\ref{thm:trace-capture} and independence of $R_{\mathrm{hid}}$,
+\[
+  \Prb[\mathrm{Bad}_A] \le q^{-s}\delta' + H\left(\frac{4w}{qL}\right)^s \le \frac{\delta}{4} + \frac{\delta}{4} = \frac{\delta}{2}.
+\]
+
+\emph{Event B (exact unrestricted search).} Condition on all markers $g_h$. The full unrestricted prefix family also has size $\le H'$ and width $\le w'$, and is independent of $(\rho_{<h}, g_{<h})$. By universality of the lower distribution, $\Prb[\mathrm{Bad}_B] \le \delta' \le \frac{\delta}{4}$. Since $\sigma_h$ only restricts the cube, it never increases tree depth.
+
+On the intersection $\overline{\mathrm{Bad}_A} \cap \overline{\mathrm{Bad}_B}$ (which fails with probability $< \frac{3\delta}{4} < \delta$), the full algorithm finishes in at most $s - 1$ blocking rounds plus at most $1$ final accepting/rejecting round, each costing at most $(v_{\max} + w)d'$ base queries, giving $d_h \le s(v_{\max} + w)d'$.
+\end{proof}
+
+\textbf{Quantitative closure for $\GI$.} For a fixed polynomial time bound $T = \mathrm{poly}(m)$ and free odd length $n = 2m+1$, fix all lengths $< n$, fix all coded even lengths $2r \in (n, 2n)$ (whose kernels only query lengths $< r < n$ and are therefore independent of $A_n$), and fix all non-coded odd lengths in $(n, T]$ as well as $A_n(1\cdots)$ to~$0$. Partition coded even lengths in $[2n, T]$ into $h = O(\log m)$ ranges $I_j = [2^j n, 2^{j+1} n)$ ($j \ge 1$). For any $2r \in I_j$, strict acyclicity gives $|q| < r < 2^j n$, so no intra-range dependencies occur, and $L = 2^r \ge 2^{2m+1} > 2^m$. Define $C_j := 1 + \log_2 H_j + \log_2(1/\delta_j)$ and total survival density $p_* := \prod_{j=0}^h p_j$. From the inductive parameter updates, $w_{j-1} = T w_j$ and $C_{j-1} = O\bigl(C_j (w_j + 1)(T + 1)\bigr)$. Tracking these recurrences across $h = O(\log m)$ ranges yields:
+\[
+  \max_j w_j \le 2^{O(\log^2 m)},\quad
+  C_j, s_j, v_j \le 2^{O(\log^3 m)},\quad
+  d_h \le 2^{O(\log^4 m)},\quad
+  \log_2(1/p_*) = O(\log^5 m).
+\]
+By Chernoff's bound, with positive probability all individual oracle bits up to length $T$ have decision-tree depth (hence exact multilinear degree) at most $d_h = 2^{O(\log^4 m)}$ over a residual free base cube of dimension $R \ge 2^{m - O(\log^5 m)}$, while $\mathcal{L}_{A_b}(1^m) = \OR_R(b)$.
+
+\section{Modular Oracle Separations and Baire Genericity}
+
+To separate $\OR_R$ from every fixed-prime modular counting class simultaneously, define the alternating dual functional over $\Z$:
+\[
+  \Lambda_R(f) = \sum_{b \in \{0,1\}^R} (-1)^{|b|} f(b).
+\]
+
+\begin{lemma}[Universal $\mathrm{Mod}_p$ Degree Lower Bound]
+\label{lem:modp-lb}
+For every integer $p \ge 2$, every $R \ge 1$, and every integer polynomial $P(b)$ of degree $d < R$, $P$ cannot agree with $\OR_R$ modulo $p$ on $\{0,1\}^R$.
+\end{lemma}
+
+\begin{proof}
+Every monomial of degree $< R$ omits at least one coordinate $i < R$, so its alternating sum vanishes identically over $\Z$; by linearity, $\Lambda_R(P) = 0$. On the other hand, $\Lambda_1(\OR_1) = 0 - 1 = -1$, and for $R \ge 1$, $\Lambda_{R+1}(\OR_{R+1}) = \Lambda_R(\OR_R) - \Lambda_R(1) = -1 - 0 = -1$. If $P(b) \equiv \OR_R(b) \pmod p$ for all $b \in \{0,1\}^R$, then $0 \equiv \Lambda_R(P) \equiv \Lambda_R(\OR_R) = -1 \pmod p$, contradicting $p \ge 2$.
+\end{proof}
+
+\begin{theorem}[Asymmetric Modular Hierarchy Separation]
+\label{thm:main-sep}
+There exists an oracle $A \in X_{\GI}$ such that $\NP^A = \UP^A$ and
+\[
+  \mathcal{L}_A \in \SigTwo{}^{,A} \setminus \bigcup_{p\text{ prime}} \Modp^A.
+\]
+Moreover, the set $\{A \in X_{\GI} : \mathcal{L}_A \notin \bigcup_{p\text{ prime}} \Modp^A\}$ is a dense $G_\delta$ in $X_{\GI}$.
+\end{theorem}
+
+\begin{proof}
+Enumerate all pairs $(p, M)$ where $p$ is prime and $M$ is a clocked $\Modp$ machine with polynomial time bound $T(m) \ge 2m + 1$. Starting from any admissible finite $\GI$-prefix, choose $n = 2m+1$ sufficiently large that $(p-1) T(m) d_h < R = 2^{m - O(\log^5 m)}$, and apply Theorem~\ref{thm:recursive-switching} to obtain a $\GI$-compatible family $\{A_b : b \in \{0,1\}^R\}$ in which every oracle bit of length $\le T(m)$ has exact degree $\le d_h$ in $b$.
+
+The number of accepting paths of $M^A(1^m)$ is an integer polynomial $C_M(A)$ of degree $\le T(m)$ in the oracle bits. By Fermat's Little Theorem, $C_M(A)^{p-1} \bmod p$ is the exact indicator of $C_M(A) \not\equiv 0 \pmod p$, so on $\{A_b\}$ the machine output is represented modulo $p$ by a polynomial of degree at most $(p-1)T(m)d_h < R$. By Lemma~\ref{lem:modp-lb}, there exists $b^* \in \{0,1\}^R$ such that $M^{A_{b^*}}(1^m) \ne \OR_R(b^*) = \mathcal{L}_{A_{b^*}}(1^m)$. Fixing $A_{b^*}$ up to length $T(m)$ (which exceeds $2m+1$ and therefore also freezes $\mathcal{L}_{A_{b^*}}(1^m)$) permanently diagonalizes against $(p, M)$ while preserving $\GI$.
+
+For each $(p, M)$, the set $U_{p,M} = \{A \in X_{\GI} : \exists m,\, M^A(1^m) \ne \mathcal{L}_A(1^m)\}$ is open (membership depends on finitely many oracle bits) and dense in $X_{\GI}$ by the construction above. Since $X_{\GI}$ is compact Hausdorff, the Baire Category Theorem yields that $\bigcap_{p,M} U_{p,M}$ is a dense $G_\delta$.
+\end{proof}
+
+\section{Consequences for Multilinear Algebraic Access}
+
+In the algebrization framework of Aaronson and Wigderson~\cite{AaronsonWigderson2009} (see also recent multilinear barriers in Chen, Hu, and Ren~\cite{ChenHuRen2026}), let $\widetilde{A}_{\F_q}$ denote the unique multilinear extension of $A$ over a finite field $\F_q$. Under $\GI$ with our subcube-preserving encoding $\mathrm{encode}(i, u, t)$, setting hidden coordinates to $1/2 \in \F_p$ ($p$ odd prime) recovers the multilinear extension $\widetilde{K}_{r,\F_p}(z) = 2^r \widetilde{A}_{2r,\F_p}(z, \tfrac12, \dots, \tfrac12)$, which yields exact counting characterizations:
+\[
+  \Pcl^{\widetilde{A}_{\F_3}} = \Modthree^A,
+  \qquad
+  \Pcl^{\widetilde{A}[\mathrm{poly}]} = \Pcl^{\SharpP^A} = \Pcl^{\PP^A} \supseteq \PH^A
+\]
+(the last inclusion by relativized Toda's theorem~\cite{Toda1991}). Now let $\widetilde{A}^{[p]}$ allow multilinear queries over \emph{arbitrary} polynomially representable extension fields $\F_{p^k}$ of a \emph{fixed} prime characteristic $p$.
+
+\begin{corollary}[Characteristic vs.\ Field-Size Separation under $\NP = \UP$]
+\label{cor:char-sep}
+For every oracle $A$ and every fixed prime $p$, $\Pcl^{\widetilde{A}^{[p]}} \subseteq \Modp^A$. Consequently, for every oracle $A$ from Theorem~\ref{thm:main-sep},
+\[
+  \mathcal{L}_A \in \bigl(\SigTwo{}^{,A} \cap \Pcl^{\widetilde{A}[\mathrm{poly}]}\bigr)
+  \setminus \bigcup_{p\text{ prime}} \Pcl^{\widetilde{A}^{[p]}}.
+\]
+\end{corollary}
+
+\begin{proof}
+For any query to $\widetilde{A}_{m,\F_{p^k}}(z)$ ($k \le \mathrm{poly}(n)$), each $\F_p$-coordinate $w_c(x) \in \{0,\dots,p-1\}$ of the Lagrange weight $\prod_j \ell_{x_j}(z_j) \in \F_{p^k}$ is deterministically computable in $\mathrm{poly}(n)$ time. Recovering $\sum_x A_m(x) w_c(x) \bmod p$ takes $p - 1$ queries to $\Modp^A$ per coordinate ($k(p-1) = \mathrm{poly}(n)$ queries total), and $\Pcl^{\Modp^A} = \Modp^A$ by Beigel--Gill closure~\cite{BeigelGill1992}. Combining with Theorem~\ref{thm:main-sep} and $\PH^A \subseteq \Pcl^{\widetilde{A}[\mathrm{poly}]}$ completes the proof.
+\end{proof}
+
+\begin{remark}[Deterministic vs.\ Randomized Contrast]
+In the randomized setting, Valiant--Vazirani isolation~\cite{ValiantVazirani1986} over $\Modthree^A$ gives $\SigTwo{}^{,A} \subseteq \RP^{\widetilde{A}_{\F_3}}$ under $\GI$, and growing the field size $\F_p \to \F_{p^k}$ yields an exponential speedup via Schwartz--Zippel. Corollary~\ref{cor:char-sep} shows that in the \emph{deterministic} setting, growing the field size at fixed characteristic $p$ gives zero gain against $\SigTwo{}^{,A}$: breaking the barrier requires either randomness or switching prime characteristics.
+\end{remark}
+
+\appendix
+\section{Machine-Verified Lean 4.36.0 Artifacts and Scope Boundaries}
+
+Seven standalone zero-import Lean~4.36.0 modules (\texttt{arm64-apple-darwin24.6.0}) machine-verify the combinatorial, algebraic, and finite-stage bridge cores of Sections~3--6 with \textbf{45/45 audited theorems}, zero errors, zero \texttt{sorryAx}, zero \texttt{ofReduceBool}, and zero \texttt{Classical.choice} (six modules compile with zero warnings; \texttt{TraceCapture.lean} emits 16 non-blocking deprecation warnings on \texttt{if\_pos}/\texttt{if\_neg}).
+
+\begin{table}[!htbp]
+\centering
+\begin{tabularx}{\linewidth}{lXcc}
+\toprule
+\textbf{Module} & \textbf{Verified Mathematical Core} & \textbf{Theorems} & \textbf{Axiom-Free} \\
+\midrule
+\texttt{PersistentMarkerKnowledge.lean} & Lemma~\ref{lem:role-disjoint} ($B \cap P = \varnothing$, $|B|=s$, $|P|\le ws$) & 3/3 & 0 \\
+\texttt{TraceCapture.lean} & Theorem~\ref{thm:trace-capture} \& hidden-marker independence & 4/4 & 2 \\
+\texttt{ReachableBranch.lean} & Reachable Leaf Lemma \& Lemma~\ref{lem:reachable-branch} ($\mathbb{N}$-scaled) & 4/4 & 0 \\
+\texttt{SingletonSwitching.lean} & Theorem~\ref{thm:singleton-switching} weights, normalization \& decode & 8/8 & 2 \\
+\texttt{RecursiveSwitching.lean} & Prefix binary search, Event A+B budget, recurrences & 8/8 & 0 \\
+\texttt{ModularSeparation.lean} & $\Lambda_R(\OR_R)=-1$, Lemma~\ref{lem:modp-lb}, Mod-$p$ step & 6/6 & 0 \\
+\texttt{UniformRecursiveBridge.lean} & Finite prob.\ method, \texttt{EvalDTree}$\to$\texttt{Poly}, cube witness $b^*$ & 12/12 & 0 \\
+\bottomrule
+\end{tabularx}
+\caption{Summary of zero-import Lean~4.36.0 verification (all remaining theorems use only core \texttt{propext} / \texttt{Quot.sound}).}
+\end{table}
+
+\textbf{Unformalized analytic boundary.} \texttt{UniformRecursiveBridge.lean} formalizes a \emph{conditional} finite-stage bridge (the hypotheses \texttt{good\_GI1}, \texttt{good\_depth}, \texttt{hProb}, and \texttt{hGap} are supplied as parameters, and the Fermat indicator interpretation of $C_M^{p-1} \bmod p$ requires $p$ to be prime as in Theorem~\ref{thm:main-sep}). Measure-theoretic probability over infinite product spaces, Chernoff bounds, the Baire Category Theorem, and the bridge from abstract DNF oracle queries to multi-tape Turing machines are proved analytically in Sections~3--7 and are not formalized in Lean.
+
+\begin{thebibliography}{99}
+
+\bibitem{AaronsonWigderson2009}
+S.~Aaronson and A.~Wigderson.
+Algebrization: A new barrier in complexity theory.
+\emph{ACM Transactions on Computation Theory}, 1(1):2:1--2:54, 2009.
+\href{https://www.scottaaronson.com/papers/alg.pdf}{PDF}.
+
+\bibitem{BakerGillSolovay1975}
+T.~Baker, J.~Gill, and R.~Solovay.
+Relativizations of the $\Pcl = ?\NP$ question.
+\emph{SIAM Journal on Computing}, 4(4):431--442, 1975.
+\href{https://epubs.siam.org/doi/10.1137/0204037}{DOI}.
+
+\bibitem{BeigelGill1992}
+R.~Beigel and J.~Gill.
+Counting classes: thresholds, parity, mods, and fewness.
+\emph{Theoretical Computer Science}, 103(1):3--23, 1992.
+
+\bibitem{ChenHuRen2026}
+L.~Chen, Y.~Hu, and H.~Ren.
+New algebrization barriers to circuit lower bounds via communication complexity of Missing-String.
+In \emph{ITCS 2026}, 2026.
+\href{https://arxiv.org/abs/2511.14038}{arXiv:2511.14038}.
+
+\bibitem{Cook2000}
+S.~Cook.
+The $\Pcl$ versus $\NP$ problem.
+Clay Mathematics Institute Millennium Prize Problem description, 2000.
+\href{https://www.claymath.org/wp-content/uploads/2022/06/pvsnp.pdf}{PDF}.
+
+\bibitem{GlasserWechsung2003}
+C.~Gla\ss er and G.~Wechsung.
+Relativizing function classes.
+\emph{Journal of Universal Computer Science}, 9(1):34--50, 2003.
+\href{https://lib.jucs.org/issue/4069/}{JUCS 9(1)}.
+
+\bibitem{Grochow2023}
+J.~A.~Grochow.
+Polynomial-time axioms of choice and polynomial-time cardinality.
+\emph{Theory of Computing Systems}, 67, 2023.
+\href{https://arxiv.org/abs/2301.07123}{arXiv:2301.07123}.
+
+\bibitem{Hastad1986}
+J.~H\aa stad.
+Almost optimal lower bounds for small depth circuits.
+In \emph{Proceedings of the 18th Annual ACM Symposium on Theory of Computing (STOC 1986)}, pp.~6--20, 1986.
+
+\bibitem{HiraharaNanashima2021}
+S.~Hirahara and M.~Nanashima.
+On worst-case learning in relativized Heuristica.
+In \emph{FOCS 2021}, pp.~751--758, 2021.
+\href{https://eccc.weizmann.ac.il/report/2021/161/download}{ECCC TR21-161}.
+
+\bibitem{RazborovRudich1997}
+A.~A.~Razborov and S.~Rudich.
+Natural proofs.
+\emph{Journal of Computer and System Sciences}, 55(1):24--35, 1997.
+\href{https://mit6875.github.io/PAPERS/natural_proofs.pdf}{PDF}.
+
+\bibitem{Toda1991}
+S.~Toda.
+$\PP$ is as hard as the polynomial-time hierarchy.
+\emph{SIAM Journal on Computing}, 20(5):865--877, 1991.
+
+\bibitem{ValiantVazirani1986}
+L.~G.~Valiant and V.~V.~Vazirani.
+$\NP$ is as easy as detecting unique solutions.
+\emph{Theoretical Computer Science}, 47(1):85--93, 1986.
+
+\end{thebibliography}
+
+\end{document}

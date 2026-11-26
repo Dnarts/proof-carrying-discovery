@@ -8,6 +8,12 @@ Evidence-scoped program discovery, finite model-class refutation, controlled rep
 
 [**All preprints: English · Русский · 简体中文 · עברית**](papers/hebrew/README.md)
 
+## Recursive Switching and Modular Oracle Separations under NP = UP (26 November 2026)
+
+In an oracle model, unique witnesses do not remove the gap between access in one fixed characteristic and access across characteristics. The Lean bundle checks selected components, not the full analytic separation.
+
+[English PDF](papers/recursive-switching-np-up/recursive_switching_np_up_en.pdf) · [Русский PDF](papers/recursive-switching-np-up/recursive_switching_np_up_ru.pdf) · [Научпоп (RU)](papers/recursive-switching-np-up/interface_barrier_popular_ru.pdf) · [Full bundle (ZIP)](papers/recursive-switching-np-up/rs_bundle.zip) · [Sources and checksums](papers/recursive-switching-np-up/)
+
 ## Information-Theoretic Blind Spots of Finite Black-Box Auditing v2.0 (25 November 2026)
 
 Information-theoretic bounds on what a finite audit profile can certify, with a separate, partially Lean-formalized oracle result.
@@ -115,6 +121,12 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 
 Основная линия: **найти программу → проверить идентифицируемость → опровергнуть недостаточный класс → сменить представление → синтезировать решение → формально проверить его поведение.**
 
+## «Рекурсивные switching-леммы и модульные оракульные разделения при NP = UP»
+
+Оракульное разделение между доступом в фиксированной характеристике и доступом с её сменой при единственности свидетелей. Это не утверждение о нерелятивизированном NP = UP.
+
+[English PDF](papers/recursive-switching-np-up/recursive_switching_np_up_en.pdf) · [Русский PDF](papers/recursive-switching-np-up/recursive_switching_np_up_ru.pdf) · [Научпоп (RU)](papers/recursive-switching-np-up/interface_barrier_popular_ru.pdf) · [Full bundle (ZIP)](papers/recursive-switching-np-up/rs_bundle.zip) · [Sources and checksums](papers/recursive-switching-np-up/)
+
 ## «Информационно-теоретические слепые зоны конечного black-box аудита» v2.0
 
 Что конечный набор тестов может и не может удостоверить по своему профилю ответов.
@@ -178,6 +190,8 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 ---
 
 # 中文简介
+
+**递归转换与 NP = UP 条件下的模计数预言机分离** · [English PDF](papers/recursive-switching-np-up/recursive_switching_np_up_en.pdf) · [Русский PDF](papers/recursive-switching-np-up/recursive_switching_np_up_ru.pdf) · [Научпоп (RU)](papers/recursive-switching-np-up/interface_barrier_popular_ru.pdf) · [Full bundle (ZIP)](papers/recursive-switching-np-up/rs_bundle.zip) · [Sources and checksums](papers/recursive-switching-np-up/)
 
 **有限黑箱审计的信息论盲区 v2.0** · [English PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_en.pdf) · [Русский PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_ru.pdf) · [简体中文 PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_zh.pdf) · [עברית PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_he.pdf) · [Sources and evidence ZIP](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_sources_and_evidence.zip)
 

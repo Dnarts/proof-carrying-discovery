@@ -1,0 +1,375 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[a4paper,margin=22mm]{geometry}
+\usepackage{fontspec}
+\usepackage{babel}
+\babelprovide[import, main]{russian}
+\usepackage{microtype}
+\sloppy
+\setlength{\emergencystretch}{4em}
+\babelfont{rm}{Noto Serif}
+\babelfont{sf}{Noto Sans}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs,tabularx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+
+\definecolor{primary}{RGB}{24,64,122}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  citecolor=primary,
+  urlcolor=primary
+}
+
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\parindent}{0pt}
+
+\newtheorem{theorem}{Теорема}[section]
+\newtheorem{lemma}[theorem]{Лемма}
+\newtheorem{corollary}[theorem]{Следствие}
+\newtheorem{proposition}[theorem]{Утверждение}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Определение}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Замечание}
+
+\newcommand{\Pcl}{\mathsf{P}}
+\newcommand{\NP}{\mathsf{NP}}
+\newcommand{\coNP}{\mathsf{coNP}}
+\newcommand{\UP}{\mathsf{UP}}
+\newcommand{\PP}{\mathsf{PP}}
+\newcommand{\PH}{\mathsf{PH}}
+\newcommand{\RP}{\mathsf{RP}}
+\newcommand{\BPP}{\mathsf{BPP}}
+\newcommand{\Modp}{\mathrm{Mod}_p\mathsf{P}}
+\newcommand{\Modthree}{\mathrm{Mod}_3\mathsf{P}}
+\newcommand{\SharpP}{\#\mathsf{P}}
+\newcommand{\SigTwo}{\Sigma_2^{\mathsf{P}}}
+\newcommand{\DT}{\mathrm{DT}}
+\newcommand{\CDT}{\mathrm{CDT}}
+\newcommand{\OR}{\mathrm{OR}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prb}{\Pr}
+\newcommand{\GI}{GI_1}
+
+\newcommand{\takeaway}[2]{%
+  \vspace{4pt}\noindent\colorbox{primary!7}{%
+    \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
+      \vspace{3pt}\textbf{\color{primary}#1:}\hspace{0.4em}#2\vspace{3pt}%
+    }%
+  }\vspace{4pt}%
+}
+
+\title{\textbf{Рекурсивные switching-леммы и модульные оракульные разделения при $\NP = \UP$}}
+\author{Препринт (кандидат в arXiv: cs.CC)}
+\date{26 ноября 2026 г.}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+В работе исследуется соотношение между устранением недетерминированной неоднозначности ($\NP^A = \UP^A$) и сохранением сложности высших уровней полиномиальной иерархии относительно классов модульного подсчёта. Опираясь на ациклическое кодирование уникальных свидетелей $\GI$ Глассера и Вехзунга (2003), мы доказываем \emph{Теорему об универсальном рекурсивном switching}, которая одновременно сводит все полиномиально доступные оракульные биты сквозь $O(\log m)$ вложенных $\GI$-слоёв к деревьям решений квазиполиномиальной глубины $2^{O(\log^4 m)}$ над остаточным свободным кубом размерности $R \ge 2^{m - O(\log^5 m)}$, сохраняя базовый мир без пустых строк.
+
+Соединяя эту рекурсивную проекцию с явным знакопеременным двойственным функционалом над $\Z$, мы аналитически доказываем существование оракула $A$ с инвариантом $\GI(A)$, относительно которого $\NP^A = \UP^A$, но один унарный язык $\mathcal{L}_A \in \SigTwo{}^{,A}$ лежит вне $\bigcup_{p\text{ прост.}} \Modp^A$. Более того, множество таких разделяющих оракулов образует плотное $G_\delta$ в компактном пространстве $X_{\GI}$. Для мультилинейного алгебраического доступа в модели Ааронсона--Вигдерсона (2009) отсюда следует безусловное разделение фиксированной характеристики (даже при экспоненциальном росте размера поля $\F_{p^k}$) и доступа со сменой характеристики:
+\[
+  \mathcal{L}_A \in \bigl(\SigTwo{}^{,A} \cap \Pcl^{\widetilde{A}[\mathrm{poly}]}\bigr) \setminus \bigcup_{p\text{ прост.}} \Pcl^{\widetilde{A}^{[p]}}.
+\]
+Выбранные комбинаторно-алгебраические ядра и конечный сквозной мост доказательства машинно проверены в семи 0-import модулях Lean~4.36.0 (45 аудированных теорем, ноль запрещённых аксиом); вероятностная индукция и бесконечная диагонализация остаются на аналитическом уровне.
+\end{abstract}
+
+\section{Введение}
+
+Влечёт ли однозначность недетерминированных вычислений ($\NP = \UP$) коллапс полиномиальной иерархии — один из классических вопросов структурной теории сложности. В релятивизированной постановке Грохоу~\cite{Grochow2023} выделяет как Open Question~1.2 задачу построения оракула $A$, относительно которого $\NP^A = \UP^A$ при бесконечной $\PH^A$, отмечая, что конструкции с уникальными свидетелями склонны непреднамеренно схлопывать высшие уровни иерархии.
+
+При условии $\NP^A = \UP^A$ каждый язык из $\NP^A$ допускает недетерминированную полиномиальную машину с не более чем одной принимающей ветвью на каждом входе, откуда немедленно следует $\NP^A \subseteq \Modp^A$ для каждого простого $p$. Поэтому классические разделения $\NP$ и модульных считающих классов невозможны внутри миров с $\NP^A = \UP^A$; более того, в силу замкнутости $\Pcl^{\Modp^A} = \Modp^A$ весь класс $\Delta_2^{\Pcl,A} = \Pcl^{\NP^A}$ также схлопывается в $\Modp^A$. Тем самым $\SigTwo{}^{,A}$ — это \emph{ровно первый нетривиальный уровень} полиномиальной иерархии, где возможно разделение с фиксированным простым модульным подсчётом при $\NP^A = \UP^A$.
+
+\takeaway{Основной результат}{Мы доказываем аналитически, что существует оракул $A \in X_{\GI}$ такой, что $\NP^A = \UP^A$ и $\SigTwo{}^{,A} \not\subseteq \bigcup_{p\text{ прост.}} \Modp^A$ на одном унарном языке $\mathcal{L}_A$, причём множество таких оракулов образует плотное $G_\delta$ в $X_{\GI}$.}
+
+\textbf{Связь с предшествующими работами.} Само кодирование $\GI$ на чётных длинах в паре со свободными нечётными длинами не является новым: его прямой предшественник содержится в работе Глассера и Вехзунга~\cite{GlasserWechsung2003}, разделивших $\mathrm{min\text{-}P}^A$ и $\SharpP^A$ при $\NP^A = \UP^A$. В части switching-лемм близким техническим предшественником выступают рестрикции над большими алфавитами Хирахары и Нанашимы~\cite{HiraharaNanashima2021}. Наш вклад состоит в рекурсивной switching-архитектуре, которая сохраняет одновременно $\GI$ и мир без пустых строк, контролируя \emph{точную} алгебраическую степень всех доступных оракульных битов сквозь $O(\log m)$ слоёв без глобальной компрессии guard-профилей.
+
+\textbf{Эпистемические границы.} Работа не решает открытый вопрос Грохоу о бесконечности $\PH^A$ при $\NP^A = \UP^A$ и не затрагивает нерелятивизированную проблему $\Pcl$ vs.\ $\NP$~\cite{Cook2000,RazborovRudich1997}. Семь 0-import модулей Lean~4.36.0 (Приложение) машинно проверяют выбранные комбинаторно-алгебраические ядра и конечный сквозной мост (45 теорем, ноль \texttt{sorryAx}, ноль \texttt{Classical.choice}); вероятностная индукция и конструкция Бэра доказаны аналитически.
+
+\section{Предварительные сведения и ациклическая модель $\GI$}
+
+Для оракула $A \subseteq \{0,1\}^*$ обозначим через $A_m : \{0,1\}^m \to \{0,1\}$ его ограничение на слова длины $m$. Пусть $K^A$ — канонический $\NP^A$-полный язык кодов $\mathrm{encode}(i, u, t) = 0^i 1\, 0^{|u|} 1\, u\, 1^t$, означающих, что $i$-я недетерминированная оракульная машина $N_i^A$ принимает вход $u$ не более чем за $t$ шагов. Поскольку $|\mathrm{encode}(i, u, t)| = i + 2|u| + t + 2 > t$, любой оракульный запрос $q$ в ходе симуляции удовлетворяет \emph{строгой ацикличности} $|q| < r$, где $r = |\mathrm{encode}(i, u, t)|$.
+
+\begin{definition}[Инвариант уникальных свидетелей $\GI$ \cite{GlasserWechsung2003}]
+Оракул $A$ удовлетворяет $\GI$ ($A \in X_{\GI}$), если для всех $r \ge 1$ и всех $x \in \{0,1\}^r$
+\[
+  \sum_{y \in \{0,1\}^r} A_{2r}(x, y) = K^A(x) \in \{0,1\}.
+\]
+\end{definition}
+
+При $A \in X_{\GI}$ проверка $x \in K^A$ сводится к угадыванию единственного свидетеля $y \in \{0,1\}^r$ с $A_{2r}(x, y) = 1$, поэтому $\NP^A = \UP^A$. Пространство $X_{\GI}$ замкнуто (а значит, компактно и полно метризуемо) в канторовом пространстве $\{0,1\}^{\mathbb{N}}$, так как каждое ограничение $\GI$ на длине $2r$ зависит лишь от конечного числа битов длины $\le 2r$.
+
+Для диагонализации на свободной нечётной длине $n = 2m + 1$ рассматриваем срез $A_n(0uv)$ ($u, v \in \{0,1\}^m$) как булеву матрицу $N \times L$ ($N = L = 2^m$), где каждая строка содержит не более одной единицы. Определим унарный целевой язык
+\[
+  \mathcal{L}_A = \bigl\{\, 1^m : \exists u \in \{0,1\}^m\; \forall v \in \{0,1\}^m,\; A_{2m+1}(0uv) = 0 \,\bigr\} \in \SigTwo{}^{,A}.
+\]
+При $b_u = \mathbf{1}[\forall v,\, A_{2m+1}(0uv) = 0]$ имеем $\mathcal{L}_A(1^m) = \OR_N(b) = \bigvee_u b_u$, где $b = 0^N$ — базовый мир без пустых строк.
+
+\section{Singleton-Preserving Switching Lemma}
+
+Стандартные рестрикции Хостада~\cite{Hastad1986} фиксируют переменные и в $0$, и в $1$, что разрушило бы мир без пустых строк $b = 0^N$. Чтобы одновременно сохранить $b = 0^N$ и единственность маркеров, вводим одностороннюю проекцию на состояниях строки $\{E, U_j, S_j\}$ ($j \in [L]$): $U_j$ фиксирует маркер в позиции $j$ ($b_u = 0$), $S_j$ оставляет строку свободной между пустой ($b_u = 1$) и маркером в $j$ ($b_u = 0$), а $E$ обозначает пустую строку. Принципиально, что $E$ \emph{никогда} не выбирается в исходной проекции $\rho$, а живёт исключительно во вспомогательной мере кодирования $\mathcal{Q}$.
+
+Мера $\mathcal{P}$ независимо назначает каждой строке $S_j$ с вероятностью $p/L$ и $U_j$ с вероятностью $(1-p)/L$. Вспомогательная мера $\mathcal{Q}$ задаётся весами $\mathcal{Q}(E) = 1/L$, $\mathcal{Q}(U_j) = (1 - p - 1/L)/L$ и $\mathcal{Q}(S_j) = p/L$.
+
+\begin{theorem}[Singleton-Preserving Switching Lemma]
+\label{thm:singleton-switching-ru}
+Пусть $F$ — нормализованная DNF ширины не выше $w$ над singleton-матрицей $N \times L$. Если $p + 1/L \le 1/2$, $(1 - p)L \ge N/2 + 1$ и $8pw^2 < 1$, то глубина канонического дерева решений $\CDT(F|_\rho)$ удовлетворяет
+\[
+  \Prb_{\rho \sim \mathcal{P}}\bigl[\CDT(F|_\rho) \ge s\bigr]
+  \le e^2 \frac{(8pw^2)^s}{1 - 8pw^2}.
+\]
+В частности, при $p = \frac{1}{32w^2}$ имеем $\Prb_\rho[\CDT(F|_\rho) \ge s] \le \frac{4e^2}{3}\, 4^{-s}$.
+\end{theorem}
+
+\begin{proof}
+Упорядочим термы $F$. Для плохой рестрикции $\rho$ с $\CDT(F|_\rho) \ge s$ пройдём каноническую ветвь длины $t \in [s, s+w-1]$, останавливаясь после первого блока, достигающего глубины $\ge s$. В каждом блоке выбираем первый ненулевой терм $\tau$ и заменяем только те свободные строки $S_j$, от которых $\tau$ фактически зависит при текущей частичной рестрикции, на их удовлетворяющую специализацию: $S_j \mapsto U_j$ при положительном литерале и $S_j \mapsto E$ при чисто отрицательном.
+
+В случае $S_j \mapsto E$ адрес $j$ обязан совпадать с одним из не более $w$ отрицательных литералов терма $\tau$ в данной строке и восстанавливается по индексу из $[w]$. Фиксация позиции строки в $\tau$ ($\le w$), индекса отрицательного литерала ($\le w$), фактического бита ветви ($2$) и флага конца блока ($2$) требует не более $4w^2$ вариантов на строку.
+
+\emph{Обратимость.} Обе замены $S_j \mapsto U_j$ и $S_j \mapsto E$ являются допустимыми специализациями $S_j$, поэтому все предшествующие тождественно нулевые термы остаются нулевыми, а $\tau$ становится тождественно истинным. Декодер однозначно находит $\tau$ как первый удовлетворённый терм, восстанавливает его свободные строки и фактические значения ветви и переходит к следующему блоку.
+
+\emph{Отношение весов.} На неизменённой $S_j$ отношение равно $1$. На заменённой строке условие $p + 1/L \le 1/2$ даёт $\mathcal{P}(S_j)/\mathcal{Q}(U_j) = \frac{p}{1 - p - 1/L} \le 2p$ и $\mathcal{P}(S_j)/\mathcal{Q}(E) = p \le 2p$. На не более $N$ неизменённых строках $U_j$ условие $(1-p)L \ge N/2 + 1$ даёт $\bigl(\frac{1-p}{1-p-1/L}\bigr)^N \le e^2$. Значит, $\mathcal{P}(\rho) \le e^2 (2p)^t \mathcal{Q}(\eta)$; суммирование по $t \in [s, s+w-1]$ и $(4w^2)^t$ кодам завершает доказательство.
+\end{proof}
+
+Объединённая оценка по $H$ формулам и неравенство Чернова дают одну проекцию с $R \ge \frac{N}{64w^2}$ свободными строками и $\max_{i \le H} \CDT(F_i|_\rho) < s = O(\log H)$.
+
+\section{Постоянная память маркеров и захват трассы}
+
+На верхних $\GI$-слоях $A_{j,x}(y) = K_{j,x}(A_{<j})\mathbf{1}[y = g_{j,x}]$ нельзя фиксировать пустые строки, а положительные литералы могут служить guards для нацеливания отрицательных запросов. Обе проблемы снимаются через постоянную память истинных маркеров и захват трассы.
+
+Зафиксируем слой $h$ с независимыми равномерными маркерами $g_{h,x} \in [L]$ и нормализованную DNF $F$ ширины $\le w$. Храним множество $U$ известных истинных маркеров $(x, g_{h,x})$ с $K_{h,x} = 1$, $U_0 = \varnothing$. В раунде $r$:
+\begin{enumerate}
+  \item Выбираем первый терм $\tau_r$, который положительно активен и не блокируется маркерами из $U_{r-1}$;
+  \item Добавляем в $U$ все положительные маркеры слоя $h$ из $\tau_r$;
+  \item Проходим отрицательные литералы слоя $h$ терма $\tau_r$ по порядку; если фактических блокировщиков ($g_{h,x}=y$ и $K_{h,x}=1$) нет, возвращаем $1$; иначе добавляем первый фактический блокировщик $(x_r^*, y_r^*)$ в $U$, получая $U_r$.
+\end{enumerate}
+Если допустимых термов нет, возвращаем $0$.
+
+\begin{lemma}[Непересечение впервые раскрытых ролей]
+\label{lem:role-disjoint-ru}
+За первые $s$ блокирующих раундов пусть $B$ — множество новых блокировщиков $x_r^*$, а $P$ — множество строк слоя $h$, \emph{впервые} раскрытых положительно (не входивших в $U_{r-1}$). Тогда $|B| = s$ (все блокировщики различны), $|P| \le ws$ и $B \cap P = \varnothing$.
+\end{lemma}
+
+\begin{proof}
+Если бы $x_r^*$ встречалась в более раннем раунде $r' < r$ (как блокировщик или положительно), то $(x_r^*, g_{h,x_r^*}) \in U_{r-1}$, что запрещает выбор $\tau_r$. Внутри самого $\tau_r$ конфликт исключён нормализацией. Положительное использование $x_r^*$ в более позднем раунде $r' > r$ не добавляет её в $P$, поскольку она уже лежит в $U_{r'-1}$.
+\end{proof}
+
+\begin{theorem}[Захват трассы]
+\label{thm:trace-capture-ru}
+Независимо отнесём каждую строку слоя $h$ к скрытой части $R_{\mathrm{hid}}$ с вероятностью $\theta = \frac{1}{w+1}$ и к $R_{\mathrm{ext}}$ иначе. Ограниченный процесс изначально знает только $g_h|_{R_{\mathrm{ext}}}$, допускает положительный поиск лишь по термам с положительными строками слоя $h$ из $R_{\mathrm{ext}} \cup \mathrm{rows}(U)$ и прерывается, если первый истинный блокировщик лежит в $R_{\mathrm{ext}}$. При $B \subseteq R_{\mathrm{hid}}$ и $P \subseteq R_{\mathrm{ext}}$ (вероятность $\ge q^s$, где $q = \theta(1-\theta)^w \ge \frac{1}{e(w+1)}$) ограниченный процесс точно воспроизводит те же $s$ раундов и состояние $U_s$.
+\end{theorem}
+
+\begin{proof}
+Индукция по $r \le s$: при $U_{r-1}^{\mathrm{restr}} = U_{r-1}$ допустимые термы ограниченного процесса образуют подмножество допустимых термов исходного, поэтому ни один терм до $\tau_r$ не выбирается. Сам $\tau_r$ допустим, так как его новые положительные строки лежат в $P \subseteq R_{\mathrm{ext}}$, а старые уже в $U_{r-1}$. Первый истинный блокировщик $x_r^*$ лежит в $B \subseteq R_{\mathrm{hid}}$, поэтому процесс не прерывается и даёт $U_r^{\mathrm{restr}} = U_r$.
+\end{proof}
+
+Предикат ограниченной допустимости не обращается к $g_{h,x}$ на нераскрытых скрытых строках $x \in R_{\mathrm{hid}} \setminus \mathrm{rows}(U)$. Для снятия перебора по $2^R$ базовым мирам добавляем независимую одностороннюю рестрикцию $\sigma$ плотности $p = \frac{1}{4a}$.
+
+\begin{lemma}[Оценка адаптивных достижимых ветвей]
+\label{lem:reachable-branch-ru}
+Пусть каждый раунд ограниченного процесса делает не более $a$ базовых запросов и не более $w$ проверок скрытых адресов. При $p = \frac{1}{4a}$ и $sw \le L/2$:
+\[
+  \Prb_{\sigma,\, g_h|_{R_{\mathrm{hid}}}}\bigl[\exists b \in \mathrm{Cube}(\sigma) : \text{выполнено } s \text{ блокирующих раундов}\bigr]
+  \le \left(\frac{4w}{L}\right)^s.
+\]
+\end{lemma}
+
+\begin{proof}
+При фиксированном $g_{\mathrm{hid}}$ выигрывающая трасса с $d \le sa$ различными базовыми запросами и $u$ единицами достижима после $\sigma$ с вероятностью $p^u$, а во вспомогательном произведении $\tilde{b}$ с $\Prb[\tilde{b}_i = 1] = \frac{p}{1+p}$, $\Prb[\tilde{b}_i = 0] = \frac{1}{1+p}$ имеет вероятность $\frac{p^u}{(1+p)^d} \ge \frac{p^u}{(1+p)^{sa}}$. Суммирование по всем выигрывающим листьям и усреднение по $g_{\mathrm{hid}}$ даёт $\Prb[\exists b : \text{успех}] \le (1+p)^{sa} \Prb_{\tilde{b}, g_{\mathrm{hid}}}[\text{успех}]$. При фиксированном $\tilde{b}$ алгоритм детерминирован по $g_{\mathrm{hid}}$ и в каждом из $s$ раундов находит новый скрытый маркер с вероятностью $\le \frac{w}{L - sw} \le \frac{2w}{L}$, а $(1+p)^a \le e^{1/4} < 2$.
+\end{proof}
+
+\section{Универсальный рекурсивный switching}
+
+Чтобы не раскрывать формулы заново до исходных базовых битов, заменяем раскрытие \emph{рекурсивным префиксным бинарным поиском}. Для упорядоченной DNF $F = \bigvee_{i=1}^M \tau_i$ ширины $\le w$ над слоями $\le h$ определим префиксный предикат
+\[
+  P_{U,j} = \bigl[\,\exists i \le j : \tau_i \text{ положительно активен и не блокируется } U\,\bigr].
+\]
+Подстановка DNF-определений $K_{h,x}$ (ширины $\le T$ над слоями $< h$) вместо положительных литералов слоя $h$ превращает каждый $P_{U,j}$ в знаковую DNF над слоями $< h$ ширины $\le w' = wT$. Поскольку после нормализации над $B$ битами $M \le M_{\max} := (2B+1)^w$, поиск первого допустимого терма занимает не более $v_{\max} := 1 + \lceil \log_2(M_{\max}+1)\rceil$ шагов бинарного поиска (независимо от конкретной формулы $F$).
+
+\begin{theorem}[Универсальный рекурсивный switching]
+\label{thm:recursive-switching-ru}
+Рассмотрим $h$-слойную ациклическую башню над базовой singleton-матрицей $N \times L_0$, с ядрами ширины $\le T$, независимыми равномерными маркерами на $\ge L$ позициях в каждой кодируемой строке и не более $B$ оракульными битами. При выполнении базовых условий switching-леммы $p_0 + 1/L_0 \le 1/2$, $(1-p_0)L_0 \ge N/2 + 1$ ($p_0 = \frac{1}{32 w_0^2}$) и индуктивных условий $s_j w_j \le L/2$, $4w_j/(q_j L) \le 1/2$ на каждом слое $j \ge 1$ существует случайная $0$-only базовая проекция $\rho_{\le h}$, распределение которой зависит \emph{только} от $(N, L_0, L, B, T, h, H, w, \delta)$, такая что для любого семейства $\mathcal{F}$ из $\le H$ знаковых DNF ширины $\le w$:
+\[
+  \Prb_{\rho_{\le h},\, g_{\le h}}\bigl[\exists F \in \mathcal{F} : \DT(F|_{\rho_{\le h}, g_{\le h}}) > d_h\bigr] < \delta.
+\]
+\end{theorem}
+
+\begin{proof}
+Индукция по $h$; база $h = 0$ — Теорема~\ref{thm:singleton-switching-ru}. На шаге $h-1 \to h$ фиксируем универсальные границы $M_{\max} = (2B+1)^w$ и $v_{\max} = 1 + \lceil \log_2(M_{\max}+1)\rceil$, а также $s = \lceil \log_2(4H/\delta)\rceil$, $\theta = \frac{1}{w+1}$, $q = \theta(1-\theta)^w$, $H' = B + H(M_{\max}+1)(B+1)^{(w+1)s}$, $w' = wT$, $\delta' = \frac{\delta q^s}{4}$, $a = (v_{\max}+w)d'$ и $p_h = \frac{1}{4a}$ (параметр $p_h$ зависит строго от общих параметров, а не от конкретных формул семейства $\mathcal{F}$).
+
+\emph{Событие A.} Фиксируя $(R_{\mathrm{hid}}, g_h|_{R_{\mathrm{ext}}})$, получаем семейство размера $\le H'$ и ширины $\le w'$, независимое от $(\rho_{<h}, g_{<h}, \sigma_h, g_h|_{R_{\mathrm{hid}}})$. По индукции, Лемме~\ref{lem:reachable-branch-ru} и Теореме~\ref{thm:trace-capture-ru}: $\Prb[\mathrm{Bad}_A] \le q^{-s}\delta' + H(4w/(qL))^s \le \delta/2$.
+
+\emph{Событие B.} Фиксируя все $g_h$, получаем полное префиксное семейство тех же параметров $(H', w')$, независимое от $(\rho_{<h}, g_{<h})$. По универсальности распределения нижней проекции $\Prb[\mathrm{Bad}_B] \le \delta' \le \delta/4$; рестрикция $\sigma_h$ глубину деревьев не увеличивает. На $\overline{\mathrm{Bad}_A} \cap \overline{\mathrm{Bad}_B}$ (отказ $< \frac{3\delta}{4} < \delta$) полный алгоритм укладывается в $\le s - 1$ блокирующих и $\le 1$ финальный раунд, давая $d_h \le s(v_{\max}+w)d'$.
+\end{proof}
+
+\textbf{Количественное замыкание для $\GI$.} Для полиномиального бюджета $T = \mathrm{poly}(m)$ и свободной нечётной длины $n = 2m+1$ фиксируем все длины $< n$, фиксируем все чётные кодируемые длины $2r \in (n, 2n)$ (их ядра обращаются только к длинам $< r < n$ и не зависят от $A_n$), а также фиксируем все некодируемые нечётные длины в $(n, T]$ и половину $A_n(1\cdots)$ нулями. Разбиваем кодируемые чётные длины в $[2n, T]$ на $h = O(\log m)$ диапазонов $I_j = [2^j n, 2^{j+1} n)$ ($j \ge 1$). Для любого $2r \in I_j$ строгая ацикличность даёт $|q| < r < 2^j n$, что исключает зависимости внутри $I_j$, и $L = 2^r \ge 2^{2m+1} > 2^m$. Обозначим $C_j := 1 + \log_2 H_j + \log_2(1/\delta_j)$ и общую плотность выживания $p_* := \prod_{j=0}^h p_j$. Из индуктивных формул получаем $w_{j-1} = T w_j$ и $C_{j-1} = O\bigl(C_j (w_j + 1)(T + 1)\bigr)$. Прослеживание этих рекуррент через $h = O(\log m)$ диапазонов даёт:
+\[
+  \max_j w_j \le 2^{O(\log^2 m)},\quad
+  C_j, s_j, v_j \le 2^{O(\log^3 m)},\quad
+  d_h \le 2^{O(\log^4 m)},\quad
+  \log_2(1/p_*) = O(\log^5 m).
+\]
+По Чернову с положительной вероятностью все оракульные биты длины $\le T$ имеют точную степень $\le d_h = 2^{O(\log^4 m)}$ на свободном кубе размерности $R \ge 2^{m - O(\log^5 m)}$, причём $\mathcal{L}_{A_b}(1^m) = \OR_R(b)$.
+
+\section{Модульные оракульные разделения и типичность по Бэру}
+
+Определим знакопеременный двойственный функционал над $\Z$:
+\[
+  \Lambda_R(f) = \sum_{b \in \{0,1\}^R} (-1)^{|b|} f(b).
+\]
+
+\begin{lemma}[Универсальная нижняя оценка степени $\mathrm{Mod}_p$]
+\label{lem:modp-lb-ru}
+Для любого целого $p \ge 2$, любого $R \ge 1$ и любого целочисленного полинома $P(b)$ степени $d < R$ невозможно совпадение $P(b) \equiv \OR_R(b) \pmod p$ на всём кубе $\{0,1\}^R$.
+\end{lemma}
+
+\begin{proof}
+Каждый моном степени $< R$ пропускает некоторую координату $i < R$, поэтому его знакопеременная сумма равна $0$ над $\Z$, и $\Lambda_R(P) = 0$. В то же время $\Lambda_1(\OR_1) = -1$, а для $R \ge 1$ имеем $\Lambda_{R+1}(\OR_{R+1}) = \Lambda_R(\OR_R) - \Lambda_R(1) = -1$. Совпадение по модулю $p$ дало бы $0 \equiv -1 \pmod p$, что противоречит $p \ge 2$.
+\end{proof}
+
+\begin{theorem}[Асимметричное модульное разделение иерархии]
+\label{thm:main-sep-ru}
+Существует оракул $A \in X_{\GI}$, для которого $\NP^A = \UP^A$ и
+\[
+  \mathcal{L}_A \in \SigTwo{}^{,A} \setminus \bigcup_{p\text{ прост.}} \Modp^A.
+\]
+Более того, множество $\{A \in X_{\GI} : \mathcal{L}_A \notin \bigcup_{p\text{ прост.}} \Modp^A\}$ образует плотное $G_\delta$ в $X_{\GI}$.
+\end{theorem}
+
+\begin{proof}
+Перечислим все пары $(p, M)$ из простого числа $p$ и полиномиальной $\Modp$-машины $M$ с бюджетом $T(m) \ge 2m + 1$. Начиная с любого допустимого конечного $\GI$-префикса, выбираем $n = 2m+1$ так, чтобы $(p-1)T(m)d_h < R = 2^{m - O(\log^5 m)}$, и строим по Теореме~\ref{thm:recursive-switching-ru} семейство $\{A_b : b \in \{0,1\}^R\}$ с оракульными битами степени $\le d_h$.
+
+Число принимающих ветвей $C_M(A)$ — полином степени $\le T(m)$ от битов оракула. По малой теореме Ферма индикатор $C_M(A)^{p-1} \bmod p$ на $\{A_b\}$ имеет степень $\le (p-1)T(m)d_h < R$. По Лемме~\ref{lem:modp-lb-ru} существует $b^* \in \{0,1\}^R$ с $M^{A_{b^*}}(1^m) \ne \mathcal{L}_{A_{b^*}}(1^m)$. Фиксация $A_{b^*}$ до длины $T(m)$ (что не меньше $2m+1$ и тем самым одновременно замораживает $\mathcal{L}_{A_{b^*}}(1^m)$) сохраняет $\GI$ и закрывает пару $(p, M)$. Открытость и плотность каждого множества ошибок $U_{p,M}$ в компакте $X_{\GI}$ дают плотное $G_\delta$ по теореме Бэра.
+\end{proof}
+
+\section{Следствия для мультилинейного алгебраического доступа}
+
+В модели алгебраизации Ааронсона--Вигдерсона~\cite{AaronsonWigderson2009} (см.\ также недавние барьеры для мультилинейных продолжений в работе Чена, Ху и Жэня~\cite{ChenHuRen2026}) подстановка $1/2 \in \F_p$ в скрытые координаты при $\GI$ и сохраняющем подкубы кодировании восстанавливает $\widetilde{K}_{r,\F_p}(z) = 2^r \widetilde{A}_{2r,\F_p}(z, \tfrac12, \dots, \tfrac12)$, что даёт точные характеристики:
+\[
+  \Pcl^{\widetilde{A}_{\F_3}} = \Modthree^A,
+  \qquad
+  \Pcl^{\widetilde{A}[\mathrm{poly}]} = \Pcl^{\SharpP^A} = \Pcl^{\PP^A} \supseteq \PH^A
+\]
+(последнее — по релятивизированной теореме Тоды~\cite{Toda1991}). Обозначим через $\widetilde{A}^{[p]}$ доступ к мультилинейным продолжениям над произвольными полиномиально представимыми полями $\F_{p^k}$ \emph{фиксированной} простой характеристики $p$.
+
+\begin{corollary}[Разделение характеристики и размера поля при $\NP = \UP$]
+\label{cor:char-sep-ru}
+Для любого оракула $A$ и любого фиксированного простого $p$ верно $\Pcl^{\widetilde{A}^{[p]}} \subseteq \Modp^A$. Следовательно, для каждого оракула $A$ из Теоремы~\ref{thm:main-sep-ru}:
+\[
+  \mathcal{L}_A \in \bigl(\SigTwo{}^{,A} \cap \Pcl^{\widetilde{A}[\mathrm{poly}]}\bigr)
+  \setminus \bigcup_{p\text{ прост.}} \Pcl^{\widetilde{A}^{[p]}}.
+\]
+\end{corollary}
+
+\begin{proof}
+Для запроса к $\widetilde{A}_{m,\F_{p^k}}(z)$ ($k \le \mathrm{poly}(n)$) каждая $\F_p$-координата веса Лагранжа $w_c(x) \in \{0,\dots,p-1\}$ вычислима детерминированно за $\mathrm{poly}(n)$. Восстановление $\sum_x A_m(x) w_c(x) \bmod p$ требует $p-1$ запросов к $\Modp^A$ на координату (всего $k(p-1) = \mathrm{poly}(n)$), а $\Pcl^{\Modp^A} = \Modp^A$ по Бейгелю--Гиллу~\cite{BeigelGill1992}. Соединение с Теоремой~\ref{thm:main-sep-ru} завершает доказательство.
+\end{proof}
+
+\begin{remark}[Контраст детерминированного и вероятностного режимов]
+В вероятностном режиме изоляция Валианта--Вазирани~\cite{ValiantVazirani1986} даёт $\SigTwo{}^{,A} \subseteq \RP^{\widetilde{A}_{\F_3}}$ при $\GI$, а рост размера поля $\F_p \to \F_{p^k}$ даёт экспоненциальное ускорение через лемму Шварца--Зиппеля. Следствие~\ref{cor:char-sep-ru} показывает, что в \emph{детерминированном} режиме рост размера поля при фиксированной характеристике не даёт никакого прироста мощности против $\SigTwo{}^{,A}$: прорыв требует либо случайности, либо смены характеристики поля.
+\end{remark}
+
+\appendix
+\section{Машинно проверенные артефакты Lean 4.36.0 и границы формализации}
+
+Семь автономных 0-import модулей Lean~4.36.0 (\texttt{arm64-apple-darwin24.6.0}) машинно проверяют комбинаторно-алгебраические ядра и конечный сквозной мост разделов~3--6: \textbf{45/45 аудированных теорем}, ноль ошибок, ноль \texttt{sorryAx}, ноль \texttt{ofReduceBool} и ноль \texttt{Classical.choice} (шесть модулей собираются без предупреждений; \texttt{TraceCapture.lean} выдаёт 16 неблокирующих предупреждений об устаревших \texttt{if\_pos}/\texttt{if\_neg}).
+
+\begin{table}[!htbp]
+\centering
+\begin{tabularx}{\linewidth}{lXcc}
+\toprule
+\textbf{Модуль} & \textbf{Проверенное математическое ядро} & \textbf{Теорем} & \textbf{Без аксиом} \\
+\midrule
+\texttt{PersistentMarkerKnowledge.lean} & Лемма~\ref{lem:role-disjoint-ru} ($B \cap P = \varnothing$, $|B|=s$, $|P|\le ws$) & 3/3 & 0 \\
+\texttt{TraceCapture.lean} & Теорема~\ref{thm:trace-capture-ru} и независимость скрытых маркеров & 4/4 & 2 \\
+\texttt{ReachableBranch.lean} & Reachable Leaf и Лемма~\ref{lem:reachable-branch-ru} ($\mathbb{N}$-арифметика) & 4/4 & 0 \\
+\texttt{SingletonSwitching.lean} & Теорема~\ref{thm:singleton-switching-ru}: веса, нормировка, декодирование & 8/8 & 2 \\
+\texttt{RecursiveSwitching.lean} & Бинарный поиск, бюджет A+B, рекурренты & 8/8 & 0 \\
+\texttt{ModularSeparation.lean} & $\Lambda_R(\OR_R)=-1$, Лемма~\ref{lem:modp-lb-ru}, шаг mod~$p$ & 6/6 & 0 \\
+\texttt{UniformRecursiveBridge.lean} & Конечный вероятн.\ метод, \texttt{EvalDTree}$\to$\texttt{Poly}, свидетель $b^*$ & 12/12 & 0 \\
+\bottomrule
+\end{tabularx}
+\caption{Сводка 0-import верификации в Lean~4.36.0 (остальные теоремы используют только базовые \texttt{propext} / \texttt{Quot.sound}).}
+\end{table}
+
+\textbf{Неформализованная аналитическая граница.} Модуль \texttt{UniformRecursiveBridge.lean} формализует \emph{условный} конечный мост (гипотезы \texttt{good\_GI1}, \texttt{good\_depth}, \texttt{hProb} и \texttt{hGap} передаются как параметры, а интерпретация $C_M^{p-1} \bmod p$ как индикатора требует простоты $p$, как в Теореме~\ref{thm:main-sep-ru}). Теория вероятностей на бесконечных произведениях, оценки Чернова, теорема Бэра и переход от абстрактных DNF-запросов к многоленточным машинам Тьюринга доказаны аналитически в разделах~3--7 и в Lean не формализованы.
+
+\begin{thebibliography}{99}
+
+\bibitem{AaronsonWigderson2009}
+S.~Aaronson and A.~Wigderson.
+Algebrization: A new barrier in complexity theory.
+\emph{ACM Transactions on Computation Theory}, 1(1):2:1--2:54, 2009.
+\href{https://www.scottaaronson.com/papers/alg.pdf}{PDF}.
+
+\bibitem{BakerGillSolovay1975}
+T.~Baker, J.~Gill, and R.~Solovay.
+Relativizations of the $\Pcl = ?\NP$ question.
+\emph{SIAM Journal on Computing}, 4(4):431--442, 1975.
+\href{https://epubs.siam.org/doi/10.1137/0204037}{DOI}.
+
+\bibitem{BeigelGill1992}
+R.~Beigel and J.~Gill.
+Counting classes: thresholds, parity, mods, and fewness.
+\emph{Theoretical Computer Science}, 103(1):3--23, 1992.
+
+\bibitem{ChenHuRen2026}
+L.~Chen, Y.~Hu, and H.~Ren.
+New algebrization barriers to circuit lower bounds via communication complexity of Missing-String.
+In \emph{ITCS 2026}, 2026.
+\href{https://arxiv.org/abs/2511.14038}{arXiv:2511.14038}.
+
+\bibitem{Cook2000}
+S.~Cook.
+The $\Pcl$ versus $\NP$ problem.
+Clay Mathematics Institute Millennium Prize Problem description, 2000.
+\href{https://www.claymath.org/wp-content/uploads/2022/06/pvsnp.pdf}{PDF}.
+
+\bibitem{GlasserWechsung2003}
+C.~Gla\ss er and G.~Wechsung.
+Relativizing function classes.
+\emph{Journal of Universal Computer Science}, 9(1):34--50, 2003.
+\href{https://lib.jucs.org/issue/4069/}{JUCS 9(1)}.
+
+\bibitem{Grochow2023}
+J.~A.~Grochow.
+Polynomial-time axioms of choice and polynomial-time cardinality.
+\emph{Theory of Computing Systems}, 67, 2023.
+\href{https://arxiv.org/abs/2301.07123}{arXiv:2301.07123}.
+
+\bibitem{Hastad1986}
+J.~H\aa stad.
+Almost optimal lower bounds for small depth circuits.
+In \emph{Proceedings of the 18th Annual ACM Symposium on Theory of Computing (STOC 1986)}, pp.~6--20, 1986.
+
+\bibitem{HiraharaNanashima2021}
+S.~Hirahara and M.~Nanashima.
+On worst-case learning in relativized Heuristica.
+In \emph{FOCS 2021}, pp.~751--758, 2021.
+\href{https://eccc.weizmann.ac.il/report/2021/161/download}{ECCC TR21-161}.
+
+\bibitem{RazborovRudich1997}
+A.~A.~Razborov and S.~Rudich.
+Natural proofs.
+\emph{Journal of Computer and System Sciences}, 55(1):24--35, 1997.
+\href{https://mit6875.github.io/PAPERS/natural_proofs.pdf}{PDF}.
+
+\bibitem{Toda1991}
+S.~Toda.
+$\PP$ is as hard as the polynomial-time hierarchy.
+\emph{SIAM Journal on Computing}, 20(5):865--877, 1991.
+
+\bibitem{ValiantVazirani1986}
+L.~G.~Valiant and V.~V.~Vazirani.
+$\NP$ is as easy as detecting unique solutions.
+\emph{Theoretical Computer Science}, 47(1):85--93, 1986.
+
+\end{thebibliography}
+
+\end{document}
