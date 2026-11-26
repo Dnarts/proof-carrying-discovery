@@ -8,7 +8,13 @@ Evidence-scoped program discovery, finite model-class refutation, controlled rep
 
 [**All preprints: English · Русский · 简体中文 · עברית**](papers/hebrew/README.md)
 
-## Latest preprint: Certified Structural Discovery v4.0 (25 November 2026)
+## Information-Theoretic Blind Spots of Finite Black-Box Auditing v2.0 (25 November 2026)
+
+Information-theoretic bounds on what a finite audit profile can certify, with a separate, partially Lean-formalized oracle result.
+
+[English PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_en.pdf) · [Русский PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_ru.pdf) · [Sources and evidence ZIP](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_sources_and_evidence.zip) · [Overview and checksums](papers/blackbox-auditing/v2.0/)
+
+## Certified Structural Discovery v4.0 (25 November 2026)
 
 An executable search for cross-domain state correspondences and safe bypasses, with independently checked certificates and method transfer on finite benchmarks. The stochastic LLM evaluation layer is outside this release’s deterministic core.
 
@@ -109,7 +115,13 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 
 Основная линия: **найти программу → проверить идентифицируемость → опровергнуть недостаточный класс → сменить представление → синтезировать решение → формально проверить его поведение.**
 
-## Новый препринт: Certified Structural Discovery v4.0
+## «Информационно-теоретические слепые зоны конечного black-box аудита» v2.0
+
+Что конечный набор тестов может и не может удостоверить по своему профилю ответов.
+
+[English PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_en.pdf) · [Русский PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_ru.pdf) · [Sources and evidence ZIP](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_sources_and_evidence.zip)
+
+## Certified Structural Discovery v4.0
 
 Поиск соответствий между моделями, проверка сертификатов и перенос методов на конечных тестах. [**English PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_en.pdf) · [**Русский PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_ru.pdf) · [**简体中文 PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_zh.pdf) · [**עברית PDF**](papers/certified-structural-discovery/v4.0/preprint/certified_structural_discovery_v4_0_preprint_he.pdf) · [Release ZIP](papers/certified-structural-discovery/v4.0/certified_structural_discovery_v4_0_MULTILINGUAL_FINAL.zip) · [Source and verification records](papers/certified-structural-discovery/v4.0/)
 
@@ -166,6 +178,8 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 ---
 
 # 中文简介
+
+**有限黑箱审计的信息论盲区 v2.0** · [English PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_en.pdf) · [Русский PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_ru.pdf) · [Sources and evidence ZIP](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_sources_and_evidence.zip)
 
 **本项目的核心问题：何时有证据支持改变假设语言，如何独立核验这种改变？**
 
