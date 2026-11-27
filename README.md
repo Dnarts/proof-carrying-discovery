@@ -16,7 +16,7 @@ In an oracle model, unique witnesses do not remove the gap between access in one
 
 **Научпоп / Plain-language companion:** [Русский PDF](papers/recursive-switching-np-up/interface_barrier_popular_ru.pdf) · [English PDF](papers/recursive-switching-np-up/interface_barrier_popular_en.pdf) · [简体中文 PDF](papers/recursive-switching-np-up/interface_barrier_popular_zh.pdf) · [עברית PDF](papers/recursive-switching-np-up/interface_barrier_popular_he.pdf)
 
-[Full bundle (ZIP)](papers/recursive-switching-np-up/rs_bundle.zip) · [Lean 4 verification artifact (ZIP)](papers/recursive-switching-np-up/recursive-switching-lean4-artifact-v1.0.zip) · [Translation sources (ZIP)](papers/recursive-switching-np-up/recursive_switching_np_up_translation_sources.zip) · [Sources and checksums](papers/recursive-switching-np-up/)
+[Full bundle (ZIP)](papers/recursive-switching-np-up/rs_bundle.zip) · [Zenodo](https://zenodo.org/records/24585707?preview=1&preview_file=recursive_switching_np_up_en.pdf) · [Lean 4 verification artifact (ZIP)](papers/recursive-switching-np-up/recursive-switching-lean4-artifact-v1.0.zip) · [Translation sources (ZIP)](papers/recursive-switching-np-up/recursive_switching_np_up_translation_sources.zip) · [Sources and checksums](papers/recursive-switching-np-up/)
 
 **Lean 4 verification artifact**
 
@@ -139,7 +139,7 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 
 **Научпоп / Plain-language companion:** [Русский PDF](papers/recursive-switching-np-up/interface_barrier_popular_ru.pdf) · [English PDF](papers/recursive-switching-np-up/interface_barrier_popular_en.pdf) · [简体中文 PDF](papers/recursive-switching-np-up/interface_barrier_popular_zh.pdf) · [עברית PDF](papers/recursive-switching-np-up/interface_barrier_popular_he.pdf)
 
-[Full bundle (ZIP)](papers/recursive-switching-np-up/rs_bundle.zip) · [Lean 4 verification artifact (ZIP)](papers/recursive-switching-np-up/recursive-switching-lean4-artifact-v1.0.zip) · [Translation sources (ZIP)](papers/recursive-switching-np-up/recursive_switching_np_up_translation_sources.zip) · [Sources and checksums](papers/recursive-switching-np-up/)
+[Full bundle (ZIP)](papers/recursive-switching-np-up/rs_bundle.zip) · [Zenodo](https://zenodo.org/records/24585707?preview=1&preview_file=recursive_switching_np_up_en.pdf) · [Lean 4 verification artifact (ZIP)](papers/recursive-switching-np-up/recursive-switching-lean4-artifact-v1.0.zip) · [Translation sources (ZIP)](papers/recursive-switching-np-up/recursive_switching_np_up_translation_sources.zip) · [Sources and checksums](papers/recursive-switching-np-up/)
 
 ## «Информационно-теоретические слепые зоны конечного black-box аудита» v2.0
 
@@ -209,7 +209,7 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 
 **Научпоп / Plain-language companion:** [Русский PDF](papers/recursive-switching-np-up/interface_barrier_popular_ru.pdf) · [English PDF](papers/recursive-switching-np-up/interface_barrier_popular_en.pdf) · [简体中文 PDF](papers/recursive-switching-np-up/interface_barrier_popular_zh.pdf) · [עברית PDF](papers/recursive-switching-np-up/interface_barrier_popular_he.pdf)
 
-[Full bundle (ZIP)](papers/recursive-switching-np-up/rs_bundle.zip) · [Lean 4 verification artifact (ZIP)](papers/recursive-switching-np-up/recursive-switching-lean4-artifact-v1.0.zip) · [Translation sources (ZIP)](papers/recursive-switching-np-up/recursive_switching_np_up_translation_sources.zip) · [Sources and checksums](papers/recursive-switching-np-up/)
+[Full bundle (ZIP)](papers/recursive-switching-np-up/rs_bundle.zip) · [Zenodo](https://zenodo.org/records/24585707?preview=1&preview_file=recursive_switching_np_up_en.pdf) · [Lean 4 verification artifact (ZIP)](papers/recursive-switching-np-up/recursive-switching-lean4-artifact-v1.0.zip) · [Translation sources (ZIP)](papers/recursive-switching-np-up/recursive_switching_np_up_translation_sources.zip) · [Sources and checksums](papers/recursive-switching-np-up/)
 
 **有限黑箱审计的信息论盲区 v2.0** · [English PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_en.pdf) · [Русский PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_ru.pdf) · [简体中文 PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_zh.pdf) · [עברית PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_he.pdf) · [Sources and evidence ZIP](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_sources_and_evidence.zip)
 
