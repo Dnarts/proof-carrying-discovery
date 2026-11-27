@@ -16,7 +16,13 @@ In an oracle model, unique witnesses do not remove the gap between access in one
 
 **Научпоп / Plain-language companion:** [Русский PDF](papers/recursive-switching-np-up/interface_barrier_popular_ru.pdf) · [English PDF](papers/recursive-switching-np-up/interface_barrier_popular_en.pdf) · [简体中文 PDF](papers/recursive-switching-np-up/interface_barrier_popular_zh.pdf) · [עברית PDF](papers/recursive-switching-np-up/interface_barrier_popular_he.pdf)
 
-[Full bundle (ZIP)](papers/recursive-switching-np-up/rs_bundle.zip) · [Translation sources (ZIP)](papers/recursive-switching-np-up/recursive_switching_np_up_translation_sources.zip) · [Sources and checksums](papers/recursive-switching-np-up/)
+[Full bundle (ZIP)](papers/recursive-switching-np-up/rs_bundle.zip) · [Lean 4 verification artifact (ZIP)](papers/recursive-switching-np-up/recursive-switching-lean4-artifact-v1.0.zip) · [Translation sources (ZIP)](papers/recursive-switching-np-up/recursive_switching_np_up_translation_sources.zip) · [Sources and checksums](papers/recursive-switching-np-up/)
+
+**Lean 4 verification artifact**
+
+Can eliminating ambiguity make a hard problem easy? This work shows that, in a constructed oracle model, the answer is no. The oracle is built so that every problem in NP has an unambiguous verifier, yet a single second-level problem, deciding whether a table has an empty row, remains beyond polynomial-time counting modulo any fixed prime. Even extending the field without changing its characteristic does not make the problem decidable in deterministic polynomial time. Allowing access across different prime characteristics does.
+
+The proof develops a recursive switching method that simplifies what a machine can observe across layers of the oracle while preserving the distinction between a table with an empty row and one without. This companion artifact contains seven Lean 4.36.0 modules that formalize selected combinatorial and algebraic steps and a conditional bridge for the finite-stage argument. The construction of the infinite oracle and the full separation are proved analytically in the preprint. The result is about oracle models, not the unrelativized relationship between P and NP.
 
 ## Information-Theoretic Blind Spots of Finite Black-Box Auditing v2.0 (25 November 2026)
 
@@ -133,7 +139,7 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 
 **Научпоп / Plain-language companion:** [Русский PDF](papers/recursive-switching-np-up/interface_barrier_popular_ru.pdf) · [English PDF](papers/recursive-switching-np-up/interface_barrier_popular_en.pdf) · [简体中文 PDF](papers/recursive-switching-np-up/interface_barrier_popular_zh.pdf) · [עברית PDF](papers/recursive-switching-np-up/interface_barrier_popular_he.pdf)
 
-[Full bundle (ZIP)](papers/recursive-switching-np-up/rs_bundle.zip) · [Translation sources (ZIP)](papers/recursive-switching-np-up/recursive_switching_np_up_translation_sources.zip) · [Sources and checksums](papers/recursive-switching-np-up/)
+[Full bundle (ZIP)](papers/recursive-switching-np-up/rs_bundle.zip) · [Lean 4 verification artifact (ZIP)](papers/recursive-switching-np-up/recursive-switching-lean4-artifact-v1.0.zip) · [Translation sources (ZIP)](papers/recursive-switching-np-up/recursive_switching_np_up_translation_sources.zip) · [Sources and checksums](papers/recursive-switching-np-up/)
 
 ## «Информационно-теоретические слепые зоны конечного black-box аудита» v2.0
 
@@ -203,7 +209,7 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 
 **Научпоп / Plain-language companion:** [Русский PDF](papers/recursive-switching-np-up/interface_barrier_popular_ru.pdf) · [English PDF](papers/recursive-switching-np-up/interface_barrier_popular_en.pdf) · [简体中文 PDF](papers/recursive-switching-np-up/interface_barrier_popular_zh.pdf) · [עברית PDF](papers/recursive-switching-np-up/interface_barrier_popular_he.pdf)
 
-[Full bundle (ZIP)](papers/recursive-switching-np-up/rs_bundle.zip) · [Translation sources (ZIP)](papers/recursive-switching-np-up/recursive_switching_np_up_translation_sources.zip) · [Sources and checksums](papers/recursive-switching-np-up/)
+[Full bundle (ZIP)](papers/recursive-switching-np-up/rs_bundle.zip) · [Lean 4 verification artifact (ZIP)](papers/recursive-switching-np-up/recursive-switching-lean4-artifact-v1.0.zip) · [Translation sources (ZIP)](papers/recursive-switching-np-up/recursive_switching_np_up_translation_sources.zip) · [Sources and checksums](papers/recursive-switching-np-up/)
 
 **有限黑箱审计的信息论盲区 v2.0** · [English PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_en.pdf) · [Русский PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_ru.pdf) · [简体中文 PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_zh.pdf) · [עברית PDF](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_he.pdf) · [Sources and evidence ZIP](papers/blackbox-auditing/v2.0/blackbox_auditing_v2_sources_and_evidence.zip)
 
