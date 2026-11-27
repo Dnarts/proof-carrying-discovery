@@ -59,7 +59,7 @@
 }
 
 \title{\textbf{Recursive Switching and Modular Oracle Separations under $\NP = \UP$}}
-\author{Preprint (arXiv: cs.CC candidate)}
+\author{Aleksandr Strand\\ \small Independent Researcher}
 \date{November 26, 2026}
 
 \begin{document}
@@ -275,6 +275,8 @@ For every oracle $A$ and every fixed prime $p$, $\Pcl^{\widetilde{A}^{[p]}} \sub
 \begin{proof}
 For any query to $\widetilde{A}_{m,\F_{p^k}}(z)$ ($k \le \mathrm{poly}(n)$), each $\F_p$-coordinate $w_c(x) \in \{0,\dots,p-1\}$ of the Lagrange weight $\prod_j \ell_{x_j}(z_j) \in \F_{p^k}$ is deterministically computable in $\mathrm{poly}(n)$ time. Recovering $\sum_x A_m(x) w_c(x) \bmod p$ takes $p - 1$ queries to $\Modp^A$ per coordinate ($k(p-1) = \mathrm{poly}(n)$ queries total), and $\Pcl^{\Modp^A} = \Modp^A$ by Beigel--Gill closure~\cite{BeigelGill1992}. Combining with Theorem~\ref{thm:main-sep} and $\PH^A \subseteq \Pcl^{\widetilde{A}[\mathrm{poly}]}$ completes the proof.
 \end{proof}
+\textbf{Scope with respect to algebrization.} Corollary~\ref{cor:char-sep} separates fixed-characteristic deterministic algebraic access ($\widetilde{A}^{[p]}$) from multi-characteristic access ($\widetilde{A}[\mathrm{poly}]$); it does not claim a general bypass of the Aaronson--Wigderson algebrization barrier, since $\mathcal{L}_A \in \Pcl^{\widetilde{A}[\mathrm{poly}]}$ (and $\mathcal{L}_A \in \mathsf{RP}^{\widetilde{A}_{\F_3}}$ via Valiant--Vazirani isolation).
+
 
 \begin{remark}[Deterministic vs.\ Randomized Contrast]
 In the randomized setting, Valiant--Vazirani isolation~\cite{ValiantVazirani1986} over $\Modthree^A$ gives $\SigTwo{}^{,A} \subseteq \RP^{\widetilde{A}_{\F_3}}$ under $\GI$, and growing the field size $\F_p \to \F_{p^k}$ yields an exponential speedup via Schwartz--Zippel. Corollary~\ref{cor:char-sep} shows that in the \emph{deterministic} setting, growing the field size at fixed characteristic $p$ gives zero gain against $\SigTwo{}^{,A}$: breaking the barrier requires either randomness or switching prime characteristics.

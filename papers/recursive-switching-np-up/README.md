@@ -2,10 +2,10 @@
 
 Canonical English and Russian editions, 26 November 2026 (Cycle XXI).
 
-- Technical preprint: [English PDF](recursive_switching_np_up_en.pdf) · [TeX](recursive_switching_np_up_en.tex) · [Русский PDF](recursive_switching_np_up_ru.pdf) · [TeX](recursive_switching_np_up_ru.tex) · [עברית PDF](recursive_switching_np_up_he.pdf) · [简体中文 PDF](recursive_switching_np_up_zh.pdf).
-- Plain-language companion / Научпоп: [Интерфейс как ресурс познания (PDF, RU)](interface_barrier_popular_ru.pdf) · [English PDF](interface_barrier_popular_en.pdf) · [עברית PDF](interface_barrier_popular_he.pdf).
-- [Translation sources (ZIP)](recursive_switching_np_up_translation_sources.zip): all four translated TeX files, build notes, font assets and checksums.
-- [Full canonical bundle](rs_bundle.zip): two preprints, seven Lean 4.36.0 modules, source drafts, verification scripts and logs, and the original manifest.
+- Technical preprint: [English PDF](recursive_switching_np_up_en.pdf) · [TeX](recursive_switching_np_up_en.tex) · [Русский PDF](recursive_switching_np_up_ru.pdf) · [TeX](recursive_switching_np_up_ru.tex).
+- Plain-language companion / Научпоп: [Интерфейс как ресурс познания (PDF, RU)](interface_barrier_popular_ru.pdf) · [TeX, RU](interface_barrier_popular_ru.tex) · [Earlier English translation (PDF)](interface_barrier_popular_en.pdf).
+- [English companion source (ZIP)](recursive_switching_np_up_translation_sources.zip): TeX for the earlier English translation. The Hebrew and Simplified Chinese translations have been withdrawn.
+- [Full canonical bundle](rs_bundle.zip): two preprints, seven Lean 4.36.0 modules, source drafts, verification scripts and logs, and a matching checksum manifest.
 - [Checksums for this directory](SHA256SUMS.txt) · [Canonical manifest for the extracted bundle](BUNDLE_SHA256SUMS.txt). The explainer and translations are separate from the canonical bundle.
 
 ## Scope
