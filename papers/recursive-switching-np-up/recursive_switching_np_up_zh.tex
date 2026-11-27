@@ -1,0 +1,397 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[a4paper,margin=22mm]{geometry}
+\usepackage{fontspec}
+\setmainfont[FontIndex=2,BoldFont=NotoSerifCJK-Bold.ttc,BoldFeatures={FontIndex=2},AutoFakeSlant=.14]{NotoSerifCJK-Regular.ttc}
+\setsansfont[FontIndex=2,BoldFont=NotoSansCJK-Bold.ttc,BoldFeatures={FontIndex=2}]{NotoSansCJK-Regular.ttc}
+\setmonofont{DejaVu Sans Mono}
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip=0pt plus 1pt
+\renewcommand{\abstractname}{摘要}
+\renewcommand{\refname}{参考文献}
+\renewcommand{\tablename}{表}
+\usepackage{amsmath,amsthm,unicode-math}
+\setmathfont{Latin Modern Math}
+\renewcommand{\proofname}{证明}
+\usepackage{booktabs,tabularx}
+\usepackage{xcolor}
+
+\setlength{\emergencystretch}{3em}
+\usepackage{hyperref}
+
+\definecolor{primary}{RGB}{24,64,122}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  citecolor=primary,
+  urlcolor=primary,
+  pdflang={zh-CN},
+  pdfauthor={Aleksandr Strand},
+  pdftitle={NP = UP 条件下的递归切换与模预言机分离},
+  pdfkeywords={递归切换；模计数；预言机复杂性；多项式层级；代数化；Lean 4}
+}
+
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\parindent}{0pt}
+
+\newtheorem{theorem}{定理}[section]
+\newtheorem{lemma}[theorem]{引理}
+\newtheorem{corollary}[theorem]{推论}
+\newtheorem{proposition}[theorem]{命题}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{定义}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{说明}
+
+\newcommand{\Pcl}{\mathsf{P}}
+\newcommand{\NP}{\mathsf{NP}}
+\newcommand{\coNP}{\mathsf{coNP}}
+\newcommand{\UP}{\mathsf{UP}}
+\newcommand{\PP}{\mathsf{PP}}
+\newcommand{\PH}{\mathsf{PH}}
+\newcommand{\RP}{\mathsf{RP}}
+\newcommand{\BPP}{\mathsf{BPP}}
+\newcommand{\Modp}{\mathrm{Mod}_p\mathsf{P}}
+\newcommand{\Modthree}{\mathrm{Mod}_3\mathsf{P}}
+\newcommand{\SharpP}{\#\mathsf{P}}
+\newcommand{\SigTwo}{\Sigma_2^{\mathsf{P}}}
+\newcommand{\DT}{\mathrm{DT}}
+\newcommand{\CDT}{\mathrm{CDT}}
+\newcommand{\OR}{\mathrm{OR}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prb}{\Pr}
+\newcommand{\GI}{GI_1}
+
+\newcommand{\takeaway}[2]{%
+  \vspace{4pt}\noindent\colorbox{primary!7}{%
+    \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
+      \vspace{3pt}\textbf{\color{primary}#1:}\hspace{0.4em}#2\vspace{3pt}%
+    }%
+  }\vspace{4pt}%
+}
+
+\title{\textbf{$\NP = \UP$ 条件下的递归切换与模预言机分离}}
+\author{Aleksandr Strand\\ \small 独立研究者}
+\date{2026 年 11 月 26 日}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+我们考察消除非确定性歧义（$\NP^A = \UP^A$）与保持多项式层级较高层相对于模计数类的困难性之间的张力。在 Gla\ss er 与 Wechsung（2003）的无环唯一见证预言机编码 $\GI$ 基础上，我们建立了\emph{一致递归切换定理}：将 $O(\log m)$ 个嵌套 $\GI$ 层中所有多项式时间可访问的预言机位，同时化为剩余自由基立方体上的、深度为准多项式 $2^{O(\log^4 m)}$ 的决策树；该立方体的维数为 $R \ge 2^{m - O(\log^5 m)}$，且全行非空的基准世界仍被保留。
+
+结合这一递归投影与定义于 $\Z$ 上的精确交错对偶泛函，我们通过解析证明得到：存在满足 $\GI(A)$ 的预言机 $A$ 使 $\NP^A = \UP^A$，但同一个一元语言 $\mathcal{L}_A \in \SigTwo{}^{,A}$ 不属于 $\bigcup_{p\text{ 为素数}} \Modp^A$。此外，在所有与 $\GI$ 相容的预言机所构成的紧空间 $X_{\GI}$ 中，实现这种分离的预言机构成稠密 $G_\delta$ 集。对于 Aaronson 与 Wigderson（2009）框架中的多重线性代数预言机访问，这给出固定特征访问（即使允许指数增长的扩域 $\F_{p^k}$）与多特征访问之间的无条件分离：$\mathcal{L}_A \in (\SigTwo{}^{,A} \cap \Pcl^{\widetilde{A}[\mathrm{poly}]}) \setminus \bigcup_{p\text{ 为素数}} \Pcl^{\widetilde{A}^{[p]}}$。证明中选定的组合、代数与有限桥接组件由七个无导入的 Lean~4.36.0 模块进行机器验证（45 条经审计的定理，零禁用公理）；测度论归纳与无限预言机对角化仍为解析证明。
+\end{abstract}
+
+\section{引言}
+
+无歧义非确定性（$\NP = \UP$）是否迫使多项式层级坍缩，是复杂性理论中长期存在的结构性问题。在相对化情形中，Grochow~\cite{Grochow2023} 在开放问题~1.2 中提出：能否构造一个预言机 $A$，相对于它有 $\NP^A = \UP^A$ 而 $\PH^A$ 仍为无限层级？他指出，强制唯一见证的构造往往会导致较高量词层级意外坍缩。
+
+若 $\NP^A = \UP^A$，则 $\NP^A$ 中的每个语言都可由一台在每个输入上至多有一条接受路径的多项式时间非确定性机器判定，因而对每个素数 $p$ 立即有 $\NP^A \subseteq \Modp^A$。因此，经典的 $\NP$ 与模计数类之间的预言机分离，在任何满足 $\NP^A = \UP^A$ 的世界中都不可能出现。进一步，对每个素数 $p$，由于 $\Pcl^{\Modp^A} = \Modp^A$，整个 $\Delta_2^{\Pcl,A} = \Pcl^{\NP^A}$ 类也坍缩到 $\Modp^A$ 中。因此，在 $\NP^A = \UP^A$ 下，$\SigTwo{}^{,A}$ 是多项式层级中能够与固定素数模计数分离的\emph{确切最低层}。
+
+\takeaway{主要结果}{我们解析地证明：存在满足无环唯一见证不变量 $\GI$ 的预言机 $A$，使 $\NP^A = \UP^A$，且通过同一个一元语言 $\mathcal{L}_A$ 实现 $\SigTwo{}^{,A} \not\subseteq \bigcup_{p\text{ 为素数}} \Modp^A$；此类预言机在 $X_{\GI}$ 中构成稠密 $G_\delta$ 集。}
+
+\textbf{与已有工作的关系。} 在偶数长度上使用唯一见证编码 $\GI$、同时保留自由奇数长度，并非新方法。Gla\ss er 与 Wechsung~\cite{GlasserWechsung2003} 直接使用了这一构造，通过无环见证保持，在 $\NP^A = \UP^A$ 下将 $\mathrm{min\text{-}P}^A$ 与 $\SharpP^A$ 分离。在切换方法方面，Hirahara 与 Nanashima~\cite{HiraharaNanashima2021} 发展了带分阶段披露的大字母表随机限制。本文的技术贡献在于一种递归切换架构：它同时保留 $\GI$ 和全行非空的基准世界，并控制 $O(\log m)$ 个递归层中所有可访问预言机位的\emph{精确}代数次数，无须对正文字守卫的取值模式进行全局压缩。
+
+\textbf{结论范围。} 本文既未解决 Grochow 关于 $\NP^A = \UP^A$ 时 $\PH^A$ 能否保持无限层级的开放问题，也未解决非相对化的 $\Pcl$ 对 $\NP$ 问题~\cite{Cook2000,RazborovRudich1997}。七个无导入的 Lean~4.36.0 模块（见附录）对选定的组合、代数与有限桥接组件进行机器验证（45 条定理，零 \texttt{sorryAx}，零 \texttt{Classical.choice}）；有限限制上的概率归纳和基于贝尔纲的预言机构造均为解析证明。
+
+\section{预备知识与无环 \texorpdfstring{$\GI$}{GI1} 预言机模型}
+
+对预言机 $A \subseteq \{0,1\}^*$，用 $A_m : \{0,1\}^m \to \{0,1\}$ 表示其在长度为 $m$ 的字符串上的限制。令 $K^A$ 为标准的 $\NP^A$ 完全语言，其元素是编码为 $\mathrm{encode}(i,u,t)=0^i1\,0^{|u|}1\,u\,1^t$ 的三元组，且第 $i$ 台非确定性预言机图灵机 $N_i^A$ 在 $t$ 步内接受 $u$。由于 $|\mathrm{encode}(i,u,t)| = i+2|u|+t+2>t$，模拟期间的每一条预言机查询 $q$ 都满足\emph{严格无环条件} $|q|<r$，其中 $r=|\mathrm{encode}(i,u,t)|$。
+
+\begin{definition}[唯一见证不变量 $\GI$~\cite{GlasserWechsung2003}]
+若对所有 $r \ge 1$ 和 $x \in \{0,1\}^r$ 均有
+\[
+  \sum_{y \in \{0,1\}^r} A_{2r}(x, y) = K^A(x) \in \{0,1\},
+\]
+则称预言机 $A$ 满足 $\GI$（记作 $A\in X_{\GI}$）。
+\end{definition}
+
+当 $A\in X_{\GI}$ 时，判定 $x\in K^A$ 可化为猜测满足 $A_{2r}(x,y)=1$ 的唯一见证 $y\in\{0,1\}^r$，因此 $\NP^A=\UP^A$。此外，$X_{\GI}$ 是 Cantor 空间 $\{0,1\}^{\mathbb N}$ 的闭子空间，因而紧且可完全度量化：在长度 $2r$ 处的每项 $\GI$ 约束仅依赖长度 $\le 2r$ 的有限多个位。
+
+为在自由奇数长度 $n=2m+1$ 进行对角化，将半切片 $A_n(0uv)$（$u,v\in\{0,1\}^m$）视为 $N\times L$ 布尔矩阵，其中 $N=L=2^m$，每行至多有一个~$1$。定义一元目标语言：
+\[
+  \mathcal{L}_A = \bigl\{\, 1^m : \exists u \in \{0,1\}^m\; \forall v \in \{0,1\}^m,\; A_{2m+1}(0uv) = 0 \,\bigr\} \in \SigTwo{}^{,A}.
+\]
+令 $b_u=\mathbf1[\forall v,\,A_{2m+1}(0uv)=0]$，则 $\mathcal L_A(1^m)$ 化为 $\OR_N(b)=\bigvee_u b_u$，其中 $b=0^N$ 是全行非空的基准世界。
+
+\section{保持单标记行的切换引理}
+
+普通的 H\aa stad 切换限制~\cite{Hastad1986} 可把变量固定为 $0$ 或 $1$，这会破坏全行非空的世界 $b=0^N$。为了同时保持该世界与每行的唯一性，引入一种关于行状态 $\{E,U_j,S_j\}$（$j\in[L]$）的单侧投影：$U_j$ 把唯一标记固定在位置 $j$（$b_u=0$）；$S_j$ 保留第 $u$ 行的自由度，使它可为空（$b_u=1$）或在 $j$ 处有标记（$b_u=0$）；$E$ 表示空行。关键在于，投影 $\rho$ \emph{从不}抽取 $E$；它仅出现于辅助编码测度 $\mathcal{Q}$ 中。
+
+令 $\mathcal P$ 独立抽取每一行，抽到 $S_j$ 的概率为 $p/L$，抽到 $U_j$ 的概率为 $(1-p)/L$。定义辅助测度 $\mathcal Q$ 为 $\mathcal Q(E)=1/L$、$\mathcal Q(U_j)=(1-p-1/L)/L$ 与 $\mathcal Q(S_j)=p/L$。
+
+\begin{theorem}[保持单标记行的切换引理]
+\label{thm:singleton-switching}
+令 $F$ 为定义在 $N\times L$ 单标记约束矩阵上的标准化析取范式（DNF），宽度至多为 $w$。若 $p+1/L\le1/2$、$(1-p)L\ge N/2+1$ 且 $8pw^2<1$，则规范决策树深度 $\CDT(F|_\rho)$ 满足
+\[
+  \Prb_{\rho \sim \mathcal{P}}\bigl[\CDT(F|_\rho) \ge s\bigr]
+  \le e^2 \frac{(8pw^2)^s}{1 - 8pw^2}.
+\]
+特别地，取 $p=\frac1{32w^2}$，有 $\Prb_\rho[\CDT(F|_\rho)\ge s]\le\frac{4e^2}{3}\,4^{-s}$。
+\end{theorem}
+
+\begin{proof}
+将 $F$ 的各项排序。对满足 $\CDT(F|_\rho)\ge s$ 的 $\rho$，沿规范分支前进，直到首个使深度达到至少 $s$ 的块之后停止。分支长度为 $t\in[s,s+w-1]$。在每个块，令 $\tau$ 为当前部分限制下首个非零项。仅对 $\tau$ 在当前部分限制下实际依赖的自由行 $S_j$ 进行使其满足的特化：若 $u$ 在 $\tau$ 中以正文字出现，则 $S_j\mapsto U_j$；若只以负文字出现，则 $S_j\mapsto E$。（归一化及单标记唯一性保证 $\tau$ 中没有含冲突文字的行。）
+
+在负向情形 $S_j\mapsto E$ 中，地址 $j$ 必须与 $\tau$ 在第 $u$ 行上至多 $w$ 个负文字之一匹配，故可用 $[w]$ 中的一个索引编码 $j$。记录该行在 $\tau$ 中的位置（$\le w$）、负文字索引（$\le w$）、实际 CDT 分支位（$2$ 种）和块终止位（$2$ 种），每个被替换的行至多需要 $4w^2$ 种辅助符号。
+
+\emph{可逆性。} 每次替换 $S_j\mapsto U_j$ 或 $S_j\mapsto E$ 都是 $S_j$ 的有效特化。因此 $\tau$ 之前的所有项（在当前限制下恒为 $0$）仍恒为 $0$，而 $\tau$ 变为恒为 $1$。解码时，$\tau$ 可被唯一地恢复为首个满足项，然后从辅助编码恢复其自由行及实际分支位，再以归纳方式处理下一块。
+
+\emph{权重比。} 对任何不变的 $S_j$，有 $\mathcal P(S_j)/\mathcal Q(S_j)=1$。对任一被替换的行，$p+1/L\le1/2$ 蕴涵 $\mathcal P(S_j)/\mathcal Q(U_j)=\frac{p}{1-p-1/L}\le2p$ 及 $\mathcal P(S_j)/\mathcal Q(E)=p\le2p$。对至多 $N$ 个不变的 $U_j$ 行，$(1-p)L\ge N/2+1$ 给出 $\bigl(\frac{1-p}{1-p-1/L}\bigr)^N\le e^2$。故 $\mathcal P(\rho)\le e^2(2p)^t\mathcal Q(\eta)$。对所有 $t\in[s,s+w-1]$ 及 $(4w^2)^t$ 种辅助编码求和即得所述界。
+\end{proof}
+对 $H$ 个宽度 $\le w$ 的 DNF 使用并集界，并对自由行数 $R$ 使用 Chernoff 界，得到同一个投影满足 $R\ge\frac{N}{64w^2}$ 及 $\max_{i\le H}\CDT(F_i|_\rho)<s=O(\log H)$。
+
+\section{持续保持的标记知识与轨迹捕获}
+
+将定理~\ref{thm:singleton-switching} 扩展至递归 $\GI$ 层面临两个障碍：高层编码行 $A_{j,x}(y)=K_{j,x}(A_{<j})\mathbf1[y=g_{j,x}]$ 上的负文字不能在不违反 $\GI$ 的情况下固定为空；混合项也可以用正文字作为守卫，使负查询瞄准隐藏标记。我们用持久标记记忆与轨迹捕获解决这两个问题。
+
+固定层 $h$，其标记 $g_{h,x}\in[L]$ 独立均匀分布；令 $F$ 为宽度 $\le w$、带正负文字的标准化 DNF。维护集合 $U$，其中存放已知为真的第 $h$ 层标记 $(x,g_{h,x})$，满足 $K_{h,x}=1$；初始时 $U_0=\varnothing$。在第 $r$ 轮：
+\begin{enumerate}
+  \item 从 $F$ 中选出首个正文字均有效且不被 $U_{r-1}$ 中任何标记阻断的项 $\tau_r$；
+  \item 将 $\tau_r$ 的所有第 $h$ 层正标记加入 $U$；
+  \item 按顺序扫描 $\tau_r$ 的第 $h$ 层负文字；若没有实际阻断项（即没有同时满足 $g_{h,x}=y$ 和 $K_{h,x}=1$ 的标记），则返回 $1$；否则将首个实际阻断标记 $(x_r^*,y_r^*)$ 加入 $U$，形成 $U_r$。
+\end{enumerate}
+若没有符合条件的项，则返回 $0$。
+
+\begin{lemma}[角色不相交]
+\label{lem:role-disjoint}
+在最初 $s$ 个发生阻断的轮次中，令 $B$ 为新发现的阻断标记所在行 $x_r^*$ 的集合，$P$ 为\emph{首次}通过正文字揭示的第 $h$ 层行的集合（即尚未在 $U_{r-1}$ 中出现）。则 $|B|=s$（阻断标记所在行互异）、$|P|\le ws$ 且 $B\cap P=\varnothing$。
+\end{lemma}
+
+\begin{proof}
+若 $x_r^*$ 在较早轮次 $r'<r$ 已被发现为阻断行或通过正文字揭示，则 $(x_r^*,g_{h,x_r^*})\in U_{r-1}$，与 $\tau_r$ 不受 $U_{r-1}$ 阻断矛盾。由标准化可知，它也不能在 $\tau_r$ 本身中以正文字出现。若在较晚轮次 $r'>r$ 以正文字使用 $x_r^*$，此时它已在 $U_{r'-1}$ 中，因而不计入 $P$。
+\end{proof}
+
+\begin{theorem}[轨迹捕获]
+\label{thm:trace-capture}
+以概率 $\theta=\frac{1}{w+1}$ 将每个第 $h$ 层行独立放入隐藏集合 $R_{\mathrm{hid}}$，否则放入 $R_{\mathrm{ext}}$。定义受限过程：初始只知道 $g_h|_{R_{\mathrm{ext}}}$，正向搜索只允许正文字所涉及第 $h$ 层行均落在 $R_{\mathrm{ext}}\cup\mathrm{rows}(U)$ 的项；若首个实际阻断标记在 $R_{\mathrm{ext}}$，则中止。只要 $B\subseteq R_{\mathrm{hid}}$ 且 $P\subseteq R_{\mathrm{ext}}$（其概率至少为 $q^s$，其中 $q=\theta(1-\theta)^w\ge\frac1{e(w+1)}$），受限过程就会精确重现相同的 $s$ 个阻断轮次及最终状态 $U_s$。
+\end{theorem}
+
+\begin{proof}
+对 $r\le s$ 归纳，假设 $U_{r-1}^{\mathrm{restr}}=U_{r-1}$。受限过程允许的每一项在原过程中同样符合条件，故不可能选出 $\tau_r$ 之前的任何项。反过来，$\tau_r$ 的每个正向第 $h$ 层行，要么已在 $\mathrm{rows}(U_{r-1})$ 中，要么首次被正向揭示，故属于 $P\subseteq R_{\mathrm{ext}}$；因此选中 $\tau_r$。首个实际阻断行 $x_r^*$ 位于 $B\subseteq R_{\mathrm{hid}}$，所以受限过程不中止，并产生 $U_r^{\mathrm{restr}}=U_r$。
+\end{proof}
+
+注意，第 $r$ 轮的受限资格谓词从不检查尚未揭示的隐藏行 $x\in R_{\mathrm{hid}}\setminus\mathrm{rows}(U)$ 的 $g_{h,x}$。为避免在所有基准赋值 $b\in\{0,1\}^R$ 上使用指数规模的并集界，我们应用自由密度为 $p=\frac1{4a}$ 的辅助仅置零限制 $\sigma$。
+
+\begin{lemma}[自适应可达分支界]
+\label{lem:reachable-branch}
+假定受限过程每轮对基变量 $b$ 至多查询 $a$ 次，并对 $R_{\mathrm{hid}}$ 中未揭示的标记至多检查 $w$ 个地址。在独立的仅置零限制 $\sigma$ 下，若自由概率 $p=\frac1{4a}$ 且 $sw\le L/2$，则
+\[
+  \Prb_{\sigma,\, g_h|_{R_{\mathrm{hid}}}}\bigl[\exists b \in \mathrm{Cube}(\sigma) : \text{过程完成 } s \text{ 个阻断轮次}\bigr]
+  \le \left(\frac{4w}{L}\right)^s.
+\]
+\end{lemma}
+
+\begin{proof}
+固定 $g_{\mathrm{hid}}=g_h|_{R_{\mathrm{hid}}}$。一条成功的基查询记录 $\pi$ 查询了 $d\le sa$ 个不同的基变量，其中 $u$ 个为一；它在 $\sigma$ 之后可达的概率是 $p^u$。在辅助乘积分布 $\tilde b$ 下，$\Prb[\tilde b_i=1]=\frac p{1+p}$、$\Prb[\tilde b_i=0]=\frac1{1+p}$，同一记录的概率为 $\frac{p^u}{(1+p)^d}\ge\frac{p^u}{(1+p)^{sa}}$。对所有成功叶结点求和并对 $g_{\mathrm{hid}}$ 取期望，得
+\[
+  \Prb[\exists b : \text{成功}] \le \E[\#\text{可达的成功叶结点}]
+  \le (1+p)^{sa}\, \Prb_{\tilde{b}, g_{\mathrm{hid}}}[\text{在 }(\tilde{b}, g_{\mathrm{hid}})\text{ 上成功}].
+\]
+对固定的 $\tilde b$，给定 $g_{\mathrm{hid}}$ 后过程是确定的；每个阻断轮次最多检查 $w$ 次便须发现全新的隐藏标记（已排除的不匹配地址至多 $sw$ 个），成功概率 $\le\frac w{L-sw}\le\frac{2w}{L}$。由于 $(1+p)^a\le e^{1/4}<2$，乘积至多为 $(4w/L)^s$。
+\end{proof}
+
+\section{一致递归切换}
+
+为在 $h$ 个嵌套 $\GI$ 层上组合定理~\ref{thm:trace-capture}，而不将所有 DNF 重新展开为原始基位，以\emph{递归前缀二分搜索}替代基展开。给定定义在不高于 $h$ 的各层上、宽度 $\le w$ 的有序 DNF $F=\bigvee_{i=1}^M\tau_i$，对每个记忆 $U$ 和前缀索引 $j\le M$ 定义前缀谓词
+\[
+  P_{U,j} = \bigl[\,\exists i \le j : \tau_i \text{ 的正文字均有效，且不被 } U\text{ 阻断}\,\bigr].
+\]
+固定可访问的第 $h$ 层标记，并以 $K_{h,x}$ 的 DNF 定义（在低于 $h$ 的层上宽度 $\le T$）替换第 $h$ 层的正文字，则每个 $P_{U,j}$ 成为较低层上的带正负文字 DNF，宽度至多为 $w'=wT$。由于对含 $B$ 个预言机位的合取项作标准化后有 $M\le M_{\max}:=(2B+1)^w$，找到首个符合条件的项至多需对 $P_{U,j}$ 进行 $v_{\max}:=1+\lceil\log_2(M_{\max}+1)\rceil$ 次二分搜索查询（与具体公式 $F$ 无关）。
+
+\begin{theorem}[一致递归切换]
+\label{thm:recursive-switching}
+考虑以 $N\times L_0$ 单标记矩阵为基底的 $h$ 层无环塔。第 $j$ 层核函数是低于 $j$ 层上的宽度 $\le T$ 的 DNF；每个编码行的标记独立且在至少 $L$ 个位置上均匀分布，预言机位总数至多为 $B$。对任意参数元组 $(N,L_0,L,B,T,h,H,w,\delta)$，若满足基底切换条件 $p_0+1/L_0\le1/2$、$(1-p_0)L_0\ge N/2+1$（其中 $p_0=\frac1{32w_0^2}$），以及每一层 $j\ge1$ 的归纳裕量条件 $s_jw_j\le L/2$、$4w_j/(q_jL)\le1/2$，则存在随机的仅置零基投影 $\rho_{\le h}$，其分布\emph{只}依赖 $(N,L,B,T,h,H,w,\delta)$（而非具体公式），使得对任意由至多 $H$ 个宽度 $\le w$ 的带正负文字 DNF 构成的族 $\mathcal F$，
+\[
+  \Prb_{\rho_{\le h},\, g_{\le h}}\bigl[\exists F \in \mathcal{F} : \DT(F|_{\rho_{\le h}, g_{\le h}}) > d_h\bigr] < \delta.
+\]
+\end{theorem}
+
+\begin{proof}
+对 $h$ 作归纳。基例 $h=0$ 由定理~\ref{thm:singleton-switching} 给出，其中 $p_0=\frac1{32w_0^2}$，$d_0=O(\log H_0+\log(1/\delta_0)+1)$。
+
+对于 $h-1\to h$ 这一步，设通用界为 $M_{\max}=(2B+1)^w$ 和 $v_{\max}=1+\lceil\log_2(M_{\max}+1)\rceil$，并令 $s=\lceil\log_2(4H/\delta)\rceil$、$\theta=\frac1{w+1}$ 及 $q=\theta(1-\theta)^w$。在 $s$ 轮中有 $|U|\le(w+1)s$，故辅助低层公式族的大小至多为 $H'=B+H(M_{\max}+1)(B+1)^{(w+1)s}$，宽度为 $w'=wT$，误差预算为 $\delta'=\frac{\delta q^s}4$。令 $(\rho_{<h},g_{<h})$ 为归纳假设中得到深度 $d'$ 的通用分布，令 $\sigma_h$ 为自由密度 $p_h=\frac1{4a}$ 的独立仅置零限制，其中 $a=(v_{\max}+w)d'$（仅依赖参数，而不依赖 $\mathcal F$ 中的具体公式）。
+
+\emph{事件 A（阻断轮次界）。} 对 $(R_{\mathrm{hid}},g_h|_{R_{\mathrm{ext}}})$ 取条件。受限前缀公式族的大小 $\le H'$、宽度 $\le w'$，且与 $(\rho_{<h},g_{<h},\sigma_h,g_h|_{R_{\mathrm{hid}}})$ 独立。由归纳假设与引理~\ref{lem:reachable-branch}，重现 $s$ 个阻断轮次的概率至多为 $\delta'+H(4w/L)^s$。由定理~\ref{thm:trace-capture} 及 $R_{\mathrm{hid}}$ 的独立性，
+\[
+  \Prb[\mathrm{Bad}_A] \le q^{-s}\delta' + H\left(\frac{4w}{qL}\right)^s \le \frac{\delta}{4} + \frac{\delta}{4} = \frac{\delta}{2}.
+\]
+
+\emph{事件 B（精确的无约束搜索）。} 对所有标记 $g_h$ 取条件。完整的无约束前缀公式族的大小也 $\le H'$、宽度 $\le w'$，且与 $(\rho_{<h},g_{<h})$ 独立。由低层分布的通用性，有 $\Prb[\mathrm{Bad}_B]\le\delta'\le\frac\delta4$。由于 $\sigma_h$ 仅进一步限制立方体，因此从不增大树深。
+
+在交集 $\overline{\mathrm{Bad}_A}\cap\overline{\mathrm{Bad}_B}$ 上（失败概率 $<\frac{3\delta}4<\delta$），完整算法在至多 $s-1$ 个阻断轮次及至多一个最终接受或拒绝轮次之后结束，每轮最多消耗 $(v_{\max}+w)d'$ 次基查询，故 $d_h\le s(v_{\max}+w)d'$。
+\end{proof}
+
+\textbf{$\GI$ 的定量闭合。} 对固定多项式时间界 $T=\mathrm{poly}(m)$ 及自由奇数长度 $n=2m+1$，固定所有长度 $<n$；固定所有编码偶数长度 $2r\in(n,2n)$（其核函数只查询长度 $<r<n$，故与 $A_n$ 独立）；并将 $(n,T]$ 中所有非编码奇数长度以及 $A_n(1\cdots)$ 置为~$0$。将 $[2n,T]$ 中的编码偶数长度划分成 $h=O(\log m)$ 个区间 $I_j=[2^jn,2^{j+1}n)$（$j\ge1$）。对任意 $2r\in I_j$，严格无环性给出 $|q|<r<2^jn$，从而没有区间内部依赖，且 $L=2^r\ge2^{2m+1}>2^m$。定义 $C_j:=1+\log_2 H_j+\log_2(1/\delta_j)$ 和总保留密度 $p_*:=\prod_{j=0}^h p_j$。归纳参数更新给出 $w_{j-1}=Tw_j$ 和 $C_{j-1}=O\bigl(C_j(w_j+1)(T+1)\bigr)$。沿 $h=O(\log m)$ 个区间追踪这些递推式，得到
+\[
+  \max_j w_j \le 2^{O(\log^2 m)},\quad
+  C_j, s_j, v_j \le 2^{O(\log^3 m)},\quad
+  d_h \le 2^{O(\log^4 m)},\quad
+  \log_2(1/p_*) = O(\log^5 m).
+\]
+利用 Chernoff 界可知，以正概率，长度至多 $T$ 的所有预言机位在维数 $R\ge2^{m-O(\log^5m)}$ 的剩余自由基立方体上，均具有至多 $d_h=2^{O(\log^4m)}$ 的决策树深度（因而精确多重线性次数也至多为该值），同时 $\mathcal L_{A_b}(1^m)=\OR_R(b)$。
+
+\section{模预言机分离与贝尔意义的泛性}
+
+为同时将 $\OR_R$ 与每一个固定素数模计数类分离，在 $\Z$ 上定义交错对偶泛函：
+\[
+  \Lambda_R(f) = \sum_{b \in \{0,1\}^R} (-1)^{|b|} f(b).
+\]
+
+\begin{lemma}[通用 $\mathrm{Mod}_p$ 次数下界]
+\label{lem:modp-lb}
+对每个整数 $p\ge2$、每个 $R\ge1$ 和每个次数为 $d<R$ 的整数系数多项式 $P(b)$，$P$ 都不能在 $\{0,1\}^R$ 上与 $\OR_R$ 模 $p$ 一致。
+\end{lemma}
+
+\begin{proof}
+每个次数 $<R$ 的单项式至少遗漏一个坐标 $i<R$，因此其交错求和在 $\Z$ 上恒为零；由线性性，$\Lambda_R(P)=0$。另一方面，$\Lambda_1(\OR_1)=0-1=-1$，且对 $R\ge1$，$\Lambda_{R+1}(\OR_{R+1})=\Lambda_R(\OR_R)-\Lambda_R(1)=-1-0=-1$。若对所有 $b\in\{0,1\}^R$ 有 $P(b)\equiv\OR_R(b)\pmod p$，则 $0\equiv\Lambda_R(P)\equiv\Lambda_R(\OR_R)=-1\pmod p$，与 $p\ge2$ 矛盾。
+\end{proof}
+
+\begin{theorem}[非对称模层级分离]
+\label{thm:main-sep}
+存在预言机 $A\in X_{\GI}$，使得 $\NP^A=\UP^A$ 且
+\[
+  \mathcal{L}_A \in \SigTwo{}^{,A} \setminus \bigcup_{p\text{ 为素数}} \Modp^A.
+\]
+此外，集合 $\{A\in X_{\GI}:\mathcal L_A\notin\bigcup_{p\text{ 为素数}}\Modp^A\}$ 在 $X_{\GI}$ 中是稠密 $G_\delta$ 集。
+\end{theorem}
+
+\begin{proof}
+枚举所有对 $(p,M)$，其中 $p$ 为素数，$M$ 是带时钟的 $\Modp$ 机器，具有多项式时间界 $T(m)\ge2m+1$。从任意允许的有限 $\GI$ 前缀出发，取足够大的 $n=2m+1$，使 $(p-1)T(m)d_h<R=2^{m-O(\log^5 m)}$，并应用定理~\ref{thm:recursive-switching}，得到与 $\GI$ 相容的预言机族 $\{A_b:b\in\{0,1\}^R\}$；其中每个长度 $\le T(m)$ 的预言机位都是关于 $b$ 的精确次数 $\le d_h$ 的函数。
+
+$M^A(1^m)$ 的接受路径数是预言机各位的整数系数多项式 $C_M(A)$，次数 $\le T(m)$。由费马小定理，$C_M(A)^{p-1}\bmod p$ 正是 $C_M(A)\not\equiv0\pmod p$ 的示性值。因此在 $\{A_b\}$ 上，机器输出可由一个次数至多为 $(p-1)T(m)d_h<R$ 的模 $p$ 多项式表示。由引理~\ref{lem:modp-lb}，存在 $b^*\in\{0,1\}^R$，使 $M^{A_{b^*}}(1^m)\ne\OR_R(b^*)=\mathcal L_{A_{b^*}}(1^m)$。将 $A_{b^*}$ 固定到长度 $T(m)$（该长度大于 $2m+1$，因而也冻结 $\mathcal L_{A_{b^*}}(1^m)$），便可永久针对 $(p,M)$ 实现对角化，同时保持 $\GI$。
+
+对每个 $(p,M)$，集合 $U_{p,M}=\{A\in X_{\GI}:\exists m,\,M^A(1^m)\ne\mathcal L_A(1^m)\}$ 为开集（成员资格只依赖有限多个预言机位），且由上述构造在 $X_{\GI}$ 中稠密。由于 $X_{\GI}$ 为紧 Hausdorff 空间，贝尔纲定理给出 $\bigcap_{p,M}U_{p,M}$ 是稠密 $G_\delta$ 集。
+\end{proof}
+
+\section{对多重线性代数访问的推论}
+
+在 Aaronson 与 Wigderson 的代数化框架~\cite{AaronsonWigderson2009} 中（另见 Chen、Hu 与 Ren 关于多重线性障碍的近期工作~\cite{ChenHuRen2026}），令 $\widetilde A_{\F_q}$ 表示 $A$ 在有限域 $\F_q$ 上的唯一多重线性延拓。在 $\GI$ 下，借助我们保持子立方体的编码 $\mathrm{encode}(i,u,t)$，将隐藏坐标设为 $1/2\in\F_p$（$p$ 是奇素数），即可恢复多重线性延拓 $\widetilde K_{r,\F_p}(z)=2^r\widetilde A_{2r,\F_p}(z,\tfrac12,\dots,\tfrac12)$，从而得到精确的计数刻画：
+\[
+  \Pcl^{\widetilde{A}_{\F_3}} = \Modthree^A,
+  \qquad
+  \Pcl^{\widetilde{A}[\mathrm{poly}]} = \Pcl^{\SharpP^A} = \Pcl^{\PP^A} \supseteq \PH^A
+\]
+（最后一个包含关系来自相对化的 Toda 定理~\cite{Toda1991}）。现在令 $\widetilde A^{[p]}$ 允许在\emph{固定}素数特征 $p$ 的\emph{任意}可用多项式长度表示的扩域 $\F_{p^k}$ 上进行多重线性查询。
+
+\begin{corollary}[在 $\NP=\UP$ 下，特征与域大小的分离]
+\label{cor:char-sep}
+对每个预言机 $A$ 和每个固定素数 $p$，有 $\Pcl^{\widetilde A^{[p]}}\subseteq\Modp^A$。因此，对定理~\ref{thm:main-sep} 给出的每个预言机 $A$，有
+\[
+  \mathcal{L}_A \in \bigl(\SigTwo{}^{,A} \cap \Pcl^{\widetilde{A}[\mathrm{poly}]}\bigr)
+  \setminus \bigcup_{p\text{ 为素数}} \Pcl^{\widetilde{A}^{[p]}}.
+\]
+\end{corollary}
+
+\begin{proof}
+对 $\widetilde A_{m,\F_{p^k}}(z)$ 的任意查询（$k\le\mathrm{poly}(n)$），拉格朗日权重 $\prod_j\ell_{x_j}(z_j)\in\F_{p^k}$ 的每个 $\F_p$ 坐标 $w_c(x)\in\{0,\dots,p-1\}$ 均能在 $\mathrm{poly}(n)$ 时间内确定性地计算。恢复 $\sum_x A_m(x)w_c(x)\bmod p$ 时，每个坐标需对 $\Modp^A$ 查询 $p-1$ 次（总查询数 $k(p-1)=\mathrm{poly}(n)$）；由 Beigel--Gill 封闭性~\cite{BeigelGill1992}，$\Pcl^{\Modp^A}=\Modp^A$。结合定理~\ref{thm:main-sep} 与 $\PH^A\subseteq\Pcl^{\widetilde A[\mathrm{poly}]}$，即得结论。
+\end{proof}
+
+\textbf{关于代数化的适用范围。} 推论~\ref{cor:char-sep} 区分了固定特征的确定性代数访问（$\widetilde{A}^{[p]}$）与允许切换特征的访问（$\widetilde{A}[\mathrm{poly}]$）。它并未宣称普遍绕过 Aaronson--Wigderson 代数化障碍，因为 $\mathcal{L}_A \in \Pcl^{\widetilde{A}[\mathrm{poly}]}$（并且借助 Valiant--Vazirani 隔离法，有 $\mathcal{L}_A \in \mathsf{RP}^{\widetilde{A}_{\F_3}}$）。
+
+\begin{remark}[确定性与随机性的对照]
+在随机情形中，在 $\Modthree^A$ 上应用 Valiant--Vazirani 隔离法~\cite{ValiantVazirani1986}，可在 $\GI$ 下得到 $\SigTwo{}^{,A}\subseteq\RP^{\widetilde A_{\F_3}}$；且将域从 $\F_p$ 扩大至 $\F_{p^k}$，通过 Schwartz--Zippel 可获得指数加速。推论~\ref{cor:char-sep} 表明，在\emph{确定性}情形中，当特征 $p$ 固定时，扩大域大小对克服 $\SigTwo{}^{,A}$ 的障碍毫无作用：突破障碍需要随机性或者切换素数特征。
+\end{remark}
+
+\appendix
+\section{Lean 4.36.0 机器验证材料与适用范围}
+
+七个独立的、无导入的 Lean~4.36.0 模块（\texttt{arm64-apple-darwin24.6.0}）对第 3 至第 6 节的组合、代数与有限阶段桥接核心进行机器验证，\textbf{45/45 条定理通过审计}，零错误、零 \texttt{sorryAx}、零 \texttt{ofReduceBool}、零 \texttt{Classical.choice}（六个模块编译无警告；\texttt{TraceCapture.lean} 对 \texttt{if\_pos}/\texttt{if\_neg} 发出 16 条不阻断运行的弃用警告）。
+
+\begin{table}[!htbp]
+\centering
+\small
+\begin{tabularx}{\linewidth}{@{}lXcc@{}}
+\toprule
+\textbf{模块} & \textbf{已验证的数学核心} & \textbf{定理数} & \textbf{无公理}\\
+\midrule
+\texttt{PersistentMarkerKnowledge.lean} & 引理~\ref{lem:role-disjoint}（$B\cap P=\varnothing$，$|B|=s$，$|P|\le ws$） & 3/3 & 0\\
+\texttt{TraceCapture.lean} & 定理~\ref{thm:trace-capture} 及隐藏标记的独立性 & 4/4 & 2\\
+\texttt{ReachableBranch.lean} & 可达叶引理及引理~\ref{lem:reachable-branch}（用 $\mathbb N$ 缩放） & 4/4 & 0\\
+\texttt{SingletonSwitching.lean} & 定理~\ref{thm:singleton-switching} 的权重、标准化与解码 & 8/8 & 2\\
+\texttt{RecursiveSwitching.lean} & 前缀二分搜索、事件 A 与 B 的预算、递推式 & 8/8 & 0\\
+\texttt{ModularSeparation.lean} & $\Lambda_R(\OR_R)=-1$、引理~\ref{lem:modp-lb}、模 $p$ 步骤 & 6/6 & 0\\
+\texttt{UniformRecursiveBridge.lean} & 有限概率方法、\texttt{EvalDTree}$\to$\texttt{Poly}、立方体见证 $b^*$ & 12/12 & 0\\
+\bottomrule
+\end{tabularx}
+\caption{无导入 Lean~4.36.0 验证概要（其余定理只使用核心公理 \texttt{propext}／\texttt{Quot.sound}）。}
+\end{table}
+
+\textbf{尚未形式化的解析边界。} \texttt{UniformRecursiveBridge.lean} 形式化的是\emph{有条件的}有限阶段桥接（假设 \texttt{good\_GI1}、\texttt{good\_depth}、\texttt{hProb} 和 \texttt{hGap} 作为参数给定；而将 $C_M^{p-1}\bmod p$ 解释为费马示性值，要求如定理~\ref{thm:main-sep} 所述 $p$ 为素数）。无限乘积空间上的测度论概率、Chernoff 界、贝尔纲定理以及从抽象 DNF 预言机查询到多带图灵机的桥接，均在第 3 至第 7 节通过解析方式证明，未在 Lean 中形式化。
+
+\begin{thebibliography}{99}\small\setlength{\itemsep}{1pt}\setlength{\parskip}{0pt}
+
+\bibitem{AaronsonWigderson2009}
+S.~Aaronson and A.~Wigderson.
+Algebrization: A new barrier in complexity theory.
+\emph{ACM Transactions on Computation Theory}, 1(1):2:1--2:54, 2009.
+\href{https://www.scottaaronson.com/papers/alg.pdf}{PDF}.
+
+\bibitem{BakerGillSolovay1975}
+T.~Baker, J.~Gill, and R.~Solovay.
+Relativizations of the $\Pcl = ?\NP$ question.
+\emph{SIAM Journal on Computing}, 4(4):431--442, 1975.
+\href{https://epubs.siam.org/doi/10.1137/0204037}{DOI}.
+
+\bibitem{BeigelGill1992}
+R.~Beigel and J.~Gill.
+Counting classes: thresholds, parity, mods, and fewness.
+\emph{Theoretical Computer Science}, 103(1):3--23, 1992.
+
+\bibitem{ChenHuRen2026}
+L.~Chen, Y.~Hu, and H.~Ren.
+New algebrization barriers to circuit lower bounds via communication complexity of Missing-String.
+In \emph{ITCS 2026}, 2026.
+\href{https://arxiv.org/abs/2511.14038}{arXiv:2511.14038}.
+
+\bibitem{Cook2000}
+S.~Cook.
+The $\Pcl$ versus $\NP$ problem.
+Clay Mathematics Institute Millennium Prize Problem description, 2000.
+\href{https://www.claymath.org/wp-content/uploads/2022/06/pvsnp.pdf}{PDF}.
+
+\bibitem{GlasserWechsung2003}
+C.~Gla\ss er and G.~Wechsung.
+Relativizing function classes.
+\emph{Journal of Universal Computer Science}, 9(1):34--50, 2003.
+\href{https://lib.jucs.org/issue/4069/}{JUCS 9(1)}.
+
+\bibitem{Grochow2023}
+J.~A.~Grochow.
+Polynomial-time axioms of choice and polynomial-time cardinality.
+\emph{Theory of Computing Systems}, 67, 2023.
+\href{https://arxiv.org/abs/2301.07123}{arXiv:2301.07123}.
+
+\bibitem{Hastad1986}
+J.~H\aa stad.
+Almost optimal lower bounds for small depth circuits.
+In \emph{Proceedings of the 18th Annual ACM Symposium on Theory of Computing (STOC 1986)}, pp.~6--20, 1986.
+
+\bibitem{HiraharaNanashima2021}
+S.~Hirahara and M.~Nanashima.
+On worst-case learning in relativized Heuristica.
+In \emph{FOCS 2021}, pp.~751--758, 2021.
+\href{https://eccc.weizmann.ac.il/report/2021/161/download}{ECCC TR21-161}.
+
+\bibitem{RazborovRudich1997}
+A.~A.~Razborov and S.~Rudich.
+Natural proofs.
+\emph{Journal of Computer and System Sciences}, 55(1):24--35, 1997.
+\href{https://mit6875.github.io/PAPERS/natural_proofs.pdf}{PDF}.
+
+\bibitem{Toda1991}
+S.~Toda.
+$\PP$ is as hard as the polynomial-time hierarchy.
+\emph{SIAM Journal on Computing}, 20(5):865--877, 1991.
+
+\bibitem{ValiantVazirani1986}
+L.~G.~Valiant and V.~V.~Vazirani.
+$\NP$ is as easy as detecting unique solutions.
+\emph{Theoretical Computer Science}, 47(1):85--93, 1986.
+
+\end{thebibliography}
+
+\end{document}

@@ -1,0 +1,271 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{fontspec}
+\usepackage{amsmath,amssymb}
+\usepackage[a4paper,margin=23mm]{geometry}
+\usepackage{enumitem,booktabs,needspace}
+\usepackage{xcolor,tikz}
+\usetikzlibrary{arrows.meta,positioning}
+\definecolor{ink}{HTML}{153353}
+\definecolor{wash}{HTML}{EEF3F8}
+\definecolor{leaf}{HTML}{79B49B}
+\usepackage[colorlinks=true,allcolors=ink]{hyperref}
+\usepackage{bookmark}
+\usepackage{polyglossia}
+\setdefaultlanguage{hebrew}
+\setotherlanguage{english}
+\setmainfont{Liberation Serif}
+\IfFileExists{fonts/NotoSansHebrew-Regular.ttf}{%
+  \newfontfamily\hebrewfont[Path=fonts/,Extension=.ttf,UprightFont=*-Regular,BoldFont=*-Bold,ItalicFeatures={FakeSlant=0.18},ItalicFont=*-Regular,Script=Hebrew]{NotoSansHebrew}%
+}{\newfontfamily\hebrewfont[Script=Hebrew,AutoFakeSlant=0.18]{Noto Sans Hebrew}}
+\providecommand{\UseMathForPositioningText}{}
+
+\newcommand{\EN}[1]{\textenglish{#1}}
+\newcommand{\NP}{\mathsf{NP}}
+\newcommand{\UP}{\mathsf{UP}}
+\newcommand{\PP}{\mathsf P}
+\newcommand{\RP}{\mathsf{RP}}
+\newcommand{\PH}{\mathsf{PH}}
+\newcommand{\GI}{\mathrm{GI}_1}
+\newcommand{\FF}{\mathbb F}
+\newcommand{\LA}{\mathcal{L}_A}
+\newcommand{\MOD}{\operatorname{Mod}}
+\newcommand{\OR}{\operatorname{OR}}
+\newcommand{\hecell}[2]{\begin{minipage}[t]{#1}\begin{RTL}\raggedleft #2\end{RTL}\end{minipage}}
+\newcommand{\hc}[2]{\begin{minipage}{#1}\begin{RTL}\centering #2\end{RTL}\end{minipage}}
+\newcommand{\figcap}[2]{\par\smallskip\noindent\textbf{איור #1:} #2\par}
+\newcommand{\tabcap}[2]{\par\smallskip\noindent\textbf{טבלה #1:} #2\par}
+\newcommand{\figbox}[2]{\colorbox{wash}{\hc{#1}{#2}}}
+\hypersetup{pdflang={he},pdfauthor={Aleksandr Strand},pdftitle={הממשק כמשאב של ידע},pdfkeywords={תורת הסיבוכיות, אורקלים, אלגבריזציה, ספירה מודולרית, ממשקי חישוב, Lean 4}}
+\setlength{\emergencystretch}{2em}
+\raggedbottom
+\setlist{itemsep=2pt,topsep=4pt}
+\begin{document}
+\begin{center}
+{\color{ink}\LARGE\bfseries הממשק כמשאב של ידע\par}
+\vspace{2mm}
+{\large מדוע ביטול העמימות אינו הופך בעיות קשות לפשוטות\par}
+\vspace{3mm}
+\EN{Aleksandr Strand}\par
+חוקר עצמאי; מאמר נלווה לקהל הרחב לפרסום המקדים\par
+\EN{Recursive Switching and Modular Oracle Separations under NP = UP}\par
+\smallskip
+26 בנובמבר 2026
+\end{center}
+
+\begin{center}\textbf{תקציר}\end{center}
+דמיינו שתי מערכות חישוב שלפניהן אותה טבלת נתונים. אף אחת מהן אינה מקבלת עובדות נסתרות חדשות. בתוך העולם הזה ביטלנו את העמימות: לכל תשובת ״כן״ יש עד יחיד. המערכת הראשונה יודעת לספור תשובות מודולו $2$, $3$ או כל ראשוני קבוע אחר $p$. היא אף רשאית להגדיל מעריכית את השדה האלגברי באותו מאפיין, למשל $\FF_3\to\FF_{3^{100}}$. המערכת השנייה יכולה לשנות את מאפיין השדה עצמו: $\FF_3,\FF_5,\FF_7,\dots$.
+
+המאמר מסביר, בלי להעמיס פורמליזם, מה גילינו בקדם־הפרסום: מדוע המערכת הראשונה אינה יכולה להכריע באופן דטרמיניסטי ובזמן פולינומי שאלה פשוטה למראית עין, האם יש שורה ריקה, ואילו השנייה כן יכולה. מכאן נובע הבדל מדויק בין הגדלה כמותית לבין שינוי ממשק החישוב. נבחין בין מה שהוכח אנליטית, מה שאומת ב־\EN{Lean 4.36.0}, ומה שנותר בגדר שאלה פתוחה או השערה על ארכיטקטורת בינה מלאכותית.
+
+\section{ספרייה ללא עמימות}
+כדי להבין את התוצאה אין צורך בהגדרות מורכבות מתורת הסיבוכיות. די לדמיין ספרייה עצומה ובה $N$ ארונות, ובכל אחד מהם בדיוק $L$ תאים ממוספרים. במודל המתמטי שלנו $N=L=2^m$, כך שאם $m=100$ אנו מדברים על סדר גודל של $10^{30}$.
+
+הספרייה מסודרת בקפידה: בכל ארון יש מסמך אחד בדיוק המשמש כעד, או שאין בו אף מסמך. אין כפילויות ואין עותקים סותרים. כעת נשאל את הספרן שתי שאלות שנראות דומות:
+\begin{enumerate}
+\item האם יש מסמך בארון מסוים $u$?
+\item האם בכל הספרייה יש לפחות ארון אחד ריק לחלוטין?
+\end{enumerate}
+
+לשאלה הראשונה אפשר לתת עדות קצרה וחד־משמעית לתשובה חיובית: פותחים את התא הנכון ומראים את המסמך היחיד. בתורת הסיבוכיות בעיות שעדות עבורן ניתנת לבדיקה מהירה שייכות למחלקה $\NP$. הגרסה החד־משמעית שלהן, שבה לכל קלט חיובי יש חישוב מקבל אחד בדיוק, היא המחלקה $\UP$.
+
+השאלה השנייה בנויה אחרת. כדי לוודא שארון $u$ ריק, אי אפשר להצביע על מסמך אחד. צריך לשלול את קיומו בכל $L$ התאים:
+\[
+  \exists u\;\forall v\colon A(u,v)=0.
+\]
+כלומר, קיים ארון שבכל אחד מתאיו הערך הוא אפס. חילוף הכמתים ״קיים״ ו״לכל״ מציב את הבעיה ברמה השנייה של ההיררכיה הפולינומית, במחלקה $\Sigma_2^{\PP}$.
+
+\Needspace{10\baselineskip}
+\begin{center}
+\begin{LTR}
+\begin{tikzpicture}[x=.57cm,y=.42cm]
+  \fill[wash] (0,0) rectangle (8,5);
+  \fill[leaf] (2,4) rectangle (3,5);
+  \fill[leaf] (6,3) rectangle (7,4);
+  \fill[leaf] (1,2) rectangle (2,3);
+  \fill[leaf] (5,0) rectangle (6,1);
+  \fill[red!7] (0,1) rectangle (8,2);
+  \draw[ink!50] (0,0) grid (8,5);
+  \draw[red!62!black] (0,1) rectangle (8,2);
+  \foreach \r in {1,...,5} {
+    \node[anchor=west] at (8.35,5.5-\r) {\hc{18mm}{ארון \r}};
+  }
+  \draw[red!62!black,thick,-{Stealth[length=2mm]}] (-.3,1.5) -- (-.02,1.5);
+  \draw[leaf!58!black,thick,-{Stealth[length=2mm]}] (-.25,4.5) -- (2,4.5);
+  \node[anchor=east,text=leaf!58!black] at (-.4,4.5) {\hc{35mm}{עד יחיד}};
+  \node[anchor=east,text=red!62!black] at (-.4,1.5) {\hc{35mm}{ארון ריק\par $\forall v\colon A(4,v)=0$}};
+\end{tikzpicture}
+\end{LTR}
+\end{center}
+\figcap{1}{מודל של בעיית המטרה: בכל ארון שאינו ריק יש מסמך אחד בדיוק, המסומן בירוק. המשימה ברמה $\Sigma_2^{\PP}$ היא להבדיל בין ספרייה שאין בה ארון ריק לבין ספרייה שיש בה לפחות אחד.}
+
+לפי האינטואיציה, אם העולם שקוף כל כך שלכל בעיה ב־$\NP$ יש אלגוריתם אימות חד־משמעי ($\NP=\UP$), ואם לצופה מותר גם לספור מיד את הענפים המקבלים מודולו $2$, $3$ או כל ראשוני אחר $p$, היינו מצפים שיהיה קל למצוא ארון ריק. התוצאה המרכזית שלנו מראה שאין זה כך.
+
+\section{מה קובע המשפט המרכזי}
+בניסוח עם יחסיות לאורקל, כל המכונות פונות לאותו אורקל מתמטי $A$, כמו בעבודתם הקלאסית של בייקר, גיל וסולוביי \cite{bgs}. אנו בונים אורקל $A$ עם האינווריאנט הא־מחזורי של עדים יחידים $\GI$, שמקורו בבנייה של גלאסר ושל וכסונג \cite{gw}. ביחס לאורקל הזה מתקיימות שתי הטענות הבאות בעת ובעונה אחת:
+\[
+\NP^A=\UP^A
+\quad;\quad
+\LA\in\Sigma_2^{\PP,A}\setminus
+\bigcup_{p\,\mathrm{prime}}\MOD_p\PP^A .
+\]
+
+מדוע $\Sigma_2^{\PP,A}$ ולא $\NP^A$? כאשר $\NP^A=\UP^A$, לכל שפה ב־$\NP^A$ יש מכונה בעלת אפס או ענף מקבל אחד, והמספרים $0$ ו־$1$ נבדלים זה מזה מודולו כל $p\ge2$. לכן $\NP^A$, ואף כל המחלקה הדטרמיניסטית ברמה השנייה $\Delta_2^{\PP,A}=\PP^{\NP^A}$, נכללות ב־$\MOD_p\PP^A$. לפיכך הרמה השנייה $\Sigma_2^{\PP,A}$ היא הרמה הראשונה בהיררכיה הפולינומית שבה תיתכן התנגדות לספירה מודולרית בתנאי $\NP^A=\UP^A$.
+
+\Needspace{14\baselineskip}
+\begin{center}
+\begin{LTR}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\hecell{.33\textwidth}{\textbf{האם יש ארון ריק? ($\LA$)}} & \hecell{.58\textwidth}{\textbf{המשאב של הצופה בעולם $A$}}\\
+\midrule
+\hecell{.33\textwidth}{השוויון מתקיים מעצם הבנייה} & \hecell{.58\textwidth}{עדים חד־משמעיים לכל $\NP^A$ ($\NP^A=\UP^A$)}\\[3pt]
+\hecell{.33\textwidth}{לא מספיק עבור שום מכונה פולינומית מן המחלקה הזאת} & \hecell{.58\textwidth}{ספירה מודולו $2$, $3$ או כל ראשוני קבוע $p$}\\[3pt]
+\hecell{.33\textwidth}{לא מספיק בחישוב דטרמיניסטי} & \hecell{.58\textwidth}{גישה אלגברית $\FF_p\to\FF_{p^k}$ עם $p$ קבוע}\\[3pt]
+\hecell{.33\textwidth}{ניתן להכרעה (הבידוד של וליאנט–וזיראני)} & \hecell{.58\textwidth}{הוספת אקראיות ($\RP^{\widetilde A_{\FF_3}}$)}\\[3pt]
+\hecell{.33\textwidth}{ניתן להכרעה דטרמיניסטית (באמצעות משפט השאריות הסיני)} & \hecell{.58\textwidth}{שינוי מאפיין השדה ($\FF_3,\FF_5,\FF_7,\dots$)}\\
+\bottomrule
+\end{tabular}
+\end{LTR}
+\end{center}
+\tabcap{1}{מה מצליח ומה אינו מצליח לעבור את המחסום בעולם $A$ שנבנה.}
+
+לא מדובר באורקל חריג אחד. לפי משפט בייר, קבוצת האורקלים המפרידים האלה היא קבוצת $G_\delta$ צפופה במרחב הקומפקטי $X_{\GI}$ של כל האורקלים התואמים ל־$\GI$. כל קטע סופי וקביל של הספרייה שנקבע מראש ניתן להשלמה לעולם שבו ההפרדה מתקיימת.
+
+\section{איך הוכחנו זאת: ארבעה מנגנונים}
+הקושי העיקרי הוא שהאורקל $A$ אינו רק מחזיק במטריצת הארונות הבסיסית. כדי לקיים $\NP^A=\UP^A$ עליו להכיל מגדל רקורסיבי אינסופי של שכבות: כל שכבה עליונה מקודדת באמצעות סמנים יחידים תשובות לשאלות $\NP$ על השכבות שמתחתיה. אם מציבים את הסמנים ברשלנות, למשל תמיד בתא הראשון, כבר השכבה השנייה תוכל לזהות בקלות אם ארון כלשהו ריק, וההפרדה תיעלם. כדי לרסן את המגדל משתמשת ההוכחה בארבעה מנגנונים הקשורים זה לזה.
+
+\Needspace{9\baselineskip}
+\begin{center}
+\begin{LTR}
+\begin{tabular}{@{}c@{\,}c@{\,}c@{\,}c@{\,}c@{\,}c@{\,}c@{}}
+\figbox{.18\textwidth}{\small\textbf{4. פונקציונל דואלי}\par $\Lambda_R$\par $\deg\le(p-1)T d_h$\par $<R=\deg(\OR_R)$}
+& $\leftarrow$ &
+\figbox{.18\textwidth}{\small\textbf{3. חיפוש לפי תחיליות}\par $O(\log m)$ שכבות בלי התפוצצות ברוחב}
+& $\leftarrow$ &
+\figbox{.18\textwidth}{\small\textbf{2. זיכרון ולכידה}\par בכל סבב חוסם מתגלה סמן חדש}
+& $\leftarrow$ &
+\figbox{.18\textwidth}{\small\textbf{1. החלפה משמרת יחידוּת}\par פישוט הבסיס בלי ליצור ארונות ריקים}
+\end{tabular}
+\end{LTR}
+\end{center}
+\figcap{2}{ארבע חוליות בשרשרת ההוכחה, ממטריצת הבסיס ועד לחסם על המכונה המודולרית.}
+
+\medskip
+\noindent\textbf{שלב 1. שינוי מבוקר (\EN{Singleton-Preserving Switching}).}
+השיטה הקלאסית של הוסטאד~\cite{hastad}, וגם הגרסאות לאלפבית גדול שפיתחו היראהרה וננשימה~\cite{hirahara}, מפשטות נוסחאות מסובכות באמצעות הגבלות אקראיות. במקרה הבוליאני, ההגבלות מקבעות משתנים ל־$0$ או ל־$1$. אבל כאן אסור לקבע ארונות כריקים, שכן כך נאבד את עולם הייחוס שבו אין ארונות ריקים. לכן משתמשים בהטלה חד־צדדית: חלק מהארונות מקובעים כלא ריקים והיתר נשארים חופשיים. מצבים ריקים מופיעים רק במידת קידוד עזר להוכחת חד־חד־ערכיות, ולעולם אינם מקובעים בעולם המתקבל.
+
+\medskip
+\noindent\textbf{שלב 2. זיכרון מתמשך של מכשולים (\EN{Persistent Marker Knowledge} ו־\EN{Trace Capture}).}
+בשכבות העליונות, תנאים חיוביים בנוסחה יכולים לשמש ״כוונת״ המכוונת שאילתות שליליות בדיוק אל הסמנים הנסתרים. כדי לשבש את הכוונת, האלגוריתם זוכר את כל הסמנים האמיתיים שכבר נחשפו. מכאן שכל סבב חוסם חדש חייב לחשוף סמן חדש, שאינו חופף לשורות החיוביות שכבר נחשפו. חלוקה אקראית של השורות לוכדת את כל העקבה הזאת בהסתברות של לפחות $[e(w+1)]^{-s}$.
+
+\medskip
+\noindent\textbf{שלב 3. רקורסיה על תחיליות ללא התפוצצות.}
+בשל הא־מחזוריות המוחלטת של $\GI$, חישוב הנמשך זמן $T=\mathrm{poly}(m)$ יכול לגעת לכל היותר ב־$h=O(\log m)$ שכבות מקוננות של המגדל. במקום לפתוח את נוסחאות השכבות העליונות לנוסחאות בסיס עצומות, אנו מוצאים את האיבר הקביל הראשון באמצעות חיפוש בינארי בפרדיקטים של תחיליות מהשכבה הקודמת. כך מצטמצמים בו־זמנית כל סיביות האורקל עד אורך $T$ לעצי החלטה בעומק קוואזי־פולינומי $d_h\le 2^{O(\log^4 m)}$, מעל קובייה חופשית שיורית מממד $R\ge 2^{m-O(\log^5 m)}$.
+
+\medskip
+\noindent\textbf{שלב 4. תקרה אלגברית על הדרגה.}
+לפי המשפט הקטן של פרמה, אפשר לייצג את האינדיקטור לקבלה של כל מכונה במחלקה $\MOD_p\PP^A$ באמצעות הפולינום השלם $C_M(A)^{p-1}\bmod p$ מדרגה שאינה עולה על $(p-1)T d_h$ ב־$R$ המשתנים החופשיים שנותרו. ואולם פונקציית המטרה
+\[
+\OR_R(b)=1-\prod_{i=1}^R(1-b_i)
+\]
+דורשת דרגה מלאה $R$. הפונקציונל בעל הסימנים המתחלפים
+\[
+\Lambda_R(f)=\sum_{b\in\{0,1\}^R}(-1)^{|b|}f(b)
+\]
+מאפס כל פולינום מדרגה קטנה מ־$R$, אך על פונקציית המטרה מתקבל $\Lambda_R(\OR_R)=-1\not\equiv0\pmod p$ לכל $p\ge2$. עבור $p$ קבוע ו־$m$ גדול מספיק, מכיוון ש־$(p-1)T d_h\le2^{O(\log^4m)}$ ואילו $R\ge2^{m-O(\log^5m)}$, החסם על הדרגה קטן בהרבה מ־$R$. לפיכך בקובייה השיורית מובטח שקיים עולם קביל שבו המכונה טועה.
+
+\section{חמש הבחנות אפיסטמולוגיות}
+אם מניחים בצד את הפרטים הטכניים, העבודה מפרידה מתמטית בין חמישה זוגות מושגים שהאינטואיציה היומיומית, וגם ההנדסית, נוטה למזג.
+
+\begin{enumerate}
+\item \textbf{חד־משמעיות הידע אינה פשטות ההיסק הגלובלי.} ביטול העמימות ($\NP^A=\UP^A$) מבטיח שלעובדה מקומית חיובית יהיה עד יחיד במודל. הוא אינו מוזיל את ההיסק הגלובלי שלפיו אין כלל עדים.
+\item \textbf{אותו מידע אינו בהכרח אותה עוצמת חישוב.} במסגרת האלגבריזציה של אהרונסון וויגדרסון \cite{aw}, וגם במחסומים המולטילינאריים העדכניים של צ'ן, הו ורן \cite{chr}, ההרחבה המולטילינארית $\widetilde A$ נקבעת באופן יחיד על ידי הטבלה $A$. היא אינה מוסיפה אף סיבית בלתי תלויה. ואף על פי כן, ממשק הגישה הוא משאב חישובי בפני עצמו.
+\item \textbf{הגדלה בתוך שפה אינה החלפת שפה.} הגדלת השדה $\FF_p\to\FF_{p^k}$ בחישוב דטרמיניסטי אינה מעניקה את העוצמה הדרושה להכרעת $\LA$, משום ש־$\PP^{\widetilde A^{[p]}}\subseteq\MOD_p\PP^A$. את המחסום אפשר לעבור באמצעות שינוי איכותי: הוספת אקראיות או מתן אפשרות לשנות את מאפיין השדה.
+\item \textbf{פשטות מקומית אינה אפשרות לאמת תכונה גלובלית.} לכל סיבית תצפית נפרדת אחרי ההטלה יש דרגה קטנה, לכל היותר $d_h$. גם הצירופים שמכונה יכולה לבנות בזמן פולינומי אינם מגיעים לדרגה $R$ של התכונה הגלובלית $\OR_R$.
+\item \textbf{דוגמה חריגה אינה טיפוסיות.} קבוצת $G_\delta$ צפופה ב־$X_{\GI}$ מלמדת שההפרדה אינה רק דוגמה נגדית מלאכותית ושברירית, אלא התנהגות טיפוסית מבחינה טופולוגית בעולמות הקבילים. אין לבלבל טיפוסיות טופולוגית עם מידה הסתברותית $1$.
+\end{enumerate}
+
+\Needspace{16\baselineskip}
+\begin{center}
+\begin{LTR}
+\begin{tikzpicture}[
+  every node/.style={inner sep=7pt},
+  edge/.style={ink,thick,-{Stealth[length=2.6mm]}}]
+  \node[fill=wash,rounded corners] (A) {\hc{.45\textwidth}{\textbf{אותו אורקל $A$}\par אותו מידע התחלתי}};
+  \node[fill=wash,rounded corners,below left=15mm and 1mm of A.south,xshift=0mm,anchor=north east] (B)
+    {\hc{.38\textwidth}{\textbf{צופה ב: מאפיין משתנה}\par משנה את החשבון:\par $\FF_3,\FF_5,\FF_7,\dots$\par משפט השאריות הסיני\par $\LA$ ניתנת להכרעה ב־$\PP$}};
+  \node[fill=wash,rounded corners,below right=15mm and 1mm of A.south,xshift=0mm,anchor=north west] (C)
+    {\hc{.38\textwidth}{\textbf{צופה א: מאפיין $p$ קבוע}\par מגדיל את השדה:\par $\FF_3\to\FF_{3^{10}}\to\FF_{3^{100}}$\par $\LA$ אינה ניתנת להכרעה\par באופן דטרמיניסטי בזמן פולינומי}};
+  \draw[edge] (A.south) -- (B.north);
+  \draw[edge] (A.south) -- (C.north);
+\end{tikzpicture}
+\end{LTR}
+\end{center}
+\figcap{3}{הבדל בין הגדלה כמותית, כלומר הגדלת השדה במאפיין קבוע, לבין שינוי מבני בממשק, כלומר החלפת המאפיין.}
+
+\section{מה זה אומר, ומה לא, על ארכיטקטורת בינה מלאכותית}
+תוצאה בתורת הסיבוכיות היחסית לאורקלים אינה מוכיחה כשלעצמה משפטים על רשתות נוירונים או על מודלי שפה גדולים. עם זאת, היא נותנת אנלוגיה מדויקת ברמת המודל לאינטואיציה הנדסית שמפתחי מערכות סוכנים נתקלים בה.
+
+\medskip
+\noindent\textbf{דוגמה עם שישה ארונות ריקים.}
+דמיינו שמונה ארונות, מהם שישה ריקים. צופה שמקבל רק את הספירה מודולו $2$ רואה $6\bmod 2=0$. צופה שמקבל את הספירה מודולו $3$ רואה $6\bmod 3=0$. אפילו עשרה סוכנים מקבילים המשתמשים באותו ממשק מודולו $2$ לא יפתרו את העמימות רק משום שעומדים לרשותם יותר טוקנים. אבל מעבר לממשק מודולו $5$ נותן מיד $6\bmod 5=1\ne0$, ולכן בדוגמה הזאת הוא מבדיל בין שישה ארונות ריקים לבין אפס.
+
+במונחים של ארכיטקטורת סוכני בינה מלאכותית, יש כאן שני אופני פעולה נבדלים:
+\begin{itemize}
+\item \textbf{הגדלה כמותית:} יותר טוקנים, ניסיונות, זיכרון ועותקים של הסוכן, בלי לשנות את אוסף הפעולות.
+\item \textbf{הגדלה מבנית:} זיהוי מגבלות הייצוג הקיים ומעבר בר־בדיקה לממשק חישובי אחר, תוך שמירה על הקריטריון לקביעת התשובה הנכונה לבעיה המקורית.
+\end{itemize}
+
+לסוכן מחקר מצטבר עולה מכאן חלוקה טבעית של הזיכרון לארבע שכבות: זיכרון עובדתי (מה למדנו), זיכרון פרוצדורלי (איך עשינו זאת), זיכרון אפיסטמי (מדוע משפחת השיטות הזאת נבלמת) וזיכרון מבני (איזה שינוי ייצוג הסיר את המחסום).
+
+\medskip
+\noindent\textbf{הסתייגות בנוגע לבינה מלאכותית.}
+במודל המתמטי החלפת המאפיין ניתנת מראש כמשאב של האורקל. במערכת בינה מלאכותית אמיתית צריך לבנות ולבדוק את הממשק החדש, ועלות הבנייה צריכה להיכלל בתקציב הכולל. יישום העיקרון בארכיטקטורת סוכנים הוא אפוא השערת מחקר מנומקת המצריכה ניסוי מבוקר נפרד, לא הוכחה ליתרון.
+
+\Needspace{21\baselineskip}
+\section{מפת הגבולות: מה העבודה אינה}
+בהצגה לקהל הרחב חשוב במיוחד שלא לטשטש את מעמדן של טענות מתמטיות. הטבלה מפרידה בין מה שהוכח לבין מה שנותר מחוץ לתוצאה.
+
+\Needspace{16\baselineskip}
+\begin{center}
+\begin{LTR}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\hecell{.28\textwidth}{\textbf{מעמד בפועל}} & \hecell{.63\textwidth}{\textbf{הטענה}}\\
+\midrule
+\hecell{.28\textwidth}{לא} & \hecell{.63\textwidth}{פתרון הבעיה הלא־יחסית $\PP$ לעומת $\NP$ \cite{cook}}\\[3pt]
+\hecell{.28\textwidth}{לא (בעיה פתוחה)} & \hecell{.63\textwidth}{הוכחה ש־$\PH^A$ אינסופית כאשר $\NP^A=\UP^A$ (גרוכו \cite{grochow})}\\[3pt]
+\hecell{.28\textwidth}{לא} & \hecell{.63\textwidth}{עקיפה כללית של מחסום האלגבריזציה}\\[3pt]
+\hecell{.28\textwidth}{לא (השערה)} & \hecell{.63\textwidth}{הוכחת עדיפות לארכיטקטורה חדשה של מודל שפה גדול}\\[3pt]
+\hecell{.28\textwidth}{טרם הושלמה} & \hecell{.63\textwidth}{פורמליזציה מקצה לקצה של האורקל האינסופי ב־\EN{Lean}}\\[3pt]
+\hecell{.28\textwidth}{מוצגת במאמר} & \hecell{.63\textwidth}{הוכחה אנליטית של $\Sigma_2^{\PP,A}\not\subseteq\bigcup_p\MOD_p\PP^A$ כאשר $\NP^A=\UP^A$}\\[3pt]
+\hecell{.28\textwidth}{7 מודולים, 45 מתוך 45 משפטים} & \hecell{.63\textwidth}{אימות ממוכן של רכיבי ליבה נבחרים ושל הגשר הסופי ב־\EN{Lean 4.36.0}}\\
+\bottomrule
+\end{tabular}
+\end{LTR}
+\end{center}
+\tabcap{2}{הבחנה בין תוצאות מוכחות, פורמליזציה חלקית ושאלות פתוחות.}
+
+נחדד את גבול האימות הפורמלי: שבעה מודולים ללא ייבוא ב־\EN{Lean 4.36.0}, ובהם 45 משפטים שנבדקו, ללא שגיאות וללא \EN{sorryAx} או \EN{Classical.choice}, מאמתים רכיבים קומבינטוריים ואלגבריים נבחרים וכן גשר מותנה לשלב הסופי (\EN{UniformRecursiveBridge.lean}). הרקורסיה ההסתברותית המלאה ובניית האורקל האינסופי מוכחות אנליטית. ביקורת עמיתים חיצונית עדיין לא נערכה.
+
+\section{במקום סיכום}
+ברמה הראשונה, כשפותרים בעיה קשה, מחפשים תשובה בתוך השפה הנתונה. ברמה הבאה מבינים מדוע השפה עצמה אינה יכולה להבחין בין המצבים הדרושים. רק ברמה השלישית אפשר לשאול את השאלה הבונה העיקרית: מהו השינוי הקטן ביותר בממשק שיהפוך ידע שלא היה נגיש קודם לבר־חישוב?
+
+ההבחנה הזאת, בין נפח הנתונים לגאומטריה של הגישה אליהם, היא עיקר מה שגילינו.
+
+\begin{LTR}
+\begin{english}
+\renewcommand{\refname}{\texthebrew{מקורות}}
+\begin{thebibliography}{9}
+\bibitem{aw} S. Aaronson and A. Wigderson. Algebrization: A new barrier in complexity theory. \textit{ACM Transactions on Computation Theory}, 1(1):2:1--2:54, 2009. \href{https://www.scottaaronson.com/papers/alg.pdf}{PDF}.
+\bibitem{bgs} T. Baker, J. Gill, and R. Solovay. Relativizations of the P =? NP question. \textit{SIAM Journal on Computing}, 4(4):431--442, 1975. \href{https://epubs.siam.org/doi/10.1137/0204037}{DOI}.
+\bibitem{chr} L. Chen, Y. Hu, and H. Ren. New algebrization barriers to circuit lower bounds via communication complexity of Missing-String. \textit{ITCS 2026}. \href{https://arxiv.org/abs/2511.14038}{arXiv:2511.14038}.
+\bibitem{cook} S. Cook. The P versus NP problem. Clay Mathematics Institute, 2000. \href{https://www.claymath.org/wp-content/uploads/2022/06/pvsnp.pdf}{PDF}.
+\bibitem{gw} C. Glaßer and G. Wechsung. Relativizing function classes. \textit{Journal of Universal Computer Science}, 9(1):34--50, 2003. \href{https://lib.jucs.org/issue/4069/}{JUCS 9(1)}.
+\bibitem{grochow} J. A. Grochow. Polynomial-time axioms of choice and polynomial-time cardinality. \textit{Theory of Computing Systems}, 67, 2023. \href{https://arxiv.org/abs/2301.07123}{arXiv:2301.07123}.
+\bibitem{hastad} J. H\aa stad. Almost optimal lower bounds for small depth circuits. In \textit{STOC 1986}, pp.~6--20, 1986.
+\bibitem{hirahara} S. Hirahara and M. Nanashima. On worst-case learning in relativized Heuristica. In \textit{FOCS 2021}, pp.~751--758, 2021. \href{https://eccc.weizmann.ac.il/report/2021/161/download}{ECCC TR21-161}.
+\end{thebibliography}
+\end{english}
+\end{LTR}
+\end{document}

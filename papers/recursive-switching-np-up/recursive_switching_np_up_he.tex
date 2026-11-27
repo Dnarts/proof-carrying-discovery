@@ -1,0 +1,402 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[a4paper,margin=22mm]{geometry}
+\usepackage{fontspec}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em}
+\usepackage{hyperref}
+
+\definecolor{primary}{RGB}{24,64,122}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=primary,
+  citecolor=primary,
+  urlcolor=primary
+}
+
+\setlength{\parskip}{6pt plus 2pt minus 1pt}
+\setlength{\parindent}{0pt}
+
+\newtheorem{theorem}{משפט}[section]
+\newtheorem{lemma}[theorem]{למה}
+\newtheorem{corollary}[theorem]{מסקנה}
+\newtheorem{proposition}[theorem]{טענה}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{הגדרה}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{הערה}
+
+\newcommand{\Pcl}{\mathsf{P}}
+\newcommand{\NP}{\mathsf{NP}}
+\newcommand{\coNP}{\mathsf{coNP}}
+\newcommand{\UP}{\mathsf{UP}}
+\newcommand{\PP}{\mathsf{PP}}
+\newcommand{\PH}{\mathsf{PH}}
+\newcommand{\RP}{\mathsf{RP}}
+\newcommand{\BPP}{\mathsf{BPP}}
+\newcommand{\Modp}{\mathrm{Mod}_p\mathsf{P}}
+\newcommand{\Modthree}{\mathrm{Mod}_3\mathsf{P}}
+\newcommand{\SharpP}{\#\mathsf{P}}
+\newcommand{\SigTwo}{\Sigma_2^{\mathsf{P}}}
+\newcommand{\DT}{\mathrm{DT}}
+\newcommand{\CDT}{\mathrm{CDT}}
+\newcommand{\OR}{\mathrm{OR}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prb}{\Pr}
+\newcommand{\GI}{GI_1}
+
+\newcommand{\takeaway}[2]{%
+  \vspace{4pt}\noindent\colorbox{primary!7}{%
+    \parbox{\dimexpr\linewidth-2\fboxsep\relax}{%
+      \vspace{3pt}\textbf{\color{primary}#1:}\hspace{0.4em}#2\vspace{3pt}%
+    }%
+  }\vspace{4pt}%
+}
+\usepackage{bookmark}
+\usepackage{polyglossia}
+\setdefaultlanguage{hebrew}
+\setotherlanguage{english}
+\setmainfont{Liberation Serif}
+\setmonofont[Scale=.78]{DejaVu Sans Mono}
+\IfFileExists{fonts/NotoSansHebrew-Regular.ttf}{%
+  \newfontfamily\hebrewfont[Path=fonts/,Extension=.ttf,UprightFont=*-Regular,BoldFont=*-Bold,ItalicFeatures={FakeSlant=0.18},ItalicFont=*-Regular,Script=Hebrew]{NotoSansHebrew}%
+}{\newfontfamily\hebrewfont[Script=Hebrew,AutoFakeSlant=0.18]{Noto Sans Hebrew}}
+\newcommand{\EN}[1]{\textenglish{#1}}
+\pdfstringdefDisableCommands{\def\EN#1{#1}}
+
+\newcommand{\RTLcell}[2]{\begin{minipage}[t]{#1}\raggedleft #2\end{minipage}}
+\hypersetup{pdflang={he},pdfauthor={Aleksandr Strand},pdftitle={מיתוג רקורסיבי והפרדות אורקל מודולריות},pdfkeywords={תורת הסיבוכיות, אורקלים, מיתוג רקורסיבי, ספירה מודולרית, Lean 4}}
+\AtBeginDocument{\renewcommand{\proofname}{הוכחה}\renewcommand{\abstractname}{תקציר}\renewcommand{\tablename}{טבלה}}
+\allowdisplaybreaks[1]
+\raggedbottom
+
+
+\title{\textbf{מיתוג רקורסיבי והפרדות אורקל מודולריות תחת $\NP = \UP$}}
+\author{\EN{Aleksandr Strand}\\ \small חוקר עצמאי}
+\date{26 בנובמבר 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+אנו חוקרים את המתח בין ביטול העמימות האי־דטרמיניסטית ($\NP^A = \UP^A$) לבין שימור הקושי של הרמות הגבוהות בהיררכיה הפולינומית מול מחלקות ספירה מודולריות. בהסתמך על קידוד האורקל הא־מחזורי בעל העד היחיד $\GI$ של גלסר ווכסונג (2003), אנו מוכיחים \emph{משפט מיתוג רקורסיבי אחיד}: הוא מצמצם בו־זמנית את כל ביטי האורקל הנגישים בזמן פולינומי, על פני $O(\log m)$ שכבות $\GI$ מקוננות, לעצי החלטה בעומק קוואזי־פולינומי $2^{O(\log^4 m)}$ מעל תת־קוביית בסיס חופשית מממד $R \ge 2^{m - O(\log^5 m)}$, תוך שימור עולם הבסיס שבו כל השורות אינן ריקות.
+
+בשילוב היטל רקורסיבי זה עם פונקציונל דואלי מתחלף מדויק מעל $\Z$, אנו מוכיחים אנליטית שקיים אורקל $A$ המקיים $\GI(A)$ כך ש־$\NP^A = \UP^A$, ואילו שפה אונרית יחידה $\mathcal{L}_A \in \SigTwo{}^{,A}$ אינה שייכת ל־$\bigcup_{p\text{ prime}} \Modp^A$. יתרה מכך, קבוצת האורקלים המפרידים הללו היא קבוצת $G_\delta$ צפופה במרחב הקומפקטי $X_{\GI}$ של האורקלים התואמים ל־$\GI$. עבור גישת אורקל אלגברית מולטילינארית במסגרת של אהרונסון וויגדרסון (2009), מתקבלת הפרדה בלתי־מותנית בין גישה במאפיין קבוע (גם מעל שדות הרחבה $\F_{p^k}$ הגדלים מעריכית) ובין גישה בכמה מאפיינים: $\mathcal{L}_A \in (\SigTwo{}^{,A} \cap \Pcl^{\widetilde{A}[\mathrm{poly}]}) \setminus \bigcup_{p\text{ prime}} \Pcl^{\widetilde{A}^{[p]}}$. רכיבים נבחרים מתחומי הקומבינטוריקה, האלגברה והגישור הסופי אומתו ממוחשב בשבעה מודולי \EN{Lean 4.36.0} ללא ייבוא (45 משפטים נבדקו, אפס אקסיומות אסורות); האינדוקציה מתורת המידה והאלכסון האינסופי על אורקלים נותרו אנליטיים.
+\end{abstract}
+
+\section{מבוא}
+
+השאלה אם אי־דטרמיניזם חד־משמעי ($\NP = \UP$) גורר קריסה של ההיררכיה הפולינומית היא שאלה מבנית ותיקה בתורת הסיבוכיות. במסגרת היחסית לאורקל, גרוכוב~\cite{Grochow2023} מציג כשאלה פתוחה 1.2 את בעיית בנייתו של אורקל $A$ שביחס אליו $\NP^A = \UP^A$ ואילו $\PH^A$ אינסופית. הוא מציין שבניות הכופות עדים יחידים נוטות לגרום לקריסות לא מכוונות של רמות כמתים גבוהות יותר.
+
+תחת $\NP^A = \UP^A$, כל שפה ב־$\NP^A$ מוכרעת על ידי מכונה אי־דטרמיניסטית בזמן פולינומי עם לכל היותר מסלול מקבל אחד לכל קלט; מכאן מיד $\NP^A \subseteq \Modp^A$ לכל ראשוני $p$. לפיכך הפרדות אורקל קלאסיות בין $\NP$ למחלקות ספירה מודולריות אינן יכולות להתרחש בשום עולם שבו $\NP^A = \UP^A$. נוסף על כך, מכיוון ש־$\Pcl^{\Modp^A} = \Modp^A$ לכל ראשוני $p$, גם כל המחלקה $\Delta_2^{\Pcl,A} = \Pcl^{\NP^A}$ קורסת לתוך $\Modp^A$. לכן $\SigTwo{}^{,A}$ היא \emph{הרמה המזערית המדויקת} של ההיררכיה הפולינומית שבה תיתכן הפרדה מספירה מודולרית בראשוני קבוע, תחת $\NP^A = \UP^A$.
+
+\takeaway{תוצאה מרכזית}{אנו מוכיחים אנליטית שקיים אורקל $A$ המקיים את אינווריאנט העד היחיד הא־מחזורי $\GI$ כך ש־$\NP^A = \UP^A$ ו־$\SigTwo{}^{,A} \not\subseteq \bigcup_{p\text{ prime}} \Modp^A$, באמצעות שפה אונרית יחידה $\mathcal{L}_A$, ושאורקלים אלה מהווים קבוצת $G_\delta$ צפופה ב־$X_{\GI}$.}
+
+\textbf{הקשר לעבודות קודמות.} קידוד העד היחיד $\GI$ באורכים זוגיים בשילוב אורכים אי־זוגיים חופשיים אינו חדש: הוא ממשיך ישירות את בנייתם של גלסר ווכסונג~\cite{GlasserWechsung2003}, שהשתמשו בשימור עדים א־מחזורי כדי להפריד את $\mathrm{min\text{-}P}^A$ מ־$\SharpP^A$ תחת $\NP^A = \UP^A$. בתחום המיתוג, היראהרה וננשימה~\cite{HiraharaNanashima2021} פיתחו הגבלות אקראיות מעל אלפבית גדול עם חשיפה בשלבים. תרומתנו הטכנית היא ארכיטקטורת מיתוג רקורסיבית המשמרת הן את $\GI$ והן את עולם הבסיס שבו כל השורות אינן ריקות, ומגבילה את הדרגה האלגברית \emph{המדויקת} של כל ביטי האורקל הנגישים לאורך $O(\log m)$ שכבות רקורסיביות, בלי לדרוש דחיסה גלובלית של פרופילי השומרים החיוביים.
+
+\textbf{היקף התוצאה.} העבודה אינה פותרת את שאלתו הפתוחה של גרוכוב על אינסופיות $\PH^A$ תחת $\NP^A = \UP^A$, ואינה מכריעה את שאלת $\Pcl$ מול $\NP$ ללא אורקל~\cite{Cook2000,RazborovRudich1997}. שבעה מודולי \EN{Lean 4.36.0} ללא ייבוא (ראו נספח) מאמתים ממוחשב רכיבים קומבינטוריים, אלגבריים ורכיבי גישור סופיים נבחרים (45 משפטים, אפס \EN{\texttt{sorryAx}}, אפס \EN{\texttt{Classical.choice}}); האינדוקציה ההסתברותית על פני הגבלות סופיות ובניית האורקל באמצעות קטגוריית בר הוכחו אנליטית.
+
+\section{הכנות ומודל האורקל הא־מחזורי \texorpdfstring{$\GI$}{GI1}}
+
+לאורקל $A \subseteq \{0,1\}^*$ נסמן ב־$A_m : \{0,1\}^m \to \{0,1\}$ את ההגבלה שלו למחרוזות באורך $m$. תהי $K^A$ השפה הקנונית השלמה ל־$\NP^A$ של שלשות $\mathrm{encode}(i, u, t) = 0^i 1\, 0^{|u|} 1\, u\, 1^t$, שעבורן מכונת טיורינג האי־דטרמיניסטית בעלת האורקל מספר $i$, המסומנת $N_i^A$, מקבלת את $u$ בתוך $t$ צעדים. מכיוון ש־$|\mathrm{encode}(i, u, t)| = i + 2|u| + t + 2 > t$, כל שאילתת אורקל $q$ המבוצעת במהלך הסימולציה עומדת ב\emph{תנאי הא־מחזוריות החמור} $|q| < r$, כאשר $r = |\mathrm{encode}(i, u, t)|$.
+
+\begin{definition}[אינווריאנט העד היחיד $\GI$ \cite{GlasserWechsung2003}]
+אורקל $A$ מקיים את $\GI$ (ובסימון $A \in X_{\GI}$) אם לכל $r \ge 1$ ולכל $x \in \{0,1\}^r$,
+\[
+  \sum_{y \in \{0,1\}^r} A_{2r}(x, y) = K^A(x) \in \{0,1\}.
+\]
+\end{definition}
+
+כאשר $A \in X_{\GI}$, ההכרעה אם $x \in K^A$ מצטמצמת לניחוש העד היחיד $y \in \{0,1\}^r$ שעבורו $A_{2r}(x, y) = 1$, ולכן $\NP^A = \UP^A$. זאת ועוד, $X_{\GI}$ הוא תת־מרחב סגור (ולכן קומפקטי ומטריזבילי בשלמות) של מרחב קנטור $\{0,1\}^{\mathbb{N}}$, שכן כל אילוץ $\GI$ באורך $2r$ תלוי רק במספר סופי של ביטים באורכים $\le 2r$.
+
+לשם אלכסון באורך האי־זוגי החופשי $n = 2m + 1$, אנו רואים בפרוסה $A_n(0uv)$ ($u, v \in \{0,1\}^m$) מטריצה בוליאנית בגודל $N \times L$, עם $N = L = 2^m$, שבה בכל שורה מופיע לכל היותר $1$ אחד. נגדיר את שפת היעד האונרית
+\[
+  \mathcal{L}_A = \bigl\{\, 1^m : \exists u \in \{0,1\}^m\; \forall v \in \{0,1\}^m,\; A_{2m+1}(0uv) = 0 \,\bigr\} \in \SigTwo{}^{,A}.
+\]
+ההצבה $b_u = \mathbf{1}[\forall v,\, A_{2m+1}(0uv) = 0]$ הופכת את $\mathcal{L}_A(1^m)$ ל־$\OR_N(b) = \bigvee_{u} b_u$, כאשר $b = 0^N$ הוא עולם הבסיס שבו כל השורות אינן ריקות.
+
+\section{למת המיתוג המשמרת סמן יחיד}
+
+הגבלות המיתוג הרגילות של הוסטאד~\cite{Hastad1986} מקבעות משתנים הן ל־$0$ והן ל־$1$, ובכך היו הורסות את עולם הבסיס שבו כל השורות אינן ריקות $b = 0^N$. כדי לשמר בו־זמנית את $b = 0^N$ ואת יחידות הסמן בכל שורה, אנו מגדירים היטל חד־צדדי על מצבי השורות $\{E, U_j, S_j\}$ ($j \in [L]$): המצב $U_j$ מקבע סמן יחיד במיקום $j$ ($b_u = 0$); המצב $S_j$ מותיר את השורה $u$ חופשית בין היותה ריקה ($b_u = 1$) לבין הצבת סמן ב־$j$ ($b_u = 0$); ו־$E$ מציין שורה ריקה. נקודה מכרעת היא ש־$E$ \emph{לעולם אינו} נדגם בהיטל $\rho$; הוא מופיע רק במידת עזר לקידוד $\mathcal{Q}$.
+
+תהי $\mathcal{P}$ המידה הדוגמת כל שורה באופן בלתי־תלוי כ־$S_j$ בהסתברות $p/L$ או כ־$U_j$ בהסתברות $(1-p)/L$. נגדיר את מידת העזר $\mathcal{Q}$ באמצעות $\mathcal{Q}(E) = 1/L$, $\mathcal{Q}(U_j) = (1 - p - 1/L)/L$ ו־$\mathcal{Q}(S_j) = p/L$.
+
+\begin{theorem}[למת המיתוג המשמרת סמן יחיד]
+\label{thm:singleton-switching}
+תהי $F$ נוסחת \EN{DNF} מנורמלת ברוחב לכל היותר $w$, מעל מטריצה $N \times L$ הכפופה לאילוץ של סמן יחיד לשורה. נניח $p + 1/L \le 1/2$, $(1 - p)L \ge N/2 + 1$ ו־$8pw^2 < 1$. אז עומק עץ ההחלטה הקנוני $\CDT(F|_\rho)$ מקיים
+\[
+  \Prb_{\rho \sim \mathcal{P}}\bigl[\CDT(F|_\rho) \ge s\bigr]
+  \le e^2 \frac{(8pw^2)^s}{1 - 8pw^2}.
+\]
+בפרט, עבור $p = \frac{1}{32w^2}$ מתקיים $\Prb_\rho[\CDT(F|_\rho) \ge s] \le \frac{4e^2}{3}\, 4^{-s}$.
+\end{theorem}
+
+\begin{proof}
+נסדר את האיברים של $F$. בהינתן $\rho$ שעבורה $\CDT(F|_\rho) \ge s$, נעקוב אחר הענף הקנוני באורך $t \in [s, s+w-1]$ ונעצור לאחר הבלוק הראשון המגיע לעומק $\ge s$. בכל בלוק נסמן ב־$\tau$ את האיבר הראשון שאינו אפס תחת ההגבלה החלקית הנוכחית. נחליף רק את השורות החופשיות $S_j$ שבהן $\tau$ תלוי בפועל תחת ההגבלה הנוכחית, במימוש הפרטי המספק שלו: $S_j \mapsto U_j$ אם $u$ מופיעה חיובית ב־$\tau$, ו־$S_j \mapsto E$ אם $u$ מופיעה ב־$\tau$ רק שלילית. (בשל הנרמול ויחידות הסמן, אין שורה עם ליטרלים סותרים ב־$\tau$.)
+
+במקרה השלילי $S_j \mapsto E$, הכתובת $j$ חייבת להתאים לאחד מבין לכל היותר $w$ הליטרלים השליליים של $\tau$ בשורה $u$, ולכן $j$ מקודד על ידי אינדקס ב־$[w]$. תיעוד מיקום השורה ב־$\tau$ ($\le w$), אינדקס הליטרל השלילי ($\le w$), ביט הענף בפועל בעץ הקנוני ($2$) וביט סוף הבלוק ($2$) משתמש לכל היותר ב־$4w^2$ סמלי עזר לכל שורה שהוחלפה.
+
+\emph{הפיכות.} כל החלפה $S_j \mapsto U_j$ או $S_j \mapsto E$ היא צמצום תקף של $S_j$, ולכן כל איבר שקודם ל־$\tau$ (וזהותית שווה ל־$0$ תחת ההגבלה הנוכחית) נשאר זהותית $0$, ואילו $\tau$ נעשה זהותית $1$. כך הפענוח משחזר את $\tau$ באופן יחיד כאיבר המסופק הראשון, מחזיר באמצעות קוד העזר את השורות החופשיות ואת ביטי הענף בפועל, וממשיך באינדוקציה לבלוק הבא.
+
+\emph{יחס המשקלים.} לכל $S_j$ שלא השתנה מתקיים $\mathcal{P}(S_j)/\mathcal{Q}(S_j) = 1$. לכל שורה שהוחלפה, $p + 1/L \le 1/2$ גורר $\mathcal{P}(S_j)/\mathcal{Q}(U_j) = \frac{p}{1 - p - 1/L} \le 2p$ וגם $\mathcal{P}(S_j)/\mathcal{Q}(E) = p \le 2p$. עבור לכל היותר $N$ שורות $U_j$ שלא השתנו, $(1-p)L \ge N/2 + 1$ נותן $\bigl(\frac{1-p}{1-p-1/L}\bigr)^N \le e^2$. לכן $\mathcal{P}(\rho) \le e^2 (2p)^t \mathcal{Q}(\eta)$. סכימה על כל $t \in [s, s+w-1]$ ועל $(4w^2)^t$ קודי העזר נותנת את החסם.
+\end{proof}
+
+הפעלת חסם האיחוד על $H$ נוסחאות \EN{DNF} ברוחב $\le w$, יחד עם חסם צ'רנוף על מספר השורות החופשיות $R$, נותנת היטל יחיד שעבורו $R \ge \frac{N}{64w^2}$ וגם $\max_{i \le H} \CDT(F_i|_\rho) < s = O(\log H)$.
+
+\section{זיכרון סמנים מתמשך ולכידת עקבה}
+
+הרחבת משפט~\ref{thm:singleton-switching} לשכבות $\GI$ רקורסיביות נתקלת בשני מכשולים: אי אפשר לקבע שורות מקודדות גבוהות $A_{j,x}(y) = K_{j,x}(A_{<j})\mathbf{1}[y = g_{j,x}]$ כריקות כדי לספק ליטרלים שליליים בלי להפר את $\GI$, ואיברים מעורבים יכולים להשתמש בליטרלים חיוביים כתנאי שמירה המכוונים שאילתות שליליות אל סמנים מוסתרים. אנו פותרים את שתיהן באמצעות זיכרון סמנים מתמשך ולכידת עקבה.
+
+נקבע שכבה $h$ עם סמנים אחידים ובלתי־תלויים $g_{h,x} \in [L]$ ונוסחת \EN{DNF} מנורמלת עם ליטרלים בשני הסימנים, $F$, שרוחבה $\le w$. נתחזק קבוצה $U$ של סמנים ידועים ונכונים משכבה $h$, $(x, g_{h,x})$, עם $K_{h,x} = 1$; בתחילה $U_0 = \varnothing$. בסבב $r$:
+\begin{enumerate}
+\item בחרו באיבר הראשון $\tau_r$ של $F$ שכל הליטרלים החיוביים שלו פעילים ושאינו נחסם בידי שום סמן ב־$U_{r-1}$;
+\item הוסיפו ל־$h$ את כל הסמנים החיוביים משכבה $\tau_r$ של $U$;
+\item סרקו לפי הסדר את הליטרלים השליליים משכבה $h$ של $\tau_r$; אם אף אחד מהם אינו חוסם בפועל ($g_{h,x} = y$ וגם $K_{h,x} = 1$), החזירו $1$; אחרת הוסיפו את החוסם הראשון בפועל $(x_r^*, y_r^*)$ ל־$U$ כדי לקבל את $U_r$.
+\end{enumerate}
+אם אין איבר כשיר, החזירו $0$.
+
+\begin{lemma}[זרות התפקידים]
+\label{lem:role-disjoint}
+במהלך $s$ סבבי החסימה הראשונים, תהי $B$ קבוצת החוסמים שהתגלו זה עתה $x_r^*$, ותהי $P$ קבוצת שורות שכבה $h$ שנחשפו חיובית \emph{לראשונה} (כלומר, לא נכללו כבר ב־$U_{r-1}$). אז $|B| = s$ (כל החוסמים שונים), $|P| \le ws$ ו־$B \cap P = \varnothing$.
+\end{lemma}
+
+\begin{proof}
+אילו $x_r^*$ התגלה כחוסם או נחשף חיובית בסבב קודם $r' < r$, אז $(x_r^*, g_{h,x_r^*}) \in U_{r-1}$, בסתירה לכך ש־$\tau_r$ אינו נחסם על ידי $U_{r-1}$. השורה אינה יכולה להופיע חיובית ב־$\tau_r$ עצמו, מכוח הנרמול. אם $x_r^*$ משמש חיובית בסבב מאוחר $r' > r$, הוא כבר נמצא ב־$U_{r'-1}$ ולכן אינו כלול ב־$P$.
+\end{proof}
+
+\begin{theorem}[לכידת עקבה]
+\label{thm:trace-capture}
+הכניסו באופן בלתי־תלוי כל שורה משכבה $h$ לקבוצה מוסתרת $R_{\mathrm{hid}}$ בהסתברות $\theta = \frac{1}{w+1}$, ולקבוצה $R_{\mathrm{ext}}$ אחרת. נגדיר תהליך מוגבל היודע בתחילה רק את $g_h|_{R_{\mathrm{ext}}}$, מתיר חיפוש חיובי רק בין איברים ששורותיהם החיוביות משכבה $h$ נמצאות ב־$R_{\mathrm{ext}} \cup \mathrm{rows}(U)$, ונפסק אם החוסם הראשון בפועל שייך ל־$R_{\mathrm{ext}}$. כאשר $B \subseteq R_{\mathrm{hid}}$ וגם $P \subseteq R_{\mathrm{ext}}$ (בהסתברות של לפחות $q^s$ עבור $q = \theta(1-\theta)^w \ge \frac{1}{e(w+1)}$), התהליך המוגבל משחזר בדיוק את אותם $s$ סבבי חסימה ואת המצב הסופי $U_s$.
+\end{theorem}
+
+\begin{proof}
+באינדוקציה על $r \le s$, נניח $U_{r-1}^{\mathrm{restr}} = U_{r-1}$. כל איבר שהתהליך המוגבל מתיר כשיר גם בתהליך המקורי, ולכן לא נבחר איבר הקודם ל־$\tau_r$. גם הכיוון ההפוך מתקיים: כל שורה חיובית משכבה $h$ של $\tau_r$ נמצאת ב־$\mathrm{rows}(U_{r-1})$, או נחשפת חיובית לראשונה ולכן נמצאת ב־$P \subseteq R_{\mathrm{ext}}$; מכאן ש־$\tau_r$ נבחר. החוסם הראשון שלו בפועל $x_r^*$ שייך ל־$B \subseteq R_{\mathrm{hid}}$, ולכן התהליך המוגבל אינו נפסק ומתקבל $U_r^{\mathrm{restr}} = U_r$.
+\end{proof}
+
+שימו לב: פרדיקט הכשירות המוגבל בסבב $r$ לעולם אינו בודק את $g_{h,x}$ עבור שורה מוסתרת שטרם נחשפה $x \in R_{\mathrm{hid}} \setminus \mathrm{rows}(U)$. כדי לבטל חסם איחוד מעריכי על עולמות הבסיס $b \in \{0,1\}^R$, נפעיל הגבלת עזר ל־$0$ בלבד, $\sigma$, שצפיפותה $p = \frac{1}{4a}$.
+
+\begin{lemma}[חסם לענפים אדפטיביים בני־השגה]
+\label{lem:reachable-branch}
+נניח שבכל סבב התהליך המוגבל מבצע לכל היותר $a$ שאילתות למשתני הבסיס $b$, ולכל היותר $w$ בדיקות כתובת לסמנים שטרם נחשפו ב־$R_{\mathrm{hid}}$. תחת הגבלה בלתי־תלויה ל־$0$ בלבד, $\sigma$, עם הסתברות חופש $p = \frac{1}{4a}$ ועם $sw \le L/2$,
+\[
+  \Prb_{\sigma,\, g_h|_{R_{\mathrm{hid}}}}\bigl[\exists b \in \mathrm{Cube}(\sigma) : \text{process completes } s \text{ blocking rounds}\bigr]
+  \le \left(\frac{4w}{L}\right)^s.
+\]
+\end{lemma}
+
+\begin{proof}
+נקבע $g_{\mathrm{hid}} = g_h|_{R_{\mathrm{hid}}}$. תמליל בסיס מנצח $\pi$ השואל $d \le sa$ משתני בסיס שונים, שמתוכם $u$ שווים לאחת, נגיש אחרי $\sigma$ בהסתברות $p^u$. תחת התפלגות המכפלה המסייעת $\tilde{b}$ עם $\Prb[\tilde{b}_i = 1] = \frac{p}{1+p}$ ועם $\Prb[\tilde{b}_i = 0] = \frac{1}{1+p}$, ההסתברות של אותו תמליל היא $\frac{p^u}{(1+p)^d} \ge \frac{p^u}{(1+p)^{sa}}$. סכימה על כל העלים המנצחים ולקיחת תוחלת על פני $g_{\mathrm{hid}}$ נותנות
+\[
+  \Prb[\exists b : \text{wins}] \le \E[\#\text{reachable winning leaves}]
+  \le (1+p)^{sa}\, \Prb_{\tilde{b}, g_{\mathrm{hid}}}[\text{wins on } (\tilde{b}, g_{\mathrm{hid}})].
+\]
+לכל $\tilde{b}$ קבוע, התהליך דטרמיניסטי ב־$g_{\mathrm{hid}}$. בכל סבב חסימה מתגלה סמן מוסתר חדש לאחר לכל היותר $w$ בדיקות (עד $sw$ כתובות לא מתאימות נפסלו), וההסתברות להצלחה היא $\le \frac{w}{L - sw} \le \frac{2w}{L}$. מכיוון ש־$(1+p)^a \le e^{1/4} < 2$, המכפלה היא לכל היותר $(4w/L)^s$.
+\end{proof}
+
+\section{מיתוג רקורסיבי אחיד}
+
+כדי להרכיב את משפט~\ref{thm:trace-capture} על פני $h$ שכבות $\GI$ מקוננות בלי לפרוס מחדש את כל נוסחאות ה־\EN{DNF} עד לביטי הבסיס הגולמיים, אנו מחליפים את פריסת הבסיס ב\emph{חיפוש בינארי רקורסיבי על תחיליות}. בהינתן נוסחת \EN{DNF} סדורה $F = \bigvee_{i=1}^M \tau_i$ ברוחב $\le w$ מעל שכבות $\le h$, לכל זיכרון $U$ ולכל אינדקס תחילית $j \le M$ נגדיר את פרדיקט התחילית
+\[
+  P_{U,j} = \bigl[\,\exists i \le j : \tau_i \text{ is positive-active and not blocked by } U\,\bigr].
+\]
+קיבוע הסמנים הנגישים משכבה $h$ והצבת הגדרות ה־\EN{DNF} $K_{h,x}$ (ברוחב $\le T$ מעל שכבות $< h$) במקום ליטרלים חיוביים משכבה $h$ הופכים כל $P_{U,j}$ לנוסחת \EN{DNF} עם שני סימני הליטרלים מעל שכבות $< h$, ברוחב לכל היותר $w' = wT$. מכיוון שנרמול איברים מעל $B$ ביטי אורקל נותן $M \le M_{\max} := (2B+1)^w$, מציאת האיבר הכשיר הראשון דורשת לכל היותר $v_{\max} := 1 + \lceil \log_2(M_{\max}+1) \rceil$ שאילתות חיפוש בינארי ל־$P_{U,j}$ (בלי תלות בנוסחה המסוימת $F$).
+
+\begin{theorem}[מיתוג רקורסיבי אחיד]
+\label{thm:recursive-switching}
+נתון מגדל א־מחזורי בן $h$ שכבות מעל מטריצת בסיס $N \times L_0$ עם סמן יחיד לכל היותר בשורה, שגרעיני שכבה $j$ שלו הם נוסחאות \EN{DNF} ברוחב $\le T$ מעל שכבות $< j$, עם סמנים אחידים בלתי־תלויים על פני $\ge L$ מיקומים לכל שורה מקודדת, ולכל היותר $B$ ביטי אורקל בסך הכול. לכל קבוצת פרמטרים $(N, L_0, L, B, T, h, H, w, \delta)$ המקיימת את תנאי מיתוג הבסיס $p_0 + 1/L_0 \le 1/2$, $(1-p_0)L_0 \ge N/2 + 1$ (כאשר $p_0 = \frac{1}{32 w_0^2}$) ואת תנאי המרווח האינדוקטיביים $s_j w_j \le L/2$, $4w_j/(q_j L) \le 1/2$ בכל שכבה $j \ge 1$, קיים היטל בסיס אקראי ל־$0$ בלבד, $\rho_{\le h}$, שהתפלגותו תלויה \emph{רק} ב־$(N, L, B, T, h, H, w, \delta)$ (לא בנוסחאות המסוימות), כך שלכל משפחה $\mathcal{F}$ של לכל היותר $H$ נוסחאות \EN{DNF} עם ליטרלים בשני הסימנים וברוחב $\le w$,
+\[
+  \Prb_{\rho_{\le h},\, g_{\le h}}\bigl[\exists F \in \mathcal{F} : \DT(F|_{\rho_{\le h}, g_{\le h}}) > d_h\bigr] < \delta.
+\]
+\end{theorem}
+
+\begin{proof}
+נוכיח באינדוקציה על $h$. המקרה הבסיסי $h = 0$ הוא משפט~\ref{thm:singleton-switching} עם $p_0 = \frac{1}{32w_0^2}$ ועם $d_0 = O(\log H_0 + \log(1/\delta_0) + 1)$.
+
+בצעד $h-1 \to h$ נקבע את החסמים האוניברסליים $M_{\max} = (2B+1)^w$ ו־$v_{\max} = 1 + \lceil \log_2(M_{\max}+1) \rceil$, וכן $s = \lceil \log_2(4H/\delta)\rceil$, $\theta = \frac{1}{w+1}$ ו־$q = \theta(1-\theta)^w$. במשך $s$ סבבים מתקיים $|U| \le (w+1)s$, לכן גודלה של משפחת העזר בשכבה התחתונה הוא לכל היותר $H' = B + H(M_{\max}+1)(B+1)^{(w+1)s}$, רוחבה $w' = wT$ ותקציב השגיאה שלה $\delta' = \frac{\delta q^s}{4}$. תהיה $(\rho_{<h}, g_{<h})$ ההתפלגות האוניברסלית מהנחת האינדוקציה הנותנת עומק $d'$, ותהיה $\sigma_h$ הגבלה בלתי־תלויה ל־$0$ בלבד בצפיפות $p_h = \frac{1}{4a}$, כאשר $a = (v_{\max} + w)d'$ (תלות רק בפרמטרים, ולא בנוסחאות המסוימות ב־$\mathcal{F}$).
+
+\emph{מאורע א (חסם לסבבי חסימה).} נתנה ב־$(R_{\mathrm{hid}}, g_h|_{R_{\mathrm{ext}}})$. גודל משפחת התחיליות המוגבלת הוא $\le H'$ ורוחבה $\le w'$, והיא בלתי־תלויה ב־$(\rho_{<h}, g_{<h}, \sigma_h, g_h|_{R_{\mathrm{hid}}})$. מהנחת האינדוקציה ומלמה~\ref{lem:reachable-branch} ההסתברות לשחזור $s$ סבבי חסימה היא לכל היותר $\delta' + H(4w/L)^s$. ממשפט~\ref{thm:trace-capture} ומאי־התלות של $R_{\mathrm{hid}}$,
+\[
+  \Prb[\mathrm{Bad}_A] \le q^{-s}\delta' + H\left(\frac{4w}{qL}\right)^s \le \frac{\delta}{4} + \frac{\delta}{4} = \frac{\delta}{2}.
+\]
+
+\emph{מאורע ב (חיפוש מדויק ללא הגבלה).} נתנה בכל הסמנים $g_h$. גם גודל משפחת התחיליות המלאה והבלתי־מוגבלת הוא $\le H'$ ורוחבה $\le w'$, והיא בלתי־תלויה ב־$(\rho_{<h}, g_{<h})$. מאוניברסליות ההתפלגות התחתונה, $\Prb[\mathrm{Bad}_B] \le \delta' \le \frac{\delta}{4}$. מאחר ש־$\sigma_h$ רק מגבילה את הקובייה, היא לעולם אינה מגדילה את עומק העץ.
+
+בחיתוך $\overline{\mathrm{Bad}_A} \cap \overline{\mathrm{Bad}_B}$ (שכישלונו בהסתברות $< \frac{3\delta}{4} < \delta$), האלגוריתם המלא מסתיים לאחר לכל היותר $s - 1$ סבבי חסימה ועוד לכל היותר $1$ סבב קבלה או דחייה סופי. כל סבב עולה לכל היותר $(v_{\max} + w)d'$ שאילתות בסיס, ומכאן $d_h \le s(v_{\max} + w)d'$.
+\end{proof}
+
+\textbf{סגירה כמותית עבור $\GI$.} עבור חסם זמן פולינומי קבוע $T = \mathrm{poly}(m)$ ואורך אי־זוגי חופשי $n = 2m+1$, נקבע את כל האורכים $< n$, את כל האורכים הזוגיים המקודדים $2r \in (n, 2n)$ (שגרעיניהם שואלים רק אורכים $< r < n$ ולכן אינם תלויים ב־$A_n$), וכן את כל האורכים האי־זוגיים הלא־מקודדים ב־$(n, T]$ ואת $A_n(1\cdots)$ ל־$0$. נחלק את האורכים הזוגיים המקודדים ב־$[2n, T]$ ל־$h = O(\log m)$ טווחים $I_j = [2^j n, 2^{j+1} n)$ ($j \ge 1$). לכל $2r \in I_j$, א־מחזוריות חמורה נותנת $|q| < r < 2^j n$, ולכן אין תלויות בתוך טווח, וכן $L = 2^r \ge 2^{2m+1} > 2^m$. נגדיר $C_j := 1 + \log_2 H_j + \log_2(1/\delta_j)$ וצפיפות הישרדות כוללת $p_* := \prod_{j=0}^h p_j$. מעדכוני הפרמטרים האינדוקטיביים מתקבל $w_{j-1} = T w_j$ וגם $C_{j-1} = O\bigl(C_j (w_j + 1)(T + 1)\bigr)$. מעקב אחר נוסחאות הנסיגה לאורך $h = O(\log m)$ טווחים נותן:
+\[
+  \max_j w_j \le 2^{O(\log^2 m)},\quad
+  C_j, s_j, v_j \le 2^{O(\log^3 m)},\quad
+  d_h \le 2^{O(\log^4 m)},\quad
+  \log_2(1/p_*) = O(\log^5 m).
+\]
+לפי חסם צ'רנוף, בהסתברות חיובית לכל ביטי האורקל הבודדים עד אורך $T$ יש עומק עץ החלטה (ולפיכך דרגה מולטילינארית מדויקת) לכל היותר $d_h = 2^{O(\log^4 m)}$ מעל תת־קוביית בסיס חופשית מממד $R \ge 2^{m - O(\log^5 m)}$, ואילו $\mathcal{L}_{A_b}(1^m) = \OR_R(b)$.
+
+\section{הפרדות אורקל מודולריות וגנריוּת של בר}
+
+כדי להפריד בו־זמנית את $\OR_R$ מכל מחלקת ספירה מודולרית עם ראשוני קבוע, נגדיר את הפונקציונל הדואלי המתחלף מעל $\Z$:
+\[
+  \Lambda_R(f) = \sum_{b \in \{0,1\}^R} (-1)^{|b|} f(b).
+\]
+
+\begin{lemma}[חסם תחתון אוניברסלי על הדרגה עבור $\mathrm{Mod}_p$]
+\label{lem:modp-lb}
+לכל שלם $p \ge 2$, לכל $R \ge 1$ ולכל פולינום בעל מקדמים שלמים $P(b)$ מדרגה $d < R$, הפולינום $P$ אינו יכול להסכים עם $\OR_R$ מודולו $p$ על $\{0,1\}^R$.
+\end{lemma}
+
+\begin{proof}
+כל מונום מדרגה $< R$ משמיט לפחות קואורדינטה אחת $i < R$, ולכן הסכום המתחלף שלו מתאפס זהותית מעל $\Z$; מליניאריות, $\Lambda_R(P) = 0$. מצד שני, $\Lambda_1(\OR_1) = 0 - 1 = -1$, ועבור $R \ge 1$ מתקיים $\Lambda_{R+1}(\OR_{R+1}) = \Lambda_R(\OR_R) - \Lambda_R(1) = -1 - 0 = -1$. אם $P(b) \equiv \OR_R(b) \pmod p$ לכל $b \in \{0,1\}^R$, אז $0 \equiv \Lambda_R(P) \equiv \Lambda_R(\OR_R) = -1 \pmod p$, בסתירה ל־$p \ge 2$.
+\end{proof}
+
+\begin{theorem}[הפרדה אסימטרית בהיררכיה המודולרית]
+\label{thm:main-sep}
+קיים אורקל $A \in X_{\GI}$ כך ש־$\NP^A = \UP^A$ וכן
+\[
+  \mathcal{L}_A \in \SigTwo{}^{,A} \setminus \bigcup_{p\text{ prime}} \Modp^A.
+\]
+יתרה מכך, הקבוצה $\{A \in X_{\GI} : \mathcal{L}_A \notin \bigcup_{p\text{ prime}} \Modp^A\}$ היא קבוצת $G_\delta$ צפופה ב־$X_{\GI}$.
+\end{theorem}
+
+\begin{proof}
+נמנה את כל הזוגות $(p, M)$ שבהם $p$ ראשוני ו־$M$ מכונת $\Modp$ עם שעון וחסם זמן פולינומי $T(m) \ge 2m + 1$. החל מתחילית $\GI$ סופית קבילה כלשהי, נבחר $n = 2m+1$ גדול דיו כדי ש־$(p-1) T(m) d_h < R = 2^{m - O(\log^5 m)}$, ונפעיל את משפט~\ref{thm:recursive-switching} כדי לקבל משפחה תואמת $\GI$, המסומנת $\{A_b : b \in \{0,1\}^R\}$, שבה לכל ביט אורקל באורך $\le T(m)$ יש דרגה מדויקת $\le d_h$ במשתנים $b$.
+
+מספר המסלולים המקבלים של $M^A(1^m)$ הוא פולינום בעל מקדמים שלמים $C_M(A)$ מדרגה $\le T(m)$ בביטי האורקל. על פי משפט פרמה הקטן, $C_M(A)^{p-1} \bmod p$ הוא האינדיקטור המדויק של $C_M(A) \not\equiv 0 \pmod p$, ולכן על $\{A_b\}$ פלט המכונה מיוצג מודולו $p$ על ידי פולינום מדרגה לכל היותר $(p-1)T(m)d_h < R$. מלמה~\ref{lem:modp-lb}, קיים $b^* \in \{0,1\}^R$ כך ש־$M^{A_{b^*}}(1^m) \ne \OR_R(b^*) = \mathcal{L}_{A_{b^*}}(1^m)$. קיבוע $A_{b^*}$ עד אורך $T(m)$ (הגדול מ־$2m+1$ ולכן מקבע גם את $\mathcal{L}_{A_{b^*}}(1^m)$) משלים לצמיתות את האלכסון נגד $(p, M)$ תוך שימור $\GI$.
+
+לכל $(p, M)$, הקבוצה $U_{p,M} = \{A \in X_{\GI} : \exists m,\, M^A(1^m) \ne \mathcal{L}_A(1^m)\}$ פתוחה (החברות בה תלויה במספר סופי של ביטי אורקל) וצפופה ב־$X_{\GI}$ לפי הבנייה לעיל. מאחר ש־$X_{\GI}$ קומפקטי והאוסדורף, ממשפט הקטגוריה של בר נובע ש־$\bigcap_{p,M} U_{p,M}$ היא קבוצת $G_\delta$ צפופה.
+\end{proof}
+
+\section{השלכות על גישה אלגברית מולטילינארית}
+
+במסגרת האלגבריזציה של אהרונסון וויגדרסון~\cite{AaronsonWigderson2009} (ראו גם מחסומים מולטילינאריים עדכניים אצל צ'ן, הו ורן~\cite{ChenHuRen2026}), נסמן ב־$\widetilde{A}_{\F_q}$ את ההרחבה המולטילינארית היחידה של $A$ מעל שדה סופי $\F_q$. תחת $\GI$ ובקידוד שלנו המשמר תת־קוביות $\mathrm{encode}(i, u, t)$, הצבת הקואורדינטות החבויות כ־$1/2 \in \F_p$ ($p$ ראשוני אי־זוגי) משחזרת את ההרחבה המולטילינארית $\widetilde{K}_{r,\F_p}(z) = 2^r \widetilde{A}_{2r,\F_p}(z, \tfrac12, \dots, \tfrac12)$, ומתקבלים אפיוני ספירה מדויקים:
+\[
+  \Pcl^{\widetilde{A}_{\F_3}} = \Modthree^A,
+  \qquad
+  \Pcl^{\widetilde{A}[\mathrm{poly}]} = \Pcl^{\SharpP^A} = \Pcl^{\PP^A} \supseteq \PH^A
+\]
+(ההכלה האחרונה נובעת ממשפט טודה היחסי לאורקל~\cite{Toda1991}). כעת תהי $\widetilde{A}^{[p]}$ גישה המתירה שאילתות מולטילינאריות מעל שדות הרחבה $\F_{p^k}$ הניתנים לייצוג פולינומי \emph{כלשהם}, במאפיין ראשוני \emph{קבוע} $p$.
+
+\begin{corollary}[הפרדה בין מאפיין לגודל השדה תחת $\NP = \UP$]
+\label{cor:char-sep}
+לכל אורקל $A$ ולכל ראשוני קבוע $p$, מתקיים $\Pcl^{\widetilde{A}^{[p]}} \subseteq \Modp^A$. לכן לכל אורקל $A$ ממשפט~\ref{thm:main-sep},
+\[
+  \mathcal{L}_A \in \bigl(\SigTwo{}^{,A} \cap \Pcl^{\widetilde{A}[\mathrm{poly}]}\bigr)
+  \setminus \bigcup_{p\text{ prime}} \Pcl^{\widetilde{A}^{[p]}}.
+\]
+\end{corollary}
+
+\begin{proof}
+לכל שאילתה אל $\widetilde{A}_{m,\F_{p^k}}(z)$ ($k \le \mathrm{poly}(n)$), כל קואורדינטת $\F_p$, המסומנת $w_c(x) \in \{0,\dots,p-1\}$, של משקל לגראנז' $\prod_j \ell_{x_j}(z_j) \in \F_{p^k}$ ניתנת לחישוב דטרמיניסטי בזמן $\mathrm{poly}(n)$. שחזור $\sum_x A_m(x) w_c(x) \bmod p$ דורש $p - 1$ שאילתות אל $\Modp^A$ לכל קואורדינטה (בסך הכול $k(p-1) = \mathrm{poly}(n)$ שאילתות), ו־$\Pcl^{\Modp^A} = \Modp^A$ לפי משפט הסגירות של בייגל וגיל~\cite{BeigelGill1992}. שילוב עם משפט~\ref{thm:main-sep} ועם $\PH^A \subseteq \Pcl^{\widetilde{A}[\mathrm{poly}]}$ משלים את ההוכחה.
+\end{proof}
+
+\textbf{תחום התוקף ביחס לאלגבריזציה.} מסקנה~\ref{cor:char-sep} מפרידה בין גישה אלגברית דטרמיניסטית במאפיין קבוע ($\widetilde{A}^{[p]}$) לבין גישה המאפשרת שינוי מאפיין ($\widetilde{A}[\mathrm{poly}]$). אין בה טענה לעקיפה כללית של מחסום האלגבריזציה של אהרונסון–ויגדרסון, משום ש־$\mathcal{L}_A \in \Pcl^{\widetilde{A}[\mathrm{poly}]}$ (ובעזרת אקראיות מתקיים גם $\mathcal{L}_A \in \mathsf{RP}^{\widetilde{A}_{\F_3}}$, לפי שיטת הבידוד של וליאנט–וזיראני).
+
+\begin{remark}[ההבדל בין גישה דטרמיניסטית לאקראית]
+במסגרת האקראית, משפט הבידוד של וליאנט ווזיראני~\cite{ValiantVazirani1986} מעל $\Modthree^A$ נותן $\SigTwo{}^{,A} \subseteq \RP^{\widetilde{A}_{\F_3}}$ תחת $\GI$, והגדלת השדה $\F_p \to \F_{p^k}$ נותנת האצה מעריכית בעזרת שוורץ–ציפל. מסקנה~\ref{cor:char-sep} מראה שבמסגרת \emph{הדטרמיניסטית}, הגדלת גודל השדה במאפיין קבוע $p$ אינה מעניקה שום רווח מול $\SigTwo{}^{,A}$: כדי לעבור את המחסום נדרשת אקראיות או החלפה בין מאפיינים ראשוניים.
+\end{remark}
+
+\appendix
+\section{ממצאים מאומתים ב־\EN{Lean 4.36.0} וגבולות האימות}
+
+שבעה מודולי \EN{Lean 4.36.0} עצמאיים ללא ייבוא (\EN{\texttt{arm64-apple-darwin24.6.0}}) מאמתים ממוחשב את ליבות הקומבינטוריקה, האלגברה והגישור בשלבים סופיים שבסעיפים \EN{3--6}: \textbf{45 מתוך 45 משפטים שנבדקו}, אפס שגיאות, אפס \EN{\texttt{sorryAx}}, אפס \EN{\texttt{ofReduceBool}} ואפס \EN{\texttt{Classical.choice}}. שישה מודולים מתקמפלים ללא אזהרות; \EN{\texttt{TraceCapture.lean}} מפיק 16 אזהרות התיישנות שאינן חוסמות, עבור \EN{\texttt{if\_pos}/\texttt{if\_neg}}.
+
+\begin{table}[!htbp]
+\centering
+\small\setlength{\tabcolsep}{3pt}\begin{tabular}{@{}llcc@{}}
+\toprule
+\textbf{מודול} & \RTLcell{.41\linewidth}{\textbf{הליבה המתמטית שאומתה}} & \textbf{משפטים} & \textbf{ללא אקסיומות} \\
+\midrule
+\EN{\texttt{PersistentMarkerKnowledge.lean}} & \RTLcell{.41\linewidth}{למה~\ref{lem:role-disjoint} ($B \cap P = \varnothing$, $|B|=s$, $|P|\le ws$)} & \EN{3/3} & 0 \\
+\EN{\texttt{TraceCapture.lean}} & \RTLcell{.41\linewidth}{משפט~\ref{thm:trace-capture} ואי־תלות של סמנים מוסתרים} & \EN{4/4} & 2 \\
+\EN{\texttt{ReachableBranch.lean}} & \RTLcell{.41\linewidth}{למת העלים בני־ההשגה ולמה~\ref{lem:reachable-branch} (בקנה מידה ב־$\mathbb{N}$)} & \EN{4/4} & 0 \\
+\EN{\texttt{SingletonSwitching.lean}} & \RTLcell{.41\linewidth}{משקלים, נרמול ופענוח במשפט~\ref{thm:singleton-switching}} & \EN{8/8} & 2 \\
+\EN{\texttt{RecursiveSwitching.lean}} & \RTLcell{.41\linewidth}{חיפוש בינארי בתחיליות, תקציב מאורעות א וב, נוסחאות נסיגה} & \EN{8/8} & 0 \\
+\EN{\texttt{ModularSeparation.lean}} & \RTLcell{.41\linewidth}{$\Lambda_R(\OR_R)=-1$, למה~\ref{lem:modp-lb}, צעד מודולו $p$} & \EN{6/6} & 0 \\
+\EN{\texttt{UniformRecursiveBridge.lean}} & \RTLcell{.41\linewidth}{שיטה הסתברותית סופית, \EN{\texttt{EvalDTree}$\to$\texttt{Poly}}, עד בקובייה $b^*$} & \EN{12/12} & 0 \\
+\bottomrule
+\end{tabular}
+\caption{סיכום האימות ללא ייבוא ב־\EN{Lean 4.36.0}. כל יתר המשפטים משתמשים רק באקסיומות הליבה \EN{\texttt{propext} / \texttt{Quot.sound}}.}
+\end{table}
+
+\textbf{הגבול האנליטי שלא פורמל.} המודול \EN{\texttt{UniformRecursiveBridge.lean}} מפרמל גשר \emph{מותנה} לשלב סופי: ההנחות \EN{\texttt{good\_GI1}}, \EN{\texttt{good\_depth}}, \EN{\texttt{hProb}} ו־\EN{\texttt{hGap}} נמסרות כפרמטרים, ופירושו של $C_M^{p-1} \bmod p$ כאינדיקטור לפי משפט פרמה דורש ש־$p$ יהיה ראשוני, כבמשפט~\ref{thm:main-sep}. הסתברות מתורת המידה על מרחבי מכפלה אינסופיים, חסמי צ'רנוף, משפט הקטגוריה של בר והגישור משאילתות אורקל מופשטות מסוג \EN{DNF} למכונות טיורינג מרובות סרטים הוכחו אנליטית בסעיפים \EN{3--7} ואינם מפורמלים ב־\EN{Lean}.
+
+\begin{english}
+\renewcommand{\refname}{References}
+\begin{thebibliography}{99}
+
+\bibitem{AaronsonWigderson2009}
+S.~Aaronson and A.~Wigderson.
+Algebrization: A new barrier in complexity theory.
+\emph{ACM Transactions on Computation Theory}, 1(1):2:1--2:54, 2009.
+\href{https://www.scottaaronson.com/papers/alg.pdf}{PDF}.
+
+\bibitem{BakerGillSolovay1975}
+T.~Baker, J.~Gill, and R.~Solovay.
+Relativizations of the $\Pcl = ?\NP$ question.
+\emph{SIAM Journal on Computing}, 4(4):431--442, 1975.
+\href{https://epubs.siam.org/doi/10.1137/0204037}{DOI}.
+
+\bibitem{BeigelGill1992}
+R.~Beigel and J.~Gill.
+Counting classes: thresholds, parity, mods, and fewness.
+\emph{Theoretical Computer Science}, 103(1):3--23, 1992.
+
+\bibitem{ChenHuRen2026}
+L.~Chen, Y.~Hu, and H.~Ren.
+New algebrization barriers to circuit lower bounds via communication complexity of Missing-String.
+In \emph{ITCS 2026}, 2026.
+\href{https://arxiv.org/abs/2511.14038}{arXiv:2511.14038}.
+
+\bibitem{Cook2000}
+S.~Cook.
+The $\Pcl$ versus $\NP$ problem.
+Clay Mathematics Institute Millennium Prize Problem description, 2000.
+\href{https://www.claymath.org/wp-content/uploads/2022/06/pvsnp.pdf}{PDF}.
+
+\bibitem{GlasserWechsung2003}
+C.~Gla\ss er and G.~Wechsung.
+Relativizing function classes.
+\emph{Journal of Universal Computer Science}, 9(1):34--50, 2003.
+\href{https://lib.jucs.org/issue/4069/}{JUCS 9(1)}.
+
+\bibitem{Grochow2023}
+J.~A.~Grochow.
+Polynomial-time axioms of choice and polynomial-time cardinality.
+\emph{Theory of Computing Systems}, 67, 2023.
+\href{https://arxiv.org/abs/2301.07123}{arXiv:2301.07123}.
+
+\bibitem{Hastad1986}
+J.~H\aa stad.
+Almost optimal lower bounds for small depth circuits.
+In \emph{Proceedings of the 18th Annual ACM Symposium on Theory of Computing (STOC 1986)}, pp.~6--20, 1986.
+
+\bibitem{HiraharaNanashima2021}
+S.~Hirahara and M.~Nanashima.
+On worst-case learning in relativized Heuristica.
+In \emph{FOCS 2021}, pp.~751--758, 2021.
+\href{https://eccc.weizmann.ac.il/report/2021/161/download}{ECCC TR21-161}.
+
+\bibitem{RazborovRudich1997}
+A.~A.~Razborov and S.~Rudich.
+Natural proofs.
+\emph{Journal of Computer and System Sciences}, 55(1):24--35, 1997.
+\href{https://mit6875.github.io/PAPERS/natural_proofs.pdf}{PDF}.
+
+\bibitem{Toda1991}
+S.~Toda.
+$\PP$ is as hard as the polynomial-time hierarchy.
+\emph{SIAM Journal on Computing}, 20(5):865--877, 1991.
+
+\bibitem{ValiantVazirani1986}
+L.~G.~Valiant and V.~V.~Vazirani.
+$\NP$ is as easy as detecting unique solutions.
+\emph{Theoretical Computer Science}, 47(1):85--93, 1986.
+
+\end{thebibliography}
+
+\end{english}
+\end{document}

@@ -1,0 +1,208 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=24mm]{geometry}
+\usepackage{amsmath,amssymb,booktabs,tabularx,tikz,fontspec,xcolor}
+\usetikzlibrary{positioning,arrows.meta}
+\setmainfont[FontIndex=2,BoldFont=NotoSerifCJK-Bold.ttc,BoldFeatures={FontIndex=2},AutoFakeSlant=.14]{NotoSerifCJK-Regular.ttc}
+\setsansfont[FontIndex=2,BoldFont=NotoSansCJK-Bold.ttc,BoldFeatures={FontIndex=2}]{NotoSansCJK-Regular.ttc}
+\XeTeXlinebreaklocale "zh"
+\XeTeXlinebreakskip=0pt plus 1pt
+\usepackage[colorlinks=true,linkcolor=blue!50!black,urlcolor=blue!50!black,citecolor=blue!50!black,pdflang={zh-CN},pdfauthor={Aleksandr Strand},pdftitle={作为发现资源的接口}]{hyperref}
+\renewcommand{\abstractname}{摘要}
+\renewcommand{\figurename}{图}
+\renewcommand{\tablename}{表}
+\renewcommand{\refname}{参考文献}
+\newcommand{\F}{\mathbb F}
+\newcommand{\NP}{\mathrm{NP}}
+\newcommand{\UP}{\mathrm{UP}}
+\newcommand{\MP}[1]{\mathrm{Mod}_{#1}\mathrm P}
+\newcommand{\LA}{\mathcal L_A}
+\newcommand{\GI}{\mathrm{GI}_1}
+\newcommand{\Sig}{\Sigma_2^{\mathrm P,A}}
+\newcommand{\OR}{\mathrm{OR}}
+\setlength\emergencystretch{2em}
+\raggedbottom
+\title{\textbf{作为发现资源的接口}\\[5pt]\large 为什么消除歧义并不会让难题变容易}
+\author{Aleksandr Strand\\ \small 独立研究者\\
+\small《$\NP=\UP$ 条件下的递归切换与模预言机分离》通俗解读}
+\date{2026 年 11 月 26 日}
+\begin{document}
+\maketitle
+\begin{abstract}
+设想两个计算系统面对同一张数据表，两者都没有获得任何额外的隐藏信息。在这个世界里，歧义已被消除：$\NP$ 问题的每个肯定实例都可以用恰好一个接受见证来表示。第一个系统可以按某个固定素数 $p$（如 2 或 3）进行模计数，甚至可以使用同一特征下指数级扩大的域，例如 $\F_3\to\F_{3^{100}}$。第二个系统则可以改变域的特征本身（$\F_3,\F_5,\F_7,\ldots$）。
+
+本文不依赖完整的技术形式体系，解释《$\NP=\UP$ 条件下的递归切换与模预言机分离》的结论：为什么第一个系统无法在确定性多项式时间内判定看似简单的空行问题，而第二个系统可以？答案准确区分了扩大接口的规模与改变接口本身。我们分别说明什么由解析证明建立，哪些组件由 Lean 4.36.0 检查，以及哪些仍是开放问题或关于人工智能架构的研究假设。
+\end{abstract}
+
+\section{一座没有歧义的图书馆}
+设想一座巨大的图书馆，里面有 $N$ 个柜子，每个柜子恰好有 $L$ 个编号格位。模型中 $N=L=2^m$，所以当 $m=100$ 时，规模约为 $10^{30}$。每个柜子要么存有一份作为见证的文件，要么完全没有文件。没有重复件，也没有互相矛盾的版本。
+
+我们问管理员两个看起来很相像的问题：
+\begin{enumerate}
+\item 指定的柜子 $u$ 里有文件吗？
+\item 整座图书馆里，是否至少有一个完全空的柜子？
+\end{enumerate}
+第一个问题的肯定答案有一个简短而无歧义的证明：打开正确的格位，把文件拿出来。在计算复杂性理论中，见证可以高效检查的问题构成 $\NP$ 类。它的无歧义版本是 $\UP$，每个肯定实例恰好有一条接受计算路径。
+
+第二个问题不同。要证明柜子 $u$ 是空的，拿出一份文件并无帮助；必须排除每个格位中有文件的可能。
+\[
+ \underbrace{\exists u}_{\text{存在一个柜子}}\qquad
+ \underbrace{\forall v}_{\text{在它的每个格位中}}\qquad A(u,v)=0.
+\]
+存在量词和全称量词的交替，使这个任务处于多项式层级的第二层 $\Sigma_2^{\mathrm P}$。
+
+\begin{figure}[htbp]\centering
+\begin{tikzpicture}[font=\small]
+\foreach \r/\c in {1/3,2/7,3/2,4/0,5/6}{
+\node[anchor=east] at (0,-.4*\r+.2) {柜子 \r};
+\foreach \j in {1,...,8}{
+\ifnum\j=\c\relax
+\fill[green!45!black] ({.44*(\j-1)+.17},{-.4*\r+.025}) rectangle +(0.41,.34);
+\fi
+\draw[gray] ({.44*(\j-1)+.17},{-.4*\r+.025}) rectangle +(0.41,.34);
+}}
+\draw[red!70!black,fill=red!6] (.17,-1.575) rectangle (3.66,-1.235);
+\draw[green!42!black,-{Stealth}] (3.85,-.19) -- (1.49,-.19);
+\node[anchor=west,text=green!42!black] at (3.91,-.19) {唯一见证};
+\draw[red!70!black,-{Stealth}] (3.85,-1.39) -- (3.67,-1.39);
+\node[anchor=west,text=red!70!black] at (3.91,-1.39) {空柜子（\(\forall v:\ A(4,v)=0\)）};
+\end{tikzpicture}
+\caption{每个非空柜子恰好有一份文件（绿色）。$\Sigma_2^{\mathrm P}$ 层级的任务是区分没有空柜子的图书馆与至少有一个空柜子的图书馆。}
+\end{figure}
+
+如果每个 $\NP$ 问题都可以无歧义地表示（$\NP=\UP$），而观察者还能直接对接受分支按任意一个固定素数 $p$ 计数，判断是否有空柜子似乎应该很容易。主要结果表明，事实并非如此。
+
+\section{主定理究竟说了什么？}
+在相对化模型中，每台机器都能访问同一个数学预言机 $A$，正如 Baker、Gill 和 Solovay 的经典工作~\cite{bgs}。基于 Glaßer 与 Wechsung 的构造~\cite{gw}，我们构造了满足无环唯一见证不变量 $\GI$ 的预言机 $A$，使下面两条同时成立：
+\[
+ \NP^A=\UP^A\quad\text{且}\quad
+ \LA\in\Sig\setminus\bigcup_{p\text{ 为素数}}\MP p^A .
+\]
+为什么是 $\Sig$，而不是 $\NP^A$？当 $\NP^A=\UP^A$ 时，$\NP^A$ 中的每个语言都有一台接受分支数为 0 或 1 的机器；模任何 $p\ge2$ 都能区分 0 和 1。因此，对每个素数 $p$，$\NP^A$ 乃至整个第二层确定性类 $\Delta_2^{\mathrm P,A}=\mathrm P^{\NP^A}$ 都属于 $\MP p^A$。所以，在 $\NP^A=\UP^A$ 的条件下，第二层是最早能出现这种模计数下界的层级。
+
+\begin{table}[htbp]\small\centering
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.47\linewidth} >{\raggedright\arraybackslash}X@{}}
+\toprule 世界 $A$ 中观察者拥有的资源 & 能否判定空柜子问题 $\LA$？\\
+\midrule $\NP^A$ 的唯一见证（$\NP^A=\UP^A$） & 这个等式由构造保证。\\
+模 2、模 3 或模任意一个固定素数 $p$ 计数 & 该模计数类中的任何多项式时间机器都不能判定。\\
+代数访问 $\F_p\to\F_{p^k}$（固定 $p$） & 在确定性情形下不够。\\
+加入随机性（$\mathrm{RP}^{\widetilde A_{\F_3}}$） & 可判定（Valiant--Vazirani 隔离法）。\\
+改变域的特征（$\F_3,\F_5,\F_7,\ldots$） & 可确定性地判定（中国剩余定理）。\\
+\bottomrule
+\end{tabularx}
+\caption{在构造的世界 $A$ 中，哪些资源能突破该下界，哪些不能。}
+\end{table}
+
+这也并非某个孤立的预言机特例。由贝尔纲定理可知，在由相容预言机构成的紧空间 $X_{\GI}$ 中，实现分离的预言机构成稠密 $G_\delta$ 集。任意预先固定的、符合约束的有限图书馆片段，都可以补全为分离成立的世界。
+
+\section{证明如何运作：四个机制}
+困难在于 $A$ 并不只存储底层的柜子矩阵。为了使 $\NP^A=\UP^A$，构造使用一个无限递归塔：每个上层用唯一标记编码关于较低层的 $\NP$ 问题的答案。如果随意放置标记，例如总放在第一个格位，那么只用第二层就可能轻易判定某个柜子是否为空，从而破坏分离。证明分四步控制这座塔。
+
+\begin{figure}[htbp]\centering
+\begin{tikzpicture}[font=\small,node distance=4.5mm,stepbox/.style={draw=blue!35,fill=blue!5,rounded corners=3pt,text width=.19\linewidth,align=center,inner sep=4pt,minimum height=18mm}]
+\node[stepbox] (a) {\textbf{1. 切换}\\保留所有行非空的世界};
+\node[stepbox,right=of a] (b) {\textbf{2. 轨迹捕获}\\每轮阻塞揭示一个新标记};
+\node[stepbox,right=of b] (c) {\textbf{3. 前缀搜索}\\递归穿过 $O(\log m)$ 层};
+\node[stepbox,right=of c] (d) {\textbf{4. 对偶检验}\\$(p-1)Td_h<R$};
+\draw[-{Stealth}] (a)--(b); \draw[-{Stealth}] (b)--(c); \draw[-{Stealth}] (c)--(d);
+\end{tikzpicture}
+\caption{从底层矩阵推导模计数下界的四个环节。}
+\end{figure}
+
+\paragraph{1. 受控变形（保持单标记的切换）。}
+H\aa stad 的经典方法~\cite{hastad}，以及 Hirahara 和 Nanashima 发展的大字母表版本~\cite{hirahara}，用随机限制简化复杂公式。在布尔情形下，这些限制把变量固定为 0 或 1。但这里不能把柜子固定为空，否则就会排除所有柜子均非空的世界。因此我们采用单侧投影：把一部分柜子固定为非空，保留其余柜子的自由度。空状态只出现在用于证明单射性的辅助编码测度中，最终投影绝不把柜子固定为空。
+
+\paragraph{2. 持久标记知识与轨迹捕获。}
+在上层，公式中的正条件可能把负查询引向隐藏的标记。算法记住所有已揭示的真实标记。因此，每轮新的阻塞都必须揭示一个真正的新标记，并且该标记所在的行尚未被揭示为正。对行进行随机划分，以至少 $[e(w+1)]^{-s}$ 的概率捕获整条轨迹。
+
+\paragraph{3. 避免膨胀的前缀递归。}
+由于 $\GI$ 严格无环，运行时间为 $T=\operatorname{poly}(m)$ 的计算至多到达 $h=O(\log m)$ 个嵌套层。我们不把上层公式展开为巨大的底层公式，而是用前一层的前缀谓词二分搜索第一个满足约束的项。由此同时把长度不超过 $T$ 的所有预言机位化为剩余自由立方体上的决策树，其深度为准多项式 $d_h\le 2^{O(\log^4 m)}$，自由立方体维数为 $R\ge 2^{m-O(\log^5 m)}$。
+
+\paragraph{4. 代数次数的上界。}
+由费马小定理，任一 $\MP p^A$ 机器的接受指示量可以表示为整数多项式 $C_M(A)^{p-1}\bmod p$；在剩余的 $R$ 个自由变量中，它的次数至多为 $(p-1)Td_h$。然而，$\OR_R(b)=1-\prod_{i=1}^R(1-b_i)$ 需要完整的 $R$ 次。交错泛函
+\[
+ \Lambda_R(f)=\sum_{b\in\{0,1\}^R}(-1)^{|b|}f(b)
+\]
+消去一切次数低于 $R$ 的多项式，但对每个 $p\ge2$，都有 $\Lambda_R(\OR_R)=-1\not\equiv0\pmod p$。固定 $p$ 且 $m$ 足够大时，次数上界 $(p-1)Td_h\le 2^{O(\log^4 m)}$ 远低于维数下界 $R\ge 2^{m-O(\log^5 m)}$。因此，剩余立方体中必有一个符合约束的世界，使机器出错。
+
+\section{关于推断，我们现在能区分什么？}
+这个结果澄清了日常直觉和工程判断常常混为一谈的五组概念。
+
+\paragraph{1. 知识无歧义，不代表全局推断容易。}
+消除歧义（$\NP^A=\UP^A$）让模型中的每个肯定性局部事实都有一个证书，却并不让判断证书的全局缺失变得容易。
+
+\paragraph{2. 信息相同，计算能力未必相同。}
+在 Aaronson 和 Wigderson 的代数化模型~\cite{aw}，以及 Chen、Hu 和 Ren 较新的多重线性障碍~\cite{chr} 中，多重线性扩张 $\widetilde A$ 完全由表 $A$ 决定，并未加入任何独立的比特。然而，机器访问该表的方式本身就是一种计算资源。
+
+\begin{figure}[htbp]\centering
+\begin{tikzpicture}[font=\small,box/.style={draw=blue!35,rounded corners=2pt,fill=blue!5,align=center,text width=.35\linewidth,inner sep=6pt}]
+\node[box] (top) {\textbf{同一个预言机 $A$}\\同一份底层信息};
+\node[box] (a) at (-3.2,-2.1) {\textbf{观察者甲：固定 $p$}\\扩大域\\$\F_3\to\F_{3^{10}}\to\F_{3^{100}}$\\
+无法在确定性多项式时间内判定 $\LA$};
+\node[box] (b) at (3.2,-2.1) {\textbf{观察者乙：可改变 $p$}\\改变运算规则\\$\F_3,\F_5,\F_7,\ldots$\\
+可用中国剩余定理在确定性多项式时间内判定 $\LA$};
+\draw[-{Stealth}] (top.south west)--(a.north); \draw[-{Stealth}] (top.south east)--(b.north);
+\end{tikzpicture}
+\caption{固定特征扩大域，与改变接口所用域的特征，是两回事。}
+\end{figure}
+
+\paragraph{3. 在语言内扩展规模，不等于更换语言。}
+把域从 $\F_p$ 扩大到 $\F_{p^k}$ 并不能令 $\LA$ 在确定性多项式时间内可判定：$\mathrm P^{\widetilde A^{[p]}}\subseteq\MP p^A$。本文给出的两种突破方式都对模型做了质的改变：加入随机性，或允许改变域的特征。
+
+\paragraph{4. 局部简单，不代表全局性质可证。}
+投影之后，每个可观察位的次数都不超过 $d_h$。即便用证明中多项式时间机器所允许的方式组合这些位，也达不到全局性质 $\OR_R$ 所需的次数 $R$。
+
+\paragraph{5. 个别异常，不等于拓扑意义上的典型。}
+在 $X_{\GI}$ 中出现稠密 $G_\delta$ 集，说明分离不是孤立而脆弱的反例，而在相容世界中具有拓扑典型性。不要把拓扑典型性误认为概率为 1。
+
+\section{对人工智能架构意味着什么，又不意味着什么？}
+相对预言机的复杂性结论本身并不证明任何关于神经网络或大语言模型的定理。但它为智能体设计中的一个重要区别提供了精确的数学模型。
+
+\paragraph{以六个空柜子为例。}
+设想八个柜子里有六个空柜子。接口只报告模 2 的空柜子数时，观察者看到的是 $6\bmod 2=0$；改为模 3 计数，看到的仍是 $6\bmod 3=0$。如果十个并行智能体只能看到同一个模 2 计数，即使花费更多词元也无法消除这种歧义。换成模 5 接口，则立即得到 $6\bmod 5=1\ne0$，在这个例子中就能区分六个空柜子与没有空柜子。
+
+对人工智能智能体来说，这区分了两种扩展方式：
+\begin{itemize}
+\item \textbf{数量上的扩展：}操作集合固定，只增加词元、尝试次数、内存或智能体副本。
+\item \textbf{结构上的扩展：}识别当前表示的限制，可验证地切换到另一种计算接口，同时保留原问题的正确性标准。
+\end{itemize}
+
+对于在先前研究的基础上继续工作的智能体，这提示了四层记忆：事实记忆（学到了什么）、过程记忆（怎么做的）、认识论记忆（为什么一类方法遇到障碍）和结构记忆（哪种表示变换消除了障碍）。
+
+\paragraph{应用到人工智能的限制。}
+在数学模型里，改变特征的能力由预言机接口直接提供。真实的人工智能系统必须构造并验证新接口，这些成本都应计入总预算。把这一原则用于智能体架构，是有待对照实验检验的研究假设，并非已经展示的优势。
+
+\section{结论的边界}
+通俗介绍也应该清楚区分已经证明和尚未证明的内容。
+
+\begin{table}[htbp]\small\centering
+\begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}p{.63\linewidth} >{\raggedright\arraybackslash}X@{}}
+\toprule 主张 & 实际状态\\\midrule
+解决非相对化的 $\mathrm P$ 与 $\NP$ 问题~\cite{cook} & 否。\\
+证明在 $\NP^A=\UP^A$ 下 $\mathrm{PH}^A$ 仍有无限多层（Grochow~\cite{grochow}） & 否，仍是开放问题。\\
+普遍绕过代数化障碍 & 否。\\
+证明一种新的大语言模型架构更优 & 否，仍是假设。\\
+在 Lean 中端到端形式化无限预言机构造 & 尚未完成。\\
+解析证明存在使 $\NP^A=\UP^A$ 且 $\Sig\not\subseteq\bigcup_p\MP p^A$ 的预言机 & 正文已给出。\\
+用 Lean 4.36.0 机器检查部分组件与有限阶段桥接 & 七个模块；审计了全部 45 条定理。\\
+\bottomrule
+\end{tabularx}
+\caption{已建立的结果、部分形式化和开放问题。}
+\end{table}
+
+Lean 4.36.0 中的七个无导入模块（45 条定理经过审计，零错误，不依赖 \texttt{sorryAx} 或 \texttt{Classical.choice}）机器检查了选定的组合与代数组件，以及有条件的有限阶段桥接结果（\texttt{UniformRecursiveBridge.lean}）。完整的概率递归与无限预言机构造使用解析证明。这项工作尚未经过外部同行评议。
+
+\section{代替结语}
+在第一层，我们在给定的语言中搜索，以解决难题。再往上一层，我们问：为什么语言本身无法区分那些关键状态？到这一步，才可以提出一个建设性问题：接口只需做出怎样的最小改变，就能让以前无法获得的知识变得可计算？
+
+信息量与信息访问方式之间的区别，是这项工作的核心。
+\begin{thebibliography}{9}
+\bibitem{aw} S. Aaronson and A. Wigderson. Algebrization: A new barrier in complexity theory. \textit{ACM Transactions on Computation Theory}, 1(1):2:1--2:54, 2009. \href{https://www.scottaaronson.com/papers/alg.pdf}{PDF}.
+\bibitem{bgs} T. Baker, J. Gill, and R. Solovay. Relativizations of the P =? NP question. \textit{SIAM Journal on Computing}, 4(4):431--442, 1975. \href{https://epubs.siam.org/doi/10.1137/0204037}{DOI}.
+\bibitem{chr} L. Chen, Y. Hu, and H. Ren. New algebrization barriers to circuit lower bounds via communication complexity of Missing-String. \textit{ITCS 2026}. \href{https://arxiv.org/abs/2511.14038}{arXiv:2511.14038}.
+\bibitem{cook} S. Cook. The P versus NP problem. Clay Mathematics Institute, 2000. \href{https://www.claymath.org/wp-content/uploads/2022/06/pvsnp.pdf}{PDF}.
+\bibitem{gw} C. Glaßer and G. Wechsung. Relativizing function classes. \textit{Journal of Universal Computer Science}, 9(1):34--50, 2003. \href{https://lib.jucs.org/issue/4069/}{JUCS 9(1)}.
+\bibitem{grochow} J. A. Grochow. Polynomial-time axioms of choice and polynomial-time cardinality. \textit{Theory of Computing Systems}, 67, 2023. \href{https://arxiv.org/abs/2301.07123}{arXiv:2301.07123}.
+\bibitem{hastad} J. H\aa stad. Almost optimal lower bounds for small depth circuits. In \textit{STOC 1986}, pp.~6--20, 1986.
+\bibitem{hirahara} S. Hirahara and M. Nanashima. On worst-case learning in relativized Heuristica. In \textit{FOCS 2021}, pp.~751--758, 2021. \href{https://eccc.weizmann.ac.il/report/2021/161/download}{ECCC TR21-161}.
+\end{thebibliography}
+\end{document}
