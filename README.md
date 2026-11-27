@@ -14,7 +14,7 @@ In an oracle model, unique witnesses do not remove the gap between access in one
 
 [English PDF](papers/recursive-switching-np-up/recursive_switching_np_up_en.pdf) · [Русский PDF](papers/recursive-switching-np-up/recursive_switching_np_up_ru.pdf)
 
-**Научпоп / Plain-language companion:** [Русский PDF](papers/recursive-switching-np-up/interface_barrier_popular_ru.pdf) · [Earlier English translation (PDF)](papers/recursive-switching-np-up/interface_barrier_popular_en.pdf)
+**Научпоп / Plain-language companion:** [Русский PDF](papers/recursive-switching-np-up/interface_barrier_popular_ru.pdf) · [English PDF](papers/recursive-switching-np-up/interface_barrier_popular_en.pdf)
 
 [Full bundle (ZIP)](papers/recursive-switching-np-up/rs_bundle.zip) · [English companion source (ZIP)](papers/recursive-switching-np-up/recursive_switching_np_up_translation_sources.zip) · [Sources and checksums](papers/recursive-switching-np-up/)
 
@@ -131,7 +131,7 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 
 [English PDF](papers/recursive-switching-np-up/recursive_switching_np_up_en.pdf) · [Русский PDF](papers/recursive-switching-np-up/recursive_switching_np_up_ru.pdf)
 
-**Научпоп / Plain-language companion:** [Русский PDF](papers/recursive-switching-np-up/interface_barrier_popular_ru.pdf) · [Earlier English translation (PDF)](papers/recursive-switching-np-up/interface_barrier_popular_en.pdf)
+**Научпоп / Plain-language companion:** [Русский PDF](papers/recursive-switching-np-up/interface_barrier_popular_ru.pdf) · [English PDF](papers/recursive-switching-np-up/interface_barrier_popular_en.pdf)
 
 [Full bundle (ZIP)](papers/recursive-switching-np-up/rs_bundle.zip) · [English companion source (ZIP)](papers/recursive-switching-np-up/recursive_switching_np_up_translation_sources.zip) · [Sources and checksums](papers/recursive-switching-np-up/)
 
@@ -201,7 +201,7 @@ Cite the **specific preprint and source commit** supporting each claim: [Meta-Sy
 
 **递归转换与 NP = UP 条件下的模计数预言机分离** · [English PDF](papers/recursive-switching-np-up/recursive_switching_np_up_en.pdf) · [Русский PDF](papers/recursive-switching-np-up/recursive_switching_np_up_ru.pdf)
 
-**Научпоп / Plain-language companion:** [Русский PDF](papers/recursive-switching-np-up/interface_barrier_popular_ru.pdf) · [Earlier English translation (PDF)](papers/recursive-switching-np-up/interface_barrier_popular_en.pdf)
+**Научпоп / Plain-language companion:** [Русский PDF](papers/recursive-switching-np-up/interface_barrier_popular_ru.pdf) · [English PDF](papers/recursive-switching-np-up/interface_barrier_popular_en.pdf)
 
 [Full bundle (ZIP)](papers/recursive-switching-np-up/rs_bundle.zip) · [English companion source (ZIP)](papers/recursive-switching-np-up/recursive_switching_np_up_translation_sources.zip) · [Sources and checksums](papers/recursive-switching-np-up/)
 

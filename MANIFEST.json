@@ -44,8 +44,8 @@
       "sha256": "f1a454a630b4488950e04c04c40b7f84cf9e3847c7392f5788e813fadc66b4f5"
     },
     "README.md": {
-      "bytes": 31622,
-      "sha256": "05e0468b818e30f974d21cfd6851075db6fb3b3f8b6d84e756295028d4842a4a"
+      "bytes": 31556,
+      "sha256": "0ec8db4bc167d324213b19dde8939084a39cefd462035e6af56f997e30391cd1"
     },
     "build_preprints.py": {
       "bytes": 15444,
