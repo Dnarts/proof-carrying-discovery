@@ -1,0 +1,64 @@
+\section{Formal verification and executable witnesses}\label{sec:verification}
+The claims of Sections~\ref{sec:investigation}--\ref{sec:closure} have three distinct forms of evidence: proof terms checked by the Lean kernel, executable examples of the finite model, and independent reference calculations. None is a measurement of wall-clock speed, nor does agreement of finitely many runs replace the universal statements proved in the formalization.
+
+\subsection{Mechanization and evidence boundary}
+The accepted canonical stack uses Lean~4.36.0 \cite{lean4}, pinned to commit\\
+\texttt{611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9}. It has 21 Lean source files (including the CLI) and 542 explicitly audited declarations: 520 theorems and 22 definitions. Table~\ref{tab:formal-audit} partitions the audit targets by the architecture's dependency groups; these counts are neither counts of independent results nor a measure of proof difficulty. The final two files provide the typed release and its executable projection. The two early historical branches are preserved separately and are not imports of this stack.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Artifact crosswalk: historical stage IDs, mathematical constructions and audit targets. Section~2 has separate historical proof artifacts.}\label{tab:formal-audit}
+\begin{tabularx}{\linewidth}{@{}lXrr@{}}\toprule
+Stage & Main construction & Files & Targets\\\midrule
+T19--T22 & Investigation, transfer, library, discovery & 4 & 132\\
+T22.9--T24.7 & Paid search, pruning, resume, cores, learning & 6 & 119\\
+T25--T27 & Meta-investigation and decision evidence & 3 & 101\\
+T28--T29c & Controller replacement and trace laws & 4 & 132\\
+T30--T31 & Policy interpretation and closure & 2 & 40\\
+T32 & Release and CLI & 2 & 18\\\midrule
+Total & & 21 & 542\\\bottomrule
+\end{tabularx}
+\end{table}
+
+The canonical runner checks the complete manifest and 19 inherited source pins, compiles in a clean temporary import directory, audits the expected fully qualified names and dependencies of each designated declaration, runs 13 independent finite-model scripts, and compares actual CLI output against a separate Python reference. The only permitted axiom dependencies of the 542 targets are \rc{propext} and \rc{Quot.sound}; the supplied successful transcript records zero compiler errors or warnings, no \rc{sorryAx}, and no \rc{Classical.choice} dependencies in these reports. Two parsers enforce exact report names and reject partial reports, duplicates, unapproved dependencies and unsuccessful compiler exits. Ten audit-parser fixtures and twelve projection-parser fixtures exercise these checks; they are tests of the checker, not additional kernel runs.
+
+The accepted successful transcript is supplied by the author. The first archive assembly environment lacked Lean and stopped with code~127. Later supplied full module logs and runner output agree byte-for-byte with the corresponding earlier successful transcript. This is consistent with deterministic repetition, but does not independently establish a distinct new compiler process. Reconciliation preserves that distinction in \rc{catalog/VERIFICATION.json}, with status \rc{SUPPLIED\_LOGS\_AND\_PYTHON\_REPLAY\_PASS}. A subsequent replay (repeated for this manuscript revision) of the reconciled archive checked all 21 source pins and 542 report names, the 21 module logs, and nine projected release fixtures; all 45 Python commands returned zero. This replay did not invoke Lean. Hash identity establishes content identity, not independent attestation of execution. Historical numbering is confined to this artifact map. The earlier sources and primary links for T03 and T14--T18 are preserved separately; T01, T02 and T04--T13 have no uniquely established primary stage link. They are not prerequisites of the canonical release proof. See \rc{GAPS\_AND\_STATUS\_RU.md}.
+
+\clearpage
+\subsection{Positive and negative computational witnesses}
+The nine release fixtures exercise the composed executor rather than just an isolated admission predicate. For each one, the independent reference constructs the canonical answer list, checks balances, ordered search and upgrade receipts, policy events, and prior certificates. The saved Lean CLI projection agrees with this reference. The result \emph{impossible} means exhaustion with an empty canonical list in the specified morphism class, not an impossibility claim about arbitrary algorithms.
+
+\begin{table}[htbp]
+\centering\small
+\caption{Release witnesses, as recorded in \rc{FINITE\_RELEASE.json} and the supplied CLI transcript. All start with zero recorded spend except the predecessor case, which starts with five units of recorded spend. $B_0$ below is initial available balance, $D_f$ final cumulative spend, $B_f$ final balance. The last column gives canonical certificate count.}\label{tab:release-cases}
+\begin{tabularx}{\linewidth}{@{}lXrrrr@{}}\toprule
+Case & Meta-upgrade verdicts / root outcome & $B_0$ & $D_f$ & $B_f$ & $|A_f|$\\\midrule
+Baseline & none; keep & 110 & 7 & 103 & 0\\
+Single & accepted; replace & 110 & 6 & 104 & 0\\
+Mixed & accepted, rejected; replace & 110 & 7 & 103 & 0\\
+Double & accepted, accepted; replace & 110 & 6 & 104 & 0\\
+Fallback & deferred, deferred; blocked & 100 & 7 & 93 & 0\\
+Liquidity baseline & none; replace & 103 & 4 & 99 & 0\\
+Liquidity rejected & rejected; reject liquidity & 103 & 10 & 93 & 0\\
+Nonempty & none; keep & 100 & 11 & 89 & 2\\
+Predecessor & none; keep & 95 & 11 & 89 & 2\\\bottomrule
+\end{tabularx}
+\end{table}
+
+\paragraph{A worked example across the layers.}
+Consider the actual depth-obstruction fixture: $S,T$ each have one world, two ports, one terminal action, constant false reads and zero terminal losses and port prices; $d_S=1$ and $d_T=0$. Section~3's morphism test fails the depth constraint, so $\CanonRef=[]$. Yet the unpruned frontier must process three split and four prepare steps at unit charge (bill $7$). A certified depth rule rejects the initial region in one paid step (bill $1$). With $B=110$, $R=R'=100$, and $H=K=1$, the guards of Section~6 accept: $101\le110$, $102\le110$, and $1+1+1<7$. The root replacement plus completion costs $3$, without changing the required result.
+
+Now compare alternative executions on this same pair, not successive bills. The incumbent meta-policy keeps the old controller (bill $7$). The closed acquisition model compares pending/exhausted frontiers and keep/attempt actions; its selected tree probes whether jobs remain and attempts replacement on the true branch. The meta-upgrade is paid, its exact bounds are $7$ and $6$, and it installs that tree. The actual single-upgrade release pays one unit each for upgrade, probe, preparation, check, migration and the final rule call: $6$ total, balance $104$, empty frontier and certified impossibility. This is the \emph{single} case in Table~\ref{tab:release-cases}; the separate \emph{nonempty} and \emph{predecessor} cases test positive canonical membership and prior-certificate preservation. See \rc{ControllerReplacement.Witnesses}, \rc{MetaPolicy.Witnesses}, and \rc{Release.Witnesses.costs}.
+
+The double-upgrade case starts from a redundant-probe policy (bill $8$), not the baseline policy; its bill drops $8\to7\to6$. Mandatory learning loses to the fixed read-rule controller in all 515 funded cases of the learning stand. The mixed root traces finish at bills 4 and 8 against 7; the closure stand checks 965 completed runs and 2,418 transitions. The liquidity pair ($4$ versus $10$) refutes unconditional policy-level monotonicity. These are finite model witnesses, not samples from an application population or physical performance measurements.
+
+\newpage
+\subsection{Artifact and reproduction}\label{sec:artifact}
+The supplement is \rc{CRTT-v1.0-FULL-ARCHITECTURE-RECONCILED.zip} \cite{crttartifact}, with the unchanged accepted canonical payload, historical sources, catalogues, full supplied logs, replay results and verifier scripts. Its external SHA-256 is
+\begin{center}\small\texttt{e09580cdb8a8f900401390db394a7bde07bb328449b50b059f2a8cd3c175c79e}\end{center}
+The complete manifest has 766 entries covering the 767-file wrapper apart from the checksum list itself. From its extracted root, use a new output directory for the log replay:
+\begin{verbatim}
+python3 verify_archive.py
+python3 replay_evidence.py --output ../CRTT-log-replay
+\end{verbatim}
+For fresh kernel verification, enter \rc{canonical/} with the pinned Lean compiler and run \verb|bash run_verify.sh|, writing the transcript outside that directory. Only the latter command performs a fresh Lean run. The manuscript supplement includes \rc{verify\_fresh.sh}, a clean-extraction wrapper that records the input hash, toolchain, execution log and process status. It does not replace the canonical runner. In this revision its local execution again passed archive preflight but stopped with exit~127 before Lean compilation. A fresh independent kernel run and a public persistent identifier for the artifact remain publication tasks; neither is claimed here. Source maps link statements to declarations and recorded audit lines.

@@ -1,0 +1,17 @@
+absolute_embedding_cases: 625
+covered_actual_pairs: 33800
+decision_bridge_actual_pairs: 804
+decision_bridge_cases: 10000
+decision_bridge_passes: 203
+empty_cover_rejections: 100
+rectangle_implications: 2600
+refined_actual_coverage_cases: 78800
+row_gate_cases: 2604
+sound_pass_cases: 696
+strict_relative_advantage_cases: 42
+subset_refinement_cases: 10204
+T28 reference witness: modeled bills 7 -> 1; check+migration 2; net gain 4.
+Paired enclosure [(7,1),(70,64)] passes; rectangular extrema fail.
+Second row is synthetic conservative uncertainty, not a measured second world.
+Reserve 100 unchanged as a liquidity obligation; not a paid bill.
+PASS: finite relative evidence, coverage, refinement, singleton embedding, T27 margin and T28 reference witness. Not Lean execution.

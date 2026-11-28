@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "Cite the manuscript edition and the exact formal artifact supporting the claim."
+title: "Contract-Relative Transformation Theory: From Certified Discovery to Meta-Policy Closure"
+type: software
+version: "1.0-rc4"
+authors:
+  - family-names: Strand
+    given-names: Aleksandr
+    email: strandlex@gmail.com
+preferred-citation:
+  type: unpublished
+  title: "Contract-Relative Transformation Theory: From Certified Discovery to Meta-Policy Closure"
+  authors:
+    - family-names: Strand
+      given-names: Aleksandr
+  year: 2026
+  version: "1.0-rc4"

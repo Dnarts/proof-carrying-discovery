@@ -1,0 +1,166 @@
+% ============================================================================
+% PACKAGE A (REVIEWED v3): Title, Abstract, Section 1, Section 2
+% Target budget: Pages 1--4
+% ============================================================================
+
+\title{\textbf{Contract-Relative Transformation Theory:}\\
+\large From Certified Discovery to Meta-Policy Closure}
+
+\author{Aleksandr Strand\\[-1pt]{\small\href{mailto:strandlex@gmail.com}{strandlex@gmail.com}}}
+\date{\vspace{-11pt}November 2026}
+
+\maketitle
+
+\begin{abstract}
+We present \textbf{Contract-Relative Transformation Theory (CRTT)}, a mechanized framework for budgeted discovery and certified modification of investigative policies. Starting from contract-relative information sufficiency, we develop constructive investigation synthesis, certified method transfer, resumable morphism discovery, obstruction compilation, and paid acquisition of decision-relative evidence. These constructions support a continuation-preserving replacement mechanism that separates semantic correctness, economic improvement, and liquidity.
+
+Our central result establishes compositional closure for finite, well-typed schedules of meta-policy upgrades under fixed source and target tasks, a fixed evidence provider, and a funded initial continuation. The executable release preserves canonical result membership, exact impossibility characterization, resource conservation, and prior certified history. Accepted upgrades strictly improve the modeled all-in objective locally, while cumulative monotonicity is guaranteed for rejection-free upgrade traces. Counterexamples demonstrate why correct learning and locally beneficial replacements need not produce global economic gains.
+
+The canonical implementation comprises 21 Lean source files and 542 audited declarations under Lean~4.36.0, with independent finite cross-checks and nine executable release witnesses. Guarantees are restricted to the declared finite deterministic model; arbitrary self-rewriting, autonomous evidence generation, and physical performance improvements are not assumed.
+\end{abstract}
+
+% ============================================================================
+\section{Introduction and Research Genesis}
+\label{sec:intro}
+% ============================================================================
+
+\subsection{From Certified Functional Replacement to CRTT Obstructions}
+The research program behind CRTT originated in \emph{Certified Functional Replacement} (CFR): determining when one internal mechanism in a complex or neural system can be replaced by another while preserving contract-specified behavior. CFR experiments motivated a distinction between three possible barriers to replacement:
+\begin{enumerate}
+    \item \textbf{Operator barrier:} no admissible operator exists within the candidate class to realize the required behavior.
+    \item \textbf{Representation barrier:} an observation fiber may lack a common admissible action even when its individual states are solvable.
+    \item \textbf{Selection barrier:} even when the observation is sufficient, the selection mechanism may fail to choose an admissible operator. Empirical calibration failures motivate this distinction but do not alone prove a representational impossibility.
+\end{enumerate}
+
+Formalizing these barriers within a budgeted, proof-carrying framework subsequently exposed three new classes of problems that are not pairwise equivalents of the original CFR barriers, but arise as the theory scales from static replacement to live investigative systems: \emph{structural non-transferability} across tasks, \emph{acquisition and search costs} for discovering methods and evidence, and \emph{migration and liquidity constraints} during live controller changes. This progression leads to the central research question of CRTT:
+\begin{quote}
+\emph{Under what conditions can an investigative system modify its own methods and control policies while preserving semantic correctness, finite resources, and proof-carrying provenance?}
+\end{quote}
+
+\subsection{Architecture as a Sequence of Transitions}
+The CRTT framework addresses this question through six qualitative mathematical transitions (Figure~\ref{fig:arch-map}). Each layer resolves a concrete boundary exposed by its predecessor, as summarized in Table~\ref{tab:genesis}. In the canonical stack, costs, balances, and reserves are natural-number accounting quantities in the declared deterministic model, not wall-clock time or physical memory.
+
+\begin{figure}[h]
+\centering
+\small
+\begin{tikzpicture}[
+    node distance=0.35cm and 0.45cm,
+    box/.style={rectangle, draw=black!75, rounded corners=2pt, align=center,
+                text width=3.9cm, minimum height=1.25cm, fill=black!3},
+    arrow/.style={->, >=stealth, thick}
+]
+\node[box] (b1) {\textbf{Section 2}\\Contract-relative sufficiency\\\emph{What must be known?}};
+\node[box, right=of b1] (b2) {\textbf{Section 3}\\Constructive investigation\\\emph{How to acquire it?}};
+\node[box, right=of b2] (b3) {\textbf{Section 4}\\Obstruction compilation\\\emph{How to turn failure into rules?}};
+
+\node[box, below=0.55cm of b1] (b4) {\textbf{Section 5}\\Decision-relative meta-evidence\\\emph{How to choose methods?}};
+\node[box, right=of b4] (b5) {\textbf{Section 6}\\Certified replacement\\\emph{How to change live controllers?}};
+\node[box, right=of b5] (b6) {\textbf{Section 7}\\Compositional closure\\\emph{How to preserve guarantees?}};
+
+\draw[arrow] (b1) -- (b2);
+\draw[arrow] (b2) -- (b3);
+\draw[arrow] (b3.south) -- ++(0,-0.25) -| (b4.north);
+\draw[arrow] (b4) -- (b5);
+\draw[arrow] (b5) -- (b6);
+\end{tikzpicture}
+\caption{The conceptual progression of CRTT; arrows denote the progression of research questions, not necessarily source imports.}
+\label{fig:arch-map}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\footnotesize
+\begin{tabular}{@{}p{3.6cm}p{5.2cm}p{4.6cm}@{}}
+\toprule
+\textbf{Established Result} & \textbf{Discovered Boundary} & \textbf{Next Object of Study} \\
+\midrule
+Functional replaceability & No valid operator may exist & Obstruction \\
+Observation sufficiency & Required information is not known a priori & Observation strategy \\
+Optimal strategy & Re-synthesis on new tasks is costly & Transfer \\
+Transferability & A transfer morphism must be found & Constructive discovery \\
+Complete discovery & Exhaustive search is too expensive & Certified pruning \\
+Rule learning & Valid learning need not pay for itself & Meta-controller \\
+Controller selection & Exact method costs are only partially known & Meta-evidence \\
+Sufficient meta-evidence & Live replacement can break a continuation & Certified migration \\
+Sound migration & Repeated changes interact across history & Compositional trace laws \\
+Controller replacement & The selection policy itself may be inadequate & Meta-policy closure \\
+\bottomrule
+\end{tabular}
+\caption{Research questions induced by the limits of preceding constructions.}
+\label{tab:genesis}
+\end{table}
+
+\subsection{Reading Guide and Supplementary Archive}
+Sections~\ref{sec:foundations}--\ref{sec:meta-evidence} build the constructive and economic machinery required to state and prove our central results in Sections~6 and~7. Full Lean~4.36.0 sources (21 canonical files, 542 audited declarations), historical gate records, and nine CLI execution witnesses are provided in the accompanying reconciled release archive (\texttt{CRTT-v1.0-FULL-ARCHITECTURE-RECONCILED.zip}), which serves as the formal supplementary material.
+
+% ============================================================================
+\section{Contract-Relative Foundations}
+\label{sec:foundations}
+% ============================================================================
+
+\subsection{Contracts, Sufficiency, and the Existence Criterion}
+Fix a state space $X$, a non-empty action space $A \neq \varnothing$, and a contract predicate $V : X \times A \to \mathrm{Prop}$. For each $x \in X$, define its set of contract-admissible actions $A_C(x) = \{ a \in A \mid V(x, a) \}$. An observation map $\phi : X \to Z$ induces a fiber $\phi^{-1}(z) = \{ x \in X \mid \phi(x) = z \}$ over each signature $z \in \phi(X)$. A total policy $\pi : Z \to A$ is \emph{contract-admissible through $\phi$} if $V(x, \pi(\phi(x)))$ holds for all $x \in X$.
+
+\begin{theorem}[Contract-Relative Sufficiency Criterion (\texttt{CRTT.selector\_iff})]
+\label{thm:sufficiency}
+Assume $A \neq \varnothing$. An observation map $\phi : X \to Z$ admits a contract-admissible total policy $\pi : Z \to A$ if and only if every realized fiber admits a common admissible action:
+\begin{equation}
+\label{eq:sufficiency}
+\exists \pi : Z \to A,\; \forall x \in X,\; V(x, \pi(\phi(x)))
+\iff
+\forall z \in \phi(X),\; \bigcap_{\phi(x) = z} A_C(x) \neq \varnothing.
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+($\Rightarrow$) If $\pi$ satisfies $V(x, \pi(\phi(x)))$ for all $x$, then for any $z \in \phi(X)$, $\pi(z) \in \bigcap_{\phi(x)=z} A_C(x)$.
+($\Leftarrow$) For each $z \in \phi(X)$, select a witness $a_z \in \bigcap_{\phi(x)=z} A_C(x)$ (using classical choice in the general setting). For $z \notin \phi(X)$, set $\pi(z) = a_0$ for an arbitrary $a_0 \in A$, which exists because $A \neq \varnothing$. The resulting total policy satisfies $V(x, \pi(\phi(x)))$ for all $x \in X$.
+\end{proof}
+
+Notice that without $A \neq \varnothing$, the criterion fails when $X = \varnothing$ and $Z \neq \varnothing$. Moreover, this early general result relies on classical choice, in sharp contrast to the constructive finite search in the canonical stack, whose audited declarations do not depend on \texttt{Classical.choice}.
+
+\subsection{Collective Obstructions and Coarsest Partitions}
+Criterion~\eqref{eq:sufficiency} shows that sufficiency fails whenever some fiber has empty admissible intersection. Crucially, refining $\phi$ cannot always resolve such an obstruction: if $A_C(x) = \varnothing$ for some $x \in X$, then even complete state observation admits no valid action.
+
+Even when every individual state is solvable ($A_C(x) \neq \varnothing$), obstructions need not be pairwise. Define world compatibility by
+\[
+x \sim_C y \iff A_C(x) \cap A_C(y) \neq \varnothing.
+\]
+Consider three worlds with admissible action sets $A_C(x_1)=\{a,b\}$, $A_C(x_2)=\{b,c\}$, and $A_C(x_3)=\{a,c\}$ (\texttt{SufficientPartitions.triangle\_compat\_all}, \texttt{triangle\_no\_common\_action}). Every pair of worlds shares an admissible action, yet $\bigcap_{i=1}^3 A_C(x_i) = \varnothing$: the obstruction is strictly collective. This phenomenon constrains the existence of a greatest sufficient partition in the refinement order (not a minimum-size encoding).
+
+\begin{theorem}[Existence of a coarsest sufficient partition]
+\label{thm:coarsest}
+A coarsest sufficient partition of $X$ exists if and only if $\sim_C$ is an equivalence relation and the partition induced by $\sim_C$ is itself sufficient.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+If $\sim_C$ is a sufficient equivalence relation, any sufficient partition must place incompatible worlds in distinct classes, so it refines $\sim_C$; thus $\sim_C$ is coarsest. Conversely, suppose a coarsest sufficient partition $\mathcal{P}^*$ exists. Its sufficiency implies $A_C(w)\ne\varnothing$ for every $w$. Thus any compatible pair $x\sim_C y$ can be merged while all other states remain singleton blocks; since $\mathcal{P}^*$ is coarsened by every sufficient partition, $x$ and $y$ must lie in the same class of $\mathcal{P}^*$. On the other hand, sufficiency of $\mathcal{P}^*$ forces any two states in the same class to be compatible. Hence $\sim_C$ coincides with the equivalence relation of $\mathcal{P}^*$ and is sufficient.
+\end{proof}
+
+The corresponding declaration is \texttt{coarsest\_exists\_iff} in \texttt{SufficientPartitions.lean}. In the triangle example above, $\sim_C$ is the universal relation (hence an equivalence), but it is not sufficient; therefore no coarsest sufficient partition exists. In contrast, for an exact target $g:X\to Y$, equality of target values is itself the coarsest sufficient relation (\texttt{exact\_target\_coarsest}).
+
+\subsection{Economic Foundations: Library Accumulation and Minimax Regret}
+Once sufficiency is established, the economic analysis examines when accumulating methods or acquiring observations pays off under finite budgets:
+\begin{itemize}
+    \item \textbf{Idealized accumulation and strict gain:} For a fixed feasible trace predicate, with reuse no dearer than discovery and no additional lookup charge, budgeted reachability is monotone under library inclusion. Writing $C_{\mathrm{ind}}^*$ and $C_{\mathrm{cum}}^*$ for the attained minima over the same feasible plans, with $C_{\mathrm{ind}}(p)=C_{\mathrm{cum}}(p)+S(p)$ for every feasible $p$, strict cumulative gain holds if and only if some admissible plan $p$ yields certified savings $S(p)$ exceeding its independent suboptimality gap:
+    \begin{equation}
+    \label{eq:t15}
+    C_{\mathrm{cum}}^* < C_{\mathrm{ind}}^* \iff \exists p :\; S(p) > C_{\mathrm{ind}}(p) - C_{\mathrm{ind}}^*.
+    \end{equation}
+    \item \textbf{Mandatory lookup costs and online thresholds:} Mandatory lookup charges can break monotonicity: a library extension increases cost from $2$ to $3$ at budget $2$. In the hidden-method model, an adversarial hidden repeated method yields regret $D-R$ for a deterministic first choice when discovery costs $D$, reuse costs $R\le D$, and at least two tasks occur. In the separate repeated-task threshold model with rent $L$ and $R<L\le D$, the break-even strategy is $2$-competitive against the offline optimum.
+    \item \textbf{Minimax regret and value of observation:} On a finite list of scenarios and a nonempty finite action list, with decidable observation equality, let $c(a,x)\in\mathbb N$ and define action regret $r(a,x) = c(a,x) - \min_{b \in A} c(b,x)$ and the worst-case minimax regret of an observation map $\phi$ by
+    \begin{equation}
+    \label{eq:t18-regret}
+    R^*(\phi) = \max_{z \in \phi(X)} \min_{a \in A} \max_{x : \phi(x)=z} r(a,x).
+    \end{equation}
+    The maximum of an empty scenario list is zero. The minimax criterion characterizes $\varepsilon$-sufficiency by existence of a common action with regret at most $\varepsilon$ in each realized fiber. In its XOR witness, no observation or either bit alone has regret $1$, whereas both bits give regret $0$. Acquiring a fixed refinement $\phi'$ at charge $c_{\mathrm{obs}}$ is strictly advantageous precisely when
+    \begin{equation}
+    \label{eq:t18-acq}
+    c_{\mathrm{obs}} + R^*(\phi') < R^*(\phi).
+    \end{equation}
+\end{itemize}
+
+\subsection{From sufficiency to investigation}
+These results include an online threshold model but do not yet provide the general bounded-depth tree synthesizer and typed task-transfer mechanism developed below. This motivates the constructive investigation and transfer layer (Section~3).
+
+The foundational results have separate historical proof artifacts. The self-contained canonical stack establishes the release theorem independently of those branches; Section~8 records their provenance.

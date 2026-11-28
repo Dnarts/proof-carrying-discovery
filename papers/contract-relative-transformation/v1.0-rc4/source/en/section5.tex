@@ -1,0 +1,47 @@
+\section{Decision-relative meta-evidence}\label{sec:meta-evidence}
+A certificate of correct learning is not a certificate of economic gain. We now distinguish the cost of selecting a controller, the cost of learning about its cost, and the sufficiency of that evidence for a decision. The finite meta-problem is itself an instance of the investigation model of Section~3; its scenarios are task pairs of fixed carrier sizes.
+
+\subsection{Selecting funded investigative plans}
+A plan specifies a base rule-schema list, a learning allowance $\lambda$, a completion reserve $R$, and setup charge $k$. It first runs the paid learning prefix within $\lambda$, then hands the current frontier and unspent allowance plus $R$ to a static pruning executor. A proof that this handoff balance dominates the static liability potential is required. The prefix record, including any pending learning event, is returned separately; pending compilation is not a remaining answer obligation. With zero allowance the learning phase is disabled, including its lookup charges.
+
+\begin{theorem}[Funded plans and meta-selection]\label{thm:meta-selection}
+Each funded plan returns precisely the canonical membership of its task pair. Its actual modeled bill, including setup, is at most $k+\lambda+R$. For a finite catalogue of such plans indexed by actions, suppose a table $U(a,w)$ bounds the actual completed bill $C(a,w)$ for every plan and scenario, and a fixed controller fee $k_0$ is declared. The investigation optimizer of Section~3 minimizes $k_0+W_E(t)$ for terminal loss $U$; its predicted worst bill bounds actual execution. If $U=C$ everywhere, the optimizer minimizes actual worst bill over legal meta-trees.
+\end{theorem}
+\begin{proof}
+The learning prefix preserves correctness. The funded handoff completes by Theorem~\ref{thm:funded-search}; conservation across the two phases gives the bound and keeps unspent reserve distinct from expenditure. At the meta-level the chosen tree executes only its selected plan. For each world its actual cost is the sum of realized query fees and $C(a,w)$, bounded by the corresponding sum using $U$. Theorem~\ref{thm:investigation} optimizes this upper objective; exactness of the table converts the inequality to actual optimality. See \rc{perform\_complete}, \rc{actualBill\_le\_reservation}, \rc{optimizer\_bound\_optimal} and \rc{optimizer\_actual\_optimal} in \rc{MetaInvestigation.lean}.
+\end{proof}
+The table, funding proofs and controller fee are supplied, not inferred from an unpaid oracle. An explicit witness reduces the worst modeled bill from $53$ to $25$ (including the declared meta-observation fee); the offline full-table acquisition costs $465$. With these fixed charges, strict amortization requires at least $17$ uses, since $465+25n<53n$ iff $465<28n$. This is a modeled witness, not a prediction of future workload. The need to acquire the cost table motivates partial evidence.
+
+\subsection{Interval evidence and paid refinement}
+For fixed worlds, ports, prices and depth, each unknown terminal cost $C(a,w)$ is represented by a proof-indexed interval
+\[
+  L(a,w)\le C(a,w)\le U(a,w).
+\]
+Intervals may be intersected; lower endpoints rise, upper endpoints fall, and the actual cost remains covered. Let $V_L,V_C,V_U$ denote the respective minimax values, $W_C$ the worst cost under actual losses, and $t_U$ an optimizer of the upper model.
+\begin{theorem}[Sufficient interval certificate]\label{thm:interval}
+$V_L\le V_C\le V_U$, and for every legal competing tree $t$,
+\[
+ W_C(t_U)\le W_C(t)+(V_U-V_L).
+\]
+The gap $V_U-V_L$ cannot increase under interval refinement. In particular, a gap at most $\epsilon$ suffices to certify the upper optimizer as $\epsilon$-near-optimal relative to the actual minimax objective.
+\end{theorem}
+\begin{proof}
+Tree costs are monotone in terminal losses, and legality is unchanged, so the corresponding optimal values are ordered. Then $W_C(t_U)\le V_U\le W_C(t)+V_U-V_L$, using $V_L\le V_C\le W_C(t)$. Refinement improves both endpoints in the appropriate directions. The formal statements are \rc{lower\_le\_true}, \rc{true\_le\_upper}, \rc{certified\_gap}, and \rc{gap\_monotone} in \rc{MetaEvidenceAcquisition.lean}.
+\end{proof}
+Acquisition and assessment are separate positive-charge operations in a supplied finite schedule. The actual-indexed bound is acquired only after paying its quoted charge; the runner records fees, updates evidence monotonically and stops upon a sufficient certificate or budget/schedule exhaustion. The theorem \rc{assess\_complete} is completeness of the gap test, not a necessary condition for near-optimality. For the specific funded-plan family, acquiring six of eight exact cells certifies value $22$ at prepaid charge $2309$, compared with $3051$ for full acquisition; this is an ex-post schedule witness, not an optimal acquisition algorithm. Reserve-based prepaid charge is not identical to realized experimental cost.
+
+\subsection{Decision sufficiency and optimal evidence acquisition}
+Cost uncertainty does not imply decision uncertainty. For example, in two possible models with costs $(0,1)$ and $(100,101)$ for the same two controllers, the first is optimal in both despite a wide range of optimal values. We therefore use a finite nonempty catalogue $\mathcal C$ of admitted controllers and a list $E$ of compatible hypotheses. Each hypothesis $h$ has a bill $J_h(c)$ and reference $v_h\le J_h(c)$ for all $c\in\mathcal C$. The reference can be the attained catalogue minimum, but need not be the optimum over any larger class. Define
+\[
+ r_h(c)=J_h(c)-v_h,\qquad R(E)=\min_{c\in\mathcal C}\max_{h\in E}r_h(c),
+\]
+with empty maximum zero.
+\begin{theorem}[Decision-relative sufficiency]\label{thm:decision}
+$R(E)\le\epsilon$ iff some admitted controller satisfies $J_h(c)\le v_h+\epsilon$ for every $h\in E$. For the catalogue reference this is equivalently $J_h(c)\le J_h(c')+\epsilon$ for all $h\in E,c'\in\mathcal C$. Refining the hypothesis list cannot increase $R$.
+\end{theorem}
+\begin{proof}
+The minimum is attained by finite selection, and the maximum bound is equivalent to the pointwise inequalities. For the catalogue case, one direction uses the lower bound of the catalogue minimum on all competitors, and the converse uses an attaining competitor for each hypothesis. Subset refinement can only reduce each controller's worst regret, hence the minimum. These are \rc{residual\_iff}, \rc{catalogue\_robust\_iff}, and \rc{residual\_subset} in \rc{DecisionEvidence.lean}.
+\end{proof}
+Pairwise bounds on costs can certify this decision without identifying the cost model. Exact hypothesis membership is an explicit external premise: a deterministic response to a port $q$ filters $E$, preserving the actual hypothesis if it was present initially (\rc{refine\_truth}). Taking terminal loss $r_h(c)$ in the investigation model produces the optimal acquisition tree for worst-case query expenditure plus regret, with terminal value $R(E)$ and the Bellman recurrence of Section~3. This is \rc{acquisition\_optimal} and \rc{acquisition\_bellman}. The actual total bill, for external setup $k$, is exactly $k+v_h+$ realized query-plus-regret cost; minimizing worst regret is not in general minimizing worst actual bill when $v_h$ varies (\rc{total\_bill\_identity}).
+
+A hard contract is different from the soft sum. Using the capped construction of Theorem~\ref{thm:investigation}, \rc{hardAssess} succeeds iff a legal acquisition tree exists with observation expenditure at most $b$ and terminal regret at most $\epsilon$ on every compatible hypothesis. Whenever feasible, its tree also minimizes worst observation expenditure among legal trees satisfying the regret tolerance (\rc{hard\_assess\_complete}, \rc{hard\_minimal\_observation}). These guarantees require actual membership and a specified finite catalogue, not automatic hypothesis generation or free validation. In particular, selecting a controller prospectively does not authorize its installation into a partially explored live frontier. That is the separate replacement problem of Section~6.

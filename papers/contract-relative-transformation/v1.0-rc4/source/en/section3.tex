@@ -1,0 +1,52 @@
+\section{Constructive investigation and transfer}\label{sec:investigation}
+Sufficiency gives a criterion for a fixed observation but not an acquisition strategy. We first synthesize finite adaptive investigations, then ask when an already synthesized strategy can be transported to another task. The declared world, action and port lists are finite; equality of ports is decidable. No efficiency bound on exhaustive synthesis is asserted.
+
+\subsection{Adaptive investigation synthesis}
+A task has a declared list of worlds $E$, a nonempty action list $\mathcal A$, a port list $Q$, a read function $r(q,w)\in\{0,1\}$, port prices $c(q)\in\Nat$, terminal losses $L(a,w)\in\Nat$, and depth limit $d$. An investigation is a finite tree
+\[
+ t ::= \operatorname{act}(a)\mid\operatorname{observe}(q,t_0,t_1).
+\]
+Legality requires declared actions and ports, depth at most $d$, and no repeated port along a path (all occurrences of a purchased port are removed from the remaining list). With $J_w(t)$ its realized cost, the semantics is $J_w(\operatorname{act}(a))=L(a,w)$ and $J_w(\operatorname{observe}(q,t_0,t_1))=c(q)+J_w(t_{r(q,w)})$. Only the realized branch is charged. Let $W_E(t)=\max_{w\in E}J_w(t)$, with empty maximum zero, and $V_d(E,Q)$ be the optimal legal worst cost. Write $E_b(q)$ for the filter of $E$ with read value $b$ and $L_*(E)=\min_{a\in\mathcal A}\max_{w\in E}L(a,w)$.
+
+\begin{theorem}[Optimal finite investigation]\label{thm:investigation}
+The executable solver attains $V_d(E,Q)$ with a legal tree. For $E\ne\varnothing$,
+\begin{align}
+ V_0(E,Q)&=L_*(E),\\
+ V_{d+1}(E,Q)&=\min\Bigl(\{L_*(E)\}\cup\{c(q)+\max_{b\in\{0,1\}} \\
+ &\hspace{24mm} V_d(E_b(q),Q\setminus\{q\}):q\in Q\}\Bigr).
+\end{align}
+For empty $E$ the value is zero. For a hard terminal tolerance $\epsilon$ and observation budget $b$, replace terminal loss by $0$ when $L(a,w)\le\epsilon$ and by $b+1$ otherwise. The capped optimum is at most $b$ if and only if a legal tree meets both bounds on every declared world.
+\end{theorem}
+\begin{proof}
+Induct on depth. Every legal tree is a terminal action or starts with a declared port and two legal subtrees at smaller depth. For nonempty $E$, the worst observation-node cost is the fee plus the maximum of the two branch costs, since one branch is realized and all costs are nonnegative. The solver chooses the least-cost candidate among the terminal optimizer and recursively synthesized observation candidates. By induction every competing tree has cost at least this minimum, and the chosen candidate is legal. In the capped problem a violating terminal leaf costs at least $b+1$; a valid leaf contributes zero, so the worst cap is precisely the hard feasibility test. See \rc{solve\_legal}, \rc{solve\_optimal}, \rc{bellman}, and \rc{epsilon\_budget\_iff} in \rc{AdaptiveObservation.lean}.
+\end{proof}
+The adaptive optimum is at most the best legal fixed-schedule value (\rc{adaptive\_le\_static}). The multiplexer witness reads a selector bit then the indicated data bit, attaining cost $2$ rather than the static optimum $3$ under unit prices and wrong-answer loss $4$. The XOR witness also excludes a general greedy one-step value rule. Synthesis here is exact within the declared tree language, not over arbitrary programs.
+
+\subsection{Transport and library economics}
+For tasks $S,T$, a transfer morphism $M=(h,p,a)$ maps target worlds to source worlds, source ports to target ports, and source actions to target actions, preserving declared membership. The port map is injective on declared source ports, $d_S\le d_T$, and for all declared arguments
+\begin{align*}
+ r_T(p(q),w)&=r_S(q,h(w)), & c_T(p(q))&\le c_S(q),\\
+ L_T(a(u),w)&\le L_S(u,h(w)).
+\end{align*}
+Transport $M_*t$ is the syntax-directed substitution of port and action labels, independent of the unknown target world.
+\begin{theorem}[Certified transfer]\label{thm:transfer}
+For every source-legal tree $t$, $M_*t$ is target-legal and $J^T_w(M_*t)\le J^S_{h(w)}(t)$ for every declared target world. Observation charges and terminal losses are separately nonincreasing. Hence $V_T\le V_S$; mutual morphisms imply equality of optima. Identity and composition of morphisms induce identity and composition of tree transports.
+\end{theorem}
+\begin{proof}
+Structural induction on the tree gives corresponding branch choices by read equality and the cost inequalities by addition; injectivity ensures removal of an observed port cannot remove a different source port's image. The depth inequality gives legality. Maximizing over target worlds and applying the result to a source optimizer proves the value inequality. Composition is function composition (contravariant on worlds) and tree substitution composes. These are the \rc{transfer\_legal}, \rc{transfer\_runCost\_le}, \rc{transfer\_hard\_contract}, \rc{optimum\_le}, \rc{mutual\_optimum\_eq}, and \rc{transfer\_compose} results of \rc{InvestigationTransfer.lean}.
+\end{proof}
+Equal optimum values alone do not imply the existence of a morphism; the finite equal-optimum witnesses show failures of injectivity and of loss preservation. Moreover, transport incurs fees. For a listed route with overhead $k$ and target execution cost $e\ge V_T$, reuse is strictly cheaper than fresh synthesis at charge $D$ followed by optimal execution exactly when $k+(e-V_T)<D$. The explicit library selector minimizes over the fresh option and listed certified offers; with search charge $s$ and fresh quote $F$, search pays off iff some discovered offer has $s+k+e<F$. Completeness relative to the semantic offer oracle requires a cost-complete admitted list, not merely a sound subset. These are \rc{paid\_candidate\_iff}, \rc{search\_profitable\_iff}, and \rc{complete\_search\_matches\_oracle} in \rc{InvestigationLibrary.lean}.
+
+\subsection{Constructive discovery of morphisms}
+A transfer theorem is useful only once its witness is available. For indexed finite tasks (all actions declared, including a default action), enumerate all maps $p:Q_S\to Q_T$ and $a:\mathcal A_S\to\mathcal A_T$. For a fixed pair define
+\[
+ \mathcal Y_w(p,a)=\{y\in X_S: \forall q\in Q_S,\ r_T(p(q),w)=r_S(q,y),\quad
+ \forall u\in\mathcal A_S,\ L_T(a(u),w)\le L_S(u,y)\}.
+\]
+\begin{theorem}[Canonical discovery]\label{thm:discovery}
+A fixed pair $(p,a)$ extends to a morphism iff the depth and port conditions hold and $\mathcal Y_w(p,a)\ne\varnothing$ for every target world $w$. Picking the first witness in each finite source row constructs a morphism. The list $\CanonRef=\rc{discoverAll}(S,T)$ contains a representative with the same port and action maps as every valid morphism; it is empty iff no morphism exists.
+\end{theorem}
+\begin{proof}
+A valid world map supplies a member of each row. Conversely, each target world can be assigned its first row member independently, since the morphism has no inter-world constraints. This establishes all read and loss obligations, while the separately checked depth, price and injectivity obligations are unaffected. Exhaustive map enumeration supplies the pair of any valid morphism. A nonempty output itself inhabits the morphism type. See \rc{fixed\_pair\_iff}, \rc{discover\_complete}, and \rc{empty\_iff\_no\_morphism} in \rc{MorphismDiscovery.lean}.
+\end{proof}
+The canonical list need not enumerate all possible world maps; the translated tree depends only on $p,a$. This removes exhaustive enumeration of global world maps, not the potentially expensive enumeration of the remaining pairs. The next problem is how to preserve this reference semantics under interruption, pruning, and learning.

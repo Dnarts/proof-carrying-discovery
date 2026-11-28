@@ -1,0 +1,21 @@
+Closed T30 fixture: baseline 7, one accepted upgrade 6, additional paid rejection 7.
+Two accepted changes, fixed provider: all-in bill 8 -> 7 -> 6.
+Liquidity counterexample: rejected fee 1 changes all-in bill 4 -> 10, not 4 -> 5.
+Twelve free deferred requests: finite schedule consumed, fallback completes.
+accepted: 128
+closed_runs: 965
+deferred: 1243
+episode_events: 877
+forged_trace_rejections: 1066
+no_rejection_gain_laws: 463
+provider_mismatch_rejections: 725
+rejected: 1047
+root_accepted: 19
+root_blocked: 418
+root_deferred: 51
+root_kept: 301
+root_rejectGain: 146
+root_rejectLiquidity: 30
+task_pairs: 24
+transition_laws: 2418
+PASS fixed-provider closure, bounded schedules, exact charges, preserved history, terminal completion and economic controls. Not Lean execution.

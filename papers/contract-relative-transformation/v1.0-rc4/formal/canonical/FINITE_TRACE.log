@@ -1,0 +1,16 @@
+Positive mixed trace: baseline 7, accepted gain 4, evidence overhead 1, final bill 4.
+Negative mixed trace: baseline 7, accepted gain 4, rejected check 5, final bill 8.
+accepted: 35
+advance: 295
+attempt: 396
+connected_chains: 149
+disconnected_rejections: 146
+evidence: 196
+forged_end_rejections: 146
+net_gain_chains: 19
+paid_attempts: 173
+prefix_bill: 11760
+spent_shift: 35280
+task_pairs: 49
+transition_laws: 887
+PASS deterministic prefix bills, connected finite histories, exact cumulative ledger, provenance and root completion. Not Lean execution.

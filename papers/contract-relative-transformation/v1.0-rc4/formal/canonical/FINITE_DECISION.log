@@ -1,0 +1,16 @@
+Witness common optimum: reference 0..100; decision regret=0; rectangular gap=100.
+Witness one-bit: residual=8, acquisition=2; with price=9 stop for sum objective, query for hard eps=0.
+Witness XOR: depth 1 value=10, depth 2 value=2.
+Witness differing objectives: minimax regret picks A (10), worst bill picks B (100 vs 110).
+PASS excluded-truth and empty-belief negative controls.
+acquisition_models: 36864
+belief_monotonicity: 1024
+bill_identities: 5455872
+endpoint_catalogues: 1296
+endpoint_completions: 10000
+hard_feasibility_checks: 184320
+hard_success: 168768
+interval_certificate_checks: 29760
+legal_tree_comparisons: 2727936
+pairwise_exact: 2048
+PASS finite robust regret, pairwise dominance, shared endpoints, legal-tree Bellman comparison, hard regret/observation budget, and accounting. Not Lean execution.

@@ -1,0 +1,22 @@
+Direct imports (not conceptual dependence).
+AdaptiveObservation <- Std
+InvestigationTransfer <- AdaptiveObservation
+InvestigationLibrary <- InvestigationTransfer
+MorphismDiscovery <- InvestigationLibrary
+BudgetedDiscovery <- MorphismDiscovery
+CertifiedPruning <- BudgetedDiscovery
+ResumeLaws <- BudgetedDiscovery
+BudgetedPruning <- CertifiedPruning
+ImpasseCompilation <- BudgetedPruning
+LearningDiscovery <- ImpasseCompilation, ResumeLaws
+MetaInvestigation <- LearningDiscovery
+MetaEvidenceAcquisition <- MetaInvestigation
+DecisionEvidence <- MetaEvidenceAcquisition
+ControllerReplacement <- DecisionEvidence
+RelativeEvidence <- ControllerReplacement
+AdmissionAccounting <- RelativeEvidence
+RecursiveTrace <- AdmissionAccounting
+MetaPolicy <- RecursiveTrace
+MetaClosure <- MetaPolicy
+Release <- MetaClosure
+ReleaseMain <- Release

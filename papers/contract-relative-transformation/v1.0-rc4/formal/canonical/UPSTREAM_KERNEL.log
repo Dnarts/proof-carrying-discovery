@@ -1,0 +1,264 @@
+AUDIT_FIXTURES.log: OK
+AdaptiveObservation.lean: OK
+BudgetedDiscovery.lean: OK
+CertifiedPruning.lean: OK
+FINITE_CHECK.log: OK
+InvestigationLibrary.lean: OK
+InvestigationTransfer.lean: OK
+KERNEL_CHECK.log: OK
+MorphismDiscovery.lean: OK
+NEXT_GATES.md: OK
+README.md: OK
+UPSTREAM_KERNEL.log: OK
+UPSTREAM_SHA256.txt: OK
+audit_lean.py: OK
+check_pruning.py: OK
+run_verify.sh: OK
+test_audit.py: OK
+AdaptiveObservation.lean: OK
+InvestigationTransfer.lean: OK
+InvestigationLibrary.lean: OK
+MorphismDiscovery.lean: OK
+BudgetedDiscovery.lean: OK
+PASS synthetic audit fixture: clean
+PASS synthetic audit fixture: nonzero compiler exit despite complete reports
+PASS synthetic audit fixture: partial reports
+PASS synthetic audit fixture: placeholder
+PASS synthetic audit fixture: classical
+PASS synthetic audit fixture: unknown axiom
+PASS synthetic audit fixture: warning
+PASS synthetic audit fixture: error
+PASS synthetic audit fixture: wrong name with same count
+PASS synthetic audit fixture: duplicate
+PASS 10 audit-parser fixtures. No Lean execution.
+Lean (version 4.36.0, arm64-apple-darwin24.6.0, commit 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9, Release)
+=== LEAN: AdaptiveObservation.lean ===
+'CRTT.AdaptiveObservation.pick_value' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.runCost_le_worst' depends on axioms: [propext]
+'CRTT.AdaptiveObservation.terminal_optimal' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.capped_cost' depends on axioms: [propext]
+'CRTT.AdaptiveObservation.capped_worst_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.solve_legal' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.worst_observe' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.solve_optimal' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.bellman' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.cost_feasible_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.runCost_split' depends on axioms: [propext]
+'CRTT.AdaptiveObservation.epsilon_budget_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.fixed_optimal' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.schedules_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.schedules_sound' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.static_optimal' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.adaptive_le_static' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.Witnesses.mux_adaptive_beats_static' does not depend on any axioms
+'CRTT.AdaptiveObservation.Witnesses.mux_exact_observation_budget' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.Witnesses.mux_lower_bound' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.Witnesses.mux_static_lower_bound' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.Witnesses.xor_greedy_failure' does not depend on any axioms
+AUDIT AdaptiveObservation.lean: 22/22 axiom reports; Lean exit=0; dependencies={'Quot.sound': 17, 'propext': 20}
+PASS AdaptiveObservation.lean: 22 axiom reports audited.
+=== LEAN: InvestigationTransfer.lean ===
+'CRTT.InvestigationTransfer.declared_of_legal' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationTransfer.transfer_legal' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationTransfer.transfer_semantics' depends on axioms: [propext]
+'CRTT.InvestigationTransfer.transfer_runCost_le' depends on axioms: [propext]
+'CRTT.InvestigationTransfer.transfer_worst_le' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationTransfer.transfer_hard_contract' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationTransfer.optimum_le' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationTransfer.mutual_optimum_eq' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationTransfer.transferred_optimizer' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationTransfer.identity' does not depend on any axioms
+'CRTT.InvestigationTransfer.compose' does not depend on any axioms
+'CRTT.InvestigationTransfer.transfer_identity' does not depend on any axioms
+'CRTT.InvestigationTransfer.transfer_compose' does not depend on any axioms
+'CRTT.InvestigationTransfer.paid_transfer_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationTransfer.paid_transfer_sufficient' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationTransfer.Witnesses.bit_tree_legal' depends on axioms: [propext]
+'CRTT.InvestigationTransfer.Witnesses.bit_tree_optimal' does not depend on any axioms
+'CRTT.InvestigationTransfer.Witnesses.equal_optimum_bad_translation' does not depend on any axioms
+'CRTT.InvestigationTransfer.Witnesses.equal_optimum_no_global_morphism' depends on axioms: [propext]
+'CRTT.InvestigationTransfer.Witnesses.equal_optimum_no_loss_morphism' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationTransfer.Witnesses.flipMorphism' depends on axioms: [propext]
+'CRTT.InvestigationTransfer.Witnesses.flipped_tree_cost' depends on axioms: [propext]
+AUDIT InvestigationTransfer.lean: 22/22 axiom reports; Lean exit=0; dependencies={'Quot.sound': 10, 'propext': 16}
+PASS InvestigationTransfer.lean: 22 axiom reports audited.
+=== LEAN: InvestigationLibrary.lean ===
+'CRTT.InvestigationLibrary.task_optimizer_legal' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.task_optimizer_cost' does not depend on any axioms
+'CRTT.InvestigationLibrary.task_optimum_le' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.overhead_single' does not depend on any axioms
+'CRTT.InvestigationLibrary.overhead_step' does not depend on any axioms
+'CRTT.InvestigationLibrary.collapse_single' does not depend on any axioms
+'CRTT.InvestigationLibrary.collapse_step' does not depend on any axioms
+'CRTT.InvestigationLibrary.execute_single' does not depend on any axioms
+'CRTT.InvestigationLibrary.execute_step' does not depend on any axioms
+'CRTT.InvestigationLibrary.append_single' does not depend on any axioms
+'CRTT.InvestigationLibrary.append_step' does not depend on any axioms
+'CRTT.InvestigationLibrary.collapse_exec' does not depend on any axioms
+'CRTT.InvestigationLibrary.append_overhead' does not depend on any axioms
+'CRTT.InvestigationLibrary.append_execution' does not depend on any axioms
+'CRTT.InvestigationLibrary.path_legal' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.path_cost_le' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.path_hard_contract' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.candidate_legal' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.candidate_hard_contract' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.candidate_optimum_le' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.residual_comparison' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.paid_candidate_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.mutual_path_execution' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.mutual_paths_compare' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.choose_mem' depends on axioms: [propext]
+'CRTT.InvestigationLibrary.chosen_from_list' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.best_le_fresh' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.best_le_candidate' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.best_attained' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.chosen_from_library' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.listed_monotone' does not depend on any axioms
+'CRTT.InvestigationLibrary.chosen_hard_contract' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.best_monotone' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.search_profitable_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.oracle_le_realized' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.complete_search_matches_oracle' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.enumerated_oracle' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.search_gap_accounting' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.use_accounting' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.stream_accounting' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.amortization_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.Witnesses.source_tree_legal' depends on axioms: [propext]
+'CRTT.InvestigationLibrary.Witnesses.cheaper_path_not_cheaper_total' depends on axioms: [propext]
+'CRTT.InvestigationLibrary.Witnesses.two_edge_computes' depends on axioms: [propext]
+'CRTT.InvestigationLibrary.Witnesses.selector_picks_better_total' depends on axioms: [propext]
+'CRTT.InvestigationLibrary.Witnesses.same_offer_small' depends on axioms: [propext]
+'CRTT.InvestigationLibrary.Witnesses.same_offer_large' depends on axioms: [propext]
+'CRTT.InvestigationLibrary.Witnesses.library_bloat_witness' depends on axioms: [propext]
+'CRTT.InvestigationLibrary.Witnesses.small_in_large' depends on axioms: [propext]
+'CRTT.InvestigationLibrary.Witnesses.bloat_budget_barrier' depends on axioms: [propext]
+'CRTT.InvestigationLibrary.Witnesses.empty_search_gap' depends on axioms: [propext]
+AUDIT InvestigationLibrary.lean: 51/51 axiom reports; Lean exit=0; dependencies={'Quot.sound': 27, 'propext': 38}
+PASS InvestigationLibrary.lean: 51 axiom reports audited.
+=== LEAN: MorphismDiscovery.lean ===
+'CRTT.MorphismDiscovery.mem_indices' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.maps_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.and_true_iff' does not depend on any axioms
+'CRTT.MorphismDiscovery.allB_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.first_sound' depends on axioms: [propext]
+'CRTT.MorphismDiscovery.first_complete' depends on axioms: [propext]
+'CRTT.MorphismDiscovery.extractSome_spec' does not depend on any axioms
+'CRTT.MorphismDiscovery.mem_collectSome' depends on axioms: [propext]
+'CRTT.MorphismDiscovery.action_mem_all' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.portOK_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.readOK_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.lossOK_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.portWorlds_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.worldWitness_sound' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.worldWitness_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.synthWorldMap_spec' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.local_world_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.buildMorphism' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.morphism_portOK' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.morphism_readCover' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.morphism_worldCover' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.fixed_pair_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.certifyPair_of_checks' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.morphism_portCandidate' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.discover_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.empty_iff_no_morphism' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.depth_barrier' depends on axioms: [propext]
+'CRTT.MorphismDiscovery.port_map_rejected' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.empty_read_row_barrier' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.empty_joint_row_barrier' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.transfer_eq_of_maps' depends on axioms: [propext]
+'CRTT.MorphismDiscovery.discover_same_execution' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.direct_offer_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.Witnesses.flipped_computes' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.Witnesses.empty_target_computes' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.Witnesses.empty_source_computes' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.Witnesses.read_barrier_computes' depends on axioms: [propext]
+AUDIT MorphismDiscovery.lean: 37/37 axiom reports; Lean exit=0; dependencies={'Quot.sound': 29, 'propext': 35}
+PASS MorphismDiscovery.lean: 37 axiom reports audited.
+=== LEAN: BudgetedDiscovery.lean ===
+'CRTT.BudgetedDiscovery.accounting' depends on axioms: [propext]
+'CRTT.BudgetedDiscovery.spent_monotone' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.budget_bound' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.invariant' depends on axioms: [propext]
+'CRTT.BudgetedDiscovery.early_optimal' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.run_stuck' depends on axioms: [propext]
+'CRTT.BudgetedDiscovery.run_add' depends on axioms: [propext]
+'CRTT.BudgetedDiscovery.run_stuck_of_ge_measure' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.run_eq_of_ge_measure' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.run_measure_le' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.run_topUp_split' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.saturate_topUp_add' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.measure_lt' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.partition_preserved' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.initial_partition_invariant' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.initial_pending_eq_discoverAll' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.pending_eq_nil_of_exhausted' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.exhausted_certificates_eq_discoverAll' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.exhausted_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.exhausted_empty_impossible' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.cursor_saturate_topUp_add' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.run_stuck_of_ge_budget' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.run_eq_if_both_stuck' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.execute_eq_saturate' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.execute_topUp_add' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.run_exhausts_with_budget' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.quote_fee_le' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.quote_none_iff_exhausted' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.execute_partition' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.quote_certificates_prefix' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.execute_certificates_prefix' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.execute_exhausted_with_budget' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.execute_full' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.start_full' depends on axioms: [propext, Quot.sound]
+AUDIT BudgetedDiscovery.lean: 34/34 axiom reports; Lean exit=0; dependencies={'Quot.sound': 30, 'propext': 34}
+PASS BudgetedDiscovery.lean: 34 axiom reports audited.
+=== LEAN: CertifiedPruning.lean ===
+'CRTT.CertifiedPruning.composeRule_same_keep' depends on axioms: [propext]
+'CRTT.CertifiedPruning.ordered_rule_cost_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.rejected_region_empty' depends on axioms: [propext]
+'CRTT.CertifiedPruning.injectiveRule' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.depthRule' depends on axioms: [propext]
+'CRTT.CertifiedPruning.selectedPair_spec' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.decodePortMap_of_extends' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.certified_pair_maps' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.prunedDiscover_sound' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.prunedDiscover_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.prunedDiscover_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.prunedDiscover_pair_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.prunedDiscover_empty_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.partialPortWorlds_monotone' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.morphism_mem_partialPortWorlds' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.empty_partialReadRow_prunes' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.readCompatRule' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.priceRule' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.composeRule' depends on axioms: [propext]
+'CRTT.CertifiedPruning.applyLibrary_sound' depends on axioms: [propext]
+'CRTT.CertifiedPruning.prunedExtend_mem_prefix' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.prunedExtend_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.pruning_profitable_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.Witnesses.sound_rule_hurts_economics' does not depend on any axioms
+AUDIT CertifiedPruning.lean: 24/24 axiom reports; Lean exit=0; dependencies={'Quot.sound': 18, 'propext': 23}
+PASS CertifiedPruning.lean: 24 axiom reports audited.
+PASS monotonicity=2048; arithmetic=3000; order=9625; independent literal h,p,a enumeration.
+canonical_pairs: 3108
+cheaper: 4137
+more_expensive: 4336
+pairs: 8529
+policy_checks: 59703
+rejected_regions: 82005
+tied: 56
+policy=none: nodes=63079, leaves=38023, actions=7453, rule_calls=0, internal_rejected=0, abstract_cost=270039
+policy=read: nodes=43757, leaves=12454, actions=7453, rule_calls=43757, internal_rejected=5669, abstract_cost=198445
+policy=price: nodes=48969, leaves=19554, actions=7453, rule_calls=48969, internal_rejected=4206, abstract_cost=235381
+policy=injective: nodes=57486, leaves=15847, actions=7453, rule_calls=57486, internal_rejected=2201, abstract_cost=249811
+policy=depth: nodes=56051, leaves=32802, actions=7453, rule_calls=56051, internal_rejected=1107, abstract_cost=296371
+policy=depth+price+injective+read: nodes=32609, leaves=2533, actions=7453, rule_calls=108817, internal_rejected=8425, abstract_cost=211446
+policy=read+injective+price+depth: nodes=32609, leaves=2533, actions=7453, rule_calls=87785, internal_rejected=8425, abstract_cost=190414
+policy=noop: nodes=63079, leaves=38023, actions=7453, rule_calls=63079, internal_rejected=0, abstract_cost=333118
+Witness early prune: nodes 40->4; cost 161->12.
+Witness noop: nodes 2->2; cost 11->13.
+Witness order: abstract cost 16 vs 25.
+PASS exact canonical certificates, scoped rejections, empty/asymmetric domains, short-circuit accounting; Lean kernel NOT executed.
+
+PASS: manifests, Lean compilation, audited axiom reports and finite cross-check.

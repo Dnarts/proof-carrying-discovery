@@ -1,0 +1,62 @@
+\section{Budgeted discovery and obstruction compilation}\label{sec:obstruction}
+The finite reference list $\CanonRef$ specifies what discovery must recover; computing it in advance would defeat the purpose of a budgeted search. We use a paid executor whose correctness is stated against $\CanonRef$ without calling the reference enumeration at each step.
+
+\subsection{Paid prefixes and certified pruning}
+A deterministic quote maps a state $u$ to no step or a pair $(\eta, k)$ with positive natural charge $\eta$ and delayed successor $k:\mathrm{Unit}\to U$. The account is $(u,B,D)$ with remaining balance $B$ and recorded spend $D$. If $\eta\le B$ the executor invokes the successor and changes the account to $(k(),B-\eta,D+\eta)$; otherwise it stops without invoking it. The bounded run counts steps separately from money, and execution with fuel $B$ suffices to reach a state with no affordable next step. Induction gives exact conservation $B'+D'=B+D$ and preservation of any inductive invariant of quoted transitions (\rc{accounting}, \rc{invariant}, \rc{budget\_bound} in \rc{BudgetedDiscovery.lean}).
+
+\begin{theorem}[Exact budget continuation]\label{thm:resume}
+For a fixed, budget-independent deterministic quote with positive charges, let $\mathsf E$ be the executor and $\mathsf U_b$ add $b$ to the account balance. Then
+\[
+ \mathsf E\mathsf U_{b_1+b_2}(s)=\mathsf E\mathsf U_{b_2}(\mathsf E\mathsf U_{b_1}(s)).
+\]
+This equality includes the state, balance and spend, even for a cyclic underlying transition system.
+\end{theorem}
+\begin{proof}
+Each affordable prefix under the smaller budget is also affordable under the larger one; payment commutes with adding the difference. Apply induction to the paid prefix, with the nonpayable and absent-step cases stationary. Positive charges bound the number of paid steps by the balance, giving the saturated-executor identity. This is \rc{execute\_topUp\_add} in \rc{ResumeLaws.lean}. The theorem does not imply semantic exhaustion; a loop may simply consume its budget.
+\end{proof}
+In the morphism search, a partial port assignment $\rho$ denotes the region of morphisms extending it. A certified pruning rule consists of a Boolean test $k(\rho)$, a charge, and the witness
+\[
+ \forall M,\rho,\quad \operatorname{Extends}(M,\rho)\Longrightarrow k(\rho)=\mathrm{true}.
+\]
+A false result excludes the entire region. Rules may test injectivity, port prices, depth or read compatibility, and sound rules can be composed. The pruned search uses the same canonical pair constructor as Section~3.
+
+\begin{theorem}[Pruning preserves canonical membership]\label{thm:prune}
+For every certified rule and morphism $x$, membership in the resulting exhaustive pruned list is equivalent to $x\in\CanonRef$.
+\end{theorem}
+\begin{proof}
+A retained complete assignment is checked by the reference pair constructor, giving soundness. For completeness, follow the prefixes of any canonical representative's port map; soundness of each rule ensures every such prefix survives. The reference action map is then considered and yields the same canonical certificate. This is \rc{prunedDiscover\_iff} in \rc{CertifiedPruning.lean}; no equality of list order or multiplicity is required.
+\end{proof}
+Sound pruning need not save resources: for $n_1\le n_0$ visited nodes, uniform node charge $c$ and per-node rule charge $k$, it pays precisely when $n_1 k<(n_0-n_1)c$ (\rc{pruning\_profitable\_iff}). A sound no-op rule increases cost if it is charged. The richer executor below accounts for actual short-circuit rule calls separately.
+
+\subsection{A funded search frontier}
+The frontier $f=(J,A,\Lambda)$ contains remaining jobs $J$, emitted canonical certificates $A$ and paid search receipts $\Lambda$. A job either extends a port-assignment region with its remaining rule queue or processes a remaining action-map suffix. A correct frontier contains only canonical certificates and covers every canonical certificate not yet emitted by at least one remaining job; see the exact predicate in Section~6.1. Splitting a job, rejecting a certified region, or checking a pair preserves this predicate and appends any new certificate. The proof uses local coverage and soundness, not a run of the reference enumeration.
+
+Let $P(C,f)$ be the natural-number remaining-liability potential for a fixed rule library and base fees. Its job budgets bound the full branching work, including rule charges. Every quoted paid step satisfies
+\begin{equation}\label{eq:funded-potential}
+ P(C,f')+\eta\le P(C,f),\qquad\eta>0.
+\end{equation}
+\begin{theorem}[Funded exhaustion]\label{thm:funded-search}
+Starting from a correct frontier with $B\ge P(C,f)$, the executor exhausts its jobs, preserves prior certificates as a list prefix, and returns a list whose membership is exactly $\CanonRef$. An empty exhausted certificate list proves nonexistence of a morphism.
+\end{theorem}
+\begin{proof}
+Equation~\eqref{eq:funded-potential} preserves funding after payment and strictly decreases the potential. At quiescence a pending job would have an affordable positive quote, contradicting quiescence. Local correctness is inductive, and empty jobs eliminate the remaining-coverage disjunct. Prefix preservation follows by induction on append-only certificate emission. These are \rc{quote\_potential}, \rc{execute\_funded\_exhausts}, \rc{execute\_full}, \rc{execute\_certificate\_prefix} and \rc{exhausted\_impossible} in \rc{BudgetedPruning.lean}.
+\end{proof}
+Without the funding hypothesis the classifier distinguishes a found witness, an empty exhausted frontier with impossibility proof, and an inconclusive empty nonexhausted frontier. Its returned account supports continuation. A found witness before exhaustion is not a claim of enumeration completeness.
+
+\subsection{From a failed row to a reusable rule}
+For a target world $w$, a partial port assignment $\rho$ defines the read-compatible row
+\[
+ Y_w(\rho)=\{y\in X_S: \forall(q,q')\in\rho,\ r_S(q,y)=r_T(q',w)\}.
+\]
+If $Y_w(\rho)=\varnothing$, adding constraints cannot restore a member. The obstruction compiler deletes constraints while retaining an empty row, producing a subset $K\subseteq\rho$ that remains bad but becomes nonbad on deletion of any of its constraint values. Thus $K$ is irreducible by inclusion, not necessarily of minimum cardinality.
+\begin{theorem}[Certified obstruction compilation]\label{thm:core}
+Given an empty read row, \rc{extract} constructs such an irreducible $K$ with its witness. Every assignment containing $K$ admits no extending morphism. The compiled test rejects precisely assignments containing $K$ and satisfies the certified-rule contract.
+\end{theorem}
+\begin{proof}
+The shrink procedure scans the original constraints, removing a value if badness persists. If removal fails, monotonicity of badness ensures that later deletions cannot make that removal bad again. The retained subset is therefore irreducible. If an extending morphism existed for an assignment containing $K$, its world map at $w$ would give a member of the empty row. The Boolean containment test is exact by membership reflection. See \rc{shrink\_spec}, \rc{extract}, \rc{core\_excludes}, \rc{compileCore\_rejects} in \rc{ImpasseCompilation.lean}.
+\end{proof}
+Core transport to a new task pair is permitted with a constraint map, a new-to-old source-world map, and a read-reflection proof on every translated constraint (\rc{transportCore}); irreducibility and economic superiority of the transported rule are not guaranteed.
+
+The learning executor makes this compilation endogenous. The search state includes an active core library, raw and reduced learned events, pending compilation, and paid receipts. Lookup, probing, compilation, and base search advancement are distinct positive-charge transitions. A core is inserted with subsumption: if an old core already excludes all of its region, it is not installed; otherwise cores whose constraints contain the new core are removed. The resulting rejected region is exactly the union of the old rejection region and the new core's region (\rc{insertCore\_rejects}); past learned events remain in the history. Theorems \rc{execute\_correct}, \rc{execute\_trace}, \rc{execute\_split}, and \rc{execute\_exhausted\_iff} in \rc{LearningDiscovery.lean} preserve the semantic and accounting guarantees. Exhaustion is conditional, not guaranteed by arbitrary learning allowances.
+
+This construction makes negative results operationally reusable. It does not establish a universally cheaper learner. In the declared finite stand, learning cost more than the fixed read-rule controller in all 515 fully completed cases. The next problem is therefore selection of the investigative mechanism itself, rather than unconditional learning.

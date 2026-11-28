@@ -1,0 +1,17 @@
+compiled_events: 699
+funded_complete: 515
+generic_resume: 10584
+learned_cheaper: 10
+learned_costlier: 505
+learned_equal: 0
+learning_bill: 38331
+learning_resume: 3090
+live_cache_hits: 144
+paid_transitions: 7525
+read_bill: 28172
+reference_bill: 8322
+subsumption_equivalence: 37440
+vs_read_cheaper: 0
+vs_read_costlier: 515
+vs_read_equal: 0
+PASS: independent finite learning model, subsumption, generic cyclic resume, paid trace, full-budget coverage, budget-sensitive counterexample. Not Lean execution.

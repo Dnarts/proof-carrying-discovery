@@ -1,0 +1,11 @@
+PASS synthetic audit fixture: clean
+PASS synthetic audit fixture: nonzero compiler exit despite complete reports
+PASS synthetic audit fixture: partial reports
+PASS synthetic audit fixture: placeholder
+PASS synthetic audit fixture: classical
+PASS synthetic audit fixture: unknown axiom
+PASS synthetic audit fixture: warning
+PASS synthetic audit fixture: error
+PASS synthetic audit fixture: wrong name with same count
+PASS synthetic audit fixture: duplicate
+PASS 10 audit-parser fixtures. No Lean execution.

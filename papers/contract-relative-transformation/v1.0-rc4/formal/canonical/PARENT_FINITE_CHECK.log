@@ -1,0 +1,33 @@
+PASS synthetic audit fixture: clean
+PASS synthetic audit fixture: nonzero compiler exit despite complete reports
+PASS synthetic audit fixture: partial reports
+PASS synthetic audit fixture: placeholder
+PASS synthetic audit fixture: classical
+PASS synthetic audit fixture: unknown axiom
+PASS synthetic audit fixture: warning
+PASS synthetic audit fixture: error
+PASS synthetic audit fixture: wrong name with same count
+PASS synthetic audit fixture: duplicate
+PASS 10 audit-parser fixtures. No Lean execution.
+PASS monotonicity=2048; arithmetic=3000; order=9625; independent literal h,p,a enumeration.
+canonical_pairs: 3108
+cheaper: 4137
+more_expensive: 4336
+pairs: 8529
+policy_checks: 59703
+rejected_regions: 82005
+tied: 56
+policy=none: nodes=63079, leaves=38023, actions=7453, rule_calls=0, internal_rejected=0, abstract_cost=270039
+policy=read: nodes=43757, leaves=12454, actions=7453, rule_calls=43757, internal_rejected=5669, abstract_cost=198445
+policy=price: nodes=48969, leaves=19554, actions=7453, rule_calls=48969, internal_rejected=4206, abstract_cost=235381
+policy=injective: nodes=57486, leaves=15847, actions=7453, rule_calls=57486, internal_rejected=2201, abstract_cost=249811
+policy=depth: nodes=56051, leaves=32802, actions=7453, rule_calls=56051, internal_rejected=1107, abstract_cost=296371
+policy=depth+price+injective+read: nodes=32609, leaves=2533, actions=7453, rule_calls=108817, internal_rejected=8425, abstract_cost=211446
+policy=read+injective+price+depth: nodes=32609, leaves=2533, actions=7453, rule_calls=87785, internal_rejected=8425, abstract_cost=190414
+policy=noop: nodes=63079, leaves=38023, actions=7453, rule_calls=63079, internal_rejected=0, abstract_cost=333118
+Witness early prune: nodes 40->4; cost 161->12.
+Witness noop: nodes 2->2; cost 11->13.
+Witness order: abstract cost 16 vs 25.
+PASS exact canonical certificates, scoped rejections, empty/asymmetric domains, short-circuit accounting; Lean kernel NOT executed.
+PASS independent finite models: budget_splits=15360, cover_cores=4061, duplicate_cores=4060, funded=1536, irreducible_not_minimum=328, read_cores=1691, task_pairs=512, transitions=13236, transport_witnesses=1517
+PASS no-op cost witness: 4 -> 10; not Lean execution.

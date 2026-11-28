@@ -1,0 +1,96 @@
+{
+  "edition": "CRTT-v1.0-rc4-ru",
+  "source_english_pdf_sha256": "e5d91081d18354217eae18725b83503e057c47f5ee89c912541d243ce2e09640",
+  "source_english_archive_sha256": "993c92186e81c585fc6c2d5dbdcf4ec3dfe0bab0df3b5c079fccead26710aa85",
+  "source_english_arxiv_sha256": "8835194b4a8ee1cca6998a616a013a5e89f19afd07b0005635e34c42af34e432",
+  "pages": 20,
+  "page_size": "A4",
+  "theorems": 18,
+  "proofs": 18,
+  "display_math_blocks": 30,
+  "references": 19,
+  "external_uri_count": 19,
+  "external_uri_set_equal": true,
+  "source_labels_references_citations_and_rc_commands_equal": true,
+  "source_comparison": [
+    {
+      "file": "references.tex",
+      "display_blocks": 0,
+      "theorems": 0,
+      "proofs": 0,
+      "inline_removed": [],
+      "inline_added": []
+    },
+    {
+      "file": "section3.tex",
+      "display_blocks": 4,
+      "theorems": 3,
+      "proofs": 3,
+      "inline_removed": [],
+      "inline_added": []
+    },
+    {
+      "file": "section4.tex",
+      "display_blocks": 4,
+      "theorems": 4,
+      "proofs": 4,
+      "inline_removed": [],
+      "inline_added": [
+        "k",
+        "k"
+      ]
+    },
+    {
+      "file": "section5.tex",
+      "display_blocks": 3,
+      "theorems": 3,
+      "proofs": 3,
+      "inline_removed": [],
+      "inline_added": []
+    },
+    {
+      "file": "section6.tex",
+      "display_blocks": 8,
+      "theorems": 3,
+      "proofs": 3,
+      "inline_removed": [],
+      "inline_added": []
+    },
+    {
+      "file": "section7.tex",
+      "display_blocks": 6,
+      "theorems": 3,
+      "proofs": 3,
+      "inline_removed": [],
+      "inline_added": []
+    },
+    {
+      "file": "section8.tex",
+      "display_blocks": 0,
+      "theorems": 0,
+      "proofs": 0,
+      "inline_removed": [],
+      "inline_added": []
+    },
+    {
+      "file": "section9.tex",
+      "display_blocks": 0,
+      "theorems": 0,
+      "proofs": 0,
+      "inline_removed": [],
+      "inline_added": []
+    },
+    {
+      "file": "sections12.tex",
+      "display_blocks": 5,
+      "theorems": 2,
+      "proofs": 2,
+      "inline_removed": [],
+      "inline_added": []
+    }
+  ],
+  "xelatex_errors_missing_glyphs_overfull_or_latex_warnings": false,
+  "fresh_lean_run": false,
+  "new_lean_log_replay": false,
+  "lean_evidence_status": "inherited from English RC4, unchanged"
+}

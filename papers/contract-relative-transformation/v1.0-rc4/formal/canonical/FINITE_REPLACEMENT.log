@@ -1,0 +1,22 @@
+PASS actual finite frontier model (not Lean execution).
+accepted: 1753
+accepted_with_action_jobs: 50
+accepted_with_certificates: 3
+action_suffix_preserved: 746
+attempts: 34705
+completed_after_attempt: 34705
+coverage_pairs: 158831
+deferred: 12000
+migration_compositions: 2000
+nonempty_action_prefixes: 116
+nonempty_certificate_prefixes: 196
+port_region_preserved: 12122
+prefixes: 2000
+rejectGain: 10251
+rejectLiquidity: 10701
+repricing_rejections: 1
+stale_offer_rejections: 3
+task_pairs: 400
+Closed depth witness: baseline 7, accepted full incremental bill 3, deferred at balance 100, rejected for liquidity at 101.
+PASS repeated replacements, stale evidence, rejected-check charge and fallback reserve protection.
+Prospective cost evidence was prepared offline; no claim of free economic witnesses or physical runtime improvement.

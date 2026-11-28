@@ -1,0 +1,67 @@
+\section{Compositional meta-policy closure}\label{sec:closure}
+\subsection{A paid and replaceable policy}
+We now distinguish a root controller from the finite policy that decides whether to attempt its replacement. Fix an incumbent continuation $c_*$ and a provider $p$ indexed by $S,T,c_*$. The provider contains a deterministic Boolean observation thunk, a thunk returning a typed relative offer for $c_*$, and declared base charges for observing, preparing, and checking. A frame $f$ contains a session $s$ with a proof that $c_s=c_*$. A policy $t$ is a finite tree with leaves \emph{keep} or \emph{attempt}, and binary observation nodes. The concrete language uses a single observation port and permits repeated probes; it need not belong to the one-use legal tree class of the earlier optimal synthesis problem.
+
+Interpretation is by structural recursion. A probe and preparation are invoked only in their funded branches, after the corresponding charge $h+1$ is posted while retaining the root reserve. A terminal attempt prepares an offer and invokes the fixed relative gate of Section~\ref{sec:replacement}; a failed guard blocks the relevant operation. Interpretation records actual Boolean responses, prepared typed offers, and verdicts. It produces a session $I_p(t,f)$ with preserved history and funds, regardless of whether a replacement was accepted. The policy is then completed by the funded root runner. Define its all-in bill (including already incurred expenditure) by
+\begin{equation}\label{eq:policy-bill}
+ \PB_p(t,f)=\Phi(I_p(t,f))=D(\finish(I_p(t,f))).
+\end{equation}
+The corresponding definitions and laws are in \rc{MetaPolicy.lean}. In particular, \rc{policyBill\_complete} proves the second equality.
+
+A machine $m=(f,t,L)$ adds the current policy and its paid upgrade history $L$ to the frame. Consider a proposed replacement $t'$ with base setup charge $a$ and $q=a+1$. Before invoking the proposal factory, the upgrade operation checks $q+R\le B$. If this fails it returns the identical machine, without a charge or invocation. Otherwise it pays $q$, giving a new frame $f^+$ with the same incumbent, and invokes the factory. The supplied proposal proves
+\begin{equation}\label{eq:policy-bounds}
+ \lambda\le\PB_p(t,f),\qquad \PB_p(t',f^+)\le\upsilon.
+\end{equation}
+The fixed upgrade gate installs $t'$ exactly when $\upsilon<\lambda$, otherwise retains $t$ at $f^+$. Both paid outcomes record the prior and candidate tree, bounds and charge. The setup cost is already included by the post-payment frame in \eqref{eq:policy-bounds}; adding it again would double count. The provider and root contract do not change.
+
+\begin{theorem}[Local policy improvement]\label{thm:policy-local}
+Every executed upgrade preserves $W$, $\Pres$, liquidity, and prior upgrade history. An accepted upgrade from $m$ to $m'$ strictly decreases $\PB_p(t,f)$ relative to its exact pre-upgrade value.
+\end{theorem}
+\begin{proof}
+Payment is an affordable evidence charge, hence preserves the continuation and funds. Installing a tree changes only the active policy; it does not execute it or alter the incumbent. For acceptance, the chain $\PB_p(t',f^+)\le\upsilon<\lambda\le\PB_p(t,f)$ gives the claimed strict decrease. A deferred upgrade is identity; a rejected upgrade retains the active tree, but not the old balance. See \rc{upgrade\_funds}, \rc{upgrade\_preserves}, \rc{upgrade\_history}, and \rc{upgrade\_gain}.
+\end{proof}
+The comparison uses certified bounds on exact pre- and post-payment frames, not an assumed free optimizer. Factories and their proof obligations are inputs. The modeled setup fee is not an empirical estimate of the computational effort to construct arbitrary proofs.
+
+\subsection{Closure of finite upgrade histories}
+A plan contains a base charge and a factory that produces a proof-bearing proposal at the actual current machine when affordable. A transition records its pre-state, plan, and actual upgrade result, with an equality witnessing execution. A valid trace of $n$ transitions connects $m_0$ to $m_n$ through these results. Let $Q_\Sigma$ be the sum of setup debits (zero if deferred, $a+1$ otherwise), and let $N_p,N_a$ count paid and accepted upgrades in this trace. Denote $\PB_p(t_i,f_i)$ by $\Psi_i$.
+
+\begin{theorem}[Finite meta-policy closure]\label{thm:meta-closure}
+Every valid finite trace with fixed $p$ satisfies
+\begin{align}
+ D(s_n)&=D(s_0)+Q_\Sigma,& W(s_n)&=W(s_0),\\
+ R(s_n)&\le B(s_n),& N_a&\le N_p\le Q_\Sigma,\\
+ N_p+B(s_n)&\le B(s_0).
+\end{align}
+It preserves $\Pres(s_0,s_n)$, and the final paid upgrade list extends the initial list by a prefix of length $N_p$. If no upgrade in the trace has verdict \emph{rejected}, then
+\begin{equation}\label{eq:meta-gain}
+ \Psi_n+N_a\le\Psi_0.
+\end{equation}
+\end{theorem}
+\begin{proof}
+The local accounting law adds exactly the setup debit and one paid history entry in each funded branch. Induction over the trace composes these identities and the transitive preservation relation; conservation gives the balance bound. In a trace without rejection, each step is either identity or decreases the natural-number objective $\Psi$ by at least one, so addition of the local inequalities proves \eqref{eq:meta-gain}. These are \rc{trace\_laws}, \rc{trace\_paid\_balance}, \rc{trace\_liquid}, and \rc{trace\_no\_rejection\_gain} in \rc{MetaClosure.lean}.
+\end{proof}
+
+The rejection condition in \eqref{eq:meta-gain} is essential. The root identity \eqref{eq:trace-objective} cannot be reused as a fee-only law for $\Psi$: a rejected meta-upgrade reduces liquidity and can change which operations the subsequently interpreted tree can afford. In the closed depth-obstruction fixture, the incumbent costs 7, the replacement costs 1, the reserve is 100, and preparation, check, and migration each cost 1. With balance 103 an attempt can complete at total spend 4. Paying one unit for an unsuccessful meta-upgrade leaves balance 102. Preparation and the root check remain affordable, but migration does not; the root gate rejects for liquidity and incumbent completion gives total spend $1+1+1+7=10$, not $4+1$. This is the negative control \rc{Release.Witnesses.low\_liquidity}. It establishes a discontinuity induced by a funding guard, rather than a failure of resource conservation.
+
+\subsection{The executable closure theorem}
+The release takes a finite list of typed plans (or a supplied connected run of declared length), executes the upgrades, interprets the last installed tree once, and finishes the resulting root session using its protected reserve. Write
+\begin{equation}\label{eq:release-pipeline}
+ s_f=\finish\bigl(I_p(t_n,f_n)\bigr),\qquad
+ m_n=\operatorname{runPlans}(p,m_0,\mathcal L).
+\end{equation}
+Here $m_n$ denotes the final machine of the returned run, $n=|\mathcal L|$, and the whole output retains the run, the interpreted episode and the final session with their connecting equalities. This scheduling model is deliberately finite: every plan consumes one list cell even when its funding guard defers it. Tree interpretation terminates structurally, and root completion terminates by its funded bound. The typed interface requires an initially funded continuation; it does not classify unfunded inputs as impossible.
+
+\begin{theorem}[Funded, proof-carrying release]\label{thm:release}
+For fixed indexed $S,T$, incumbent $c_*$, provider $p$, a valid initial machine $m_0$ and finite well-typed plan list $\mathcal L$, the release constructs a closed run of length $n=|\mathcal L|$ satisfying
+\begin{align}
+ &J_f=[] ,\qquad \forall x:\mathrm{Morphism}(S,T),\quad x\in A_f\iff x\in\CanonRef,\label{eq:release-complete}\\
+ &A_f=[]\iff \neg\operatorname{Nonempty}(\mathrm{Morphism}(S,T)),\label{eq:release-impossible}\\
+ &W(s_f)=W(s_0),\qquad \Pres(s_0,s_f),\qquad D(s_f)=\Psi_n.\label{eq:release-conserve}
+\end{align}
+In \eqref{eq:release-impossible}, the right side denotes non-inhabitation of the morphism type. If the upgrade trace has no rejected upgrade, then $D(s_f)+N_a\le\Psi_0$.
+\end{theorem}
+\begin{proof}
+The structural list recursion constructs the connected trace and proves its length. By Theorem~\ref{thm:meta-closure}, the resulting machine retains funds and history. Interpretation preserves them again, and funded completion discharges all pending jobs. The funded-search completeness theorem gives \eqref{eq:release-complete}. If a morphism exists, constructive discovery supplies a canonical representative with the same port and action maps; it must occur in $A_f$. Conversely, each list element inhabits the morphism type. This proves \eqref{eq:release-impossible}. Composition of the three preservation laws and \eqref{eq:policy-bill} gives \eqref{eq:release-conserve}. The last inequality follows from \eqref{eq:meta-gain}. The corresponding kernel targets are \rc{result\_steps}, \rc{result\_exhausted}, \rc{result\_complete}, \rc{result\_impossible\_iff}, \rc{result\_funds}, \rc{result\_history}, \rc{result\_bill} in \rc{Release.lean}, and \rc{closed\_gain} in \rc{MetaClosure.lean}.
+\end{proof}
+
+The completion claim concerns exact membership of canonical morphisms, not enumeration of every possible world map. The printed summary is a projection of the typed result, not a certificate decoder or a claim of persistent storage. The closure theorem also does not imply autonomous synthesis of every proposal factory, arbitrary self-rewriting, or unbounded improvement. It establishes a bounded composition of admitted changes under a fixed contract, with full root completion even when proposed improvements fail. The next section tests the release against explicit positive and negative computational witnesses and distinguishes kernel verification from model execution.

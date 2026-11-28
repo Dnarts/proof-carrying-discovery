@@ -1,0 +1,11 @@
+# CRTT preprint v1.0-rc4
+
+Revised English manuscript: 20 pages, Sections 1–9 and references. RC4 responds to the supplied cold peer review. It retains the formal mathematical core, replaces internal research-stage labels in the main exposition, clarifies the certificate-supply boundary, adds a worked example, distinguishes ports from search receipts, and reduces the main bibliography to 19 entries. All eight prior companion-study records are preserved in `supplement/COMPANION_REFERENCES.tex` and its PDF. The original contact address and formal artifact identifier are unchanged.
+
+Build in this directory with `pdflatex -interaction=nonstopmode -halt-on-error main.tex` twice. No bibliography processing is required. The compiled `main.pdf` and `BUILD.log` are included.
+
+The separately distributed `CRTT-v1.0-FULL-ARCHITECTURE-RECONCILED.zip` is the unchanged formal artifact (SHA-256 `e09580cdb8a8f900401390db394a7bde07bb328449b50b059f2a8cd3c175c79e`). `SOURCE_MAP_AB.md`, `SOURCE_MAP_C.md`, `SOURCE_MAP_D.md`, and the source-pin files retain the exact claim-to-source locators. `REVIEW.md` answers the supplied review; `REVIEW_RECEIPT.json` distinguishes current observations from inherited evidence. Previous manuscript sources and metadata are retained under `history/rc3/` and earlier history directories; the original RC3 ZIP is unchanged. `SHA256SUMS.txt` covers all files in this bundle except itself.
+
+The formal log replay was repeated in RC4 and passed. `supplement/verify_fresh.sh` is a clean-extraction wrapper for the unchanged canonical runner. Read `supplement/FRESH_VERIFICATION.md` before use. In this environment the fresh attempt passes archive preflight and stops with exit 127 because the pinned Lean executable is unavailable. The raw logs and failure status are retained in `supplement/local_attempt/`. This is not a fresh successful kernel run. `supplement/replay_rc4/` holds the separate successful replay evidence.
+
+Status: manuscript release candidate; no independent new Lean compilation, public artifact DOI, journal acceptance, or peer-review endorsement claimed. `ZENODO_LINK_AUDIT.*` preserves the prior repository-verified companion-link metadata and the limits of that check.

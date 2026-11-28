@@ -1,0 +1,119 @@
+{
+  "schema": "crtt.full-architecture.verification.v1",
+  "status": "SUPPLIED_LOGS_AND_PYTHON_REPLAY_PASS",
+  "scope": "Accepted CRTT T19–T32 stack; no new mathematical stage or theorem claim.",
+  "canonical": {
+    "files": 144,
+    "lean_modules": 21,
+    "source_archive_sha256": "a3bc17f64f96b9966b1226ffb5f9fad055c763796960deb858da7a2f3b78f4bc",
+    "mutation": "none"
+  },
+  "original_assembly": {
+    "status": "LEAN_UNAVAILABLE_IN_ORIGINAL_ASSEMBLY_ENVIRONMENT",
+    "observed_runner_exit_code": 127,
+    "evidence_path": "evidence/recheck/commands/runner_without_lean.json",
+    "evidence_sha256": "64d6bf1263a9d6598db09f88c17a8de5879fb5c418ee5722f590d7474a142ba6",
+    "historical_record_preserved": true,
+    "interpretation": "This observation describes the original assembly environment only."
+  },
+  "supplied_lean_witness": {
+    "status": "SUCCESSFUL_OUTPUT_VERIFIED",
+    "user_reported_later_compilation": true,
+    "toolchain_version": "4.36.0",
+    "toolchain_commit": "611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9",
+    "platform_in_log": "arm64-apple-darwin24.6.0",
+    "declared_header_time_utc": "2026-11-28T11:03:28Z",
+    "header_time_is_independent_process_receipt": false,
+    "runner": {
+      "path": "evidence/local_verification/RUNNER_FULL.log",
+      "sha256": "8c0304244ea68c11f61851751807360a508800a6ca704caf4f9b3048bbc41aa1"
+    },
+    "aggregate": {
+      "path": "evidence/local_verification/ALL_LEAN_LOGS.log",
+      "sha256": "5ed163582de9b63f4445eadaaf72ba75adeb85888e120d918f64ec184317c90f"
+    },
+    "per_module_directory": "evidence/local_verification/per_module",
+    "module_count": 21,
+    "audit_report_count": 542,
+    "per_module_exits_recorded_in_runner": {
+      "AdaptiveObservation.lean": 0,
+      "InvestigationTransfer.lean": 0,
+      "InvestigationLibrary.lean": 0,
+      "MorphismDiscovery.lean": 0,
+      "BudgetedDiscovery.lean": 0,
+      "CertifiedPruning.lean": 0,
+      "ResumeLaws.lean": 0,
+      "BudgetedPruning.lean": 0,
+      "ImpasseCompilation.lean": 0,
+      "LearningDiscovery.lean": 0,
+      "MetaInvestigation.lean": 0,
+      "MetaEvidenceAcquisition.lean": 0,
+      "DecisionEvidence.lean": 0,
+      "ControllerReplacement.lean": 0,
+      "RelativeEvidence.lean": 0,
+      "AdmissionAccounting.lean": 0,
+      "RecursiveTrace.lean": 0,
+      "MetaPolicy.lean": 0,
+      "MetaClosure.lean": 0,
+      "Release.lean": 0,
+      "ReleaseMain.lean": 0
+    },
+    "cli_exit_recorded_in_runner": 0,
+    "cli_reference_cases": 9,
+    "final_success_marker_present": true,
+    "allowed_axioms": [
+      "propext",
+      "Quot.sound"
+    ],
+    "separate_outer_runner_process_exit_receipt_present": false,
+    "relationships": {
+      "byte_identical_prior_runner_path": "evidence/freeze/T32-KERNEL_CHECK.log",
+      "per_module_logs_equal_runner_raw_segments": true,
+      "aggregate_contains_same_module_bodies": true
+    },
+    "aggregate_header_integrity_count": {
+      "recorded_value": "589/589",
+      "scope": "Original complete-archive snapshot before the 23 additional log files; not the current archive inventory.",
+      "current_inventory_source": "MANIFEST.json and SHA256SUMS.txt"
+    }
+  },
+  "current_replay": {
+    "status": "PASS",
+    "started_utc": "2026-11-28T11:25:38.557981+00:00",
+    "finished_utc": "2026-11-28T11:25:39.134219+00:00",
+    "lean_executed": false,
+    "source_pins_verified": 21,
+    "exact_audit_reports": 542,
+    "per_module_strict_parser_calls": 42,
+    "cli_strict_parser_calls": 2,
+    "cli_reference_cases": 9,
+    "python_commands": 45,
+    "all_python_commands_exit_zero": true,
+    "script_path": "replay_evidence.py",
+    "script_sha256": "c5926f5640aee20a7572d9fe756e70c7a1642cfb4a8a10602e8c6d7fc4fa4fe7",
+    "report_path": "evidence/reconciliation/replay/log_review.json",
+    "report_sha256": "75f01096919660ca8b88caed0852dd29c2a9e629091f31f23b8b295eeaee8cfb",
+    "command_receipts_directory": "evidence/reconciliation/replay/commands"
+  },
+  "execution_freshness": {
+    "independent_new_compiler_process": "NOT_ESTABLISHED",
+    "interpretation": "Identical deterministic output neither proves nor disproves a later run. This replay validates supplied output and does not execute Lean."
+  },
+  "historical_scope": {
+    "early_numbering_gaps": [
+      "T01",
+      "T02",
+      "T04",
+      "T05",
+      "T06",
+      "T07",
+      "T08",
+      "T09",
+      "T10",
+      "T11",
+      "T12",
+      "T13"
+    ],
+    "new_logs_extend_the_current_mathematical_scope": false
+  }
+}

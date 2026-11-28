@@ -1,0 +1,21 @@
+Closed witness: baseline 7, accepted total 3, rejected liquidity total 8, deferred total 7.
+Gate does not read rows before liquidity. Empty or stale offers and forged verdicts are rejected at the typed boundary model.
+accepted: 1342
+accepted_with_previous_certificates: 6
+accepted_with_previous_search_receipts: 800
+action_suffix_preserved: 98
+attempts: 17621
+completed_after_attempt: 17621
+correlated_only_accepts: 1342
+coverage_pairs: 20841
+deferred: 7425
+external_receipts: 17617
+funded_guard_cases: 37500
+invalid_application_rejections: 3
+numeric_cases: 45000
+port_region_preserved: 1785
+prefixes: 960
+rejectGain: 4420
+rejectLiquidity: 4434
+task_pairs: 320
+PASS numeric reflection, exact charges, preserved reserves, receipts and root completion. Not Lean execution.

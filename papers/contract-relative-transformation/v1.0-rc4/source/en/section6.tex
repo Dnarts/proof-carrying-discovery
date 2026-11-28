@@ -1,0 +1,92 @@
+\section{Certified controller replacement}\label{sec:replacement}
+The preceding constructions separate the existence of a transferable investigation from the cost of finding it. Selecting a controller before a search begins, however, does not justify replacing that controller during a partially completed search. A replacement must preserve the unresolved obligations as well as the results already certified, and it must be possible to pay for the change without losing the ability to finish. We now fix the indexed source and target tasks $S,T$ and the canonical reference list $\CanonRef=\rc{discoverAll}(S,T)$ of Section~3. Throughout Sections~6--7, resource-accounting quantities denote natural-number model charges, not measured time or memory.
+
+\subsection{Continuations and their denotation}
+A controller $C=(\mathcal R,\tau)$ consists of a certified pruning-rule library and base search tariffs. A frontier $f=(J,A,\Lambda)$ contains pending jobs $J$, a list of certified morphisms $A$, and a list of search receipts $\Lambda$. Writing $\Cov(x,J)$ for coverage of a morphism by a pending job, frontier correctness is exactly
+\begin{equation}\label{eq:frontier-correct}
+ \Correct(f)\;\Longleftrightarrow\;
+ (A\subseteq\CanonRef)\ \land\
+ \bigl(\forall x\in\CanonRef,\ x\in A\ \lor\ \Cov(x,J)\bigr),
+\end{equation}
+where inclusion and membership concern lists, not an assertion of uniqueness or disjointness. The frontier thus represents both established knowledge and remaining search obligations. For frontiers $f,g$ define continuation equivalence by
+\begin{equation}\label{eq:same-cont}
+ f\simeq g\;\Longleftrightarrow\;
+ A_g=A_f\ \land\ \Lambda_g=\Lambda_f\ \land\
+ \forall x:\mathrm{Morphism}(S,T),\ \Cov(x,J_g)\leftrightarrow\Cov(x,J_f).
+\end{equation}
+A continuation $c=(C,f,R;\pi)$ contains a proof $\pi$ of correctness and of the potential bound $P(C,f)\le R$. The reserve $R$ is a sufficient upper bound on completion resources, not an expenditure. Define $b(c)=\bill(c)$ to be the actual modeled bill of running the current static continuation to exhaustion from balance $R$ and zero incremental spend. By funded completion, $b(c)\le R$. A live state also requires $R\le B$, where $B$ is its available balance.
+
+\begin{theorem}[Continuation-preserving replacement]\label{thm:rebase}
+Replacing $\mathcal R$ by another certified library $\mathcal R'$ with the same $\tau$, rebasing pending rule queues, and supplying a valid new reserve produces a continuation $c'$ with $f\simeq f'$. Its completion has exactly the same canonical membership as the completion of $c$; both have membership equal to $\CanonRef$.
+\end{theorem}
+\begin{proof}
+The rebase operation resets only the rule queue of a pending port-region job. It leaves its region, every action job and its unprocessed suffix unchanged, and copies $A,\Lambda$ exactly. Coverage is independent of the rule queue, so coverage of every job, hence of their list, is invariant. Equation~\eqref{eq:same-cont} follows, and \eqref{eq:frontier-correct} transfers to the new frontier. Funded completion for each continuation gives membership in $\CanonRef$ independently of the selected rule library. These are \rc{rebase\_same}, \rc{same\_correct}, and \rc{completion\_full} in \rc{ControllerReplacement.lean}.
+\end{proof}
+This equivalence is stronger than equality of final answer sets: it preserves the outstanding denotation without restarting the search. It does not authorize arbitrary executable-code migration or the transfer of a full learning state.
+
+\subsection{Liquidity and comparative cost evidence}
+An absolute offer is indexed by the exact incumbent $c$ and contains a new controller, same-fee and funding proofs, a migration charge $K$, and proved bounds $L\le b(c)$ and $b(c')\le U$. Let $H$ be the check charge. The numerical gate admits the offer if and only if
+\begin{equation}\label{eq:absolute-gate}
+ H+R\le B,\qquad H+K+R'\le B,\qquad H+K+U<L.
+\end{equation}
+The first inequality protects incumbent completion even if validation fails. The second protects completion after migration. The last establishes strict improvement, including the charges for both check and migration. A low remaining bill does not imply an affordable change, since the reserve is distinct from the bill.
+
+Independent endpoints can discard decisive correlations. The relative-evidence construction therefore replaces a single pair $(L,U)$ by a finite list $E$ of paired lower and upper bounds with a supplied actual-pair coverage proof:
+\begin{equation}\label{eq:actual-coverage}
+ \exists (\ell,u)\in E:\quad \ell\le b(c)\quad\land\quad b(c')\le u.
+\end{equation}
+This is a joint certificate, not a list of unrelated marginal bounds. In particular, $E$ cannot be empty at the typed boundary, even though the raw universal arithmetic test would pass the empty list. The cost predicate is
+\begin{equation}\label{eq:relative-gate}
+ \operatorname{relativeOK}(H+K,E)\;\Longleftrightarrow\;
+ \forall(\ell,u)\in E,\ H+K+u<\ell.
+\end{equation}
+For a singleton list $[(L,U)]$, this recovers the absolute economic test in \eqref{eq:absolute-gate}. For example, the paired rows $(7,1)$ and $(70,64)$ pass with $H+K=2$, whereas independent extrema $(7,64)$ fail. The second row in the release fixture represents synthetic uncertainty, not a measured second world.
+
+\begin{theorem}[Exact admission and sound gain]\label{thm:gate}
+For a typed relative offer, the fixed numerical gate returns \emph{accepted} if and only if the first two inequalities of \eqref{eq:absolute-gate} and \eqref{eq:relative-gate} hold. If accepted, $H+K+b(c')<b(c)$. Its application preserves continuation equivalence, base search tariffs and a funded reserve.
+\end{theorem}
+\begin{proof}
+The equivalence is by the successive branches of \rc{gate}; the universal row test is reflected into a Boolean by \rc{relativeOK\_iff}. Choose the covering pair of \eqref{eq:actual-coverage}. Then $H+K+b(c')\le H+K+u<\ell\le b(c)$, which proves the strict gain. Rebasing uses Theorem~\ref{thm:rebase}. The accepted balance $B-H-K$ is at least $R'$ by the second guard. For rejection the incumbent is retained, and the first guard bounds its reserve by the post-check balance. For deferral the state is unchanged. These are \rc{gate\_accepted\_iff}, \rc{relative\_sound}, \rc{apply\_same}, and \rc{apply\_liquid}.
+\end{proof}
+
+The public attempt uses $H=h+1$ for a base charge $h\in\Nat$. Its verdict is an ordinary four-valued result; application requires a proof that this verdict is the output of the fixed gate on this exact state and offer. Table~\ref{tab:debit} gives the operational accounting. The first failed guard determines the verdict, and the row test is evaluated only after both reserve guards pass.
+\begin{table}[htbp]
+\centering\small
+\caption{Admission accounting. $d$ is the debit, not the completion reserve.}\label{tab:debit}
+\begin{tabularx}{\linewidth}{@{}lXll@{}}\toprule
+Verdict & Condition (in order) & Installed & $d$\\\midrule
+Deferred & Incumbent guard fails & $c$ & $0$\\
+Reject liquidity & New reserve guard fails & $c$ & $H$\\
+Reject gain & Paired gain test fails & $c$ & $H$\\
+Accepted & All three tests pass & $c'$ & $H+K$\\\bottomrule
+\end{tabularx}
+\end{table}
+
+Let a session $s$ contain the live state and a relative journal. Write $D(s)=\spent(s)$ for the sum of search receipts, legacy attempt charges, and relative journal charges, and $W(s)=B(s)+D(s)$ for the total funds. Application subtracts precisely $d$ from balance and adds $d$ to the ledger, preserving $W$. The proposal is already proof-bearing; the gate neither estimates the unknown bills by free prospective runs nor performs a proof search. It verifies the declared numerical conditions. External evidence charges record expenditure and do not by themselves certify the truth or acquisition of evidence.
+
+\subsection{A law for mixed replacement histories}
+For a funded session define the completion objective
+\begin{equation}\label{eq:root-objective}
+ \Phi(s)=D(s)+b(c_s).
+\end{equation}
+It is the total modeled spend obtained by finishing the incumbent, not an online estimate. Allowed actions are a funded prefix of the current search, an attempt indexed by the current continuation, and an affordable external evidence receipt. A connected trace $s_0\to\cdots\to s_n$ consists of actual action applications, with equality of adjacent endpoints; it is not a list of freely asserted postconditions. In particular no decidable equality of arbitrary function-bearing states is assumed.
+
+For each step define its net gain $g_i$ and overhead $o_i$ as follows. An accepted replacement has $g_i=\Phi(s_{i-1})-\Phi(s_i)>0$, already net of check and migration, and $o_i=0$. A paid rejection or evidence charge has $g_i=0$ and $o_i$ equal to its charge. A search prefix or deferral has both zero. Let $G=\sum_i g_i$, $O=\sum_i o_i$, $N_p$ the number of non-deferred replacement attempts, and $N_a$ the number accepted.
+
+\begin{theorem}[Compositional root accounting]\label{thm:root-trace}
+For every connected finite root trace,
+\begin{align}
+ \Phi(s_n)+G&=\Phi(s_0)+O,\label{eq:trace-objective}\\
+ W(s_n)&=W(s_0),& R(s_n)&\le B(s_n),\label{eq:trace-funds}\\
+ N_p+B(s_n)&\le B(s_0),& N_a&\le G.
+\end{align}
+Moreover the endpoint relation $\Pres(s_0,s_n)$ preserves base search tariffs and the legacy attempt history exactly, the certificate list as a prefix, and search receipts and relative journal as suffixes of their reverse-chronological lists.
+\end{theorem}
+\begin{proof}
+For a prefix of the fixed controller, deterministic continuation gives $b(c)=d+b(c')$, where $d$ is prefix spend. Thus \eqref{eq:root-objective} is unchanged. A deferred attempt is identity. A rejected attempt or an evidence receipt retains $c$ and increases $D$ by its recorded charge. Acceptance strictly decreases $\Phi$ by Theorem~\ref{thm:gate}; this difference defines its net gain. Every step consequently satisfies $\Phi(s_i)+g_i=\Phi(s_{i-1})+o_i$, conservation, and the indicated history relation. The certificate-prefix and receipt-suffix relations compose by list concatenation. Induct on the connected trace, adding both nonnegative statistics at each step; positive check tariffs bound the paid count, and each accepted gain is at least one. The identities are \rc{remainingBill\_prefix}, \rc{action\_laws}, \rc{laws\_compose}, and \rc{trace\_laws} in \rc{RecursiveTrace.lean}.
+\end{proof}
+Since $D(\finish(s))=\Phi(s)$, \eqref{eq:trace-objective} gives the necessary and sufficient condition for a strict net saving over immediate incumbent completion:
+\begin{equation}\label{eq:net-gain}
+ D(\finish(s_n))<D(\finish(s_0))\quad\Longleftrightarrow\quad O<G.
+\end{equation}
+This is \rc{trace\_final\_gain\_iff}. The theorem permits losses from exploratory attempts without weakening correctness. It also identifies the next obstruction: choosing when to incur such attempts can itself be inadequate. This motivates making the proposal policy an explicit, replaceable object rather than imposing a fixed sequence of heuristic interventions.

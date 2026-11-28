@@ -1,0 +1,52 @@
+AUDIT AdaptiveObservation.lean: 22/22 axiom reports; Lean exit=0; dependencies={'Quot.sound': 17, 'propext': 20}
+PASS AdaptiveObservation.lean: 22 axiom reports audited.
+PASS qualified names: AdaptiveObservation.lean 22/22
+AUDIT InvestigationTransfer.lean: 22/22 axiom reports; Lean exit=0; dependencies={'Quot.sound': 10, 'propext': 16}
+PASS InvestigationTransfer.lean: 22 axiom reports audited.
+PASS qualified names: InvestigationTransfer.lean 22/22
+AUDIT InvestigationLibrary.lean: 51/51 axiom reports; Lean exit=0; dependencies={'Quot.sound': 27, 'propext': 38}
+PASS InvestigationLibrary.lean: 51 axiom reports audited.
+PASS qualified names: InvestigationLibrary.lean 51/51
+AUDIT MorphismDiscovery.lean: 37/37 axiom reports; Lean exit=0; dependencies={'Quot.sound': 29, 'propext': 35}
+PASS MorphismDiscovery.lean: 37 axiom reports audited.
+PASS qualified names: MorphismDiscovery.lean 37/37
+AUDIT BudgetedDiscovery.lean: 34/34 axiom reports; Lean exit=0; dependencies={'Quot.sound': 30, 'propext': 34}
+PASS BudgetedDiscovery.lean: 34 axiom reports audited.
+PASS qualified names: BudgetedDiscovery.lean 34/34
+AUDIT CertifiedPruning.lean: 24/24 axiom reports; Lean exit=0; dependencies={'Quot.sound': 18, 'propext': 23}
+PASS CertifiedPruning.lean: 24 axiom reports audited.
+PASS qualified names: CertifiedPruning.lean 24/24
+AUDIT ResumeLaws.lean: 5/5 axiom reports; Lean exit=0; dependencies={'Quot.sound': 4, 'propext': 4}
+PASS ResumeLaws.lean: 5 axiom reports audited.
+PASS qualified names: ResumeLaws.lean 5/5
+AUDIT BudgetedPruning.lean: 27/27 axiom reports; Lean exit=0; dependencies={'Quot.sound': 24, 'propext': 27}
+PASS BudgetedPruning.lean: 27 axiom reports audited.
+PASS qualified names: BudgetedPruning.lean 27/27
+AUDIT ImpasseCompilation.lean: 13/13 axiom reports; Lean exit=0; dependencies={'Quot.sound': 10, 'propext': 13}
+PASS ImpasseCompilation.lean: 13 axiom reports audited.
+PASS qualified names: ImpasseCompilation.lean 13/13
+AUDIT LearningDiscovery.lean: 16/16 axiom reports; Lean exit=0; dependencies={'Quot.sound': 14, 'propext': 15}
+PASS LearningDiscovery.lean: 16 axiom reports audited.
+PASS qualified names: LearningDiscovery.lean 16/16
+AUDIT MetaInvestigation.lean: 30/30 axiom reports; Lean exit=0; dependencies={'Quot.sound': 29, 'propext': 30}
+PASS MetaInvestigation.lean: 30 axiom reports audited.
+PASS qualified names: MetaInvestigation.lean 30/30
+AUDIT MetaEvidenceAcquisition.lean: 35/35 axiom reports; Lean exit=0; dependencies={'Quot.sound': 24, 'propext': 30}
+PASS MetaEvidenceAcquisition.lean: 35 axiom reports audited.
+PASS qualified names: MetaEvidenceAcquisition.lean 35/35
+AUDIT DecisionEvidence.lean: 36/36 axiom reports; Lean exit=0; dependencies={'Quot.sound': 25, 'propext': 34}
+PASS DecisionEvidence.lean: 36 axiom reports audited.
+PASS qualified names: DecisionEvidence.lean 36/36
+AUDIT ControllerReplacement.lean: 43/43 axiom reports; Lean exit=0; dependencies={'Quot.sound': 40, 'propext': 43}
+PASS ControllerReplacement.lean: 43 axiom reports audited.
+PASS qualified names: ControllerReplacement.lean 43/43
+AUDIT RelativeEvidence.lean: 21/21 axiom reports; Lean exit=0; dependencies={'Quot.sound': 17, 'propext': 17}
+PASS RelativeEvidence.lean: 21 axiom reports audited.
+PASS qualified names: RelativeEvidence.lean 21/21
+AUDIT AdmissionAccounting.lean: 35/35 axiom reports; Lean exit=0; dependencies={'Quot.sound': 31, 'propext': 35}
+PASS AdmissionAccounting.lean: 35 axiom reports audited.
+PASS qualified names: AdmissionAccounting.lean 35/35
+AUDIT RecursiveTrace.lean: 33/33 axiom reports; Lean exit=0; dependencies={'Quot.sound': 33, 'propext': 33}
+PASS RecursiveTrace.lean: 33 axiom reports audited.
+PASS qualified names: RecursiveTrace.lean 33/33
+PASS replay 484 reports; not new kernel execution.

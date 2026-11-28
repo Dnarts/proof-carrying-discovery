@@ -1,0 +1,11 @@
+{
+  "status": "PASS",
+  "checksums_matched": 766,
+  "checksums_expected": 766,
+  "files_total": 767,
+  "payload_files": 765,
+  "original_archives_crc_checked": 54,
+  "canonical_files_compared": 144,
+  "lean_executed": false,
+  "errors": []
+}

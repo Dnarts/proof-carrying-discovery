@@ -1,0 +1,1554 @@
+ARCHITECTURE_RU.md: OK
+AUDIT_FIXTURES.log: OK
+AdaptiveObservation.lean: OK
+AdmissionAccounting.lean: OK
+BudgetedDiscovery.lean: OK
+BudgetedPruning.lean: OK
+CertifiedPruning.lean: OK
+ControllerReplacement.lean: OK
+DEPENDENCIES.txt: OK
+DecisionEvidence.lean: OK
+FAILURE_REPORT.md: OK
+FINITE_ADMISSION.log: OK
+FINITE_CLOSURE.log: OK
+FINITE_DECISION.log: OK
+FINITE_EVIDENCE.log: OK
+FINITE_LEARNING.log: OK
+FINITE_META.log: OK
+FINITE_POLICY.log: OK
+FINITE_RELATIVE.log: OK
+FINITE_RELEASE.json: OK
+FINITE_RELEASE.log: OK
+FINITE_REPLACEMENT.log: OK
+FINITE_TRACE.log: OK
+HISTORY_T01_T18.zip: OK
+HISTORY_T03_T19.zip: OK
+ImpasseCompilation.lean: OK
+InvestigationLibrary.lean: OK
+InvestigationTransfer.lean: OK
+LearningDiscovery.lean: OK
+MetaClosure.lean: OK
+MetaEvidenceAcquisition.lean: OK
+MetaInvestigation.lean: OK
+MetaPolicy.lean: OK
+MorphismDiscovery.lean: OK
+NEXT_GATES.md: OK
+PARENT_ARCHIVE_SHA256.txt: OK
+PARENT_AUDIT.log: OK
+PARENT_FINITE_CHECK.log: OK
+PARENT_README.md: OK
+README.md: OK
+RELEASE_ACCEPTANCE.md: OK
+RecursiveTrace.lean: OK
+RelativeEvidence.lean: OK
+Release.lean: OK
+ReleaseMain.lean: OK
+ResumeLaws.lean: OK
+T247_KERNEL.log: OK
+T247_README.md: OK
+T247_SHA256SUMS.txt: OK
+T247_UPSTREAM_SHA256.txt: OK
+T25_GATES.md: OK
+T25_KERNEL_CHECK.log: OK
+T25_README.md: OK
+T25_SHA256SUMS.txt: OK
+T25_UPSTREAM_SHA256.txt: OK
+T26_KERNEL_CHECK.log: OK
+T26_NEXT_GATES.md: OK
+T26_README.md: OK
+T26_SHA256SUMS.txt: OK
+T26_UPSTREAM_SHA256.txt: OK
+T27_KERNEL_CHECK.log: OK
+T27_NEXT_GATES.md: OK
+T27_PARENT_ARCHIVE_SHA256.txt: OK
+T27_README.md: OK
+T27_SHA256SUMS.txt: OK
+T27_UPSTREAM_SHA256.txt: OK
+T28_KERNEL_CHECK.log: OK
+T28_NEXT_GATES.md: OK
+T28_PARENT_ARCHIVE_SHA256.txt: OK
+T28_PARENT_AUDIT.log: OK
+T28_README.md: OK
+T28_SHA256SUMS.txt: OK
+T28_UPSTREAM_SHA256.txt: OK
+T28_run_verify.sh: OK
+T29A_AUDIT_FIXTURES.log: OK
+T29a_KERNEL_CHECK.log: OK
+T29a_NEXT_GATES.md: OK
+T29a_PARENT_ARCHIVE_SHA256.txt: OK
+T29a_PARENT_AUDIT.log: OK
+T29a_README.md: OK
+T29a_SHA256SUMS.txt: OK
+T29a_UPSTREAM_SHA256.txt: OK
+T29a_run_verify.sh: OK
+T29b_AUDIT_FIXTURES.log: OK
+T29b_KERNEL_CHECK.log: OK
+T29b_NEXT_GATES.md: OK
+T29b_PARENT_ARCHIVE_SHA256.txt: OK
+T29b_PARENT_AUDIT.log: OK
+T29b_README.md: OK
+T29b_SHA256SUMS.txt: OK
+T29b_UPSTREAM_SHA256.txt: OK
+T29b_run_verify.sh: OK
+T29c_KERNEL_CHECK.log: OK
+T29c_NEXT_GATES.md: OK
+T29c_PARENT_ARCHIVE_SHA256.txt: OK
+T29c_PARENT_AUDIT.log: OK
+T29c_README.md: OK
+T29c_SHA256SUMS.txt: OK
+T29c_UPSTREAM_SHA256.txt: OK
+T29c_run_verify.sh: OK
+T30_AUDIT_FIXTURES.log: OK
+T30_KERNEL_CHECK.log: OK
+T30_NEXT_GATES.md: OK
+T30_PARENT_ARCHIVE_SHA256.txt: OK
+T30_PARENT_AUDIT.log: OK
+T30_README.md: OK
+T30_SHA256SUMS.txt: OK
+T30_UPSTREAM_SHA256.txt: OK
+T31_AUDIT_FIXTURES.log: OK
+T31_KERNEL_CHECK.log: OK
+T31_NEXT_GATES.md: OK
+T31_PARENT_ARCHIVE_SHA256.txt: OK
+T31_PARENT_AUDIT.log: OK
+T31_README.md: OK
+T31_SHA256SUMS.txt: OK
+T31_UPSTREAM_SHA256.txt: OK
+T31_run_verify.sh: OK
+T32_AUDIT_FIXTURES.log: OK
+T32_PROJECTION_FIXTURES.log: OK
+UPSTREAM_KERNEL.log: OK
+UPSTREAM_NEXT_GATES.md: OK
+UPSTREAM_README.md: OK
+UPSTREAM_SHA256.txt: OK
+audit_lean.py: OK
+audit_names.py: OK
+check_admission.py: OK
+check_closure.py: OK
+check_decision.py: OK
+check_evidence.py: OK
+check_impasse.py: OK
+check_learning.py: OK
+check_meta.py: OK
+check_policy.py: OK
+check_pruning.py: OK
+check_relative.py: OK
+check_release.py: OK
+check_replacement.py: OK
+check_trace.py: OK
+lean-toolchain: OK
+run_verify.sh: OK
+test_audit.py: OK
+test_release_projection.py: OK
+verify_integrity.py: OK
+AdaptiveObservation.lean: OK
+AdmissionAccounting.lean: OK
+BudgetedDiscovery.lean: OK
+BudgetedPruning.lean: OK
+CertifiedPruning.lean: OK
+ControllerReplacement.lean: OK
+DecisionEvidence.lean: OK
+ImpasseCompilation.lean: OK
+InvestigationLibrary.lean: OK
+InvestigationTransfer.lean: OK
+LearningDiscovery.lean: OK
+MetaClosure.lean: OK
+MetaEvidenceAcquisition.lean: OK
+MetaInvestigation.lean: OK
+MetaPolicy.lean: OK
+MorphismDiscovery.lean: OK
+RecursiveTrace.lean: OK
+RelativeEvidence.lean: OK
+ResumeLaws.lean: OK
+PASS complete manifest 143/143; 19 upstream source pins; 18 standalone historical checks.
+PASS synthetic audit fixture: clean
+PASS synthetic audit fixture: nonzero compiler exit despite complete reports
+PASS synthetic audit fixture: partial reports
+PASS synthetic audit fixture: placeholder
+PASS synthetic audit fixture: classical
+PASS synthetic audit fixture: unknown axiom
+PASS synthetic audit fixture: warning
+PASS synthetic audit fixture: error
+PASS synthetic audit fixture: wrong name with same count
+PASS synthetic audit fixture: duplicate
+PASS 10 audit-parser fixtures. No Lean execution.
+PASS 12 synthetic projection controls: clean + 11 rejected mutations. Not Lean execution.
+Lean (version 4.36.0, arm64-apple-darwin24.6.0, commit 611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9, Release)
+=== LEAN: AdaptiveObservation.lean ===
+'CRTT.AdaptiveObservation.pick_value' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.runCost_le_worst' depends on axioms: [propext]
+'CRTT.AdaptiveObservation.terminal_optimal' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.capped_cost' depends on axioms: [propext]
+'CRTT.AdaptiveObservation.capped_worst_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.solve_legal' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.worst_observe' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.solve_optimal' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.bellman' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.cost_feasible_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.runCost_split' depends on axioms: [propext]
+'CRTT.AdaptiveObservation.epsilon_budget_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.fixed_optimal' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.schedules_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.schedules_sound' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.static_optimal' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.adaptive_le_static' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.Witnesses.mux_adaptive_beats_static' does not depend on any axioms
+'CRTT.AdaptiveObservation.Witnesses.mux_exact_observation_budget' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.Witnesses.mux_lower_bound' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.Witnesses.mux_static_lower_bound' depends on axioms: [propext, Quot.sound]
+'CRTT.AdaptiveObservation.Witnesses.xor_greedy_failure' does not depend on any axioms
+AUDIT AdaptiveObservation.lean: 22/22 axiom reports; Lean exit=0; dependencies={'Quot.sound': 17, 'propext': 20}
+PASS AdaptiveObservation.lean: 22 axiom reports audited.
+PASS qualified names: AdaptiveObservation.lean 22/22
+=== LEAN: InvestigationTransfer.lean ===
+'CRTT.InvestigationTransfer.declared_of_legal' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationTransfer.transfer_legal' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationTransfer.transfer_semantics' depends on axioms: [propext]
+'CRTT.InvestigationTransfer.transfer_runCost_le' depends on axioms: [propext]
+'CRTT.InvestigationTransfer.transfer_worst_le' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationTransfer.transfer_hard_contract' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationTransfer.optimum_le' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationTransfer.mutual_optimum_eq' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationTransfer.transferred_optimizer' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationTransfer.identity' does not depend on any axioms
+'CRTT.InvestigationTransfer.compose' does not depend on any axioms
+'CRTT.InvestigationTransfer.transfer_identity' does not depend on any axioms
+'CRTT.InvestigationTransfer.transfer_compose' does not depend on any axioms
+'CRTT.InvestigationTransfer.paid_transfer_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationTransfer.paid_transfer_sufficient' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationTransfer.Witnesses.bit_tree_legal' depends on axioms: [propext]
+'CRTT.InvestigationTransfer.Witnesses.bit_tree_optimal' does not depend on any axioms
+'CRTT.InvestigationTransfer.Witnesses.equal_optimum_bad_translation' does not depend on any axioms
+'CRTT.InvestigationTransfer.Witnesses.equal_optimum_no_global_morphism' depends on axioms: [propext]
+'CRTT.InvestigationTransfer.Witnesses.equal_optimum_no_loss_morphism' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationTransfer.Witnesses.flipMorphism' depends on axioms: [propext]
+'CRTT.InvestigationTransfer.Witnesses.flipped_tree_cost' depends on axioms: [propext]
+AUDIT InvestigationTransfer.lean: 22/22 axiom reports; Lean exit=0; dependencies={'Quot.sound': 10, 'propext': 16}
+PASS InvestigationTransfer.lean: 22 axiom reports audited.
+PASS qualified names: InvestigationTransfer.lean 22/22
+=== LEAN: InvestigationLibrary.lean ===
+'CRTT.InvestigationLibrary.task_optimizer_legal' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.task_optimizer_cost' does not depend on any axioms
+'CRTT.InvestigationLibrary.task_optimum_le' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.overhead_single' does not depend on any axioms
+'CRTT.InvestigationLibrary.overhead_step' does not depend on any axioms
+'CRTT.InvestigationLibrary.collapse_single' does not depend on any axioms
+'CRTT.InvestigationLibrary.collapse_step' does not depend on any axioms
+'CRTT.InvestigationLibrary.execute_single' does not depend on any axioms
+'CRTT.InvestigationLibrary.execute_step' does not depend on any axioms
+'CRTT.InvestigationLibrary.append_single' does not depend on any axioms
+'CRTT.InvestigationLibrary.append_step' does not depend on any axioms
+'CRTT.InvestigationLibrary.collapse_exec' does not depend on any axioms
+'CRTT.InvestigationLibrary.append_overhead' does not depend on any axioms
+'CRTT.InvestigationLibrary.append_execution' does not depend on any axioms
+'CRTT.InvestigationLibrary.path_legal' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.path_cost_le' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.path_hard_contract' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.candidate_legal' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.candidate_hard_contract' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.candidate_optimum_le' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.residual_comparison' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.paid_candidate_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.mutual_path_execution' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.mutual_paths_compare' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.choose_mem' depends on axioms: [propext]
+'CRTT.InvestigationLibrary.chosen_from_list' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.best_le_fresh' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.best_le_candidate' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.best_attained' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.chosen_from_library' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.listed_monotone' does not depend on any axioms
+'CRTT.InvestigationLibrary.chosen_hard_contract' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.best_monotone' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.search_profitable_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.oracle_le_realized' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.complete_search_matches_oracle' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.enumerated_oracle' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.search_gap_accounting' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.use_accounting' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.stream_accounting' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.amortization_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.InvestigationLibrary.Witnesses.source_tree_legal' depends on axioms: [propext]
+'CRTT.InvestigationLibrary.Witnesses.cheaper_path_not_cheaper_total' depends on axioms: [propext]
+'CRTT.InvestigationLibrary.Witnesses.two_edge_computes' depends on axioms: [propext]
+'CRTT.InvestigationLibrary.Witnesses.selector_picks_better_total' depends on axioms: [propext]
+'CRTT.InvestigationLibrary.Witnesses.same_offer_small' depends on axioms: [propext]
+'CRTT.InvestigationLibrary.Witnesses.same_offer_large' depends on axioms: [propext]
+'CRTT.InvestigationLibrary.Witnesses.library_bloat_witness' depends on axioms: [propext]
+'CRTT.InvestigationLibrary.Witnesses.small_in_large' depends on axioms: [propext]
+'CRTT.InvestigationLibrary.Witnesses.bloat_budget_barrier' depends on axioms: [propext]
+'CRTT.InvestigationLibrary.Witnesses.empty_search_gap' depends on axioms: [propext]
+AUDIT InvestigationLibrary.lean: 51/51 axiom reports; Lean exit=0; dependencies={'Quot.sound': 27, 'propext': 38}
+PASS InvestigationLibrary.lean: 51 axiom reports audited.
+PASS qualified names: InvestigationLibrary.lean 51/51
+=== LEAN: MorphismDiscovery.lean ===
+'CRTT.MorphismDiscovery.mem_indices' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.maps_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.and_true_iff' does not depend on any axioms
+'CRTT.MorphismDiscovery.allB_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.first_sound' depends on axioms: [propext]
+'CRTT.MorphismDiscovery.first_complete' depends on axioms: [propext]
+'CRTT.MorphismDiscovery.extractSome_spec' does not depend on any axioms
+'CRTT.MorphismDiscovery.mem_collectSome' depends on axioms: [propext]
+'CRTT.MorphismDiscovery.action_mem_all' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.portOK_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.readOK_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.lossOK_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.portWorlds_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.worldWitness_sound' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.worldWitness_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.synthWorldMap_spec' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.local_world_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.buildMorphism' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.morphism_portOK' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.morphism_readCover' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.morphism_worldCover' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.fixed_pair_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.certifyPair_of_checks' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.morphism_portCandidate' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.discover_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.empty_iff_no_morphism' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.depth_barrier' depends on axioms: [propext]
+'CRTT.MorphismDiscovery.port_map_rejected' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.empty_read_row_barrier' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.empty_joint_row_barrier' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.transfer_eq_of_maps' depends on axioms: [propext]
+'CRTT.MorphismDiscovery.discover_same_execution' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.direct_offer_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.Witnesses.flipped_computes' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.Witnesses.empty_target_computes' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.Witnesses.empty_source_computes' depends on axioms: [propext, Quot.sound]
+'CRTT.MorphismDiscovery.Witnesses.read_barrier_computes' depends on axioms: [propext]
+AUDIT MorphismDiscovery.lean: 37/37 axiom reports; Lean exit=0; dependencies={'Quot.sound': 29, 'propext': 35}
+PASS MorphismDiscovery.lean: 37 axiom reports audited.
+PASS qualified names: MorphismDiscovery.lean 37/37
+=== LEAN: BudgetedDiscovery.lean ===
+'CRTT.BudgetedDiscovery.accounting' depends on axioms: [propext]
+'CRTT.BudgetedDiscovery.spent_monotone' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.budget_bound' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.invariant' depends on axioms: [propext]
+'CRTT.BudgetedDiscovery.early_optimal' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.run_stuck' depends on axioms: [propext]
+'CRTT.BudgetedDiscovery.run_add' depends on axioms: [propext]
+'CRTT.BudgetedDiscovery.run_stuck_of_ge_measure' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.run_eq_of_ge_measure' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.run_measure_le' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.run_topUp_split' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.saturate_topUp_add' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.measure_lt' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.partition_preserved' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.initial_partition_invariant' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.initial_pending_eq_discoverAll' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.pending_eq_nil_of_exhausted' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.exhausted_certificates_eq_discoverAll' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.exhausted_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.exhausted_empty_impossible' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.cursor_saturate_topUp_add' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.run_stuck_of_ge_budget' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.run_eq_if_both_stuck' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.execute_eq_saturate' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.execute_topUp_add' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.run_exhausts_with_budget' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.quote_fee_le' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.quote_none_iff_exhausted' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.execute_partition' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.quote_certificates_prefix' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.execute_certificates_prefix' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.execute_exhausted_with_budget' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.execute_full' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedDiscovery.start_full' depends on axioms: [propext, Quot.sound]
+AUDIT BudgetedDiscovery.lean: 34/34 axiom reports; Lean exit=0; dependencies={'Quot.sound': 30, 'propext': 34}
+PASS BudgetedDiscovery.lean: 34 axiom reports audited.
+PASS qualified names: BudgetedDiscovery.lean 34/34
+=== LEAN: CertifiedPruning.lean ===
+'CRTT.CertifiedPruning.composeRule_same_keep' depends on axioms: [propext]
+'CRTT.CertifiedPruning.ordered_rule_cost_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.rejected_region_empty' depends on axioms: [propext]
+'CRTT.CertifiedPruning.injectiveRule' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.depthRule' depends on axioms: [propext]
+'CRTT.CertifiedPruning.selectedPair_spec' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.decodePortMap_of_extends' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.certified_pair_maps' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.prunedDiscover_sound' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.prunedDiscover_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.prunedDiscover_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.prunedDiscover_pair_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.prunedDiscover_empty_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.partialPortWorlds_monotone' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.morphism_mem_partialPortWorlds' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.empty_partialReadRow_prunes' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.readCompatRule' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.priceRule' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.composeRule' depends on axioms: [propext]
+'CRTT.CertifiedPruning.applyLibrary_sound' depends on axioms: [propext]
+'CRTT.CertifiedPruning.prunedExtend_mem_prefix' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.prunedExtend_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.pruning_profitable_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.CertifiedPruning.Witnesses.sound_rule_hurts_economics' does not depend on any axioms
+AUDIT CertifiedPruning.lean: 24/24 axiom reports; Lean exit=0; dependencies={'Quot.sound': 18, 'propext': 23}
+PASS CertifiedPruning.lean: 24 axiom reports audited.
+PASS qualified names: CertifiedPruning.lean 24/24
+=== LEAN: ResumeLaws.lean ===
+'CRTT.ResumeLaws.run_eq_of_ge_budget' depends on axioms: [propext, Quot.sound]
+'CRTT.ResumeLaws.execute_paid' depends on axioms: [propext, Quot.sound]
+'CRTT.ResumeLaws.execute_topUp_prefix' depends on axioms: [propext, Quot.sound]
+'CRTT.ResumeLaws.execute_topUp_add' depends on axioms: [propext, Quot.sound]
+'CRTT.ResumeLaws.loop_no_decreasing_measure' does not depend on any axioms
+AUDIT ResumeLaws.lean: 5/5 axiom reports; Lean exit=0; dependencies={'Quot.sound': 4, 'propext': 4}
+PASS ResumeLaws.lean: 5 axiom reports audited.
+PASS qualified names: ResumeLaws.lean 5/5
+=== LEAN: BudgetedPruning.lean ===
+'CRTT.BudgetedPruning.bill_positive' depends on axioms: [propext]
+'CRTT.BudgetedPruning.canonical_pair' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.certified_mem_reference' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.jobStep_sound' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.jobStep_covers' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.initial_correct' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.quote_correct' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.execute_correct' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.exhausted_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.exhausted_impossible' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.quote_receipt_cost' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.run_meter' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.execute_trace' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.jobsBudget_append' depends on axioms: [propext]
+'CRTT.BudgetedPruning.childrenBudget' depends on axioms: [propext]
+'CRTT.BudgetedPruning.job_budget_step' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.quote_potential' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.potential_decreases' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.run_funded' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.execute_funded_exhausts' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.execute_full' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.execute_split' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.start_full' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.quote_certificate_prefix' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.execute_certificate_prefix' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.verdict' depends on axioms: [propext, Quot.sound]
+'CRTT.BudgetedPruning.classify' depends on axioms: [propext, Quot.sound]
+AUDIT BudgetedPruning.lean: 27/27 axiom reports; Lean exit=0; dependencies={'Quot.sound': 24, 'propext': 27}
+PASS BudgetedPruning.lean: 27 axiom reports audited.
+PASS qualified names: BudgetedPruning.lean 27/27
+=== LEAN: ImpasseCompilation.lean ===
+'CRTT.ImpasseCompilation.shrink_spec' depends on axioms: [propext]
+'CRTT.ImpasseCompilation.rowBad_iff' depends on axioms: [propext]
+'CRTT.ImpasseCompilation.rows_antitone' depends on axioms: [propext, Quot.sound]
+'CRTT.ImpasseCompilation.rowBad_monotone' depends on axioms: [propext, Quot.sound]
+'CRTT.ImpasseCompilation.extract' depends on axioms: [propext, Quot.sound]
+'CRTT.ImpasseCompilation.containsCore_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.ImpasseCompilation.core_excludes' depends on axioms: [propext, Quot.sound]
+'CRTT.ImpasseCompilation.compileCore' depends on axioms: [propext, Quot.sound]
+'CRTT.ImpasseCompilation.compileCore_rejects' depends on axioms: [propext, Quot.sound]
+'CRTT.ImpasseCompilation.compiled_search_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.ImpasseCompilation.allB_false_exists' depends on axioms: [propext]
+'CRTT.ImpasseCompilation.rowBad_cover_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.ImpasseCompilation.transportCore' depends on axioms: [propext, Quot.sound]
+AUDIT ImpasseCompilation.lean: 13/13 axiom reports; Lean exit=0; dependencies={'Quot.sound': 10, 'propext': 13}
+PASS ImpasseCompilation.lean: 13 axiom reports audited.
+PASS qualified names: ImpasseCompilation.lean 13/13
+=== LEAN: LearningDiscovery.lean ===
+'CRTT.LearningDiscovery.verdict' depends on axioms: [propext, Quot.sound]
+'CRTT.LearningDiscovery.classify' depends on axioms: [propext, Quot.sound]
+'CRTT.LearningDiscovery.sub_trans' does not depend on any axioms
+'CRTT.LearningDiscovery.insertCore_rejects' depends on axioms: [propext, Quot.sound]
+'CRTT.LearningDiscovery.library_sound' depends on axioms: [propext, Quot.sound]
+'CRTT.LearningDiscovery.findCore_constraints' depends on axioms: [propext]
+'CRTT.LearningDiscovery.drop_correct' depends on axioms: [propext, Quot.sound]
+'CRTT.LearningDiscovery.probe_correct' depends on axioms: [propext, Quot.sound]
+'CRTT.LearningDiscovery.lookup_correct' depends on axioms: [propext, Quot.sound]
+'CRTT.LearningDiscovery.base_correct' depends on axioms: [propext, Quot.sound]
+'CRTT.LearningDiscovery.quote_correct' depends on axioms: [propext, Quot.sound]
+'CRTT.LearningDiscovery.quote_meter' depends on axioms: [propext, Quot.sound]
+'CRTT.LearningDiscovery.execute_trace' depends on axioms: [propext, Quot.sound]
+'CRTT.LearningDiscovery.execute_correct' depends on axioms: [propext, Quot.sound]
+'CRTT.LearningDiscovery.execute_split' depends on axioms: [propext, Quot.sound]
+'CRTT.LearningDiscovery.execute_exhausted_iff' depends on axioms: [propext, Quot.sound]
+AUDIT LearningDiscovery.lean: 16/16 axiom reports; Lean exit=0; dependencies={'Quot.sound': 14, 'propext': 15}
+PASS LearningDiscovery.lean: 16 axiom reports audited.
+PASS qualified names: LearningDiscovery.lean 16/16
+=== LEAN: MetaInvestigation.lean ===
+'CRTT.MetaInvestigation.schema_sound' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.runPlan_prefix' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.finishInput_correct' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.drop_potential_le' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.base_potential_le' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.learning_quote_potential' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.learning_potential_bound' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.funded_of_initial' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.perform_exhausted' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.perform_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.perform_static' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.learning_accounting' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.perform_accounting' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.perform_trace' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.actualBill_le_reservation' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.walk_cost' depends on axioms: [propext]
+'CRTT.MetaInvestigation.executionCost_le' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.executionCost_eq' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.selectedRun_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.runMeta_bill' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.runMeta_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.runMeta_history' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.actualWorst_le' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.actualWorst_eq' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.optimizer_legal' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.optimizer_bound_optimal' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.optimizer_actual_optimal' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.meta_budget_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.default_upper' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaInvestigation.acquisition_gain_iff' depends on axioms: [propext, Quot.sound]
+AUDIT MetaInvestigation.lean: 30/30 axiom reports; Lean exit=0; dependencies={'Quot.sound': 29, 'propext': 30}
+PASS MetaInvestigation.lean: 30 axiom reports audited.
+PASS qualified names: MetaInvestigation.lean 30/30
+=== LEAN: MetaEvidenceAcquisition.lean ===
+'CRTT.MetaEvidenceAcquisition.info_refl' does not depend on any axioms
+'CRTT.MetaEvidenceAcquisition.info_trans' does not depend on any axioms
+'CRTT.MetaEvidenceAcquisition.refine_at' depends on axioms: [propext]
+'CRTT.MetaEvidenceAcquisition.refine_elsewhere' depends on axioms: [propext]
+'CRTT.MetaEvidenceAcquisition.refine_info' depends on axioms: [propext]
+'CRTT.MetaEvidenceAcquisition.legal_withLoss' depends on axioms: [propext]
+'CRTT.MetaEvidenceAcquisition.runCost_loss_le' depends on axioms: [propext]
+'CRTT.MetaEvidenceAcquisition.worst_loss_le' depends on axioms: [propext]
+'CRTT.MetaEvidenceAcquisition.withLoss_self' does not depend on any axioms
+'CRTT.MetaEvidenceAcquisition.value_loss_le' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.lower_le_true' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.true_le_upper' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.upperTree_legal' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.upperTree_bill' depends on axioms: [propext]
+'CRTT.MetaEvidenceAcquisition.certified_gap' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.gap_monotone' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.pointTable_gap_zero' depends on axioms: [Quot.sound]
+'CRTT.MetaEvidenceAcquisition.nearOptimal_guarantee' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.assess_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.paid_improvement' does not depend on any axioms
+'CRTT.MetaEvidenceAcquisition.quote_meter' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.quote_info' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.quote_potential' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.execute_funded_quiescent' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.execute_trace' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.execute_info' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.execute_gap_le' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.execute_split' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.initialBounds' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.exactRequest' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.exactRequest_charge_covers' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.exactRequest_point' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.actualModel_runCost' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.accepted_actual_bill' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaEvidenceAcquisition.accepted_complete' depends on axioms: [propext, Quot.sound]
+AUDIT MetaEvidenceAcquisition.lean: 35/35 axiom reports; Lean exit=0; dependencies={'Quot.sound': 24, 'propext': 30}
+PASS MetaEvidenceAcquisition.lean: 35 axiom reports audited.
+PASS qualified names: MetaEvidenceAcquisition.lean 35/35
+=== LEAN: DecisionEvidence.lean ===
+'CRTT.DecisionEvidence.terminal_admitted' depends on axioms: [propext]
+'CRTT.DecisionEvidence.residual_le' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.robust_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.residual_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.robust_subset' depends on axioms: [propext]
+'CRTT.DecisionEvidence.residual_subset' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.catalogue_reference_attained' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.catalogue_robust_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.interval_pair' does not depend on any axioms
+'CRTT.DecisionEvidence.catalogue_interval_certificate' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.intervalOK_sound' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.intervalCandidate_sound' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.exactFamilyModel' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.shared_endpoint_regret' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.assess_complete' depends on axioms: [propext]
+'CRTT.DecisionEvidence.certificate_bill' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.refine_membership' depends on axioms: [propext]
+'CRTT.DecisionEvidence.refine_truth' depends on axioms: [propext]
+'CRTT.DecisionEvidence.refine_residual_le' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.acquisition_legal' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.acquisition_optimal' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.acquisition_zero' does not depend on any axioms
+'CRTT.DecisionEvidence.acquisition_bellman' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.walk_member' depends on axioms: [propext]
+'CRTT.DecisionEvidence.walk_terminal' depends on axioms: [propext]
+'CRTT.DecisionEvidence.walk_paid' depends on axioms: [propext]
+'CRTT.DecisionEvidence.total_bill_identity' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.optimizer_bill_bound' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.hardAssess' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.hard_assess_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.hard_execution' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.capped_worst_of_valid' depends on axioms: [propext]
+'CRTT.DecisionEvidence.hard_minimal_observation' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.Witnesses.common_optimum_uncertain_value' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.Witnesses.paid_bit_strict_gain' depends on axioms: [propext, Quot.sound]
+'CRTT.DecisionEvidence.Witnesses.regret_not_actual_bill' depends on axioms: [propext, Quot.sound]
+AUDIT DecisionEvidence.lean: 36/36 axiom reports; Lean exit=0; dependencies={'Quot.sound': 25, 'propext': 34}
+PASS DecisionEvidence.lean: 36 axiom reports audited.
+PASS qualified names: DecisionEvidence.lean 36/36
+=== LEAN: ControllerReplacement.lean ===
+'CRTT.ControllerReplacement.covers_rebaseJob' depends on axioms: [propext]
+'CRTT.ControllerReplacement.covered_rebase' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.same_refl' depends on axioms: [propext]
+'CRTT.ControllerReplacement.same_trans' depends on axioms: [propext]
+'CRTT.ControllerReplacement.rebase_same' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.same_correct' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.rebase_correct' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.completion_full' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.completion_bill_le' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.completion_same_answers' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.proposed_fees' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.proposed_same' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.economic_sound' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.checked_accept_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.apply_same' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.apply_nonaccepted_current' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.apply_history' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.apply_conserves' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.apply_accepted_gain' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.apply_balance' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.apply_exact_charge' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.apply_liquid' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.prefix_funded' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.prefix_correct' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.advance_history' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.advance_certificates' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.quote_receipt_prefix' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.advance_receipts' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.advance_meter' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.advance_conserves' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.finish_full' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.finish_exhausted' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.finish_meter' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.finish_after_attempt_full' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.accepted_finish_gain' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.tryReplace_conserves' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.tryReplace_same' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.tryReplace_accepted_gain' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.Witnesses.profitable_switch' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.Witnesses.fallback_reserve_protected' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.Witnesses.cheaper_but_illiquid' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.Witnesses.paid_end_to_end' depends on axioms: [propext, Quot.sound]
+'CRTT.ControllerReplacement.Witnesses.baseline_bill' depends on axioms: [propext, Quot.sound]
+AUDIT ControllerReplacement.lean: 43/43 axiom reports; Lean exit=0; dependencies={'Quot.sound': 40, 'propext': 43}
+PASS ControllerReplacement.lean: 43 axiom reports audited.
+PASS qualified names: ControllerReplacement.lean 43/43
+=== LEAN: RelativeEvidence.lean ===
+'CRTT.RelativeEvidence.relativeOK_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.RelativeEvidence.relativeOK_refine' depends on axioms: [propext, Quot.sound]
+'CRTT.RelativeEvidence.paired_gain' depends on axioms: [propext, Quot.sound]
+'CRTT.RelativeEvidence.coverage_nonempty' does not depend on any axioms
+'CRTT.RelativeEvidence.offer_nonempty' depends on axioms: [propext, Quot.sound]
+'CRTT.RelativeEvidence.proposed_reserve' depends on axioms: [propext, Quot.sound]
+'CRTT.RelativeEvidence.proposed_same' depends on axioms: [propext, Quot.sound]
+'CRTT.RelativeEvidence.proposed_fees' depends on axioms: [propext, Quot.sound]
+'CRTT.RelativeEvidence.proposed_bill_le_reserve' depends on axioms: [propext, Quot.sound]
+'CRTT.RelativeEvidence.relative_sound' depends on axioms: [propext, Quot.sound]
+'CRTT.RelativeEvidence.fromAbsolute' depends on axioms: [propext, Quot.sound]
+'CRTT.RelativeEvidence.absolute_same_candidate' depends on axioms: [propext, Quot.sound]
+'CRTT.RelativeEvidence.absolute_gate' depends on axioms: [propext, Quot.sound]
+'CRTT.RelativeEvidence.decision_margin' depends on axioms: [propext, Quot.sound]
+'CRTT.RelativeEvidence.fromDecision' depends on axioms: [propext, Quot.sound]
+'CRTT.RelativeEvidence.decision_offer_gain' depends on axioms: [propext, Quot.sound]
+'CRTT.RelativeEvidence.Witnesses.correlated_gap' does not depend on any axioms
+'CRTT.RelativeEvidence.Witnesses.zero_regret_not_strict_improvement' does not depend on any axioms
+'CRTT.RelativeEvidence.Witnesses.empty_scan' does not depend on any axioms
+'CRTT.RelativeEvidence.Witnesses.paired_live_gain' depends on axioms: [propext, Quot.sound]
+'CRTT.RelativeEvidence.Witnesses.paired_live_reserve' depends on axioms: [propext, Quot.sound]
+AUDIT RelativeEvidence.lean: 21/21 axiom reports; Lean exit=0; dependencies={'Quot.sound': 17, 'propext': 17}
+PASS RelativeEvidence.lean: 21 axiom reports audited.
+PASS qualified names: RelativeEvidence.lean 21/21
+=== LEAN: AdmissionAccounting.lean ===
+'CRTT.AdmissionAccounting.gate_accepted_iff' depends on axioms: [propext]
+'CRTT.AdmissionAccounting.gate_deferred_iff' depends on axioms: [propext]
+'CRTT.AdmissionAccounting.gate_rejectLiquidity_iff' depends on axioms: [propext]
+'CRTT.AdmissionAccounting.gate_rejectGain_iff' depends on axioms: [propext]
+'CRTT.AdmissionAccounting.gate_debit_le' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.accepted_affordable' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.rejected_liquidity_affordable' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.rejected_gain_affordable' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.addedEntries_cost' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.apply_deferred' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.apply_current' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.apply_nonaccepted' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.apply_same' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.apply_fees' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.apply_old_history' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.apply_journal' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.apply_balance' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.apply_charge' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.apply_funds' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.apply_liquid' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.apply_accepted_gain' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.apply_nonaccepted_objective' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.evidence_current' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.evidence_journal' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.evidence_charge' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.evidence_funds' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.evidence_objective' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.tryRelative_funds' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.tryRelative_same' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.tryRelative_completion' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.Witnesses.relative_accepted' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.Witnesses.relative_deferred' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.Witnesses.relative_illiquid' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.Witnesses.accepted_exact_cost' depends on axioms: [propext, Quot.sound]
+'CRTT.AdmissionAccounting.Witnesses.reject_exact_cost' depends on axioms: [propext, Quot.sound]
+AUDIT AdmissionAccounting.lean: 35/35 axiom reports; Lean exit=0; dependencies={'Quot.sound': 31, 'propext': 35}
+PASS AdmissionAccounting.lean: 35 axiom reports audited.
+PASS qualified names: AdmissionAccounting.lean 35/35
+=== LEAN: RecursiveTrace.lean ===
+'CRTT.RecursiveTrace.run_shift_spent' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.execute_prefix_bill' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.remainingBill_prefix' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.advance_spent' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.advance_funds' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.advance_objective' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.preserves_refl' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.preserves_trans' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.advance_preserves' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.apply_preserves' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.evidence_preserves' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.laws_refl' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.laws_compose' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.advance_laws' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.evidence_laws' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.apply_laws' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.action_laws' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.singleton_valid' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.valid_append' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.trace_laws' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.trace_objective' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.trace_funds' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.trace_preserves' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.trace_paid_bound' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.trace_accepted_bound' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.finish_bill' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.finish_full' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.trace_completion' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.trace_final_gain_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.Witnesses.positive_valid' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.Witnesses.positive_cost' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.Witnesses.negative_valid' depends on axioms: [propext, Quot.sound]
+'CRTT.RecursiveTrace.Witnesses.negative_cost' depends on axioms: [propext, Quot.sound]
+AUDIT RecursiveTrace.lean: 33/33 axiom reports; Lean exit=0; dependencies={'Quot.sound': 33, 'propext': 33}
+PASS RecursiveTrace.lean: 33 axiom reports audited.
+PASS qualified names: RecursiveTrace.lean 33/33
+=== LEAN: MetaPolicy.lean ===
+'CRTT.MetaPolicy.pay_funds' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaPolicy.pay_spent' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaPolicy.pay_preserves' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaPolicy.interpret_funds' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaPolicy.interpret_preserves' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaPolicy.interpret_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaPolicy.policyBill_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaPolicy.upgrade_funds' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaPolicy.upgrade_preserves' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaPolicy.upgrade_gain' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaPolicy.upgrade_history' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaPolicy.Witnesses.terminal_bills' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaPolicy.Witnesses.selected_legal' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaPolicy.Witnesses.selected_regret' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaPolicy.Witnesses.selected_bills' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaPolicy.Witnesses.changed_policy' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaPolicy.Witnesses.changed_bill' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaPolicy.Witnesses.actual_saving' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaPolicy.Witnesses.blocked_is_free' depends on axioms: [propext, Quot.sound]
+AUDIT MetaPolicy.lean: 19/19 axiom reports; Lean exit=0; dependencies={'Quot.sound': 19, 'propext': 19}
+PASS MetaPolicy.lean: 19 axiom reports audited.
+PASS qualified names: MetaPolicy.lean 19/19
+=== LEAN: MetaClosure.lean ===
+'CRTT.MetaClosure.upgrade_facts' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaClosure.transition_facts' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaClosure.trace_laws' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaClosure.trace_paid_balance' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaClosure.trace_liquid' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaClosure.transition_gain' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaClosure.trace_no_rejection_gain' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaClosure.run_laws' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaClosure.run_steps' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaClosure.closed_preserves' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaClosure.closed_funds' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaClosure.closed_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaClosure.closed_bill' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaClosure.closed_gain' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaClosure.closed_history' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaClosure.policyBill_le_funds' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaClosure.Witnesses.first_complete_bill' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaClosure.Witnesses.paid_rejection_erases_saving' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaClosure.Witnesses.two_accepted_changes' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaClosure.Witnesses.actual_schedule_rejections' depends on axioms: [propext, Quot.sound]
+'CRTT.MetaClosure.Witnesses.actual_schedule_deferred' depends on axioms: [propext, Quot.sound]
+AUDIT MetaClosure.lean: 21/21 axiom reports; Lean exit=0; dependencies={'Quot.sound': 21, 'propext': 21}
+PASS MetaClosure.lean: 21 axiom reports audited.
+PASS qualified names: MetaClosure.lean 21/21
+=== LEAN: Release.lean ===
+'CRTT.Release.runList_eq_close' depends on axioms: [propext, Quot.sound]
+'CRTT.Release.result_complete' depends on axioms: [propext, Quot.sound]
+'CRTT.Release.result_exhausted' depends on axioms: [propext, Quot.sound]
+'CRTT.Release.result_empty_impossible' depends on axioms: [propext, Quot.sound]
+'CRTT.Release.result_impossible_empty' depends on axioms: [propext, Quot.sound]
+'CRTT.Release.result_impossible_iff' depends on axioms: [propext, Quot.sound]
+'CRTT.Release.result_funds' depends on axioms: [propext, Quot.sound]
+'CRTT.Release.result_history' depends on axioms: [propext, Quot.sound]
+'CRTT.Release.result_bill' depends on axioms: [propext, Quot.sound]
+'CRTT.Release.result_steps' depends on axioms: [propext, Quot.sound]
+'CRTT.Release.summary_exhausted' depends on axioms: [propext, Quot.sound]
+'CRTT.Release.summary_bill' depends on axioms: [propext, Quot.sound]
+'CRTT.Release.summary_conserved' depends on axioms: [propext, Quot.sound]
+'CRTT.Release.Witnesses.costs' depends on axioms: [propext, Quot.sound]
+'CRTT.Release.Witnesses.low_liquidity' depends on axioms: [propext, Quot.sound]
+'CRTT.Release.Witnesses.fallback_control' depends on axioms: [propext, Quot.sound]
+'CRTT.Release.Witnesses.nonempty_result' depends on axioms: [propext, Quot.sound]
+'CRTT.Release.Witnesses.predecessor_result' depends on axioms: [propext, Quot.sound]
+AUDIT Release.lean: 18/18 axiom reports; Lean exit=0; dependencies={'Quot.sound': 18, 'propext': 18}
+PASS Release.lean: 18 axiom reports audited.
+PASS qualified names: Release.lean 18/18
+=== LEAN: ReleaseMain.lean ===
+AUDIT ReleaseMain.lean: 0/0 axiom reports; Lean exit=0; dependencies={}
+PASS ReleaseMain.lean: 0 axiom reports audited.
+PASS qualified names: ReleaseMain.lean 0/0
+PASS monotonicity=2048; arithmetic=3000; order=9625; independent literal h,p,a enumeration.
+canonical_pairs: 3108
+cheaper: 4137
+more_expensive: 4336
+pairs: 8529
+policy_checks: 59703
+rejected_regions: 82005
+tied: 56
+policy=none: nodes=63079, leaves=38023, actions=7453, rule_calls=0, internal_rejected=0, abstract_cost=270039
+policy=read: nodes=43757, leaves=12454, actions=7453, rule_calls=43757, internal_rejected=5669, abstract_cost=198445
+policy=price: nodes=48969, leaves=19554, actions=7453, rule_calls=48969, internal_rejected=4206, abstract_cost=235381
+policy=injective: nodes=57486, leaves=15847, actions=7453, rule_calls=57486, internal_rejected=2201, abstract_cost=249811
+policy=depth: nodes=56051, leaves=32802, actions=7453, rule_calls=56051, internal_rejected=1107, abstract_cost=296371
+policy=depth+price+injective+read: nodes=32609, leaves=2533, actions=7453, rule_calls=108817, internal_rejected=8425, abstract_cost=211446
+policy=read+injective+price+depth: nodes=32609, leaves=2533, actions=7453, rule_calls=87785, internal_rejected=8425, abstract_cost=190414
+policy=noop: nodes=63079, leaves=38023, actions=7453, rule_calls=63079, internal_rejected=0, abstract_cost=333118
+Witness early prune: nodes 40->4; cost 161->12.
+Witness noop: nodes 2->2; cost 11->13.
+Witness order: abstract cost 16 vs 25.
+PASS exact canonical certificates, scoped rejections, empty/asymmetric domains, short-circuit accounting; Lean kernel NOT executed.
+PASS independent finite models: budget_splits=15360, cover_cores=4061, duplicate_cores=4060, funded=1536, irreducible_not_minimum=328, read_cores=1691, task_pairs=512, transitions=13236, transport_witnesses=1517
+PASS no-op cost witness: 4 -> 10; not Lean execution.
+compiled_events: 699
+funded_complete: 515
+generic_resume: 10584
+learned_cheaper: 10
+learned_costlier: 505
+learned_equal: 0
+learning_bill: 38331
+learning_resume: 3090
+live_cache_hits: 144
+paid_transitions: 7525
+read_bill: 28172
+reference_bill: 8322
+subsumption_equivalence: 37440
+vs_read_cheaper: 0
+vs_read_costlier: 515
+vs_read_equal: 0
+PASS: independent finite learning model, subsumption, generic cyclic resume, paid trace, full-budget coverage, budget-sensitive counterexample. Not Lean execution.
+actual_optimality_checks: 452352
+amortization_cases: 5500
+complete_plans: 2330
+empty_reference_worlds: 320
+meta_cases: 256
+nonempty_reference_worlds: 69
+selected_reruns: 768
+tree_comparisons: 904704
+handoff_pending_compilation: 118
+handoff_remaining_jobs: 2656
+prefix_paid: 774
+prefix_with_certificates: 60
+prefix_with_compiled_core: 156
+Witness table: ((80, 21, 87, 63), (80, 53, 18, 63)) tree: ('obs', 0, ('act', 1), ('act', 2)) fixed worst: 53 meta worst incl. fee: 25
+Offline table acquisition (sum of the eight modeled runs): 465 strict amortization at uses: 17
+PASS exact/bounded tables, selected reruns, frontier handoff, no-learning control, paid trace, fixed uniform reserves, finite minimax, costly-controller and loose-bound counterexamples. Not Lean execution.
+compatible_completions: 80000
+funded_success: 162
+interval_models: 10368
+refinements: 320000
+resume_checks: 10368
+tree_comparisons: 480000
+T25 concrete reference: actual acquired cells= ((0, 0, 80), (0, 1, 21), (0, 2, 87), (0, 3, 63), (1, 1, 53), (1, 2, 18))
+T25 reserve caps: (350, 390, 390, 390)
+T25 partial acquisition: 6/8 cells, certified value=22, prepaid bill=2309; full prepaid bill=3051; actual plan bills acquired=322 vs 465.
+Positive witness is fixed ex-post schedule on known family, not an online schedule-optimality or generalization result.
+PASS interval minimax, monotone refinement, paid schedule, quiescence, split, insufficient evidence and oracle-regret controls. Not Lean execution.
+Witness common optimum: reference 0..100; decision regret=0; rectangular gap=100.
+Witness one-bit: residual=8, acquisition=2; with price=9 stop for sum objective, query for hard eps=0.
+Witness XOR: depth 1 value=10, depth 2 value=2.
+Witness differing objectives: minimax regret picks A (10), worst bill picks B (100 vs 110).
+PASS excluded-truth and empty-belief negative controls.
+acquisition_models: 36864
+belief_monotonicity: 1024
+bill_identities: 5455872
+endpoint_catalogues: 1296
+endpoint_completions: 10000
+hard_feasibility_checks: 184320
+hard_success: 168768
+interval_certificate_checks: 29760
+legal_tree_comparisons: 2727936
+pairwise_exact: 2048
+PASS finite robust regret, pairwise dominance, shared endpoints, legal-tree Bellman comparison, hard regret/observation budget, and accounting. Not Lean execution.
+PASS actual finite frontier model (not Lean execution).
+accepted: 1753
+accepted_with_action_jobs: 50
+accepted_with_certificates: 3
+action_suffix_preserved: 746
+attempts: 34705
+completed_after_attempt: 34705
+coverage_pairs: 158831
+deferred: 12000
+migration_compositions: 2000
+nonempty_action_prefixes: 116
+nonempty_certificate_prefixes: 196
+port_region_preserved: 12122
+prefixes: 2000
+rejectGain: 10251
+rejectLiquidity: 10701
+repricing_rejections: 1
+stale_offer_rejections: 3
+task_pairs: 400
+Closed depth witness: baseline 7, accepted full incremental bill 3, deferred at balance 100, rejected for liquidity at 101.
+PASS repeated replacements, stale evidence, rejected-check charge and fallback reserve protection.
+Prospective cost evidence was prepared offline; no claim of free economic witnesses or physical runtime improvement.
+absolute_embedding_cases: 625
+covered_actual_pairs: 33800
+decision_bridge_actual_pairs: 804
+decision_bridge_cases: 10000
+decision_bridge_passes: 203
+empty_cover_rejections: 100
+rectangle_implications: 2600
+refined_actual_coverage_cases: 78800
+row_gate_cases: 2604
+sound_pass_cases: 696
+strict_relative_advantage_cases: 42
+subset_refinement_cases: 10204
+T28 reference witness: modeled bills 7 -> 1; check+migration 2; net gain 4.
+Paired enclosure [(7,1),(70,64)] passes; rectangular extrema fail.
+Second row is synthetic conservative uncertainty, not a measured second world.
+Reserve 100 unchanged as a liquidity obligation; not a paid bill.
+PASS: finite relative evidence, coverage, refinement, singleton embedding, T27 margin and T28 reference witness. Not Lean execution.
+Closed witness: baseline 7, accepted total 3, rejected liquidity total 8, deferred total 7.
+Gate does not read rows before liquidity. Empty or stale offers and forged verdicts are rejected at the typed boundary model.
+accepted: 1342
+accepted_with_previous_certificates: 6
+accepted_with_previous_search_receipts: 800
+action_suffix_preserved: 98
+attempts: 17621
+completed_after_attempt: 17621
+correlated_only_accepts: 1342
+coverage_pairs: 20841
+deferred: 7425
+external_receipts: 17617
+funded_guard_cases: 37500
+invalid_application_rejections: 3
+numeric_cases: 45000
+port_region_preserved: 1785
+prefixes: 960
+rejectGain: 4420
+rejectLiquidity: 4434
+task_pairs: 320
+PASS numeric reflection, exact charges, preserved reserves, receipts and root completion. Not Lean execution.
+Positive mixed trace: baseline 7, accepted gain 4, evidence overhead 1, final bill 4.
+Negative mixed trace: baseline 7, accepted gain 4, rejected check 5, final bill 8.
+accepted: 35
+advance: 295
+attempt: 396
+connected_chains: 149
+disconnected_rejections: 146
+evidence: 196
+forged_end_rejections: 146
+net_gain_chains: 19
+paid_attempts: 173
+prefix_bill: 11760
+spent_shift: 35280
+task_pairs: 49
+transition_laws: 887
+PASS deterministic prefix bills, connected finite histories, exact cumulative ledger, provenance and root completion. Not Lean execution.
+Closed terminal incremental bills: exhausted=(0,2), pending=(7,4).
+T27 synthesized query: regret value 1; pending bill 5, exhausted incremental bill 1.
+Installed policy: original completion 7; new all-in completion 6 (synthesis/admission, query, preparation, root check, migration, execution: 1 each).
+Negative control: rejected policy synthesis/check costs 1; unchanged completion rises 7 -> 8.
+closed_switches: 1
+executed_policies: 17280
+negative_upgrade: 1
+outcome_accepted: 474
+outcome_blocked: 5760
+outcome_deferred: 864
+outcome_kept: 6912
+outcome_rejectGain: 2796
+outcome_rejectLiquidity: 474
+poison_guards: 3
+task_pairs: 48
+terminal_table_checks: 4
+PASS actual finite T23 runner, paid policy thunks, protected fallback, synthesis/installation and complete reference membership. Not Lean execution.
+Closed T30 fixture: baseline 7, one accepted upgrade 6, additional paid rejection 7.
+Two accepted changes, fixed provider: all-in bill 8 -> 7 -> 6.
+Liquidity counterexample: rejected fee 1 changes all-in bill 4 -> 10, not 4 -> 5.
+Twelve free deferred requests: finite schedule consumed, fallback completes.
+accepted: 128
+closed_runs: 965
+deferred: 1243
+episode_events: 877
+forged_trace_rejections: 1066
+no_rejection_gain_laws: 463
+provider_mismatch_rejections: 725
+rejected: 1047
+root_accepted: 19
+root_blocked: 418
+root_deferred: 51
+root_kept: 301
+root_rejectGain: 146
+root_rejectLiquidity: 30
+task_pairs: 24
+transition_laws: 2418
+PASS fixed-provider closure, bounded schedules, exact charges, preserved history, terminal completion and economic controls. Not Lean execution.
+baseline : ['impossible', 7, 103, 110, 0, 0, 0, 0, 0, 7, 0] status kept upgrades []
+single : ['impossible', 6, 104, 110, 0, 1, 1, 1, 0, 1, 3] status accepted upgrades ['accepted']
+mixed : ['impossible', 7, 103, 110, 0, 2, 2, 1, 0, 1, 3] status accepted upgrades ['accepted', 'rejected']
+double : ['impossible', 6, 104, 110, 0, 2, 2, 2, 0, 1, 2] status accepted upgrades ['accepted', 'accepted']
+fallback : ['impossible', 7, 93, 100, 0, 2, 0, 0, 0, 7, 0] status blocked upgrades ['deferred', 'deferred']
+liquidity-baseline : ['impossible', 4, 99, 103, 0, 0, 0, 0, 0, 1, 2] status accepted upgrades []
+liquidity-rejected : ['impossible', 10, 93, 103, 0, 1, 1, 0, 0, 7, 2] status rejectLiquidity upgrades ['rejected']
+nonempty : ['complete', 11, 89, 100, 0, 0, 0, 0, 2, 11, 0] status kept upgrades []
+predecessor : ['complete', 11, 89, 100, 0, 0, 0, 0, 2, 6, 0] status kept upgrades []
+PASS 9 independent release fixtures, complete canonical membership, predecessor preservation and ordered paid ledgers. Not Lean execution.
+
+=== T32 CLI: ACTUAL LEAN EXECUTION ===
+T32|baseline|impossible|7|103|110|0|0|0|0|0|7|0
+T32STATUS|baseline|CRTT.MetaPolicy.Status.kept
+T32SEARCH|baseline|CRTT.BudgetedPruning.Kind.split|1
+T32SEARCH|baseline|CRTT.BudgetedPruning.Kind.split|1
+T32SEARCH|baseline|CRTT.BudgetedPruning.Kind.prepare|1
+T32SEARCH|baseline|CRTT.BudgetedPruning.Kind.prepare|1
+T32SEARCH|baseline|CRTT.BudgetedPruning.Kind.split|1
+T32SEARCH|baseline|CRTT.BudgetedPruning.Kind.prepare|1
+T32SEARCH|baseline|CRTT.BudgetedPruning.Kind.prepare|1
+{ source := { worlds := 1,
+              ports := 2,
+              actions := 1,
+              depth := 1,
+              readTable := [[false], [false]],
+              prices := [0, 0],
+              losses := [[0]] },
+  target := { worlds := 1,
+              ports := 2,
+              actions := 1,
+              depth := 0,
+              readTable := [[false], [false]],
+              prices := [0, 0],
+              losses := [[0]] },
+  terminal := "impossible",
+  episodeStatus := "CRTT.MetaPolicy.Status.kept",
+  initialBalance := 110,
+  initialSpent := 0,
+  initialReserve := 100,
+  balance := 103,
+  spent := 7,
+  funds := 110,
+  remainingReserve := 93,
+  remainingJobs := 0,
+  finishBill := 7,
+  upgradeCount := 0,
+  paidUpgrades := 0,
+  acceptedUpgrades := 0,
+  initialCertificates := [],
+  certificates := [],
+  upgradeStatuses := [],
+  upgradeHistory := [],
+  episodeEvents := [],
+  relativeJournal := [],
+  oldHistory := [],
+  searchReceipts := [{ kind := CRTT.BudgetedPruning.Kind.split, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.split, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.prepare, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.prepare, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.split, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.prepare, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.prepare, fee := 1 }],
+  initialPolicy := "CRTT.AdaptiveObservation.Investigation.act false",
+  installedPolicy := "CRTT.AdaptiveObservation.Investigation.act false",
+  baseSearchFees := [1, 1, 1],
+  providerFees := [1, 1, 1] }
+T32|single|impossible|6|104|110|0|1|1|1|0|1|3
+T32STATUS|single|CRTT.MetaPolicy.Status.attempted (CRTT.ControllerReplacement.Verdict.accepted)
+T32UPGRADE|single|CRTT.MetaPolicy.UpgradeStatus.accepted
+T32EVENT|single|observed;answer=true;fee=1
+T32EVENT|single|prepared;fee=1;label="closed depth-obstruction example";rows=[(7, 1)];migration=1;oldReserve=100;newReserve=100;oldRuleCosts=[];newRuleCosts=[0]
+T32EVENT|single|attempted;verdict=CRTT.ControllerReplacement.Verdict.accepted
+T32JOURNAL|single|evidence;fee=1;label="T30: policy synthesis and admission"
+T32JOURNAL|single|evidence;fee=1;label="T30: observe"
+T32JOURNAL|single|evidence;fee=1;label="T30: prepare offer"
+T32JOURNAL|single|attempt;balanceBefore=107;checkFee=1;verdict=CRTT.ControllerReplacement.Verdict.accepted;debit=2;label="closed depth-obstruction example";rows=[(7, 1)];migration=1;oldReserve=100;newReserve=100;oldRuleCosts=[];newRuleCosts=[0]
+T32SEARCH|single|CRTT.BudgetedPruning.Kind.rule|1
+{ source := { worlds := 1,
+              ports := 2,
+              actions := 1,
+              depth := 1,
+              readTable := [[false], [false]],
+              prices := [0, 0],
+              losses := [[0]] },
+  target := { worlds := 1,
+              ports := 2,
+              actions := 1,
+              depth := 0,
+              readTable := [[false], [false]],
+              prices := [0, 0],
+              losses := [[0]] },
+  terminal := "impossible",
+  episodeStatus := "CRTT.MetaPolicy.Status.attempted (CRTT.ControllerReplacement.Verdict.accepted)",
+  initialBalance := 110,
+  initialSpent := 0,
+  initialReserve := 100,
+  balance := 104,
+  spent := 6,
+  funds := 110,
+  remainingReserve := 99,
+  remainingJobs := 0,
+  finishBill := 1,
+  upgradeCount := 1,
+  paidUpgrades := 1,
+  acceptedUpgrades := 1,
+  initialCertificates := [],
+  certificates := [],
+  upgradeStatuses := ["CRTT.MetaPolicy.UpgradeStatus.accepted"],
+  upgradeHistory := ["fee=1;status=CRTT.MetaPolicy.UpgradeStatus.accepted;balanceBefore=110;oldLower=7;newUpper=6;prior=CRTT.AdaptiveObservation.Investigation.act false;candidate=CRTT.AdaptiveObservation.Investigation.observe\n  ()\n  (CRTT.AdaptiveObservation.Investigation.act false)\n  (CRTT.AdaptiveObservation.Investigation.act true)"],
+  episodeEvents := ["observed;answer=true;fee=1",
+                    "prepared;fee=1;label=\"closed depth-obstruction example\";rows=[(7, 1)];migration=1;oldReserve=100;newReserve=100;oldRuleCosts=[];newRuleCosts=[0]",
+                    "attempted;verdict=CRTT.ControllerReplacement.Verdict.accepted"],
+  relativeJournal := ["evidence;fee=1;label=\"T30: policy synthesis and admission\"",
+                      "evidence;fee=1;label=\"T30: observe\"", "evidence;fee=1;label=\"T30: prepare offer\"",
+                      "attempt;balanceBefore=107;checkFee=1;verdict=CRTT.ControllerReplacement.Verdict.accepted;debit=2;label=\"closed depth-obstruction example\";rows=[(7, 1)];migration=1;oldReserve=100;newReserve=100;oldRuleCosts=[];newRuleCosts=[0]"],
+  oldHistory := [],
+  searchReceipts := [{ kind := CRTT.BudgetedPruning.Kind.rule, fee := 1 }],
+  initialPolicy := "CRTT.AdaptiveObservation.Investigation.act false",
+  installedPolicy := "CRTT.AdaptiveObservation.Investigation.observe\n  ()\n  (CRTT.AdaptiveObservation.Investigation.act false)\n  (CRTT.AdaptiveObservation.Investigation.act true)",
+  baseSearchFees := [1, 1, 1],
+  providerFees := [1, 1, 1] }
+T32|mixed|impossible|7|103|110|0|2|2|1|0|1|3
+T32STATUS|mixed|CRTT.MetaPolicy.Status.attempted (CRTT.ControllerReplacement.Verdict.accepted)
+T32UPGRADE|mixed|CRTT.MetaPolicy.UpgradeStatus.accepted
+T32UPGRADE|mixed|CRTT.MetaPolicy.UpgradeStatus.rejected
+T32EVENT|mixed|observed;answer=true;fee=1
+T32EVENT|mixed|prepared;fee=1;label="closed depth-obstruction example";rows=[(7, 1)];migration=1;oldReserve=100;newReserve=100;oldRuleCosts=[];newRuleCosts=[0]
+T32EVENT|mixed|attempted;verdict=CRTT.ControllerReplacement.Verdict.accepted
+T32JOURNAL|mixed|evidence;fee=1;label="T30: policy synthesis and admission"
+T32JOURNAL|mixed|evidence;fee=1;label="T30: policy synthesis and admission"
+T32JOURNAL|mixed|evidence;fee=1;label="T30: observe"
+T32JOURNAL|mixed|evidence;fee=1;label="T30: prepare offer"
+T32JOURNAL|mixed|attempt;balanceBefore=106;checkFee=1;verdict=CRTT.ControllerReplacement.Verdict.accepted;debit=2;label="closed depth-obstruction example";rows=[(7, 1)];migration=1;oldReserve=100;newReserve=100;oldRuleCosts=[];newRuleCosts=[0]
+T32SEARCH|mixed|CRTT.BudgetedPruning.Kind.rule|1
+{ source := { worlds := 1,
+              ports := 2,
+              actions := 1,
+              depth := 1,
+              readTable := [[false], [false]],
+              prices := [0, 0],
+              losses := [[0]] },
+  target := { worlds := 1,
+              ports := 2,
+              actions := 1,
+              depth := 0,
+              readTable := [[false], [false]],
+              prices := [0, 0],
+              losses := [[0]] },
+  terminal := "impossible",
+  episodeStatus := "CRTT.MetaPolicy.Status.attempted (CRTT.ControllerReplacement.Verdict.accepted)",
+  initialBalance := 110,
+  initialSpent := 0,
+  initialReserve := 100,
+  balance := 103,
+  spent := 7,
+  funds := 110,
+  remainingReserve := 99,
+  remainingJobs := 0,
+  finishBill := 1,
+  upgradeCount := 2,
+  paidUpgrades := 2,
+  acceptedUpgrades := 1,
+  initialCertificates := [],
+  certificates := [],
+  upgradeStatuses := ["CRTT.MetaPolicy.UpgradeStatus.accepted", "CRTT.MetaPolicy.UpgradeStatus.rejected"],
+  upgradeHistory := ["fee=1;status=CRTT.MetaPolicy.UpgradeStatus.accepted;balanceBefore=110;oldLower=7;newUpper=6;prior=CRTT.AdaptiveObservation.Investigation.act false;candidate=CRTT.AdaptiveObservation.Investigation.observe\n  ()\n  (CRTT.AdaptiveObservation.Investigation.act false)\n  (CRTT.AdaptiveObservation.Investigation.act true)",
+                     "fee=1;status=CRTT.MetaPolicy.UpgradeStatus.rejected;balanceBefore=109;oldLower=6;newUpper=7;prior=CRTT.AdaptiveObservation.Investigation.observe\n  ()\n  (CRTT.AdaptiveObservation.Investigation.act false)\n  (CRTT.AdaptiveObservation.Investigation.act true);candidate=CRTT.AdaptiveObservation.Investigation.observe\n  ()\n  (CRTT.AdaptiveObservation.Investigation.act false)\n  (CRTT.AdaptiveObservation.Investigation.act true)"],
+  episodeEvents := ["observed;answer=true;fee=1",
+                    "prepared;fee=1;label=\"closed depth-obstruction example\";rows=[(7, 1)];migration=1;oldReserve=100;newReserve=100;oldRuleCosts=[];newRuleCosts=[0]",
+                    "attempted;verdict=CRTT.ControllerReplacement.Verdict.accepted"],
+  relativeJournal := ["evidence;fee=1;label=\"T30: policy synthesis and admission\"",
+                      "evidence;fee=1;label=\"T30: policy synthesis and admission\"",
+                      "evidence;fee=1;label=\"T30: observe\"", "evidence;fee=1;label=\"T30: prepare offer\"",
+                      "attempt;balanceBefore=106;checkFee=1;verdict=CRTT.ControllerReplacement.Verdict.accepted;debit=2;label=\"closed depth-obstruction example\";rows=[(7, 1)];migration=1;oldReserve=100;newReserve=100;oldRuleCosts=[];newRuleCosts=[0]"],
+  oldHistory := [],
+  searchReceipts := [{ kind := CRTT.BudgetedPruning.Kind.rule, fee := 1 }],
+  initialPolicy := "CRTT.AdaptiveObservation.Investigation.act false",
+  installedPolicy := "CRTT.AdaptiveObservation.Investigation.observe\n  ()\n  (CRTT.AdaptiveObservation.Investigation.act false)\n  (CRTT.AdaptiveObservation.Investigation.act true)",
+  baseSearchFees := [1, 1, 1],
+  providerFees := [1, 1, 1] }
+T32|double|impossible|6|104|110|0|2|2|2|0|1|2
+T32STATUS|double|CRTT.MetaPolicy.Status.attempted (CRTT.ControllerReplacement.Verdict.accepted)
+T32UPGRADE|double|CRTT.MetaPolicy.UpgradeStatus.accepted
+T32UPGRADE|double|CRTT.MetaPolicy.UpgradeStatus.accepted
+T32EVENT|double|prepared;fee=1;label="closed depth-obstruction example";rows=[(7, 1)];migration=1;oldReserve=100;newReserve=100;oldRuleCosts=[];newRuleCosts=[0]
+T32EVENT|double|attempted;verdict=CRTT.ControllerReplacement.Verdict.accepted
+T32JOURNAL|double|evidence;fee=1;label="T30: policy synthesis and admission"
+T32JOURNAL|double|evidence;fee=1;label="T30: policy synthesis and admission"
+T32JOURNAL|double|evidence;fee=1;label="T30: prepare offer"
+T32JOURNAL|double|attempt;balanceBefore=107;checkFee=1;verdict=CRTT.ControllerReplacement.Verdict.accepted;debit=2;label="closed depth-obstruction example";rows=[(7, 1)];migration=1;oldReserve=100;newReserve=100;oldRuleCosts=[];newRuleCosts=[0]
+T32SEARCH|double|CRTT.BudgetedPruning.Kind.rule|1
+{ source := { worlds := 1,
+              ports := 2,
+              actions := 1,
+              depth := 1,
+              readTable := [[false], [false]],
+              prices := [0, 0],
+              losses := [[0]] },
+  target := { worlds := 1,
+              ports := 2,
+              actions := 1,
+              depth := 0,
+              readTable := [[false], [false]],
+              prices := [0, 0],
+              losses := [[0]] },
+  terminal := "impossible",
+  episodeStatus := "CRTT.MetaPolicy.Status.attempted (CRTT.ControllerReplacement.Verdict.accepted)",
+  initialBalance := 110,
+  initialSpent := 0,
+  initialReserve := 100,
+  balance := 104,
+  spent := 6,
+  funds := 110,
+  remainingReserve := 99,
+  remainingJobs := 0,
+  finishBill := 1,
+  upgradeCount := 2,
+  paidUpgrades := 2,
+  acceptedUpgrades := 2,
+  initialCertificates := [],
+  certificates := [],
+  upgradeStatuses := ["CRTT.MetaPolicy.UpgradeStatus.accepted", "CRTT.MetaPolicy.UpgradeStatus.accepted"],
+  upgradeHistory := ["fee=1;status=CRTT.MetaPolicy.UpgradeStatus.accepted;balanceBefore=110;oldLower=8;newUpper=7;prior=CRTT.AdaptiveObservation.Investigation.observe\n  ()\n  (CRTT.AdaptiveObservation.Investigation.act false)\n  (CRTT.AdaptiveObservation.Investigation.observe\n    ()\n    (CRTT.AdaptiveObservation.Investigation.act false)\n    (CRTT.AdaptiveObservation.Investigation.observe\n      ()\n      (CRTT.AdaptiveObservation.Investigation.act false)\n      (CRTT.AdaptiveObservation.Investigation.observe\n        ()\n        (CRTT.AdaptiveObservation.Investigation.act false)\n        (CRTT.AdaptiveObservation.Investigation.act true))));candidate=CRTT.AdaptiveObservation.Investigation.observe\n  ()\n  (CRTT.AdaptiveObservation.Investigation.act false)\n  (CRTT.AdaptiveObservation.Investigation.observe\n    ()\n    (CRTT.AdaptiveObservation.Investigation.act false)\n    (CRTT.AdaptiveObservation.Investigation.act true))",
+                     "fee=1;status=CRTT.MetaPolicy.UpgradeStatus.accepted;balanceBefore=109;oldLower=7;newUpper=6;prior=CRTT.AdaptiveObservation.Investigation.observe\n  ()\n  (CRTT.AdaptiveObservation.Investigation.act false)\n  (CRTT.AdaptiveObservation.Investigation.observe\n    ()\n    (CRTT.AdaptiveObservation.Investigation.act false)\n    (CRTT.AdaptiveObservation.Investigation.act true));candidate=CRTT.AdaptiveObservation.Investigation.act true"],
+  episodeEvents := ["prepared;fee=1;label=\"closed depth-obstruction example\";rows=[(7, 1)];migration=1;oldReserve=100;newReserve=100;oldRuleCosts=[];newRuleCosts=[0]",
+                    "attempted;verdict=CRTT.ControllerReplacement.Verdict.accepted"],
+  relativeJournal := ["evidence;fee=1;label=\"T30: policy synthesis and admission\"",
+                      "evidence;fee=1;label=\"T30: policy synthesis and admission\"",
+                      "evidence;fee=1;label=\"T30: prepare offer\"",
+                      "attempt;balanceBefore=107;checkFee=1;verdict=CRTT.ControllerReplacement.Verdict.accepted;debit=2;label=\"closed depth-obstruction example\";rows=[(7, 1)];migration=1;oldReserve=100;newReserve=100;oldRuleCosts=[];newRuleCosts=[0]"],
+  oldHistory := [],
+  searchReceipts := [{ kind := CRTT.BudgetedPruning.Kind.rule, fee := 1 }],
+  initialPolicy := "CRTT.AdaptiveObservation.Investigation.observe\n  ()\n  (CRTT.AdaptiveObservation.Investigation.act false)\n  (CRTT.AdaptiveObservation.Investigation.observe\n    ()\n    (CRTT.AdaptiveObservation.Investigation.act false)\n    (CRTT.AdaptiveObservation.Investigation.observe\n      ()\n      (CRTT.AdaptiveObservation.Investigation.act false)\n      (CRTT.AdaptiveObservation.Investigation.observe\n        ()\n        (CRTT.AdaptiveObservation.Investigation.act false)\n        (CRTT.AdaptiveObservation.Investigation.act true))))",
+  installedPolicy := "CRTT.AdaptiveObservation.Investigation.act true",
+  baseSearchFees := [1, 1, 1],
+  providerFees := [1, 1, 1] }
+T32|fallback|impossible|7|93|100|0|2|0|0|0|7|0
+T32STATUS|fallback|CRTT.MetaPolicy.Status.blocked
+T32UPGRADE|fallback|CRTT.MetaPolicy.UpgradeStatus.deferred
+T32UPGRADE|fallback|CRTT.MetaPolicy.UpgradeStatus.deferred
+T32SEARCH|fallback|CRTT.BudgetedPruning.Kind.split|1
+T32SEARCH|fallback|CRTT.BudgetedPruning.Kind.split|1
+T32SEARCH|fallback|CRTT.BudgetedPruning.Kind.prepare|1
+T32SEARCH|fallback|CRTT.BudgetedPruning.Kind.prepare|1
+T32SEARCH|fallback|CRTT.BudgetedPruning.Kind.split|1
+T32SEARCH|fallback|CRTT.BudgetedPruning.Kind.prepare|1
+T32SEARCH|fallback|CRTT.BudgetedPruning.Kind.prepare|1
+{ source := { worlds := 1,
+              ports := 2,
+              actions := 1,
+              depth := 1,
+              readTable := [[false], [false]],
+              prices := [0, 0],
+              losses := [[0]] },
+  target := { worlds := 1,
+              ports := 2,
+              actions := 1,
+              depth := 0,
+              readTable := [[false], [false]],
+              prices := [0, 0],
+              losses := [[0]] },
+  terminal := "impossible",
+  episodeStatus := "CRTT.MetaPolicy.Status.blocked",
+  initialBalance := 100,
+  initialSpent := 0,
+  initialReserve := 100,
+  balance := 93,
+  spent := 7,
+  funds := 100,
+  remainingReserve := 93,
+  remainingJobs := 0,
+  finishBill := 7,
+  upgradeCount := 2,
+  paidUpgrades := 0,
+  acceptedUpgrades := 0,
+  initialCertificates := [],
+  certificates := [],
+  upgradeStatuses := ["CRTT.MetaPolicy.UpgradeStatus.deferred", "CRTT.MetaPolicy.UpgradeStatus.deferred"],
+  upgradeHistory := [],
+  episodeEvents := [],
+  relativeJournal := [],
+  oldHistory := [],
+  searchReceipts := [{ kind := CRTT.BudgetedPruning.Kind.split, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.split, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.prepare, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.prepare, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.split, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.prepare, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.prepare, fee := 1 }],
+  initialPolicy := "CRTT.AdaptiveObservation.Investigation.observe\n  ()\n  (CRTT.AdaptiveObservation.Investigation.act false)\n  (CRTT.AdaptiveObservation.Investigation.act true)",
+  installedPolicy := "CRTT.AdaptiveObservation.Investigation.observe\n  ()\n  (CRTT.AdaptiveObservation.Investigation.act false)\n  (CRTT.AdaptiveObservation.Investigation.act true)",
+  baseSearchFees := [1, 1, 1],
+  providerFees := [1, 1, 1] }
+T32|liquidity-baseline|impossible|4|99|103|0|0|0|0|0|1|2
+T32STATUS|liquidity-baseline|CRTT.MetaPolicy.Status.attempted (CRTT.ControllerReplacement.Verdict.accepted)
+T32EVENT|liquidity-baseline|prepared;fee=1;label="closed depth-obstruction example";rows=[(7, 1)];migration=1;oldReserve=100;newReserve=100;oldRuleCosts=[];newRuleCosts=[0]
+T32EVENT|liquidity-baseline|attempted;verdict=CRTT.ControllerReplacement.Verdict.accepted
+T32JOURNAL|liquidity-baseline|evidence;fee=1;label="T30: prepare offer"
+T32JOURNAL|liquidity-baseline|attempt;balanceBefore=102;checkFee=1;verdict=CRTT.ControllerReplacement.Verdict.accepted;debit=2;label="closed depth-obstruction example";rows=[(7, 1)];migration=1;oldReserve=100;newReserve=100;oldRuleCosts=[];newRuleCosts=[0]
+T32SEARCH|liquidity-baseline|CRTT.BudgetedPruning.Kind.rule|1
+{ source := { worlds := 1,
+              ports := 2,
+              actions := 1,
+              depth := 1,
+              readTable := [[false], [false]],
+              prices := [0, 0],
+              losses := [[0]] },
+  target := { worlds := 1,
+              ports := 2,
+              actions := 1,
+              depth := 0,
+              readTable := [[false], [false]],
+              prices := [0, 0],
+              losses := [[0]] },
+  terminal := "impossible",
+  episodeStatus := "CRTT.MetaPolicy.Status.attempted (CRTT.ControllerReplacement.Verdict.accepted)",
+  initialBalance := 103,
+  initialSpent := 0,
+  initialReserve := 100,
+  balance := 99,
+  spent := 4,
+  funds := 103,
+  remainingReserve := 99,
+  remainingJobs := 0,
+  finishBill := 1,
+  upgradeCount := 0,
+  paidUpgrades := 0,
+  acceptedUpgrades := 0,
+  initialCertificates := [],
+  certificates := [],
+  upgradeStatuses := [],
+  upgradeHistory := [],
+  episodeEvents := ["prepared;fee=1;label=\"closed depth-obstruction example\";rows=[(7, 1)];migration=1;oldReserve=100;newReserve=100;oldRuleCosts=[];newRuleCosts=[0]",
+                    "attempted;verdict=CRTT.ControllerReplacement.Verdict.accepted"],
+  relativeJournal := ["evidence;fee=1;label=\"T30: prepare offer\"",
+                      "attempt;balanceBefore=102;checkFee=1;verdict=CRTT.ControllerReplacement.Verdict.accepted;debit=2;label=\"closed depth-obstruction example\";rows=[(7, 1)];migration=1;oldReserve=100;newReserve=100;oldRuleCosts=[];newRuleCosts=[0]"],
+  oldHistory := [],
+  searchReceipts := [{ kind := CRTT.BudgetedPruning.Kind.rule, fee := 1 }],
+  initialPolicy := "CRTT.AdaptiveObservation.Investigation.act true",
+  installedPolicy := "CRTT.AdaptiveObservation.Investigation.act true",
+  baseSearchFees := [1, 1, 1],
+  providerFees := [1, 1, 1] }
+T32|liquidity-rejected|impossible|10|93|103|0|1|1|0|0|7|2
+T32STATUS|liquidity-rejected|CRTT.MetaPolicy.Status.attempted (CRTT.ControllerReplacement.Verdict.rejectLiquidity)
+T32UPGRADE|liquidity-rejected|CRTT.MetaPolicy.UpgradeStatus.rejected
+T32EVENT|liquidity-rejected|prepared;fee=1;label="closed depth-obstruction example";rows=[(7, 1)];migration=1;oldReserve=100;newReserve=100;oldRuleCosts=[];newRuleCosts=[0]
+T32EVENT|liquidity-rejected|attempted;verdict=CRTT.ControllerReplacement.Verdict.rejectLiquidity
+T32JOURNAL|liquidity-rejected|evidence;fee=1;label="T30: policy synthesis and admission"
+T32JOURNAL|liquidity-rejected|evidence;fee=1;label="T30: prepare offer"
+T32JOURNAL|liquidity-rejected|attempt;balanceBefore=101;checkFee=1;verdict=CRTT.ControllerReplacement.Verdict.rejectLiquidity;debit=1;label="closed depth-obstruction example";rows=[(7, 1)];migration=1;oldReserve=100;newReserve=100;oldRuleCosts=[];newRuleCosts=[0]
+T32SEARCH|liquidity-rejected|CRTT.BudgetedPruning.Kind.split|1
+T32SEARCH|liquidity-rejected|CRTT.BudgetedPruning.Kind.split|1
+T32SEARCH|liquidity-rejected|CRTT.BudgetedPruning.Kind.prepare|1
+T32SEARCH|liquidity-rejected|CRTT.BudgetedPruning.Kind.prepare|1
+T32SEARCH|liquidity-rejected|CRTT.BudgetedPruning.Kind.split|1
+T32SEARCH|liquidity-rejected|CRTT.BudgetedPruning.Kind.prepare|1
+T32SEARCH|liquidity-rejected|CRTT.BudgetedPruning.Kind.prepare|1
+{ source := { worlds := 1,
+              ports := 2,
+              actions := 1,
+              depth := 1,
+              readTable := [[false], [false]],
+              prices := [0, 0],
+              losses := [[0]] },
+  target := { worlds := 1,
+              ports := 2,
+              actions := 1,
+              depth := 0,
+              readTable := [[false], [false]],
+              prices := [0, 0],
+              losses := [[0]] },
+  terminal := "impossible",
+  episodeStatus := "CRTT.MetaPolicy.Status.attempted (CRTT.ControllerReplacement.Verdict.rejectLiquidity)",
+  initialBalance := 103,
+  initialSpent := 0,
+  initialReserve := 100,
+  balance := 93,
+  spent := 10,
+  funds := 103,
+  remainingReserve := 93,
+  remainingJobs := 0,
+  finishBill := 7,
+  upgradeCount := 1,
+  paidUpgrades := 1,
+  acceptedUpgrades := 0,
+  initialCertificates := [],
+  certificates := [],
+  upgradeStatuses := ["CRTT.MetaPolicy.UpgradeStatus.rejected"],
+  upgradeHistory := ["fee=1;status=CRTT.MetaPolicy.UpgradeStatus.rejected;balanceBefore=103;oldLower=0;newUpper=103;prior=CRTT.AdaptiveObservation.Investigation.act true;candidate=CRTT.AdaptiveObservation.Investigation.act true"],
+  episodeEvents := ["prepared;fee=1;label=\"closed depth-obstruction example\";rows=[(7, 1)];migration=1;oldReserve=100;newReserve=100;oldRuleCosts=[];newRuleCosts=[0]",
+                    "attempted;verdict=CRTT.ControllerReplacement.Verdict.rejectLiquidity"],
+  relativeJournal := ["evidence;fee=1;label=\"T30: policy synthesis and admission\"",
+                      "evidence;fee=1;label=\"T30: prepare offer\"",
+                      "attempt;balanceBefore=101;checkFee=1;verdict=CRTT.ControllerReplacement.Verdict.rejectLiquidity;debit=1;label=\"closed depth-obstruction example\";rows=[(7, 1)];migration=1;oldReserve=100;newReserve=100;oldRuleCosts=[];newRuleCosts=[0]"],
+  oldHistory := [],
+  searchReceipts := [{ kind := CRTT.BudgetedPruning.Kind.split, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.split, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.prepare, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.prepare, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.split, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.prepare, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.prepare, fee := 1 }],
+  initialPolicy := "CRTT.AdaptiveObservation.Investigation.act true",
+  installedPolicy := "CRTT.AdaptiveObservation.Investigation.act true",
+  baseSearchFees := [1, 1, 1],
+  providerFees := [1, 1, 1] }
+T32|nonempty|complete|11|89|100|0|0|0|0|2|11|0
+T32STATUS|nonempty|CRTT.MetaPolicy.Status.kept
+T32SEARCH|nonempty|CRTT.BudgetedPruning.Kind.split|1
+T32SEARCH|nonempty|CRTT.BudgetedPruning.Kind.split|1
+T32SEARCH|nonempty|CRTT.BudgetedPruning.Kind.prepare|1
+T32SEARCH|nonempty|CRTT.BudgetedPruning.Kind.prepare|1
+T32SEARCH|nonempty|CRTT.BudgetedPruning.Kind.action|1
+T32SEARCH|nonempty|CRTT.BudgetedPruning.Kind.action|1
+T32SEARCH|nonempty|CRTT.BudgetedPruning.Kind.split|1
+T32SEARCH|nonempty|CRTT.BudgetedPruning.Kind.prepare|1
+T32SEARCH|nonempty|CRTT.BudgetedPruning.Kind.action|1
+T32SEARCH|nonempty|CRTT.BudgetedPruning.Kind.action|1
+T32SEARCH|nonempty|CRTT.BudgetedPruning.Kind.prepare|1
+T32CERT|nonempty|0|0,1|0
+T32CERT|nonempty|0|1,0|0
+{ source := { worlds := 1,
+              ports := 2,
+              actions := 1,
+              depth := 1,
+              readTable := [[false], [false]],
+              prices := [0, 0],
+              losses := [[0]] },
+  target := { worlds := 1,
+              ports := 2,
+              actions := 1,
+              depth := 1,
+              readTable := [[false], [false]],
+              prices := [0, 0],
+              losses := [[0]] },
+  terminal := "complete",
+  episodeStatus := "CRTT.MetaPolicy.Status.kept",
+  initialBalance := 100,
+  initialSpent := 0,
+  initialReserve := 100,
+  balance := 89,
+  spent := 11,
+  funds := 100,
+  remainingReserve := 89,
+  remainingJobs := 0,
+  finishBill := 11,
+  upgradeCount := 0,
+  paidUpgrades := 0,
+  acceptedUpgrades := 0,
+  initialCertificates := [],
+  certificates := [{ worlds := [0], ports := [0, 1], actions := [0] },
+                   { worlds := [0], ports := [1, 0], actions := [0] }],
+  upgradeStatuses := [],
+  upgradeHistory := [],
+  episodeEvents := [],
+  relativeJournal := [],
+  oldHistory := [],
+  searchReceipts := [{ kind := CRTT.BudgetedPruning.Kind.split, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.split, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.prepare, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.prepare, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.action, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.action, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.split, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.prepare, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.action, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.action, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.prepare, fee := 1 }],
+  initialPolicy := "CRTT.AdaptiveObservation.Investigation.act false",
+  installedPolicy := "CRTT.AdaptiveObservation.Investigation.act false",
+  baseSearchFees := [1, 1, 1],
+  providerFees := [1, 1, 1] }
+T32|predecessor|complete|11|89|100|0|0|0|0|2|6|0
+T32STATUS|predecessor|CRTT.MetaPolicy.Status.kept
+T32SEARCH|predecessor|CRTT.BudgetedPruning.Kind.split|1
+T32SEARCH|predecessor|CRTT.BudgetedPruning.Kind.split|1
+T32SEARCH|predecessor|CRTT.BudgetedPruning.Kind.prepare|1
+T32SEARCH|predecessor|CRTT.BudgetedPruning.Kind.prepare|1
+T32SEARCH|predecessor|CRTT.BudgetedPruning.Kind.action|1
+T32SEARCH|predecessor|CRTT.BudgetedPruning.Kind.action|1
+T32SEARCH|predecessor|CRTT.BudgetedPruning.Kind.split|1
+T32SEARCH|predecessor|CRTT.BudgetedPruning.Kind.prepare|1
+T32SEARCH|predecessor|CRTT.BudgetedPruning.Kind.action|1
+T32SEARCH|predecessor|CRTT.BudgetedPruning.Kind.action|1
+T32SEARCH|predecessor|CRTT.BudgetedPruning.Kind.prepare|1
+T32PRIOR|predecessor|0|0,1|0
+T32CERT|predecessor|0|0,1|0
+T32CERT|predecessor|0|1,0|0
+{ source := { worlds := 1,
+              ports := 2,
+              actions := 1,
+              depth := 1,
+              readTable := [[false], [false]],
+              prices := [0, 0],
+              losses := [[0]] },
+  target := { worlds := 1,
+              ports := 2,
+              actions := 1,
+              depth := 1,
+              readTable := [[false], [false]],
+              prices := [0, 0],
+              losses := [[0]] },
+  terminal := "complete",
+  episodeStatus := "CRTT.MetaPolicy.Status.kept",
+  initialBalance := 95,
+  initialSpent := 5,
+  initialReserve := 95,
+  balance := 89,
+  spent := 11,
+  funds := 100,
+  remainingReserve := 89,
+  remainingJobs := 0,
+  finishBill := 6,
+  upgradeCount := 0,
+  paidUpgrades := 0,
+  acceptedUpgrades := 0,
+  initialCertificates := [{ worlds := [0], ports := [0, 1], actions := [0] }],
+  certificates := [{ worlds := [0], ports := [0, 1], actions := [0] },
+                   { worlds := [0], ports := [1, 0], actions := [0] }],
+  upgradeStatuses := [],
+  upgradeHistory := [],
+  episodeEvents := [],
+  relativeJournal := [],
+  oldHistory := [],
+  searchReceipts := [{ kind := CRTT.BudgetedPruning.Kind.split, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.split, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.prepare, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.prepare, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.action, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.action, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.split, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.prepare, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.action, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.action, fee := 1 },
+                     { kind := CRTT.BudgetedPruning.Kind.prepare, fee := 1 }],
+  initialPolicy := "CRTT.AdaptiveObservation.Investigation.act false",
+  installedPolicy := "CRTT.AdaptiveObservation.Investigation.act false",
+  baseSearchFees := [1, 1, 1],
+  providerFees := [1, 1, 1] }
+AUDIT ReleaseMain.lean: 0/0 axiom reports; Lean exit=0; dependencies={}
+PASS ReleaseMain.lean: 0 axiom reports audited.
+PASS qualified names: ReleaseMain.lean 0/0
+baseline : ['impossible', 7, 103, 110, 0, 0, 0, 0, 0, 7, 0] status kept upgrades []
+single : ['impossible', 6, 104, 110, 0, 1, 1, 1, 0, 1, 3] status accepted upgrades ['accepted']
+mixed : ['impossible', 7, 103, 110, 0, 2, 2, 1, 0, 1, 3] status accepted upgrades ['accepted', 'rejected']
+double : ['impossible', 6, 104, 110, 0, 2, 2, 2, 0, 1, 2] status accepted upgrades ['accepted', 'accepted']
+fallback : ['impossible', 7, 93, 100, 0, 2, 0, 0, 0, 7, 0] status blocked upgrades ['deferred', 'deferred']
+liquidity-baseline : ['impossible', 4, 99, 103, 0, 0, 0, 0, 0, 1, 2] status accepted upgrades []
+liquidity-rejected : ['impossible', 10, 93, 103, 0, 1, 1, 0, 0, 7, 2] status rejectLiquidity upgrades ['rejected']
+nonempty : ['complete', 11, 89, 100, 0, 0, 0, 0, 2, 11, 0] status kept upgrades []
+predecessor : ['complete', 11, 89, 100, 0, 0, 0, 0, 2, 6, 0] status kept upgrades []
+PASS 9 independent release fixtures, complete canonical membership, predecessor preservation and ordered paid ledgers. Not Lean execution.
+PASS actual Lean runtime projection against independent finite reference: {'T32': 9, 'T32CERT': 4, 'T32EVENT': 12, 'T32JOURNAL': 18, 'T32PRIOR': 1, 'T32SEARCH': 47, 'T32STATUS': 9, 'T32UPGRADE': 8}
+
+PASS: T32 complete manifest, Lean compilation, 542 audited reports, finite checks and actual CLI/reference agreement.

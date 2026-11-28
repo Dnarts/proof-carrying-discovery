@@ -1,0 +1,11 @@
+compatible_completions: 80000
+funded_success: 162
+interval_models: 10368
+refinements: 320000
+resume_checks: 10368
+tree_comparisons: 480000
+T25 concrete reference: actual acquired cells= ((0, 0, 80), (0, 1, 21), (0, 2, 87), (0, 3, 63), (1, 1, 53), (1, 2, 18))
+T25 reserve caps: (350, 390, 390, 390)
+T25 partial acquisition: 6/8 cells, certified value=22, prepaid bill=2309; full prepaid bill=3051; actual plan bills acquired=322 vs 465.
+Positive witness is fixed ex-post schedule on known family, not an online schedule-optimality or generalization result.
+PASS interval minimax, monotone refinement, paid schedule, quiescence, split, insufficient evidence and oracle-regret controls. Not Lean execution.

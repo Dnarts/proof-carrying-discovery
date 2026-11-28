@@ -1,0 +1,10 @@
+baseline : ['impossible', 7, 103, 110, 0, 0, 0, 0, 0, 7, 0] status kept upgrades []
+single : ['impossible', 6, 104, 110, 0, 1, 1, 1, 0, 1, 3] status accepted upgrades ['accepted']
+mixed : ['impossible', 7, 103, 110, 0, 2, 2, 1, 0, 1, 3] status accepted upgrades ['accepted', 'rejected']
+double : ['impossible', 6, 104, 110, 0, 2, 2, 2, 0, 1, 2] status accepted upgrades ['accepted', 'accepted']
+fallback : ['impossible', 7, 93, 100, 0, 2, 0, 0, 0, 7, 0] status blocked upgrades ['deferred', 'deferred']
+liquidity-baseline : ['impossible', 4, 99, 103, 0, 0, 0, 0, 0, 1, 2] status accepted upgrades []
+liquidity-rejected : ['impossible', 10, 93, 103, 0, 1, 1, 0, 0, 7, 2] status rejectLiquidity upgrades ['rejected']
+nonempty : ['complete', 11, 89, 100, 0, 0, 0, 0, 2, 11, 0] status kept upgrades []
+predecessor : ['complete', 11, 89, 100, 0, 0, 0, 0, 2, 6, 0] status kept upgrades []
+PASS 9 independent release fixtures, complete canonical membership, predecessor preservation and ordered paid ledgers. Not Lean execution.

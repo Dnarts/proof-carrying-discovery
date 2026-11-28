@@ -1,0 +1,16 @@
+actual_optimality_checks: 452352
+amortization_cases: 5500
+complete_plans: 2330
+empty_reference_worlds: 320
+meta_cases: 256
+nonempty_reference_worlds: 69
+selected_reruns: 768
+tree_comparisons: 904704
+handoff_pending_compilation: 118
+handoff_remaining_jobs: 2656
+prefix_paid: 774
+prefix_with_certificates: 60
+prefix_with_compiled_core: 156
+Witness table: ((80, 21, 87, 63), (80, 53, 18, 63)) tree: ('obs', 0, ('act', 1), ('act', 2)) fixed worst: 53 meta worst incl. fee: 25
+Offline table acquisition (sum of the eight modeled runs): 465 strict amortization at uses: 17
+PASS exact/bounded tables, selected reruns, frontier handoff, no-learning control, paid trace, fixed uniform reserves, finite minimax, costly-controller and loose-bound counterexamples. Not Lean execution.
