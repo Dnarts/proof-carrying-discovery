@@ -43,8 +43,8 @@
   "source_russian_gate11_12_sha256": "493a969798afec0f9084dfe8d351f7af881a35e238fa60a9ce616d140f1e9262",
   "sources": {
     "docs/PREPRINT_LANGUAGES.md": {
-      "bytes": 4532,
-      "sha256": "56df2312e1d115168f04e201190f7d3c242bdbe1038dc3b7162a7542795851d3"
+      "bytes": 11633,
+      "sha256": "954060ec2fda7833a8d9883ef644092753018c6567033e40232e110c97e96bd1"
     },
     "docs/translation_release.py": {
       "bytes": 4807,
@@ -71,8 +71,8 @@
       "sha256": "d5dc4c32db2171e97730b2b43485b036546cc6a35900ab8c119ac66110ee1b23"
     },
     "papers/hypothesis-language/translations/gate11-gate12-v12.3/README.md": {
-      "bytes": 1782,
-      "sha256": "43e2f6dbb1b58549a2ee8e802debca993fb81c99d80de3898b3298060a91262a"
+      "bytes": 1983,
+      "sha256": "e02c8c2411de6b1d6e6c71b0ad02675cfabb7ee67d120450ccd4e99c725a67e2"
     },
     "papers/hypothesis-language/translations/gate11-gate12-v12.3/hypothesis_language_gate12_en.pdf": {
       "bytes": 132646,
