@@ -1,5 +1,27 @@
 # Proof-Carrying Discovery
 
+## CRTT — Contract-Relative Transformation Theory · v1.0-rc4
+
+**From Certified Discovery to Meta-Policy Closure**  
+Aleksandr Strand · November 2026  
+[strandlex@gmail.com](mailto:strandlex@gmail.com)
+
+**Контрактно-относительная теория преобразований: от сертифицированного открытия к замыканию метаполитик.**
+
+| Materials / Материалы | English | Русский |
+| --- | --- | --- |
+| Preprint PDF · 20 pages / страниц | [Read PDF](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4.pdf) | [Читать PDF](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4-ru.pdf) |
+| Complete publication package / Полный комплект | [ZIP](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4.zip) · [SHA-256](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4.zip.sha256) | [ZIP](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4-ru.zip) · [SHA-256](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4-ru.zip.sha256) |
+| LaTeX source / Исходники LaTeX | [ZIP](papers/contract-relative-transformation/v1.0-rc4/CRTT-arxiv-source-v1.0-rc4.zip) · [Browse](papers/contract-relative-transformation/v1.0-rc4/source/en/) | [ZIP](papers/contract-relative-transformation/v1.0-rc4/CRTT-arxiv-source-v1.0-rc4-ru.zip) · [Просмотр](papers/contract-relative-transformation/v1.0-rc4/source/ru/) |
+
+**Formal artifact / Формальное приложение:** [Full archive · ZIP](papers/contract-relative-transformation/v1.0-rc4/CRTT-v1.0-FULL-ARCHITECTURE-RECONCILED.zip) · [SHA-256](papers/contract-relative-transformation/v1.0-rc4/CRTT-v1.0-FULL-ARCHITECTURE-RECONCILED.zip.sha256) · [Lean sources](papers/contract-relative-transformation/v1.0-rc4/formal/canonical/) · [Verification status](papers/contract-relative-transformation/v1.0-rc4/formal/VERIFICATION_RU.md).
+
+**[Overview / Обзор](papers/contract-relative-transformation/v1.0-rc4/README.md) · [All SHA-256 checksums / Все контрольные суммы](papers/contract-relative-transformation/v1.0-rc4/SHA256SUMS.txt) · [Response to review / Ответ на рецензию](papers/contract-relative-transformation/v1.0-rc4/publication/REVIEW.md).**
+
+Verification evidence consists of the supplied Lean 4.36.0 logs and Python replay. A new independent Lean run and a DOI for the formal artifact remain pending; see the [verification instructions](papers/contract-relative-transformation/v1.0-rc4/publication/supplement/FRESH_VERIFICATION.md).
+
+---
+
 **When may an autonomous system change its hypothesis language, and how can it carry an independently checkable reason?**
 
 Evidence-scoped program discovery, finite model-class refutation, controlled representation escalation and formal verification of synthesized programs.
