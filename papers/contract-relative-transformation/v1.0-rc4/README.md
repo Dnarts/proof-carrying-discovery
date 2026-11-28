@@ -7,6 +7,8 @@
 | | English | Русский |
 |---|---|---|
 | PDF (20 pages each) | [English](CRTT-preprint-v1.0-rc4.pdf) | [Русский](CRTT-preprint-v1.0-rc4-ru.pdf) |
+| Single-file LaTeX | [TEX](CRTT-preprint-v1.0-rc4.tex) | [TEX](CRTT-preprint-v1.0-rc4-ru.tex) |
+| Plain-language guide / Научпоп | [HTML](crtt-en.html) | [HTML](crtt.html) |
 | Complete publication package | [ZIP](CRTT-preprint-v1.0-rc4.zip) | [ZIP](CRTT-preprint-v1.0-rc4-ru.zip) |
 | Clean LaTeX source | [ZIP](CRTT-arxiv-source-v1.0-rc4.zip) · [browse](source/en/) | [ZIP](CRTT-arxiv-source-v1.0-rc4-ru.zip) · [browse](source/ru/) |
 
@@ -36,6 +38,10 @@ Keep verification output outside the immutable archive. See [fresh verification 
 
 Build English from `source/en/` with pdfLaTeX twice, Russian from `source/ru/` with XeLaTeX twice (FreeSerif and DejaVu Sans Mono installed locally). See the language-specific original README files in `publication/`.
 
+The `.tex` files next to the PDFs inline all manuscript sections and bibliography from the corresponding `source/` directory. Each is a complete single-file source; standard LaTeX packages and the fonts named above are still required. Run pdfLaTeX twice on `CRTT-preprint-v1.0-rc4.tex`, or XeLaTeX twice on `CRTT-preprint-v1.0-rc4-ru.tex`.
+
+The Russian [plain-language guide](crtt.html) and its [English translation](crtt-en.html) are self-contained HTML pages with inline styles, a linear reading order and one optional budget slider. Download an HTML file and open it in a browser. The explanatory calculator illustrates the arithmetic of the model; it is not a Lean verifier.
+
 ## Русский
 
-Контрактно-относительная теория преобразований: от сертифицированного открытия к замыканию метаполитик. В комплект входят английский и русский препринты, исходники LaTeX, формальный архив CRTT v1.0, полные журналы и SHA-256. Формальные гарантии относятся к объявленной конечной детерминированной модели. Сохранённый успешный журнал и повторный аудит не заменяют новый независимый запуск Lean. DOI формального приложения ещё не присвоен.
+Контрактно-относительная теория преобразований: от сертифицированного открытия к замыканию метаполитик. В комплект входят английский и русский препринты, самостоятельные TEX-файлы рядом с PDF, модульные исходники LaTeX, [русская научно-популярная страница](crtt.html) и [английский перевод](crtt-en.html), формальный архив CRTT v1.0, полные журналы и SHA-256. Формальные гарантии относятся к объявленной конечной детерминированной модели. Сохранённый успешный журнал и повторный аудит не заменяют новый независимый запуск Lean. DOI формального приложения ещё не присвоен.

@@ -11,6 +11,8 @@ Aleksandr Strand · November 2026
 | Materials / Материалы | English | Русский |
 | --- | --- | --- |
 | Preprint PDF · 20 pages / страниц | [Read PDF](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4.pdf) | [Читать PDF](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4-ru.pdf) |
+| Single-file LaTeX / Один TEX-файл | [TEX](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4.tex) | [TEX](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4-ru.tex) |
+| Plain-language guide / Научпоп | [HTML](papers/contract-relative-transformation/v1.0-rc4/crtt-en.html) | [HTML](papers/contract-relative-transformation/v1.0-rc4/crtt.html) |
 | Complete publication package / Полный комплект | [ZIP](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4.zip) · [SHA-256](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4.zip.sha256) | [ZIP](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4-ru.zip) · [SHA-256](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4-ru.zip.sha256) |
 | LaTeX source / Исходники LaTeX | [ZIP](papers/contract-relative-transformation/v1.0-rc4/CRTT-arxiv-source-v1.0-rc4.zip) · [Browse](papers/contract-relative-transformation/v1.0-rc4/source/en/) | [ZIP](papers/contract-relative-transformation/v1.0-rc4/CRTT-arxiv-source-v1.0-rc4-ru.zip) · [Просмотр](papers/contract-relative-transformation/v1.0-rc4/source/ru/) |
 

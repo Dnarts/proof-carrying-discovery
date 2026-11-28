@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f3ee">
+  <meta name="description" content="Научно-популярный разбор CRTT: достаточность наблюдений, перенос методов, обучение правилам, бюджет и доказуемая замена контроллеров. Последовательное чтение без вкладок.">
+  <meta name="crtt-manuscript-revision" content="v1.0-rc4; GitHub bc7bf91a93c999c877facf4069aabab3cac03f6e">
+  <meta name="crtt-original-html-sha256" content="6a4aa3985c1605746b2ad3b9ba24a85cc8b2d107e427fd5fdac83013cf27c4bb">
+  <title>CRTT — Как менять метод во время поиска</title>
+  <style>
+    :root{--paper:#f4f3ee;--white:#fbfaf6;--ink:#141414;--muted:#585850;--line:#d1cfc5;--red:#bd3016;--blue:#244b99;--green:#286047;--red-wash:#f3e5df;--blue-wash:#e7ebf3;--green-wash:#e5ece5;--sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;--mono:"SFMono-Regular",Consolas,"Liberation Mono",monospace}
+    *{box-sizing:border-box}
+    html{background:var(--paper);color:var(--ink);scroll-behavior:auto;scroll-padding-top:86px}
+    body{margin:0;font-family:var(--sans);font-size:17px;line-height:1.75;-webkit-font-smoothing:antialiased}
+    a{color:var(--blue);text-underline-offset:4px;text-decoration-thickness:1px}
+    a:hover{text-decoration-thickness:2px}
+    a:focus-visible,input:focus-visible{outline:3px solid var(--blue);outline-offset:5px}
+    h1,h2,h3,p,ul,ol,figure,dl{margin:0}
+    h1,h2,h3{line-height:1.16;letter-spacing:-.035em;text-wrap:balance}
+    h1{font-size:clamp(36px,5.4vw,66px);font-weight:750;max-width:780px}
+    h2{font-size:clamp(28px,3.6vw,42px);font-weight:720;max-width:850px}
+    h3{font-size:22px;font-weight:700;line-height:1.3}
+    strong{font-weight:700}
+    code,.math{font-family:var(--mono);font-size:.92em;overflow-wrap:anywhere}
+    sub{font-size:.72em;line-height:0}
+    svg{display:block;max-width:100%;height:auto}
+    .wrap{width:min(1140px,100% - 64px);margin-inline:auto}
+    .topbar{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--ink);background:var(--paper)}
+    .topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:58px}
+    .brand{font-family:var(--mono);font-size:14px;font-weight:700;letter-spacing:.08em;color:var(--ink);text-decoration:none;white-space:nowrap}
+    .brand::before{content:"";display:inline-block;background:var(--red);width:9px;height:9px;margin-right:10px}
+    .edition{color:var(--muted);font-size:11px;margin-left:12px;letter-spacing:.03em}
+    .navlinks{display:flex;gap:24px;align-items:center;font-size:13px}
+    .navlinks a{color:var(--ink);text-decoration:none}
+    .navlinks a:hover{text-decoration:underline}
+    .skip-link{position:absolute;left:16px;top:12px;transform:translateY(-180%);z-index:20;padding:8px 14px;background:var(--ink);color:var(--paper)}
+    .skip-link:focus{transform:none}
+    main{padding-block:54px 88px}
+    .eyebrow,.kicker,.label{font:600 11px/1.6 var(--mono);letter-spacing:.09em;text-transform:uppercase}
+    .eyebrow{color:var(--red);margin-bottom:24px}
+    .hero{border:1.5px solid var(--ink)}
+    .hero-main{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(0,1fr)}
+    .hero-copy{padding:42px}
+    .hero h1 em{font-style:normal;color:var(--red)}
+    .deck{font-size:20px;line-height:1.65;margin-top:24px;max-width:660px}
+    .byline{font-size:13px;color:var(--muted);margin-top:30px;line-height:1.65}
+    .byline a{font-size:13px}
+    .hero-aside{padding:30px;border-left:1.5px solid var(--ink);background:var(--white);display:flex;flex-direction:column;justify-content:center;gap:28px}
+    .hero-aside dt{font-size:13px;font-weight:750;letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px}
+    .hero-aside dd{margin:0;font-size:14px;line-height:1.6;color:var(--muted)}
+    .hero-aside dl{display:grid;gap:20px}
+    .hero-foot{border-top:1.5px solid var(--ink);padding:18px 28px;display:flex;align-items:center;justify-content:space-between;gap:22px;font-size:13px}
+    .hero-foot p{max-width:740px;color:var(--muted)}
+    .read-link{font-weight:700;white-space:nowrap}
+    .opening{max-width:780px;margin:36px 0 0;font-size:19px}
+    .contents{margin-top:32px;border-block:1px solid var(--line);padding-block:20px;display:grid;grid-template-columns:125px minmax(0,1fr);gap:16px}
+    .contents ol{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:10px 26px;font-size:14px}
+    .contents a{color:var(--ink)}
+    section.chapter{margin-top:84px;scroll-margin-top:84px}
+    .section-head{border-top:2px solid var(--ink);padding-top:15px;margin-bottom:28px}
+    .kicker{color:var(--red);margin-bottom:16px}
+    .intro{max-width:770px;font-size:19px;margin-top:20px;line-height:1.75}
+    .prose{max-width:770px}
+    .prose p+p{margin-top:18px}
+    .prose h3{margin-top:34px;margin-bottom:14px}
+    .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:start}
+    .spaced{margin-top:30px}
+    .small{font-size:14px;line-height:1.7}
+    .muted{color:var(--muted)}
+    .note{padding:20px 24px;border-left:4px solid var(--blue);background:var(--blue-wash);font-size:16px;line-height:1.75;margin-top:28px}
+    .note strong:first-child{color:var(--blue)}
+    .note.warm{border-left-color:var(--red);background:var(--red-wash)}
+    .note.warm strong:first-child{color:var(--red)}
+    .note.green{border-left-color:var(--green);background:var(--green-wash)}
+    .note.green strong:first-child{color:var(--green)}
+    .source{font-size:12px;line-height:1.7;color:var(--muted);margin-top:24px}
+    .source a{color:var(--muted)}
+    .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--ink);margin-top:28px;background:var(--white)}
+    .card{padding:24px}
+    .card+.card{border-left:1px solid var(--ink)}
+    .card .label{color:var(--red);margin-bottom:12px}
+    .card h3{font-size:20px;margin-bottom:12px}
+    .card p{font-size:15px;line-height:1.75}
+    .card .math{display:block;margin-top:16px;font-size:13px;color:var(--blue)}
+    .diagram{padding:26px;border:1px solid var(--ink);background:var(--white)}
+    .diagram svg{width:100%;max-width:390px;margin-inline:auto}
+    figcaption{font-size:13px;line-height:1.65;margin-top:20px;color:var(--muted)}
+    table{border-collapse:collapse;width:100%;font-size:15px;line-height:1.6}
+    caption{text-align:left;font-size:16px;font-weight:700;margin-bottom:12px}
+    th,td{padding:13px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+    thead th{font:600 11px/1.6 var(--mono);text-transform:uppercase;letter-spacing:.04em;border-block:1px solid var(--ink);color:var(--muted)}
+    tbody th{font-weight:600}
+    tr.emphasis{background:var(--red-wash)}
+    tr.emphasis td,tr.emphasis th{color:var(--red);font-weight:700}
+    .table-note{font-size:14px;color:var(--muted);margin-top:16px;line-height:1.7}
+    .result-strip{display:grid;grid-template-columns:auto minmax(0,1fr);gap:30px;align-items:center;padding:26px 30px;border:1px solid var(--red);margin-top:28px;background:var(--white)}
+    .big-number{font-family:var(--mono);font-weight:700;font-size:40px;line-height:1.2;color:var(--red);letter-spacing:-.06em}
+    .result-strip p{font-size:16px}
+    .result-strip .label{color:var(--red);margin-top:8px}
+    .formula{padding:20px 24px;border-block:1px solid var(--ink);font-family:var(--mono);font-size:19px;line-height:1.7;overflow-wrap:anywhere;margin-top:22px;background:var(--white)}
+    .formula .formula-caption{font-family:var(--sans);font-size:14px;color:var(--muted);margin-top:8px;display:block}
+    .guard-list{list-style:none;padding:0;margin-top:28px;border:1px solid var(--ink)}
+    .guard-list li{display:grid;grid-template-columns:42px minmax(0,1fr) minmax(0,1.15fr);gap:22px;padding:22px;background:var(--white);align-items:start}
+    .guard-list li+li{border-top:1px solid var(--line)}
+    .guard-num{font:600 13px/1 var(--mono);width:32px;height:32px;display:grid;place-items:center;background:var(--ink);color:var(--paper)}
+    .guard-list h3{font-size:18px;margin-bottom:8px;letter-spacing:-.02em}
+    .guard-list .math{font-size:16px;color:var(--blue)}
+    .guard-list p{font-size:15px;line-height:1.7}
+    .lab{margin-top:30px;border:1.5px solid var(--ink);background:var(--white)}
+    .lab-header{padding:22px 26px;border-bottom:1px solid var(--ink)}
+    .lab-header .label{color:var(--blue);margin-bottom:7px}
+    .lab-header h3{font-size:22px}
+    .lab-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)}
+    .lab-control{padding:26px;border-right:1px solid var(--ink)}
+    .lab-control label{display:block;font-size:16px;font-weight:650}
+    .balance-output{display:flex;align-items:baseline;justify-content:space-between;margin-top:18px;font-family:var(--mono)}
+    .balance-output output{font-size:42px;font-weight:650;color:var(--blue);line-height:1.2}
+    input[type=range]{width:100%;margin:24px 0 8px;height:28px;accent-color:var(--blue);cursor:pointer}
+    .range-labels{display:flex;justify-content:space-between;font:12px/1.5 var(--mono);color:var(--muted)}
+    .fixed-values{margin-top:24px;font-size:14px;line-height:1.85;color:var(--muted)}
+    .lab-result{padding:26px;--verdict-color:var(--green)}
+    .lab-result[data-verdict=deferred]{--verdict-color:var(--ink)}
+    .lab-result[data-verdict=liquidity]{--verdict-color:var(--red)}
+    .verdict{font-size:24px;line-height:1.3;font-weight:700;letter-spacing:-.025em;color:var(--verdict-color);margin:7px 0 16px}
+    .lab-metrics{display:flex;flex-wrap:wrap;gap:16px 32px;margin-bottom:18px;font-size:14px}
+    .lab-metrics dt{color:var(--muted)}
+    .lab-metrics dd{margin:3px 0 0;font-family:var(--mono);font-size:24px;font-weight:600}
+    .lab-result p{font-size:15px;line-height:1.75}
+    .lab-foot{border-top:1px solid var(--line);padding:16px 26px;font-size:13px;color:var(--muted)}
+    .thresholds .card h3{font-family:var(--mono);font-size:24px}
+    .thresholds .card:nth-child(2) .label{color:var(--red)}
+    .thresholds .card:nth-child(3) .label{color:var(--green)}
+    .pair-box{padding:22px;border:1px solid var(--line);margin-top:30px}
+    .pair-box h3{font-size:20px;margin-bottom:14px}
+    .pair-box p{font-size:15px;line-height:1.75}
+    .pair-math{display:flex;gap:14px 28px;flex-wrap:wrap;margin:16px 0;font:16px/1.8 var(--mono);color:var(--green)}
+    .scenario-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:28px}
+    .scenario{border:1.5px solid var(--ink);background:var(--white)}
+    .scenario-head{padding:24px;border-bottom:1px solid var(--ink)}
+    .scenario-head .label{color:var(--green);margin-bottom:10px}
+    .scenario.loss .label{color:var(--red)}
+    .scenario-head h3{font-size:23px}
+    .scenario ol{list-style:none;counter-reset:step;padding:0 24px}
+    .scenario li{counter-increment:step;display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:12px;padding:18px 0;border-bottom:1px solid var(--line);font-size:14px;line-height:1.65}
+    .scenario li::before{content:counter(step,decimal-leading-zero);font:11px/1.8 var(--mono);color:var(--muted)}
+    .scenario .balance{font:600 14px/1.8 var(--mono);white-space:nowrap}
+    .scenario-total{padding:22px 24px;display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+    .scenario-total strong{font:700 38px/1.2 var(--mono);color:var(--green)}
+    .scenario.loss .scenario-total strong{color:var(--red)}
+    .scenario-total span{font-size:13px;color:var(--muted)}
+    .cost-card .big-number{color:var(--blue);font-size:46px;margin:10px 0}
+    .cost-card .label{color:var(--muted)}
+    .cost-card h3{font-size:19px}
+    .guarantees{padding:0;list-style:none;border-top:1px solid var(--line);margin-top:26px}
+    .guarantees li{padding:19px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:200px minmax(0,1fr);gap:28px;font-size:16px}
+    .guarantees strong{color:var(--green)}
+    .closing{background:var(--ink);color:var(--paper);padding:32px;margin-top:30px}
+    .closing .label{color:#ed9d8a;margin-bottom:14px}
+    .closing p{font-size:22px;line-height:1.6;max-width:850px;font-weight:500;letter-spacing:-.015em}
+    .verification{border:1px solid var(--ink);padding:28px;margin-top:28px}
+    .verification h3{margin-bottom:16px}
+    .verification p+p{margin-top:16px}
+    .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;border-block:1px solid var(--line);padding-block:20px;margin-block:22px}
+    .stats strong{font:650 30px/1.2 var(--mono);display:block}
+    .stats span{font-size:12px;color:var(--muted);line-height:1.6;display:block;margin-top:6px}
+    .sources{margin-top:70px;border-top:2px solid var(--ink);padding-top:22px}
+    .sources h2{font-size:28px;margin-bottom:22px}
+    .source-links{list-style:none;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 32px;font-size:15px}
+    .source-links li{padding-bottom:14px;border-bottom:1px solid var(--line)}
+    .source-links small{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+    footer{border-top:1px solid var(--ink);padding-block:25px;font-size:12px;color:var(--muted)}
+    footer .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px}
+    @media(max-width:900px){.hero-copy{padding:30px}.hero-aside{padding:24px}.hero-main{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}.guard-list li{grid-template-columns:32px minmax(0,1fr);gap:12px 18px}.guard-list li>p{grid-column:2}.card{padding:20px}.cards{grid-template-columns:1fr}.card+.card{border-left:0;border-top:1px solid var(--line)}.thresholds{grid-template-columns:repeat(3,minmax(0,1fr))}.thresholds .card+.card{border-top:0;border-left:1px solid var(--line)}}
+    @media(max-width:650px){body{font-size:16px;line-height:1.8}.wrap{width:calc(100% - 36px)}.topbar .wrap{min-height:54px;gap:10px}.edition{display:none}.navlinks{font-size:12px;gap:16px}main{padding-top:28px}.hero-main{grid-template-columns:1fr}.hero-copy{padding:26px 22px}.hero-aside{border-left:0;border-top:1px solid var(--ink);padding:24px}.hero-aside>svg{display:none}.hero-aside dl{gap:15px}.hero-aside dt{font-size:12px}.hero-aside dd{font-size:14px}.eyebrow{font-size:10px;margin-bottom:20px}.deck{font-size:17px;margin-top:20px}.hero-foot{padding:18px 22px;display:block}.hero-foot .read-link{display:inline-block;margin-top:12px}.opening,.intro{font-size:17px}.contents{grid-template-columns:1fr;gap:12px}.contents ol{gap:9px 20px;font-size:13px}section.chapter{margin-top:58px}.section-head{padding-top:13px;margin-bottom:22px}.kicker{font-size:10px;margin-bottom:13px}.split,.scenario-grid,.lab-grid{grid-template-columns:1fr;gap:24px}.diagram{padding:22px 18px}.note{padding:18px 20px;font-size:15px}.result-strip{grid-template-columns:1fr;gap:18px;padding:24px}.big-number{font-size:36px}.formula{padding:18px;font-size:16px}.guard-list li{padding:20px 16px}.guard-list .math{font-size:14px}.lab-grid{gap:0}.lab-control{border-right:0;border-bottom:1px solid var(--line);padding:22px}.lab-header,.lab-result{padding:22px}.lab-foot{padding:16px 22px}.thresholds{grid-template-columns:1fr}.thresholds .card+.card{border-left:0;border-top:1px solid var(--line)}.pair-box{padding:20px}.scenario-head{padding:22px}.scenario ol{padding-inline:20px}.scenario li{gap:10px;grid-template-columns:22px minmax(0,1fr) auto}.scenario-total{padding:22px 20px}.guarantees li{grid-template-columns:1fr;gap:7px}.closing{padding:24px}.closing p{font-size:19px}.verification{padding:22px}.stats{gap:14px}.stats strong{font-size:26px}.source-links{grid-template-columns:1fr}.sources{margin-top:55px}th,td{padding:12px 8px;font-size:14px}footer .wrap{align-items:start;flex-direction:column;gap:12px}}
+    @media(max-width:360px){.wrap{width:calc(100% - 28px)}.navlinks{gap:12px}.brand{font-size:13px}.hero-copy{padding-inline:18px}h1{font-size:33px}.scenario li{grid-template-columns:minmax(0,1fr) auto}.scenario li::before{display:none}.guard-list li{gap:10px}.guard-num{width:26px;height:26px}.guard-list h3{font-size:17px}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+    @media print{body{font-size:10pt;background:white;line-height:1.6}.wrap{width:100%}.topbar,.read-link,.skip-link,.lab-control input,.range-labels{display:none}main{padding:0}h1{font-size:28pt}h2{font-size:20pt}.hero-copy,.hero-aside{padding:20px}.chapter{margin-top:32px!important}.section-head{break-after:avoid}.cards,.scenario,.note,.diagram,.verification{break-inside:avoid}.closing{color:black;background:white;border:2px solid black}.closing .label{color:black}.source a{color:black}a{text-decoration:none}.lab-grid{display:block}.lab-control{border:0}.source-links{display:block}.sources{break-before:page}footer{margin-top:30px}}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#sec-1">Перейти к статье</a>
+  <nav class="topbar" aria-label="Навигация по статье">
+    <div class="wrap">
+      <a class="brand" href="#top">CRTT<span class="edition">v1.0-rc4 / научпоп</span></a>
+      <div class="navlinks"><a href="#sec-1">Текст</a><a href="#sec-5">Бюджет</a><a href="#sources">Источники</a></div>
+    </div>
+  </nav>
+  <main id="top" class="wrap">
+    <!-- HERO: the aircraft metaphor was replaced because the theorems concern a finite model, not physical flight safety. -->
+    <header class="hero">
+      <div class="hero-main">
+        <div class="hero-copy">
+          <p class="eyebrow">Contract-Relative Transformation Theory</p>
+          <h1>Как <em>менять метод</em> во время поиска</h1>
+          <p class="deck">И сохранять доказанные гарантии: правильность результата, возможность закончить работу и историю уже сделанных шагов.</p>
+          <p class="byline">По материалам препринта <cite>From Certified Discovery to Meta-Policy Closure</cite><br><strong>Aleksandr Strand</strong><br><a href="mailto:strandlex@gmail.com">strandlex@gmail.com</a></p>
+        </div>
+        <aside class="hero-aside" aria-label="Три основных понятия">
+          <svg viewBox="0 0 300 110" role="img" aria-labelledby="flow-title flow-desc">
+            <title id="flow-title">Метод меняется, контракт сохраняется</title><desc id="flow-desc">Старый и новый методы соединены проверяемой заменой под одним фиксированным контрактом.</desc>
+            <path d="M20 24H280" stroke="#141414" stroke-dasharray="4 4"/><text x="150" y="14" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#585850">ОДИН КОНТРАКТ</text>
+            <rect x="0" y="44" width="100" height="43" fill="#141414"/><text x="50" y="70" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#f4f3ee">Метод A</text>
+            <path d="M110 65H190m-9-7 9 7-9 7" fill="none" stroke="#bd3016" stroke-width="2"/>
+            <rect x="200" y="44" width="100" height="43" fill="#244b99"/><text x="250" y="70" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#f4f3ee">Метод B</text>
+            <text x="150" y="107" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#585850">с проверкой условий перехода</text>
+          </svg>
+          <dl><div><dt>Контракт</dt><dd>Что считается допустимым результатом в объявленной задаче.</dd></div><div><dt>Контроллер</dt><dd>Правила, по которым продолжается поиск.</dd></div><div><dt>Метаполитика</dt><dd>План, определяющий, стоит ли готовить попытку замены контроллера.</dd></div></dl>
+        </aside>
+      </div>
+      <div class="hero-foot"><p>Речь о конечной детерминированной модели. «Монеты» ниже — условные единицы учёта, а не измеренные секунды или байты памяти.</p><a class="read-link" href="#sec-1">Читать по порядку ↓</a></div>
+    </header>
+    <p class="opening">Алгоритм уже начал работу: проверил часть вариантов, отбросил невозможные, сохранил найденные решения. Теперь появился другой метод. CRTT изучает, <strong>как разрешить такую замену, не потеряв смысл незавершённого поиска</strong> — и как проверить, хватит ли на неё ресурсов.</p>
+    <nav class="contents" aria-label="Содержание"><span class="label">Маршрут чтения</span><ol><li><a href="#sec-1">01 Контракт</a></li><li><a href="#sec-2">02 Наблюдение</a></li><li><a href="#sec-transfer">03 Перенос</a></li><li><a href="#sec-3">04 Обучение</a></li><li><a href="#sec-4">05 Выбор</a></li><li><a href="#sec-5">06 Замена</a></li><li><a href="#sec-6">07 Последняя монета</a></li><li><a href="#sec-7">08 Замыкание</a></li></ol></nav>
+
+    <!-- sec-1 preserves the original architecture subject; every explanation is now ordinary document content. -->
+    <section id="sec-1" class="chapter" aria-labelledby="title-1">
+      <div class="section-head"><p class="kicker">01 / Сначала определим задачу</p><h2 id="title-1">Правильность всегда относительно контракта</h2><p class="intro">Контракт задаёт, какие действия допустимы в каждом состоянии. Хороший метод должен удовлетворять именно этим требованиям. Отсюда возникают три разных препятствия.</p></div>
+      <div class="cards"><article class="card"><p class="label">Нет подходящего действия</p><h3>Операторный барьер</h3><p>В разрешённом классе может вообще не быть действия, выполняющего контракт. Даже полное знание состояния тогда не поможет.</p></article><article class="card"><p class="label">Не хватает различий</p><h3>Барьер представления</h3><p>Наблюдение смешивает состояния, для которых нельзя выбрать одно общее допустимое действие.</p></article><article class="card"><p class="label">Выбор ошибается</p><h3>Барьер селектора</h3><p>Подходящее действие существует, наблюдений достаточно, но механизм выбора всё равно может выбрать недопустимый вариант.</p></article></div>
+      <div class="prose spaced"><p>Это разные причины неудачи. Новые наблюдения помогают различать состояния; они не создают отсутствующий оператор. А существование правильного выбора ещё не означает, что текущая программа его найдёт.</p><p>В работающей системе добавляются другие вопросы: можно ли перенести метод на новую задачу, сколько стоит найти и проверить замену, сохранится ли резерв для завершения работы. Дальше пройдём эту цепочку по порядку.</p></div>
+      <p class="source">Источник: <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/ru/sections12.tex">препринт, §§1–2: контракт и три исходных препятствия</a>.</p>
+    </section>
+
+    <!-- sec-2: show all pair intersections and the collective obstruction together; no worlds disappear on click. -->
+    <section id="sec-2" class="chapter" aria-labelledby="title-2">
+      <div class="section-head"><p class="kicker">02 / Сколько нужно знать</p><h2 id="title-2">Наблюдение достаточно, если можно действовать</h2><p class="intro">Не обязательно установить точное состояние мира. Достаточно, чтобы в каждой группе состояний, которые наблюдение не различает, существовало хотя бы одно действие, допустимое для всей группы.</p></div>
+      <div class="split">
+        <figure class="diagram"><svg viewBox="0 0 360 270" role="img" aria-labelledby="triangle-title triangle-desc"><title id="triangle-title">У каждой пары миров есть общее действие, у тройки — нет</title><desc id="triangle-desc">Мир x1 допускает A и B, x2 — B и C, x3 — A и C. Каждая пара имеет общее действие, у тройки пересечение пусто.</desc><path d="M180 46L58 210H302Z" fill="none" stroke="#286047" stroke-width="2"/><rect x="136" y="13" width="88" height="64" fill="#141414"/><text x="180" y="39" fill="#f4f3ee" text-anchor="middle" font-family="sans-serif" font-size="18">x₁</text><text x="180" y="61" fill="#f4f3ee" text-anchor="middle" font-family="sans-serif" font-size="14">{A, B}</text><rect x="14" y="186" width="88" height="64" fill="#141414"/><text x="58" y="212" fill="#f4f3ee" text-anchor="middle" font-family="sans-serif" font-size="18">x₂</text><text x="58" y="234" fill="#f4f3ee" text-anchor="middle" font-family="sans-serif" font-size="14">{B, C}</text><rect x="258" y="186" width="88" height="64" fill="#141414"/><text x="302" y="212" fill="#f4f3ee" text-anchor="middle" font-family="sans-serif" font-size="18">x₃</text><text x="302" y="234" fill="#f4f3ee" text-anchor="middle" font-family="sans-serif" font-size="14">{A, C}</text><rect x="97" y="117" width="32" height="27" fill="#fbfaf6"/><text x="113" y="137" text-anchor="middle" fill="#286047" font-family="sans-serif" font-size="17">B</text><rect x="231" y="117" width="32" height="27" fill="#fbfaf6"/><text x="247" y="137" text-anchor="middle" fill="#286047" font-family="sans-serif" font-size="17">A</text><rect x="164" y="195" width="32" height="27" fill="#fbfaf6"/><text x="180" y="215" text-anchor="middle" fill="#286047" font-family="sans-serif" font-size="17">C</text><text x="180" y="164" text-anchor="middle" fill="#bd3016" font-family="sans-serif" font-size="44">∅</text></svg><figcaption>Линии показывают общее действие каждой пары. В центре — пустое пересечение всех трёх множеств. Попарной совместимости недостаточно.</figcaption></figure>
+        <div><table><caption>Одно и то же действие для выбранных миров</caption><thead><tr><th scope="col">Миры</th><th scope="col">Общие действия</th></tr></thead><tbody><tr><th scope="row">x₁ и x₂</th><td>{B}</td></tr><tr><th scope="row">x₁ и x₃</th><td>{A}</td></tr><tr><th scope="row">x₂ и x₃</th><td>{C}</td></tr><tr class="emphasis"><th scope="row">x₁, x₂ и x₃</th><td>∅ — ни одного</td></tr></tbody></table><p class="table-note">Если наблюдение не различает всю тройку, выбрать допустимое действие невозможно: любой ответ нарушит контракт хотя бы в одном мире.</p></div>
+      </div>
+      <div class="prose spaced"><p>Можно объединить любую пару и отдельно различать третий мир. Получатся три достаточных разбиения: <span class="math">{x₁,x₂} | {x₃}</span>, <span class="math">{x₁,x₃} | {x₂}</span> и <span class="math">{x₂,x₃} | {x₁}</span>. Но достаточного разбиения, которое было бы грубее всех трёх, <strong>не существует</strong>: для этого пришлось бы объединить всю тройку.</p><p>Так возникает коллективное препятствие: его не видно ни в одной паре, но оно проявляется для группы целиком.</p></div>
+      <div class="note"><strong>Что утверждает критерий.</strong> Он устанавливает существование политики выбора по наблюдению, а не правильность любого конкретного селектора. В общей теореме пространство действий непусто и используется классический выбор; последующие конечные конструкции рассматриваются отдельно.</div>
+      <p class="source">Источник: <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/ru/sections12.tex">§2, теоремы 2.1 и 2.2; пример треугольника</a>.</p>
+    </section>
+
+    <section id="sec-transfer" class="chapter" aria-labelledby="title-transfer">
+      <div class="section-head"><p class="kicker">03 / От выбора к исследованию</p><h2 id="title-transfer">Готовый метод ещё нужно уметь перенести</h2><p class="intro">Если имеющихся наблюдений недостаточно, можно покупать новые. В модели исследование — конечное дерево: запросить признак, получить 0 или 1, перейти по соответствующей ветке и в конце выбрать действие.</p></div>
+      <div class="prose"><p>При заданных состояниях, запросах, ценах и пределе глубины перебор позволяет построить оптимальное дерево по худшей стоимости. Это оптимальность <strong>среди объявленных допустимых деревьев</strong>; стоимость самого перебора от этого не становится малой.</p><p>Теперь допустим, дерево уже найдено для задачи <span class="math">S</span>, а решать нужно задачу <span class="math">T</span>. CRTT описывает <em>морфизм переноса</em>: согласованное сопоставление состояний, запросов и действий. Оно сохраняет ответы наблюдений и ограничения глубины, не увеличивает цены запросов и конечные потери.</p><p>Если такой морфизм предъявлен, исходное дерево можно перевести в целевую задачу с доказанными гарантиями. Но найти сам морфизм — отдельный поиск. Конечный алгоритм перебирает сопоставления запросов и действий и для каждого целевого состояния конструктивно выбирает совместимое исходное.</p></div>
+      <div class="note"><strong>Что означает «полный поиск».</strong> Он получает канонического представителя для каждого допустимого сочетания карт запросов и действий. Перечислять все возможные карты состояний не требуется. Если перебор исчерпан и канонический список пуст, морфизма в этом заданном классе нет.</div>
+      <div class="prose"><h3>Один пример, к которому мы вернёмся</h3><p>В примере из артефакта предел глубины исходной задачи равен <span class="math">d<sub>S</sub> = 1</span>, а целевой — <span class="math">d<sub>T</sub> = 0</span>. Определение морфизма требует <span class="math">d<sub>S</sub> ≤ d<sub>T</sub></span>, поэтому переноса этого типа нет. Это не означает, что целевая задача вообще не имеет решений другими способами.</p><p>Обычный перебор может долго идти к доказательству отсутствия переноса. Сертифицированное правило глубины позволяет закрыть тот же поиск раньше. На этом примере ниже видно, как меняется стоимость при замене контроллера.</p></div>
+      <p class="source">Источники: <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/ru/section3.tex">§3, оптимальное исследование, перенос и канонический поиск</a>; <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/ru/section8.tex">§8.2, пример с препятствием глубины</a>.</p>
+    </section>
+
+    <!-- sec-3 retains the obstruction-learning subject; distinguish inclusion-minimal cores from smallest cores. -->
+    <section id="sec-3" class="chapter" aria-labelledby="title-3">
+      <div class="section-head"><p class="kicker">04 / Как использовать неудачный поиск</p><h2 id="title-3">«Компиляция граблей»: превратить тупик в правило</h2><p class="intro">Иногда частичное сопоставление запросов уже исключает все подходящие исходные состояния для некоторого целевого мира. Дополнение такого сопоставления не спасёт ветку: добавление ограничений не может вернуть исключённые состояния.</p></div>
+      <div class="cards"><article class="card"><p class="label">Шаг 1</p><h3>Найти несовместимость</h3><p>В строке совместимых миров не осталось ни одного элемента. Получено конкретное свидетельство, почему эта ветка не может продолжаться до морфизма.</p><span class="math">Y<sub>w</sub>(ρ) = ∅</span></article><article class="card"><p class="label">Шаг 2</p><h3>Убрать лишние ограничения</h3><p>Извлекается ядро K: несовместимость сохраняется, но удаление любого оставшегося ограничения её разрушает. Ядро минимально по включению, а не обязательно по числу условий.</p><span class="math">K ⊆ ρ</span></article><article class="card"><p class="label">Шаг 3</p><h3>Сохранить правило отсечения</h3><p>Теперь назначения, содержащие K, можно отклонять. Доказательство гарантирует: ни одно допустимое продолжение морфизма при этом не потеряно.</p><span class="math">K ⊆ ρ′ ⇒ ветку можно отсечь</span></article></div>
+      <div class="prose spaced"><p>Так история неудачи становится инструментом будущего поиска. Но её полезность имеет две стороны: правило должно быть <strong>корректным</strong>, а получение и использование правила — <strong>окупаться</strong>. Первое не влечёт второго.</p></div>
+      <div class="result-strip"><div><div class="big-number">515 / 515</div><p class="label">дороже по модельному счёту</p></div><p>На заданном конечном стенде обучающийся исполнитель оказался дороже фиксированного контроллера с правилом совместимости чтений во всех 515 финансируемых завершённых случаях. Проверка базы правил, извлечение ядра и компиляция тоже оплачивались.</p></div>
+      <div class="prose spaced"><p>Это результат конкретного контроллера, набора задач и тарифов. Он не измеряет «вероятность бесполезности обучения». Он показывает, зачем нужен следующий вопрос: <strong>когда стоит платить за более сложный метод?</strong></p></div>
+      <p class="source">Источники: <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/ru/section4.tex">§4.3, теорема 4.4 и экономика обучения</a>; <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/formal/canonical/ImpasseCompilation.lean">формальные свойства извлечения ядра и его компиляции</a>.</p>
+    </section>
+
+    <!-- sec-4: costs and regrets are simultaneously visible; the interval theorem is a separate guarantee. -->
+    <section id="sec-4" class="chapter" aria-labelledby="title-4">
+      <div class="section-head"><p class="kicker">05 / Свидетельства для выбора</p><h2 id="title-4">Можно не знать точную цену и всё-таки выбрать правильно</h2><p class="intro">Рассмотрим два метода и две возможные гипотезы о стоимости. Во втором мире обе цены выше на 100. При этом лучший метод остаётся тем же.</p></div>
+      <div class="split"><table><caption>Абсолютная стоимость</caption><thead><tr><th scope="col">Гипотеза</th><th scope="col">Метод 1</th><th scope="col">Метод 2</th></tr></thead><tbody><tr><th scope="row">h₁</th><td>0</td><td>1</td></tr><tr><th scope="row">h₂</th><td>100</td><td>101</td></tr></tbody></table><table><caption>Сожаление: переплата к лучшему в том же мире</caption><thead><tr><th scope="col">Гипотеза</th><th scope="col">Метод 1</th><th scope="col">Метод 2</th></tr></thead><tbody><tr><th scope="row">h₁</th><td>0</td><td>1</td></tr><tr><th scope="row">h₂</th><td>0</td><td>1</td></tr></tbody></table></div>
+      <div class="prose spaced"><p>Метод 1 дешевле на единицу в обеих гипотезах. Его худшее сожаление равно нулю. Поэтому <strong>для выбора между этими двумя методами</strong> различать миры не требуется. Точный будущий счёт остаётся неизвестным, но это уже другой вопрос.</p><p>Гарантия относится к заданному конечному каталогу методов и набору гипотез, в котором присутствует действительная модель. Нельзя незаметно добавить неизвестный лучший метод за пределами каталога и сохранить прежний вывод.</p><h3>Другой сертификат: достаточно узкий интервал</h3><p>Бывает, что известны только доказанные границы цен <span class="math">L ≤ C ≤ U</span>. На них строятся нижняя и верхняя оценки оптимальной худшей стоимости исследования: <span class="math">V<sub>L</sub></span> и <span class="math">V<sub>U</sub></span>.</p><p>Если зазор <span class="math">V<sub>U</sub> − V<sub>L</sub> ≤ ε</span>, дерево, оптимальное по верхним оценкам, имеет худшую стоимость не более чем на ε выше истинного минимаксного оптимума <strong>среди объявленных допустимых деревьев</strong>. Знать точные значения всех цен для этого не обязательно.</p></div>
+      <div class="note"><strong>Две разные гарантии.</strong> В первой таблице один метод оптимален в каждой гипотезе. Интервальный сертификат говорит о близости худшей стоимости к минимаксному оптимуму. Он сам по себе не обещает малого сожаления в каждом отдельном мире. Проверка малого зазора — достаточное, но не необходимое условие такой близости к оптимуму.</div>
+      <p class="source">Источник: <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/ru/section5.tex">§5, теоремы 5.2–5.3: интервальный минимакс и свидетельства для выбора</a>.</p>
+    </section>
+
+    <!-- sec-5: fixed proof-bearing example, one funded balance slider. This JavaScript is an illustration, not a Lean verifier. -->
+    <section id="sec-5" class="chapter" aria-labelledby="title-5">
+      <div class="section-head"><p class="kicker">06 / Замена во время работы</p><h2 id="title-5">Мало быть дешевле. Нужно ещё суметь заплатить за переход</h2><p class="intro">В незавершённом поиске есть найденные сертификаты, квитанции и оставшиеся задания. При замене контроллера нужно сохранить все три составляющие — включая то, что ещё предстоит проверить.</p></div>
+      <div class="prose"><p>В рассматриваемой конструкции меняется сертифицированная библиотека правил отсечения, а базовые тарифы остаются прежними. Перестройка очередей сохраняет смысл оставшихся задач. Предложение уже несёт доказательства корректности такой замены, границ стоимости и достаточности нового резерва.</p><p>Только после этого работает числовой шлюз. Он не синтезирует эти доказательства и не запускает бесплатно оба контроллера ради сравнения их будущих счетов.</p></div>
+      <ol class="guard-list"><li><span class="guard-num" aria-hidden="true">1</span><div><h3>Можно оплатить проверку</h3><div class="math">H + R<sub>old</sub> ≤ B</div></div><p>После платы H должен остаться резерв для завершения старым контроллером — даже если предложение будет отклонено.</p></li><li><span class="guard-num" aria-hidden="true">2</span><div><h3>Можно оплатить замену</h3><div class="math">H + K + R<sub>new</sub> ≤ B</div></div><p>После проверки H и миграции K должен остаться достаточный резерв завершения новым контроллером.</p></li><li><span class="guard-num" aria-hidden="true">3</span><div><h3>Доказана строгая экономия</h3><div class="math">H + K + U<sub>new</sub> &lt; L<sub>old</sub></div></div><p>Проверка, миграция и верхняя граница нового счёта вместе меньше доказанной нижней границы старого.</p></li></ol>
+      <div class="prose spaced"><p>Здесь B — доступный баланс; R — достаточный резерв, а не уже сделанный расход; L и U — корректные границы, которым не обязательно быть точными. Исходное состояние уже должно удовлетворять <span class="math">R<sub>old</sub> ≤ B</span>.</p></div>
+      <div class="cards thresholds"><article class="card"><p class="label">Проверка отложена</p><h3>B = 100</h3><p>Для H = 1 и резерва 100 не хватает единицы сверх резерва. Платная попытка отложена; списание 0. Старое состояние сохраняется.</p></article><article class="card"><p class="label">Отказ по ликвидности</p><h3>B = 101</h3><p>Проверку за 1 оплатить можно. Но на миграцию за 1 сверх нового резерва 100 денег уже нет. Списывается только проверка.</p></article><article class="card"><p class="label">Замена принята</p><h3>B = 102</h3><p>Проверка и миграция стоят 2, резерв 100 обеспечен, а <span class="math">1 + 1 + 1 &lt; 7</span>. Списывается 2; устанавливается новый контроллер.</p></article></div>
+      <div class="lab" aria-labelledby="lab-title">
+        <div class="lab-header"><p class="label">Необязательная иллюстрация / один параметр</p><h3 id="lab-title">Граница проходит между 101 и 102</h3></div>
+        <div class="lab-grid"><div class="lab-control"><label for="balance">Баланс перед корневым шлюзом B</label><div class="balance-output"><span class="small">Условных единиц</span><output id="balance-value" for="balance">102</output></div><input id="balance" type="range" disabled min="100" max="110" value="102" step="1" aria-describedby="lab-domain lab-assumptions"><div class="range-labels" aria-hidden="true"><span>100</span><span>105</span><span>110</span></div><p id="lab-domain" class="fixed-values">R<sub>old</sub> = R<sub>new</sub> = 100<br>H = 1; K = 1; L<sub>old</sub> = 7; U<sub>new</sub> = 1<br>Во всём диапазоне исходный резерв обеспечен.</p></div><div id="gate-result" class="lab-result" data-verdict="accepted" role="status" aria-live="polite" aria-atomic="true"><p class="label">Результат числовой проверки</p><div id="gate-verdict" class="verdict">Замена принята</div><dl class="lab-metrics"><div><dt>Списание</dt><dd id="gate-debit">2</dd></div><div><dt>Остаток</dt><dd id="gate-remaining">100</dd></div></dl><p id="gate-explanation">101 ≤ 102 и 102 ≤ 102: оба резерва обеспечены. Условие выгоды 3 &lt; 7 выполнено. Устанавливается новый контроллер.</p></div></div>
+        <p id="lab-assumptions" class="lab-foot">Виджет показывает арифметику для уже доказанного предложения. Он не проверяет Lean-доказательства. Подготовка предложения и само завершение поиска в показанное списание не входят.</p>
+        <noscript><p class="lab-foot">JavaScript отключён. Выше сохранён пример B = 102; все три исхода полностью описаны в открытых карточках.</p></noscript>
+      </div>
+      <div class="prose spaced"><p>Бывает и отказ по выгоде: при <span class="math">H = 3</span>, <span class="math">K = 4</span> и прежних границах получаем <span class="math">3 + 4 + 1 = 8 ≥ 7</span>. Даже с балансом 110 и обеспеченными резервами замена не принимается: строгой экономии нет. Списывается только H = 3, старый контроллер сохраняется.</p></div>
+      <aside class="pair-box"><h3>Зачем сохранять связь между границами</h3><p>В более общем варианте предложение несёт связанные пары <span class="math">(7, 1)</span> и <span class="math">(70, 64)</span>. При цене проверки и миграции 2 обе строки проходят:</p><div class="pair-math"><span>2 + 1 &lt; 7</span><span>2 + 64 &lt; 70</span></div><p>Если независимо взять нижнюю старую границу 7 и верхнюю новую 64, полезная связь исчезнет. Для исходного списка требуется доказательство, что хотя бы одна пара одновременно покрывает действительные старый и новый счета; тест выгоды проверяется для каждой пары. Вторая строка в примере — синтетическая неопределённость, а не измерение другого мира.</p></aside>
+      <p class="source">Источник: <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/ru/section6.tex">§6, теоремы 6.1–6.2: сохранение продолжения, ликвидность, совместные границы и списания</a>.</p>
+    </section>
+
+    <!-- sec-6: both original coin scenarios are visible. Accepted check+migration is one formal application, shown as a combined debit. -->
+    <section id="sec-6" class="chapter" aria-labelledby="title-6">
+      <div class="section-head"><p class="kicker">07 / Контрпример low_liquidity</p><h2 id="title-6">Почему одна потраченная монета превращает счёт 4 в 10</h2><p class="intro">Вернёмся к примеру с препятствием глубины. Завершение старым контроллером стоит 7, новым — 1. Оба заявленных резерва равны 100. Начальный баланс — 103, подготовка предложения, проверка и миграция стоят по единице.</p></div>
+      <div class="prose"><p>Текущая метаполитика уже предписывает попытаться заменить контроллер. Сравним два пути: выполнить её сразу либо сначала потратить одну единицу на отклонённый апгрейд самой метаполитики.</p></div>
+      <div class="scenario-grid"><article class="scenario"><div class="scenario-head"><p class="label">Сценарий A / без метаотказа</p><h3>На замену хватает</h3></div><ol><li><span>Начальный баланс. Основной резерв обеспечен.</span><span class="balance">B = 103</span></li><li><span>Подготовка предложения: −1.</span><span class="balance">B = 102</span></li><li><span>Шлюз принимает замену: проверка и миграция вместе −2. Новый резерв 100 сохранён.</span><span class="balance">B = 100</span></li><li><span>Новый контроллер завершает поиск: −1.</span><span class="balance">B = 99</span></li></ol><div class="scenario-total"><div><strong>4</strong><span> — итоговый счёт</span></div><span>1 + 2 + 1</span></div></article><article class="scenario loss"><div class="scenario-head"><p class="label">Сценарий Б / метаотказ стоит 1</p><h3>Миграция уже недоступна</h3></div><ol><li><span>Начальный баланс.</span><span class="balance">B = 103</span></li><li><span>Оплаченный, но отклонённый метаапгрейд: −1. Прежняя политика сохраняется.</span><span class="balance">B = 102</span></li><li><span>Подготовка предложения: −1.</span><span class="balance">B = 101</span></li><li><span>Проверка оплачена: −1. Миграция нарушила бы резерв 100, поэтому замена отклонена.</span><span class="balance">B = 100</span></li><li><span>Старый контроллер завершает поиск: −7. Новый не устанавливался.</span><span class="balance">B = 93</span></li></ol><div class="scenario-total"><div><strong>10</strong><span> — итоговый счёт</span></div><span>1 + 1 + 1 + 7</span></div></article></div>
+      <div class="note warm"><strong>Потеря возможности дороже самой платы.</strong> Дополнительная единица пересекает порог ликвидности. Выгодная замена становится недоступна, и приходится завершать поиск старым контроллером. Именно это происходит в конечном примере 4 → 10.</div>
+      <div class="prose"><h3>Почему остаток может быть меньше резерва 100</h3><p>Резерв защищают от расходов на исследование и замену, чтобы осталось чем закончить основную работу. <strong>Само завершение оплачивается из этого резерва.</strong> Это достаточная верхняя граница будущего счёта, а не неприкосновенная сумма, которая обязана остаться навсегда.</p><p>Поэтому конечные балансы 99 и 93 допустимы. Учёт сходится в обоих случаях: <span class="math">99 + 4 = 103</span> и <span class="math">93 + 10 = 103</span>. Никакие ресурсы не возникли и не исчезли.</p><h3>Два уровня экономического учёта</h3><p>Для корневого контроллера рассматривают величину Φ: уже списанное плюс точный модельный счёт завершения текущим контроллером. Для связной конечной истории действует закон:</p></div>
+      <div class="formula">Φ<sub>конец</sub> + G = Φ<sub>начало</sub> + O<span class="formula-caption">G — чистая выгода принятых замен; O — платы за отклонённые попытки и внешние свидетельства.</span></div>
+      <div class="prose spaced"><p>Итоговая экономия относительно немедленного завершения исходным контроллером есть ровно тогда, когда <span class="math">G &gt; O</span>. В первом сценарии <span class="math">7 + 1 − 4 = 4</span>, во втором — <span class="math">7 + 3 − 0 = 10</span>.</p><p>А счёт метаполитики Ψ включает исполнение её дерева и последующее завершение поиска. Он зависит от того, <em>какие операции дерево сможет оплатить</em>. Поэтому после метаотказа его изменение нельзя свести только к цене самого отказа. Монотонное улучшение по Ψ в статье доказано для историй <strong>без отклонённых метаапгрейдов</strong>; бесплатные отложения допустимы.</p></div>
+      <p class="source">Источники: <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/ru/section6.tex">§6.3, точный корневой учёт</a>; <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/ru/section7.tex">§7.2, ограничение метамонотонности и контрпример 4 → 10</a>.</p>
+    </section>
+
+    <!-- sec-7: exact finite scheduling, scoped completeness, and supplied-log verification status. -->
+    <section id="sec-7" class="chapter" aria-labelledby="title-7">
+      <div class="section-head"><p class="kicker">08 / Что удаётся собрать в одну теорему</p><h2 id="title-7">Менять можно и способ выбора замен</h2><p class="intro">Контроллер обрабатывает поиск. Метаполитика определяет, оплачивать ли наблюдение, сохранять ли контроллер или готовить попытку его замены. Она представлена конечным деревом — и это дерево тоже допускает сертифицированную замену.</p></div>
+      <div class="prose"><p>Для принятия метаапгрейда требуется доказать уменьшение полного счёта относительно точного текущего состояния. Цена апгрейда уже учтена в новом состоянии после оплаты; прибавлять её повторно не нужно. Установка нового дерева ещё не означает его исполнения и сама по себе не заменяет корневой контроллер.</p><p>Итоговый протокол конкретен: выполнить <strong>конечный список</strong> планов метаапгрейда, один раз интерпретировать последнее установленное дерево, затем закончить основной поиск из обеспеченного резерва. Теорема относится к фиксированным конечным задачам, фиксированному провайдеру и корректно типизированным предложениям.</p></div>
+      <ul class="guarantees"><li><strong>Поиск завершён</strong><span>Очередь оставшихся заданий опустошена. Исходное продолжение должно быть обеспечено ресурсами.</span></li><li><strong>Результаты полны</strong><span>Совпадает принадлежность каждого канонического морфизма результату и эталонному <code>discoverAll(S,T)</code>. Порядок и кратность элементов не обязаны совпадать.</span></li><li><strong>Невозможность точна</strong><span>Пустой финальный список эквивалентен отсутствию морфизма именно в заданном классе переноса. Это не утверждение о невозможности любых других методов.</span></li><li><strong>Ресурсы учтены</strong><span>Сумма доступного баланса и накопленных модельных списаний сохраняется.</span></li><li><strong>История сохранена</strong><span>Допустимые переходы сохраняют установленные отношения между сертификатами, квитанциями и журналами. Гарантия относится к формальной истории состояний.</span></li></ul>
+      <div class="prose"><h3>Тот же пример с глубиной: три разные цены</h3><p>Во всех трёх исполнениях доказывается отсутствие морфизма. Различается объём оплаченной работы. Сравнивать суммы нужно вместе с тем, что в них включено.</p></div>
+      <div class="cards"><article class="card cost-card"><p class="label">Базовый поиск</p><div class="big-number">7</div><h3>Без правила глубины</h3><p>Три шага разбиения и четыре шага подготовки. Поиск исчерпывается и подтверждает отсутствие переноса.</p><span class="math">3 + 4 = 7</span></article><article class="card cost-card"><p class="label">Корневая замена</p><div class="big-number">3</div><h3>Предложение уже готово</h3><p>Проверка, миграция и один оплаченный шаг правила глубины. Подготовка предложения в эту сумму не входит.</p><span class="math">1 + 1 + 1 = 3</span></article><article class="card cost-card"><p class="label">CLI-сценарий single</p><div class="big-number">6</div><h3>С объявленными сборами</h3><p>Метаапгрейд, наблюдение, подготовка, проверка, миграция и правило: шесть единичных начислений данного сценария.</p><span class="math">1 + 1 + 1 + 1 + 1 + 1 = 6</span></article></div>
+      <p class="source">Источники: <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/ru/section7.tex">§7, теоремы 7.1–7.3</a>; <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/ru/section8.tex">§8.2, сопоставление 7 / 3 / 6</a>. Корневой пример 3: <code>ControllerReplacement.Witnesses.paid_end_to_end</code>.</p>
+      <div class="prose"><h3>Откуда берутся доказательства для предложений</h3><p>Полезные границы не обязаны быть точными, но должны быть доказанно корректными. Некоторые сертификаты строятся внутри стека: например, статический потенциал P(C,f) даёт достаточный резерв. Точный счёт конечного продолжения тоже определён конструктивно, но его получение может оказаться дорогим.</p><p>Общий дешёвый синтез достаточно сильных сравнительных границ и всех фабрик предложений здесь не решён. Они поступают с доказательными обязательствами, привязанными к текущему состоянию. Само наличие места для такого входа не доказывает, что его легко произвести.</p><h3>Граница применимости</h3><p>Верификатор, корневой контракт, провайдер и базовые тарифы фиксированы. Допускаются объявленные изменения сертифицированных библиотек правил и конечных деревьев метаполитик. Перенос произвольного кода, бесконечное самоулучшение, физическое ускорение нейросетей и сохранность файлов после сбоя этими результатами не установлены.</p></div>
+      <div class="verification"><h3>Что подтверждают материалы rc4</h3><div class="stats"><div><strong>21</strong><span>Lean-файл канонического стека</span></div><div><strong>542</strong><span>аудируемые декларации: 520 теорем и 22 определения</span></div><div><strong>9</strong><span>CLI-сценариев в приложенных материалах</span></div></div><p>В предоставленных успешных журналах Lean 4.36.0 для аудируемых деклараций нет зависимостей от <code>sorryAx</code> и <code>Classical.choice</code>; допустимый список аксиом включает <code>propext</code> и <code>Quot.sound</code>. Это не заявление об отсутствии любых аксиом.</p><p>Статус сборки rc4 — <code>SUPPLIED_LOGS_AND_PYTHON_REPLAY_PASS</code>: сопоставлены исходники, сохранённые журналы и Python-проверки. <strong>Новый независимый успешный запуск Lean этими материалами не подтверждён.</strong> Общая теорема о селекторе из исторического основания использует классический выбор и не входит в этот канонический импортный стек.</p><p class="small muted">Эта страница объясняет результаты и показывает арифметический пример. Её JavaScript не является формальной верификацией теорем.</p></div>
+      <div class="closing"><p class="label">Главная идея</p><p>Изменение метода становится проверяемым переходом: нужно сохранить смысл оставшейся работы, предъявить достаточные свидетельства и оплатить изменение так, чтобы ещё можно было закончить задачу.</p></div>
+      <p class="source">Источники: <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/ru/section8.tex">§8.1, происхождение журналов и статус проверки</a>; <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/ru/section9.tex">§9, внешние входы и границы модели</a>.</p>
+    </section>
+
+    <section class="sources" id="sources" aria-labelledby="sources-title"><p class="kicker">Первоисточники</p><h2 id="sources-title">Препринт, исходники и проверка</h2><ul class="source-links"><li><a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4-ru.pdf">Русский препринт · PDF</a><small>CRTT v1.0-rc4, 20 страниц.</small></li><li><a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4.pdf">English preprint · PDF</a><small>From Certified Discovery to Meta-Policy Closure.</small></li><li><a href="https://github.com/Dnarts/proof-carrying-discovery/tree/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/formal/canonical">Канонические исходники Lean</a><small>Определения, доказательства и программа проверки.</small></li><li><a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/publication/supplement/FRESH_VERIFICATION.md">Инструкция независимого запуска</a><small>Как получить новый журнал проверки.</small></li><li><a href="https://github.com/Dnarts/proof-carrying-discovery/tree/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4">Полный комплект публикации</a><small>Обе языковые версии, архивы, приложения и журналы.</small></li><li><a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/SHA256SUMS.txt">Контрольные суммы SHA-256</a><small>Ссылки закреплены за опубликованной версией файлов.</small></li></ul></section>
+  </main>
+  <footer><div class="wrap"><p>CRTT / Научно-популярный разбор по препринту v1.0-rc4<br>Редакционная проверка: 28 ноября 2026.</p><a href="#top">К началу ↑</a></div></footer>
+  <script>
+    'use strict';
+    // This fixed illustrative offer assumes proved continuation equivalence,
+    // funded reserves, and sound cost bounds. It does not verify those proofs.
+    // The slider domain B >= 100 preserves the initial funding assumption.
+    const balanceInput = document.getElementById('balance');
+    function renderGate() {
+      const B = Number(balanceInput.value);
+      const H = 1, K = 1, Rold = 100, Rnew = 100, Lold = 7, Unew = 1;
+      let verdict, title, debit, explanation;
+      if (H + Rold > B) {
+        verdict = 'deferred'; title = 'Платная попытка отложена'; debit = 0;
+        explanation = `101 > ${B}: оплатить проверку и сохранить старый резерв нельзя. Платная проверка и миграция отложены; состояние не меняется.`;
+      } else if (H + K + Rnew > B) {
+        verdict = 'liquidity'; title = 'Отказ по ликвидности'; debit = H;
+        explanation = `101 ≤ ${B}, но 102 > ${B}: проверка оплачена, а миграция нарушила бы новый резерв. Старый контроллер сохраняется; строгая экономия не делает замену доступной.`;
+      } else if (H + K + Unew >= Lold) {
+        // Retain the full arithmetic guard even though this fixed offer passes it.
+        verdict = 'gain'; title = 'Строгая выгода не доказана'; debit = H;
+        explanation = 'Проверка и миграция вместе с верхней границей нового счёта не меньше нижней границы старого. Старый контроллер сохраняется.';
+      } else {
+        verdict = 'accepted'; title = 'Замена принята'; debit = H + K;
+        explanation = `101 ≤ ${B} и 102 ≤ ${B}: оба резерва обеспечены. Условие выгоды 3 < 7 выполнено. Устанавливается новый контроллер.`;
+      }
+      document.getElementById('balance-value').value = String(B);
+      balanceInput.setAttribute('aria-valuetext', `${B} условных единиц. ${title}. Списание ${debit}. Остаток ${B - debit}.`);
+      document.getElementById('gate-result').dataset.verdict = verdict;
+      document.getElementById('gate-verdict').textContent = title;
+      document.getElementById('gate-debit').textContent = String(debit);
+      document.getElementById('gate-remaining').textContent = String(B - debit);
+      document.getElementById('gate-explanation').textContent = explanation;
+    }
+    balanceInput.disabled = false;
+    balanceInput.addEventListener('input', renderGate);
+    renderGate();
+  </script>
+</body>
+</html>

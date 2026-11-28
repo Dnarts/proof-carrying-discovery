@@ -1,0 +1,347 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f4f3ee">
+  <meta name="description" content="A plain-language guide to CRTT: observation sufficiency, method transfer, rule learning, budgets and certified controller replacement. A continuous article with no tabs.">
+  <meta name="crtt-manuscript-revision" content="v1.0-rc4; GitHub bc7bf91a93c999c877facf4069aabab3cac03f6e">
+  <meta name="crtt-original-html-sha256" content="6a4aa3985c1605746b2ad3b9ba24a85cc8b2d107e427fd5fdac83013cf27c4bb">
+  <title>CRTT — How to change methods during a search</title>
+  <style>
+    :root{--paper:#f4f3ee;--white:#fbfaf6;--ink:#141414;--muted:#585850;--line:#d1cfc5;--red:#bd3016;--blue:#244b99;--green:#286047;--red-wash:#f3e5df;--blue-wash:#e7ebf3;--green-wash:#e5ece5;--sans:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;--mono:"SFMono-Regular",Consolas,"Liberation Mono",monospace}
+    *{box-sizing:border-box}
+    html{background:var(--paper);color:var(--ink);scroll-behavior:auto;scroll-padding-top:86px}
+    body{margin:0;font-family:var(--sans);font-size:17px;line-height:1.75;-webkit-font-smoothing:antialiased}
+    a{color:var(--blue);text-underline-offset:4px;text-decoration-thickness:1px}
+    a:hover{text-decoration-thickness:2px}
+    a:focus-visible,input:focus-visible{outline:3px solid var(--blue);outline-offset:5px}
+    h1,h2,h3,p,ul,ol,figure,dl{margin:0}
+    h1,h2,h3{line-height:1.16;letter-spacing:-.035em;text-wrap:balance}
+    h1{font-size:clamp(36px,5.4vw,66px);font-weight:750;max-width:780px}
+    h2{font-size:clamp(28px,3.6vw,42px);font-weight:720;max-width:850px}
+    h3{font-size:22px;font-weight:700;line-height:1.3}
+    strong{font-weight:700}
+    code,.math{font-family:var(--mono);font-size:.92em;overflow-wrap:anywhere}
+    sub{font-size:.72em;line-height:0}
+    svg{display:block;max-width:100%;height:auto}
+    .wrap{width:min(1140px,100% - 64px);margin-inline:auto}
+    .topbar{position:sticky;top:0;z-index:10;border-bottom:1px solid var(--ink);background:var(--paper)}
+    .topbar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:58px}
+    .brand{font-family:var(--mono);font-size:14px;font-weight:700;letter-spacing:.08em;color:var(--ink);text-decoration:none;white-space:nowrap}
+    .brand::before{content:"";display:inline-block;background:var(--red);width:9px;height:9px;margin-right:10px}
+    .edition{color:var(--muted);font-size:11px;margin-left:12px;letter-spacing:.03em}
+    .navlinks{display:flex;gap:24px;align-items:center;font-size:13px}
+    .navlinks a{color:var(--ink);text-decoration:none}
+    .navlinks a:hover{text-decoration:underline}
+    .skip-link{position:absolute;left:16px;top:12px;transform:translateY(-180%);z-index:20;padding:8px 14px;background:var(--ink);color:var(--paper)}
+    .skip-link:focus{transform:none}
+    main{padding-block:54px 88px}
+    .eyebrow,.kicker,.label{font:600 11px/1.6 var(--mono);letter-spacing:.09em;text-transform:uppercase}
+    .eyebrow{color:var(--red);margin-bottom:24px}
+    .hero{border:1.5px solid var(--ink)}
+    .hero-main{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(0,1fr)}
+    .hero-copy{padding:42px}
+    .hero h1 em{font-style:normal;color:var(--red)}
+    .deck{font-size:20px;line-height:1.65;margin-top:24px;max-width:660px}
+    .byline{font-size:13px;color:var(--muted);margin-top:30px;line-height:1.65}
+    .byline a{font-size:13px}
+    .hero-aside{padding:30px;border-left:1.5px solid var(--ink);background:var(--white);display:flex;flex-direction:column;justify-content:center;gap:28px}
+    .hero-aside dt{font-size:13px;font-weight:750;letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px}
+    .hero-aside dd{margin:0;font-size:14px;line-height:1.6;color:var(--muted)}
+    .hero-aside dl{display:grid;gap:20px}
+    .hero-foot{border-top:1.5px solid var(--ink);padding:18px 28px;display:flex;align-items:center;justify-content:space-between;gap:22px;font-size:13px}
+    .hero-foot p{max-width:740px;color:var(--muted)}
+    .read-link{font-weight:700;white-space:nowrap}
+    .opening{max-width:780px;margin:36px 0 0;font-size:19px}
+    .contents{margin-top:32px;border-block:1px solid var(--line);padding-block:20px;display:grid;grid-template-columns:125px minmax(0,1fr);gap:16px}
+    .contents ol{list-style:none;padding:0;display:flex;flex-wrap:wrap;gap:10px 26px;font-size:14px}
+    .contents a{color:var(--ink)}
+    section.chapter{margin-top:84px;scroll-margin-top:84px}
+    .section-head{border-top:2px solid var(--ink);padding-top:15px;margin-bottom:28px}
+    .kicker{color:var(--red);margin-bottom:16px}
+    .intro{max-width:770px;font-size:19px;margin-top:20px;line-height:1.75}
+    .prose{max-width:770px}
+    .prose p+p{margin-top:18px}
+    .prose h3{margin-top:34px;margin-bottom:14px}
+    .split{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:32px;align-items:start}
+    .spaced{margin-top:30px}
+    .small{font-size:14px;line-height:1.7}
+    .muted{color:var(--muted)}
+    .note{padding:20px 24px;border-left:4px solid var(--blue);background:var(--blue-wash);font-size:16px;line-height:1.75;margin-top:28px}
+    .note strong:first-child{color:var(--blue)}
+    .note.warm{border-left-color:var(--red);background:var(--red-wash)}
+    .note.warm strong:first-child{color:var(--red)}
+    .note.green{border-left-color:var(--green);background:var(--green-wash)}
+    .note.green strong:first-child{color:var(--green)}
+    .source{font-size:12px;line-height:1.7;color:var(--muted);margin-top:24px}
+    .source a{color:var(--muted)}
+    .cards{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--ink);margin-top:28px;background:var(--white)}
+    .card{padding:24px}
+    .card+.card{border-left:1px solid var(--ink)}
+    .card .label{color:var(--red);margin-bottom:12px}
+    .card h3{font-size:20px;margin-bottom:12px}
+    .card p{font-size:15px;line-height:1.75}
+    .card .math{display:block;margin-top:16px;font-size:13px;color:var(--blue)}
+    .diagram{padding:26px;border:1px solid var(--ink);background:var(--white)}
+    .diagram svg{width:100%;max-width:390px;margin-inline:auto}
+    figcaption{font-size:13px;line-height:1.65;margin-top:20px;color:var(--muted)}
+    table{border-collapse:collapse;width:100%;font-size:15px;line-height:1.6}
+    caption{text-align:left;font-size:16px;font-weight:700;margin-bottom:12px}
+    th,td{padding:13px 12px;text-align:left;border-bottom:1px solid var(--line);vertical-align:top}
+    thead th{font:600 11px/1.6 var(--mono);text-transform:uppercase;letter-spacing:.04em;border-block:1px solid var(--ink);color:var(--muted)}
+    tbody th{font-weight:600}
+    tr.emphasis{background:var(--red-wash)}
+    tr.emphasis td,tr.emphasis th{color:var(--red);font-weight:700}
+    .table-note{font-size:14px;color:var(--muted);margin-top:16px;line-height:1.7}
+    .result-strip{display:grid;grid-template-columns:auto minmax(0,1fr);gap:30px;align-items:center;padding:26px 30px;border:1px solid var(--red);margin-top:28px;background:var(--white)}
+    .big-number{font-family:var(--mono);font-weight:700;font-size:40px;line-height:1.2;color:var(--red);letter-spacing:-.06em}
+    .result-strip p{font-size:16px}
+    .result-strip .label{color:var(--red);margin-top:8px}
+    .formula{padding:20px 24px;border-block:1px solid var(--ink);font-family:var(--mono);font-size:19px;line-height:1.7;overflow-wrap:anywhere;margin-top:22px;background:var(--white)}
+    .formula .formula-caption{font-family:var(--sans);font-size:14px;color:var(--muted);margin-top:8px;display:block}
+    .guard-list{list-style:none;padding:0;margin-top:28px;border:1px solid var(--ink)}
+    .guard-list li{display:grid;grid-template-columns:42px minmax(0,1fr) minmax(0,1.15fr);gap:22px;padding:22px;background:var(--white);align-items:start}
+    .guard-list li+li{border-top:1px solid var(--line)}
+    .guard-num{font:600 13px/1 var(--mono);width:32px;height:32px;display:grid;place-items:center;background:var(--ink);color:var(--paper)}
+    .guard-list h3{font-size:18px;margin-bottom:8px;letter-spacing:-.02em}
+    .guard-list .math{font-size:16px;color:var(--blue)}
+    .guard-list p{font-size:15px;line-height:1.7}
+    .lab{margin-top:30px;border:1.5px solid var(--ink);background:var(--white)}
+    .lab-header{padding:22px 26px;border-bottom:1px solid var(--ink)}
+    .lab-header .label{color:var(--blue);margin-bottom:7px}
+    .lab-header h3{font-size:22px}
+    .lab-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr)}
+    .lab-control{padding:26px;border-right:1px solid var(--ink)}
+    .lab-control label{display:block;font-size:16px;font-weight:650}
+    .balance-output{display:flex;align-items:baseline;justify-content:space-between;margin-top:18px;font-family:var(--mono)}
+    .balance-output output{font-size:42px;font-weight:650;color:var(--blue);line-height:1.2}
+    input[type=range]{width:100%;margin:24px 0 8px;height:28px;accent-color:var(--blue);cursor:pointer}
+    .range-labels{display:flex;justify-content:space-between;font:12px/1.5 var(--mono);color:var(--muted)}
+    .fixed-values{margin-top:24px;font-size:14px;line-height:1.85;color:var(--muted)}
+    .lab-result{padding:26px;--verdict-color:var(--green)}
+    .lab-result[data-verdict=deferred]{--verdict-color:var(--ink)}
+    .lab-result[data-verdict=liquidity]{--verdict-color:var(--red)}
+    .verdict{font-size:24px;line-height:1.3;font-weight:700;letter-spacing:-.025em;color:var(--verdict-color);margin:7px 0 16px}
+    .lab-metrics{display:flex;flex-wrap:wrap;gap:16px 32px;margin-bottom:18px;font-size:14px}
+    .lab-metrics dt{color:var(--muted)}
+    .lab-metrics dd{margin:3px 0 0;font-family:var(--mono);font-size:24px;font-weight:600}
+    .lab-result p{font-size:15px;line-height:1.75}
+    .lab-foot{border-top:1px solid var(--line);padding:16px 26px;font-size:13px;color:var(--muted)}
+    .thresholds .card h3{font-family:var(--mono);font-size:24px}
+    .thresholds .card:nth-child(2) .label{color:var(--red)}
+    .thresholds .card:nth-child(3) .label{color:var(--green)}
+    .pair-box{padding:22px;border:1px solid var(--line);margin-top:30px}
+    .pair-box h3{font-size:20px;margin-bottom:14px}
+    .pair-box p{font-size:15px;line-height:1.75}
+    .pair-math{display:flex;gap:14px 28px;flex-wrap:wrap;margin:16px 0;font:16px/1.8 var(--mono);color:var(--green)}
+    .scenario-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:24px;margin-top:28px}
+    .scenario{border:1.5px solid var(--ink);background:var(--white)}
+    .scenario-head{padding:24px;border-bottom:1px solid var(--ink)}
+    .scenario-head .label{color:var(--green);margin-bottom:10px}
+    .scenario.loss .label{color:var(--red)}
+    .scenario-head h3{font-size:23px}
+    .scenario ol{list-style:none;counter-reset:step;padding:0 24px}
+    .scenario li{counter-increment:step;display:grid;grid-template-columns:24px minmax(0,1fr) auto;gap:12px;padding:18px 0;border-bottom:1px solid var(--line);font-size:14px;line-height:1.65}
+    .scenario li::before{content:counter(step,decimal-leading-zero);font:11px/1.8 var(--mono);color:var(--muted)}
+    .scenario .balance{font:600 14px/1.8 var(--mono);white-space:nowrap}
+    .scenario-total{padding:22px 24px;display:flex;align-items:baseline;justify-content:space-between;gap:16px}
+    .scenario-total strong{font:700 38px/1.2 var(--mono);color:var(--green)}
+    .scenario.loss .scenario-total strong{color:var(--red)}
+    .scenario-total span{font-size:13px;color:var(--muted)}
+    .cost-card .big-number{color:var(--blue);font-size:46px;margin:10px 0}
+    .cost-card .label{color:var(--muted)}
+    .cost-card h3{font-size:19px}
+    .guarantees{padding:0;list-style:none;border-top:1px solid var(--line);margin-top:26px}
+    .guarantees li{padding:19px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:200px minmax(0,1fr);gap:28px;font-size:16px}
+    .guarantees strong{color:var(--green)}
+    .closing{background:var(--ink);color:var(--paper);padding:32px;margin-top:30px}
+    .closing .label{color:#ed9d8a;margin-bottom:14px}
+    .closing p{font-size:22px;line-height:1.6;max-width:850px;font-weight:500;letter-spacing:-.015em}
+    .verification{border:1px solid var(--ink);padding:28px;margin-top:28px}
+    .verification h3{margin-bottom:16px}
+    .verification p+p{margin-top:16px}
+    .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px;border-block:1px solid var(--line);padding-block:20px;margin-block:22px}
+    .stats strong{font:650 30px/1.2 var(--mono);display:block}
+    .stats span{font-size:12px;color:var(--muted);line-height:1.6;display:block;margin-top:6px}
+    .sources{margin-top:70px;border-top:2px solid var(--ink);padding-top:22px}
+    .sources h2{font-size:28px;margin-bottom:22px}
+    .source-links{list-style:none;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 32px;font-size:15px}
+    .source-links li{padding-bottom:14px;border-bottom:1px solid var(--line)}
+    .source-links small{display:block;color:var(--muted);font-size:12px;margin-top:4px}
+    footer{border-top:1px solid var(--ink);padding-block:25px;font-size:12px;color:var(--muted)}
+    footer .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px}
+    @media(max-width:900px){.hero-copy{padding:30px}.hero-aside{padding:24px}.hero-main{grid-template-columns:minmax(0,1.6fr) minmax(0,1fr)}.guard-list li{grid-template-columns:32px minmax(0,1fr);gap:12px 18px}.guard-list li>p{grid-column:2}.card{padding:20px}.cards{grid-template-columns:1fr}.card+.card{border-left:0;border-top:1px solid var(--line)}.thresholds{grid-template-columns:repeat(3,minmax(0,1fr))}.thresholds .card+.card{border-top:0;border-left:1px solid var(--line)}}
+    @media(max-width:650px){body{font-size:16px;line-height:1.8}.wrap{width:calc(100% - 36px)}.topbar .wrap{min-height:54px;gap:10px}.edition{display:none}.navlinks{font-size:12px;gap:16px}main{padding-top:28px}.hero-main{grid-template-columns:1fr}.hero-copy{padding:26px 22px}.hero-aside{border-left:0;border-top:1px solid var(--ink);padding:24px}.hero-aside>svg{display:none}.hero-aside dl{gap:15px}.hero-aside dt{font-size:12px}.hero-aside dd{font-size:14px}.eyebrow{font-size:10px;margin-bottom:20px}.deck{font-size:17px;margin-top:20px}.hero-foot{padding:18px 22px;display:block}.hero-foot .read-link{display:inline-block;margin-top:12px}.opening,.intro{font-size:17px}.contents{grid-template-columns:1fr;gap:12px}.contents ol{gap:9px 20px;font-size:13px}section.chapter{margin-top:58px}.section-head{padding-top:13px;margin-bottom:22px}.kicker{font-size:10px;margin-bottom:13px}.split,.scenario-grid,.lab-grid{grid-template-columns:1fr;gap:24px}.diagram{padding:22px 18px}.note{padding:18px 20px;font-size:15px}.result-strip{grid-template-columns:1fr;gap:18px;padding:24px}.big-number{font-size:36px}.formula{padding:18px;font-size:16px}.guard-list li{padding:20px 16px}.guard-list .math{font-size:14px}.lab-grid{gap:0}.lab-control{border-right:0;border-bottom:1px solid var(--line);padding:22px}.lab-header,.lab-result{padding:22px}.lab-foot{padding:16px 22px}.thresholds{grid-template-columns:1fr}.thresholds .card+.card{border-left:0;border-top:1px solid var(--line)}.pair-box{padding:20px}.scenario-head{padding:22px}.scenario ol{padding-inline:20px}.scenario li{gap:10px;grid-template-columns:22px minmax(0,1fr) auto}.scenario-total{padding:22px 20px}.guarantees li{grid-template-columns:1fr;gap:7px}.closing{padding:24px}.closing p{font-size:19px}.verification{padding:22px}.stats{gap:14px}.stats strong{font-size:26px}.source-links{grid-template-columns:1fr}.sources{margin-top:55px}th,td{padding:12px 8px;font-size:14px}footer .wrap{align-items:start;flex-direction:column;gap:12px}}
+    @media(max-width:360px){.wrap{width:calc(100% - 28px)}.navlinks{gap:12px}.brand{font-size:13px}.hero-copy{padding-inline:18px}h1{font-size:33px}.scenario li{grid-template-columns:minmax(0,1fr) auto}.scenario li::before{display:none}.guard-list li{gap:10px}.guard-num{width:26px;height:26px}.guard-list h3{font-size:17px}}
+    @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;animation:none!important;transition:none!important}}
+    @media print{body{font-size:10pt;background:white;line-height:1.6}.wrap{width:100%}.topbar,.read-link,.skip-link,.lab-control input,.range-labels{display:none}main{padding:0}h1{font-size:28pt}h2{font-size:20pt}.hero-copy,.hero-aside{padding:20px}.chapter{margin-top:32px!important}.section-head{break-after:avoid}.cards,.scenario,.note,.diagram,.verification{break-inside:avoid}.closing{color:black;background:white;border:2px solid black}.closing .label{color:black}.source a{color:black}a{text-decoration:none}.lab-grid{display:block}.lab-control{border:0}.source-links{display:block}.sources{break-before:page}footer{margin-top:30px}}
+  </style>
+</head>
+<body>
+  <a class="skip-link" href="#sec-1">Skip to the article</a>
+  <nav class="topbar" aria-label="Article navigation">
+    <div class="wrap">
+      <a class="brand" href="#top">CRTT<span class="edition">v1.0-rc4 / a plain-language guide</span></a>
+      <div class="navlinks"><a href="#sec-1">Article</a><a href="#sec-5">Budget</a><a href="#sources">Sources</a></div>
+    </div>
+  </nav>
+  <main id="top" class="wrap">
+    <!-- HERO: the aircraft metaphor was replaced because the theorems concern a finite model, not physical flight safety. -->
+    <header class="hero">
+      <div class="hero-main">
+        <div class="hero-copy">
+          <p class="eyebrow">Contract-Relative Transformation Theory</p>
+          <h1>How to <em>change methods</em> during a search</h1>
+          <p class="deck">While preserving proved guarantees: correct results, the ability to finish the work, and a record of the steps already taken.</p>
+          <p class="byline">Based on the preprint <cite>From Certified Discovery to Meta-Policy Closure</cite><br><strong>Aleksandr Strand</strong><br><a href="mailto:strandlex@gmail.com">strandlex@gmail.com</a></p>
+        </div>
+        <aside class="hero-aside" aria-label="Three key concepts">
+          <svg viewBox="0 0 300 110" role="img" aria-labelledby="flow-title flow-desc">
+            <title id="flow-title">The method changes; the contract is preserved</title><desc id="flow-desc">The old and new methods are connected by a verified replacement under one fixed contract.</desc>
+            <path d="M20 24H280" stroke="#141414" stroke-dasharray="4 4"/><text x="150" y="14" text-anchor="middle" font-family="sans-serif" font-size="11" fill="#585850">ONE CONTRACT</text>
+            <rect x="0" y="44" width="100" height="43" fill="#141414"/><text x="50" y="70" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#f4f3ee">Method A</text>
+            <path d="M110 65H190m-9-7 9 7-9 7" fill="none" stroke="#bd3016" stroke-width="2"/>
+            <rect x="200" y="44" width="100" height="43" fill="#244b99"/><text x="250" y="70" text-anchor="middle" font-family="sans-serif" font-size="13" fill="#f4f3ee">Method B</text>
+            <text x="150" y="107" text-anchor="middle" font-family="sans-serif" font-size="10" fill="#585850">with checked transition conditions</text>
+          </svg>
+          <dl><div><dt>Contract</dt><dd>What counts as an admissible result for the declared task.</dd></div><div><dt>Controller</dt><dd>The rules that govern how the search proceeds.</dd></div><div><dt>Meta-policy</dt><dd>A plan that determines whether to prepare an attempt to replace the controller.</dd></div></dl>
+        </aside>
+      </div>
+      <div class="hero-foot"><p>The setting is a finite deterministic model. The “coins” below are accounting units, not measured seconds or bytes of memory.</p><a class="read-link" href="#sec-1">Read in order ↓</a></div>
+    </header>
+    <p class="opening">An algorithm has already started work: it has checked some candidates, ruled out impossible ones, and kept the solutions it has found. Now another method is available. CRTT studies <strong>how to permit that replacement while preserving the meaning of the unfinished search</strong> — and how to check that the resources will cover it.</p>
+    <nav class="contents" aria-label="Contents"><span class="label">Reading route</span><ol><li><a href="#sec-1">01 Contract</a></li><li><a href="#sec-2">02 Observation</a></li><li><a href="#sec-transfer">03 Transfer</a></li><li><a href="#sec-3">04 Learning</a></li><li><a href="#sec-4">05 Selection</a></li><li><a href="#sec-5">06 Replacement</a></li><li><a href="#sec-6">07 The last coin</a></li><li><a href="#sec-7">08 Closure</a></li></ol></nav>
+
+    <!-- sec-1 preserves the original architecture subject; every explanation is now ordinary document content. -->
+    <section id="sec-1" class="chapter" aria-labelledby="title-1">
+      <div class="section-head"><p class="kicker">01 / First, define the task</p><h2 id="title-1">Correctness is always relative to a contract</h2><p class="intro">The contract specifies which actions are admissible in each state. A suitable method must satisfy those requirements. Three distinct obstacles can arise.</p></div>
+      <div class="cards"><article class="card"><p class="label">No suitable action</p><h3>Operator barrier</h3><p>The permitted class may contain no action that satisfies the contract. Even complete knowledge of the state cannot help in that case.</p></article><article class="card"><p class="label">Too few distinctions</p><h3>Representation barrier</h3><p>The observation groups together states for which no single common admissible action can be chosen.</p></article><article class="card"><p class="label">Selection goes wrong</p><h3>Selection barrier</h3><p>An admissible action exists and the observation is sufficient, yet the selection mechanism may still choose an inadmissible option.</p></article></div>
+      <div class="prose spaced"><p>These are different causes of failure. New observations help distinguish states; they do not create a missing operator. And the existence of a correct choice does not mean the current program will find it.</p><p>A running system raises further questions: whether a method can be transferred to a new task, what it costs to find and check a replacement, and whether enough resources will remain to finish. We will follow that sequence below.</p></div>
+      <p class="source">Source: <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/en/sections12.tex">preprint, §§1–2: the contract and the three initial barriers</a>.</p>
+    </section>
+
+    <!-- sec-2: show all pair intersections and the collective obstruction together; no worlds disappear on click. -->
+    <section id="sec-2" class="chapter" aria-labelledby="title-2">
+      <div class="section-head"><p class="kicker">02 / How much must be known?</p><h2 id="title-2">An observation is sufficient when it supports an admissible choice</h2><p class="intro">The exact state of the world need not be identified. It is enough that each group of states the observation cannot distinguish has at least one action admissible for the entire group.</p></div>
+      <div class="split">
+        <figure class="diagram"><svg viewBox="0 0 360 270" role="img" aria-labelledby="triangle-title triangle-desc"><title id="triangle-title">Every pair of worlds has a common action; the triple does not</title><desc id="triangle-desc">World x1 admits A and B, x2 admits B and C, and x3 admits A and C. Each pair has a common action, but the intersection for all three worlds is empty.</desc><path d="M180 46L58 210H302Z" fill="none" stroke="#286047" stroke-width="2"/><rect x="136" y="13" width="88" height="64" fill="#141414"/><text x="180" y="39" fill="#f4f3ee" text-anchor="middle" font-family="sans-serif" font-size="18">x₁</text><text x="180" y="61" fill="#f4f3ee" text-anchor="middle" font-family="sans-serif" font-size="14">{A, B}</text><rect x="14" y="186" width="88" height="64" fill="#141414"/><text x="58" y="212" fill="#f4f3ee" text-anchor="middle" font-family="sans-serif" font-size="18">x₂</text><text x="58" y="234" fill="#f4f3ee" text-anchor="middle" font-family="sans-serif" font-size="14">{B, C}</text><rect x="258" y="186" width="88" height="64" fill="#141414"/><text x="302" y="212" fill="#f4f3ee" text-anchor="middle" font-family="sans-serif" font-size="18">x₃</text><text x="302" y="234" fill="#f4f3ee" text-anchor="middle" font-family="sans-serif" font-size="14">{A, C}</text><rect x="97" y="117" width="32" height="27" fill="#fbfaf6"/><text x="113" y="137" text-anchor="middle" fill="#286047" font-family="sans-serif" font-size="17">B</text><rect x="231" y="117" width="32" height="27" fill="#fbfaf6"/><text x="247" y="137" text-anchor="middle" fill="#286047" font-family="sans-serif" font-size="17">A</text><rect x="164" y="195" width="32" height="27" fill="#fbfaf6"/><text x="180" y="215" text-anchor="middle" fill="#286047" font-family="sans-serif" font-size="17">C</text><text x="180" y="164" text-anchor="middle" fill="#bd3016" font-family="sans-serif" font-size="44">∅</text></svg><figcaption>Each edge shows the common action for a pair. The centre marks the empty intersection of all three sets. Pairwise compatibility is not enough.</figcaption></figure>
+        <div><table><caption>The same action for the listed worlds</caption><thead><tr><th scope="col">Worlds</th><th scope="col">Common actions</th></tr></thead><tbody><tr><th scope="row">x₁ and x₂</th><td>{B}</td></tr><tr><th scope="row">x₁ and x₃</th><td>{A}</td></tr><tr><th scope="row">x₂ and x₃</th><td>{C}</td></tr><tr class="emphasis"><th scope="row">x₁, x₂ and x₃</th><td>∅ — none</td></tr></tbody></table><p class="table-note">If the observation cannot distinguish any of the three worlds, no admissible action can be selected: every answer violates the contract in at least one world.</p></div>
+      </div>
+      <div class="prose spaced"><p>Any pair can be grouped together while keeping the third world separate. This gives three sufficient partitions: <span class="math">{x₁,x₂} | {x₃}</span>, <span class="math">{x₁,x₃} | {x₂}</span> and <span class="math">{x₂,x₃} | {x₁}</span>. But a sufficient partition coarser than all three <strong>does not exist</strong>: it would have to group all three worlds together.</p><p>This is a collective obstruction: it is absent from every pair but appears in the group as a whole.</p></div>
+      <div class="note"><strong>What the criterion establishes.</strong> It establishes the existence of a policy that chooses actions from observations, not the correctness of any particular selector. The general theorem assumes a nonempty action space and uses classical choice; the later finite constructions are considered separately.</div>
+      <p class="source">Source: <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/en/sections12.tex">§2, Theorems 2.1 and 2.2; the triangle example</a>.</p>
+    </section>
+
+    <section id="sec-transfer" class="chapter" aria-labelledby="title-transfer">
+      <div class="section-head"><p class="kicker">03 / From selection to investigation</p><h2 id="title-transfer">A method still needs a valid transfer to the new task</h2><p class="intro">If the current observations are insufficient, further observations can be purchased. In the model, an investigation is a finite tree: query a feature, receive 0 or 1, follow the corresponding branch, and eventually choose an action.</p></div>
+      <div class="prose"><p>For specified states, queries, prices and a depth limit, exhaustive search can construct a tree with optimal worst-case cost. This is optimality <strong>among the declared legal trees</strong>; it does not make the search itself inexpensive.</p><p>Now suppose a tree has already been found for task <span class="math">S</span>, while the task to be solved is <span class="math">T</span>. CRTT defines a <em>transfer morphism</em>: a compatible mapping of states, queries and actions. It preserves observation responses and respects the depth constraint, without increasing query prices or terminal losses.</p><p>Given such a morphism, the source tree can be translated to the target task with proved guarantees. Finding the morphism is a separate search. The finite algorithm enumerates query maps and action maps and constructively chooses a compatible source state for each target state.</p></div>
+      <div class="note"><strong>What “complete search” means.</strong> It obtains a canonical representative for every admissible combination of query and action maps. It need not enumerate every possible state map. If the enumeration is exhausted and the canonical list is empty, no morphism exists in this specified class.</div>
+      <div class="prose"><h3>An example we will return to</h3><p>In the artifact’s example, the source task has depth limit <span class="math">d<sub>S</sub> = 1</span>, while the target has <span class="math">d<sub>T</sub> = 0</span>. The definition of a morphism requires <span class="math">d<sub>S</sub> ≤ d<sub>T</sub></span>, so no transfer of this type exists. This does not mean that the target task has no solution by other means.</p><p>Ordinary enumeration may take many steps to prove that no transfer exists. A certified depth rule can close the same search earlier. We will use this example below to see how replacing the controller changes the cost.</p></div>
+      <p class="source">Sources: <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/en/section3.tex">§3: optimal investigation, transfer and canonical discovery</a>; <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/en/section8.tex">§8.2: the depth-obstruction example</a>.</p>
+    </section>
+
+    <!-- sec-3 retains the obstruction-learning subject; distinguish inclusion-minimal cores from smallest cores. -->
+    <section id="sec-3" class="chapter" aria-labelledby="title-3">
+      <div class="section-head"><p class="kicker">04 / Making use of a failed search</p><h2 id="title-3">Compiling hard lessons: turn a dead end into a rule</h2><p class="intro">Sometimes a partial query mapping already rules out every compatible source state for some target world. Extending the mapping cannot rescue that branch: adding constraints cannot bring excluded states back.</p></div>
+      <div class="cards"><article class="card"><p class="label">Step 1</p><h3>Find the incompatibility</h3><p>The row of compatible worlds is empty. This provides a concrete witness that the branch cannot be extended to a morphism.</p><span class="math">Y<sub>w</sub>(ρ) = ∅</span></article><article class="card"><p class="label">Step 2</p><h3>Remove redundant constraints</h3><p>An inclusion-minimal core K is extracted: the incompatibility remains, but deleting any remaining constraint removes it. The core need not contain the smallest possible number of constraints.</p><span class="math">K ⊆ ρ</span></article><article class="card"><p class="label">Step 3</p><h3>Keep the pruning rule</h3><p>Assignments containing K can now be rejected. The proof guarantees that no admissible extension to a morphism is lost.</p><span class="math">K ⊆ ρ′ ⇒ the branch can be pruned</span></article></div>
+      <div class="prose spaced"><p>A recorded failure thus becomes a tool for future search. But usefulness has two aspects: the rule must be <strong>sound</strong>, and obtaining and using it must <strong>pay off</strong>. The first does not imply the second.</p></div>
+      <div class="result-strip"><div><div class="big-number">515 / 515</div><p class="label">more expensive in the cost model</p></div><p>In the specified finite test suite, the learning executor cost more than the fixed controller with a read-compatibility rule in all 515 funded, completed cases. Library lookup, core extraction and compilation were charged too.</p></div>
+      <div class="prose spaced"><p>This is a result for a particular controller, set of tasks and fee schedule. It does not measure the “probability that learning is useless”. It motivates the next question: <strong>when is a more elaborate method worth paying for?</strong></p></div>
+      <p class="source">Sources: <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/en/section4.tex">§4.3: Theorem 4.4 and the economics of learning</a>; <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/formal/canonical/ImpasseCompilation.lean">formal properties of core extraction and compilation</a>.</p>
+    </section>
+
+    <!-- sec-4: costs and regrets are simultaneously visible; the interval theorem is a separate guarantee. -->
+    <section id="sec-4" class="chapter" aria-labelledby="title-4">
+      <div class="section-head"><p class="kicker">05 / Evidence for a decision</p><h2 id="title-4">The right choice need not require an exact price</h2><p class="intro">Consider two methods and two possible hypotheses about their costs. In the second world, both prices are higher by 100. The best method is still the same.</p></div>
+      <div class="split"><table><caption>Absolute cost</caption><thead><tr><th scope="col">Hypothesis</th><th scope="col">Method 1</th><th scope="col">Method 2</th></tr></thead><tbody><tr><th scope="row">h₁</th><td>0</td><td>1</td></tr><tr><th scope="row">h₂</th><td>100</td><td>101</td></tr></tbody></table><table><caption>Regret: extra cost above the best in the same world</caption><thead><tr><th scope="col">Hypothesis</th><th scope="col">Method 1</th><th scope="col">Method 2</th></tr></thead><tbody><tr><th scope="row">h₁</th><td>0</td><td>1</td></tr><tr><th scope="row">h₂</th><td>0</td><td>1</td></tr></tbody></table></div>
+      <div class="prose spaced"><p>Method 1 is cheaper by one unit under both hypotheses. Its worst-case regret is zero. So <strong>to choose between these two methods</strong>, there is no need to distinguish the worlds. The exact eventual bill remains unknown, but that is a different question.</p><p>The guarantee concerns a specified finite catalogue of methods and a set of hypotheses containing the actual model. It cannot simply be extended to an unknown better method outside that catalogue.</p><h3>A different certificate: a sufficiently narrow interval</h3><p>Sometimes only proved cost bounds are known: <span class="math">L ≤ C ≤ U</span>. These yield lower and upper bounds on the optimal worst-case cost of investigation: <span class="math">V<sub>L</sub></span> and <span class="math">V<sub>U</sub></span>.</p><p>If the gap satisfies <span class="math">V<sub>U</sub> − V<sub>L</sub> ≤ ε</span>, the tree optimized for the upper bounds has worst-case cost at most ε above the true minimax optimum <strong>among the declared legal trees</strong>. Exact values for every cost are not required.</p></div>
+      <div class="note"><strong>Two different guarantees.</strong> In the first table, one method is optimal under every hypothesis. The interval certificate establishes how close worst-case cost is to the minimax optimum. By itself, it does not promise small regret in every individual world. A small gap is a sufficient, but not a necessary, condition for this near-optimality.</div>
+      <p class="source">Source: <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/en/section5.tex">§5, Theorems 5.2–5.3: interval minimax bounds and decision-relative evidence</a>.</p>
+    </section>
+
+    <!-- sec-5: fixed proof-bearing example, one funded balance slider. This JavaScript is an illustration, not a Lean verifier. -->
+    <section id="sec-5" class="chapter" aria-labelledby="title-5">
+      <div class="section-head"><p class="kicker">06 / Replacement during execution</p><h2 id="title-5">Lower cost is not enough. The transition must also be affordable</h2><p class="intro">An unfinished search contains discovered certificates, receipts and remaining jobs. Replacing the controller must preserve all three components, including the work that still needs to be checked.</p></div>
+      <div class="prose"><p>In this construction, the certified library of pruning rules changes while the base fees stay fixed. Rebuilding the queues preserves the meaning of the remaining jobs. The proposal already carries proofs that the replacement is sound, that its cost bounds are valid, and that its new completion reserve is sufficient.</p><p>Only then does the numerical gate operate. It neither synthesizes those proofs nor runs both controllers for free to compare their future bills.</p></div>
+      <ol class="guard-list"><li><span class="guard-num" aria-hidden="true">1</span><div><h3>The check is affordable</h3><div class="math">H + R<sub>old</sub> ≤ B</div></div><p>After paying H, enough reserve must remain to finish with the old controller, even if the proposal is rejected.</p></li><li><span class="guard-num" aria-hidden="true">2</span><div><h3>The replacement is affordable</h3><div class="math">H + K + R<sub>new</sub> ≤ B</div></div><p>After paying for the check H and migration K, enough reserve must remain to finish with the new controller.</p></li><li><span class="guard-num" aria-hidden="true">3</span><div><h3>Strict savings are proved</h3><div class="math">H + K + U<sub>new</sub> &lt; L<sub>old</sub></div></div><p>The check, migration and upper bound on the new bill together fall below the proved lower bound on the old bill.</p></li></ol>
+      <div class="prose spaced"><p>Here B is the available balance; R is a sufficient reserve, not money already spent; L and U are sound bounds that need not be exact. The initial state must already satisfy <span class="math">R<sub>old</sub> ≤ B</span>.</p></div>
+      <div class="cards thresholds"><article class="card"><p class="label">Check deferred</p><h3>B = 100</h3><p>With H = 1 and a reserve of 100, the extra unit needed for the check is missing. The paid attempt is deferred; the debit is 0. The old state is retained.</p></article><article class="card"><p class="label">Rejected for liquidity</p><h3>B = 101</h3><p>The check costing 1 is affordable. But another 1 for migration cannot be paid while retaining the new reserve of 100. Only the check is charged.</p></article><article class="card"><p class="label">Replacement accepted</p><h3>B = 102</h3><p>The check and migration cost 2, the reserve of 100 is funded, and <span class="math">1 + 1 + 1 &lt; 7</span>. The debit is 2; the new controller is installed.</p></article></div>
+      <div class="lab" aria-labelledby="lab-title">
+        <div class="lab-header"><p class="label">Optional illustration / one parameter</p><h3 id="lab-title">The threshold lies between 101 and 102</h3></div>
+        <div class="lab-grid"><div class="lab-control"><label for="balance">Balance before the root gate, B</label><div class="balance-output"><span class="small">Accounting units</span><output id="balance-value" for="balance">102</output></div><input id="balance" type="range" disabled min="100" max="110" value="102" step="1" aria-describedby="lab-domain lab-assumptions"><div class="range-labels" aria-hidden="true"><span>100</span><span>105</span><span>110</span></div><p id="lab-domain" class="fixed-values">R<sub>old</sub> = R<sub>new</sub> = 100<br>H = 1; K = 1; L<sub>old</sub> = 7; U<sub>new</sub> = 1<br>The initial reserve is funded throughout the range.</p></div><div id="gate-result" class="lab-result" data-verdict="accepted" role="status" aria-live="polite" aria-atomic="true"><p class="label">Result of the numerical check</p><div id="gate-verdict" class="verdict">Replacement accepted</div><dl class="lab-metrics"><div><dt>Debit</dt><dd id="gate-debit">2</dd></div><div><dt>Balance left</dt><dd id="gate-remaining">100</dd></div></dl><p id="gate-explanation">101 ≤ 102 and 102 ≤ 102: both reserves are funded. The gain condition 3 &lt; 7 holds. The new controller is installed.</p></div></div>
+        <p id="lab-assumptions" class="lab-foot">The widget shows the arithmetic for a proposal whose proof obligations are already met. It does not check Lean proofs. The displayed debit excludes proposal preparation and completion of the search itself.</p>
+        <noscript><p class="lab-foot">JavaScript is disabled. The B = 102 example remains visible above; all three outcomes are fully described in the visible cards.</p></noscript>
+      </div>
+      <div class="prose spaced"><p>A proposal can also fail the gain test: with <span class="math">H = 3</span>, <span class="math">K = 4</span> and the same bounds, we get <span class="math">3 + 4 + 1 = 8 ≥ 7</span>. Even with a balance of 110 and funded reserves, the replacement is rejected: there is no strict saving. Only H = 3 is charged, and the old controller is retained.</p></div>
+      <aside class="pair-box"><h3>Why the relationship between bounds matters</h3><p>In a more general version, the proposal carries the paired bounds <span class="math">(7, 1)</span> and <span class="math">(70, 64)</span>. With a combined check and migration charge of 2, both rows pass:</p><div class="pair-math"><span>2 + 1 &lt; 7</span><span>2 + 64 &lt; 70</span></div><p>Taking the old lower bound 7 and the new upper bound 64 independently would lose useful information about their relationship. The original list requires a proof that at least one pair simultaneously bounds the actual old and new bills; the gain test is checked for every pair. The second row represents synthetic uncertainty, not a measurement from another world.</p></aside>
+      <p class="source">Source: <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/en/section6.tex">§6, Theorems 6.1–6.2: continuation preservation, liquidity, joint bounds and debits</a>.</p>
+    </section>
+
+    <!-- sec-6: both original coin scenarios are visible. Accepted check+migration is one formal application, shown as a combined debit. -->
+    <section id="sec-6" class="chapter" aria-labelledby="title-6">
+      <div class="section-head"><p class="kicker">07 / The low_liquidity counterexample</p><h2 id="title-6">Why spending one coin turns a bill of 4 into 10</h2><p class="intro">Return to the depth-obstruction example. Finishing with the old controller costs 7; with the new one, 1. Both declared reserves are 100. The initial balance is 103, and proposal preparation, checking and migration each cost one unit.</p></div>
+      <div class="prose"><p>The current meta-policy already calls for an attempt to replace the controller. Compare two paths: execute it immediately, or first spend one unit on a rejected upgrade to the meta-policy itself.</p></div>
+      <div class="scenario-grid"><article class="scenario"><div class="scenario-head"><p class="label">Scenario A / no meta-upgrade rejection</p><h3>The replacement is affordable</h3></div><ol><li><span>Initial balance. The completion reserve is funded.</span><span class="balance">B = 103</span></li><li><span>Prepare the proposal: −1.</span><span class="balance">B = 102</span></li><li><span>The gate accepts the replacement: check and migration together debit 2. The new reserve of 100 is retained.</span><span class="balance">B = 100</span></li><li><span>The new controller completes the search: −1.</span><span class="balance">B = 99</span></li></ol><div class="scenario-total"><div><strong>4</strong><span> — total bill</span></div><span>1 + 2 + 1</span></div></article><article class="scenario loss"><div class="scenario-head"><p class="label">Scenario B / meta-upgrade rejection costs 1</p><h3>Migration is no longer affordable</h3></div><ol><li><span>Initial balance.</span><span class="balance">B = 103</span></li><li><span>A paid but rejected meta-upgrade: −1. The previous policy is retained.</span><span class="balance">B = 102</span></li><li><span>Prepare the proposal: −1.</span><span class="balance">B = 101</span></li><li><span>The check is paid: −1. Migration would breach the reserve of 100, so the replacement is rejected.</span><span class="balance">B = 100</span></li><li><span>The old controller completes the search: −7. The new controller was never installed.</span><span class="balance">B = 93</span></li></ol><div class="scenario-total"><div><strong>10</strong><span> — total bill</span></div><span>1 + 1 + 1 + 7</span></div></article></div>
+      <div class="note warm"><strong>Losing an option costs more than the fee itself.</strong> The extra unit spent crosses the liquidity threshold. A beneficial replacement becomes unaffordable, so the old controller must finish the search. This is exactly what happens in the finite 4 → 10 example.</div>
+      <div class="prose"><h3>Why the balance can fall below the reserve of 100</h3><p>The reserve is protected from investigation and replacement expenses so that the main task can still be finished. <strong>Completion itself is paid from that reserve.</strong> It is a sufficient upper bound on the future bill, not an untouchable amount that must remain forever.</p><p>Final balances of 99 and 93 are therefore valid. The accounts reconcile in both cases: <span class="math">99 + 4 = 103</span> and <span class="math">93 + 10 = 103</span>. No resources have appeared or disappeared.</p><h3>Two levels of economic accounting</h3><p>For the root controller, Φ is the amount already debited plus the exact modeled bill for finishing with the current controller. Every connected finite history satisfies:</p></div>
+      <div class="formula">Φ<sub>end</sub> + G = Φ<sub>start</sub> + O<span class="formula-caption">G is the net gain from accepted replacements; O is the cost of rejected attempts and external evidence.</span></div>
+      <div class="prose spaced"><p>The total cost is lower than immediately finishing with the original controller exactly when <span class="math">G &gt; O</span>. In the first scenario, <span class="math">7 + 1 − 4 = 4</span>; in the second, <span class="math">7 + 3 − 0 = 10</span>.</p><p>The meta-policy bill Ψ includes execution of its tree followed by completion of the search. It depends on <em>which operations the tree can afford</em>. After a rejected meta-upgrade, its change therefore cannot be reduced to the rejection fee alone. The paper proves monotone improvement in Ψ for histories <strong>with no rejected meta-upgrades</strong>; free deferrals are allowed.</p></div>
+      <p class="source">Sources: <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/en/section6.tex">§6.3: exact accounting at the root level</a>; <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/en/section7.tex">§7.2: the restriction on meta-policy monotonicity and the 4 → 10 counterexample</a>.</p>
+    </section>
+
+    <!-- sec-7: exact finite scheduling, scoped completeness, and supplied-log verification status. -->
+    <section id="sec-7" class="chapter" aria-labelledby="title-7">
+      <div class="section-head"><p class="kicker">08 / Bringing the guarantees together</p><h2 id="title-7">The way replacements are selected can change too</h2><p class="intro">The controller carries out the search. The meta-policy determines whether to pay for an observation, keep the controller, or prepare an attempt to replace it. It is represented by a finite tree, and that tree also admits certified replacement.</p></div>
+      <div class="prose"><p>Accepting a meta-upgrade requires a proof that it reduces the all-in bill relative to the exact current state. The upgrade fee is already reflected in the new state after payment; it must not be added again. Installing a new tree does not execute it and does not, by itself, replace the root controller.</p><p>The final protocol is specific: run a <strong>finite list</strong> of meta-upgrade plans, interpret the last installed tree once, then finish the main search using the funded reserve. The theorem applies to fixed finite tasks, a fixed evidence provider and well-typed proposals.</p></div>
+      <ul class="guarantees"><li><strong>The search is exhausted</strong><span>The queue of remaining jobs is empty. The initial continuation must be funded.</span></li><li><strong>The results are complete</strong><span>A canonical morphism belongs to the result if and only if it belongs to the reference list <code>discoverAll(S,T)</code>. List order and multiplicity need not match.</span></li><li><strong>Impossibility is characterized exactly</strong><span>An empty final list is equivalent to the absence of a morphism in the specified transfer class. This does not establish the impossibility of every other method.</span></li><li><strong>Resources are accounted for</strong><span>The sum of the available balance and accumulated modeled debits is conserved.</span></li><li><strong>History is preserved</strong><span>Admissible transitions preserve the specified relations between certificates, receipts and logs. The guarantee concerns the formal state history.</span></li></ul>
+      <div class="prose"><h3>The same depth example: three different bills</h3><p>All three executions prove that no morphism exists. They differ in the amount of paid work. The totals must be compared together with what each includes.</p></div>
+      <div class="cards"><article class="card cost-card"><p class="label">Baseline search</p><div class="big-number">7</div><h3>Without the depth rule</h3><p>Three split steps and four prepare steps. The search is exhausted and confirms that no transfer exists.</p><span class="math">3 + 4 = 7</span></article><article class="card cost-card"><p class="label">Root-level replacement</p><div class="big-number">3</div><h3>The proposal is already available</h3><p>The check, migration and one paid call to the depth rule. Proposal preparation is not included in this amount.</p><span class="math">1 + 1 + 1 = 3</span></article><article class="card cost-card"><p class="label">The single CLI case</p><div class="big-number">6</div><h3>With the declared fees</h3><p>Meta-upgrade, observation, preparation, check, migration and rule call: six unit charges in this case.</p><span class="math">1 + 1 + 1 + 1 + 1 + 1 = 6</span></article></div>
+      <p class="source">Sources: <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/en/section7.tex">§7, Theorems 7.1–7.3</a>; <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/en/section8.tex">§8.2: the 7 / 3 / 6 comparison</a>. Root-level example with bill 3: <code>ControllerReplacement.Witnesses.paid_end_to_end</code>.</p>
+      <div class="prose"><h3>Where proposal proofs come from</h3><p>Useful bounds need not be exact, but they must be proved sound. Some certificates are constructed within the stack: for example, the static potential P(C,f) supplies a sufficient reserve. The exact bill for a finite continuation is also constructively defined, but obtaining it may be expensive.</p><p>A general inexpensive way to synthesize sufficiently strong comparison bounds and all proposal factories is not provided here. They are supplied with proof obligations tied to the current state. Providing an input slot does not establish that the input is easy to produce.</p><h3>Scope of the results</h3><p>The verifier, root contract, evidence provider and base fees are fixed. The permitted changes affect declared certified rule libraries and finite meta-policy trees. These results do not establish arbitrary code transfer, unbounded self-improvement, physical performance gains for neural networks, or file durability after a crash.</p></div>
+      <div class="verification"><h3>What the rc4 materials establish</h3><div class="stats"><div><strong>21</strong><span>Lean files in the canonical stack</span></div><div><strong>542</strong><span>audited declarations: 520 theorems and 22 definitions</span></div><div><strong>9</strong><span>CLI cases in the supplied materials</span></div></div><p>For the audited declarations, the supplied successful Lean 4.36.0 logs report no dependencies on <code>sorryAx</code> or <code>Classical.choice</code>; the permitted axiom list includes <code>propext</code> and <code>Quot.sound</code>. This is not a claim of complete freedom from axioms.</p><p>The rc4 verification status is <code>SUPPLIED_LOGS_AND_PYTHON_REPLAY_PASS</code>: the sources, saved logs and Python checks have been reconciled. <strong>These materials do not establish a fresh, independent, successful Lean run.</strong> The general selector theorem from the historical foundations uses classical choice and is not imported by this canonical stack.</p><p class="small muted">This page explains the results and illustrates the arithmetic. Its JavaScript does not formally verify the theorems.</p></div>
+      <div class="closing"><p class="label">The central idea</p><p>A change of method becomes a verifiable transition: preserve the meaning of the work still to be done, supply sufficient evidence, and pay for the change while retaining enough resources to finish the task.</p></div>
+      <p class="source">Sources: <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/en/section8.tex">§8.1: log provenance and verification status</a>; <a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/source/en/section9.tex">§9: external inputs and the limits of the model</a>.</p>
+    </section>
+
+    <section class="sources" id="sources" aria-labelledby="sources-title"><p class="kicker">Primary sources</p><h2 id="sources-title">Preprint, source code and verification</h2><ul class="source-links"><li><a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4-ru.pdf">Russian preprint · PDF</a><small>CRTT v1.0-rc4, 20 pages.</small></li><li><a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4.pdf">English preprint · PDF</a><small>From Certified Discovery to Meta-Policy Closure.</small></li><li><a href="https://github.com/Dnarts/proof-carrying-discovery/tree/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/formal/canonical">Canonical Lean sources</a><small>Definitions, proofs and the verification runner.</small></li><li><a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/publication/supplement/FRESH_VERIFICATION.md">Instructions for an independent run</a><small>How to obtain a fresh verification log.</small></li><li><a href="https://github.com/Dnarts/proof-carrying-discovery/tree/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4">Complete publication package</a><small>Both language versions, archives, supplements and logs.</small></li><li><a href="https://github.com/Dnarts/proof-carrying-discovery/blob/bc7bf91a93c999c877facf4069aabab3cac03f6e/papers/contract-relative-transformation/v1.0-rc4/SHA256SUMS.txt">SHA-256 checksums</a><small>Links are pinned to the published file revision.</small></li></ul></section>
+  </main>
+  <footer><div class="wrap"><p>CRTT / A plain-language guide to the v1.0-rc4 preprint<br>Editorial review: 28 November 2026.</p><a href="#top">Back to the top ↑</a></div></footer>
+  <script>
+    'use strict';
+    // This fixed illustrative offer assumes proved continuation equivalence,
+    // funded reserves, and sound cost bounds. It does not verify those proofs.
+    // The slider domain B >= 100 preserves the initial funding assumption.
+    const balanceInput = document.getElementById('balance');
+    function renderGate() {
+      const B = Number(balanceInput.value);
+      const H = 1, K = 1, Rold = 100, Rnew = 100, Lold = 7, Unew = 1;
+      let verdict, title, debit, explanation;
+      if (H + Rold > B) {
+        verdict = 'deferred'; title = 'Paid attempt deferred'; debit = 0;
+        explanation = `101 > ${B}: the check cannot be paid while retaining the old reserve. The paid check and migration are deferred; the state is unchanged.`;
+      } else if (H + K + Rnew > B) {
+        verdict = 'liquidity'; title = 'Rejected for liquidity'; debit = H;
+        explanation = `101 ≤ ${B}, but 102 > ${B}: the check is paid, but migration would breach the new reserve. The old controller is retained; strict savings do not make the replacement affordable.`;
+      } else if (H + K + Unew >= Lold) {
+        // Retain the full arithmetic guard even though this fixed offer passes it.
+        verdict = 'gain'; title = 'Strict gain not proved'; debit = H;
+        explanation = 'The check and migration, together with the upper bound on the new bill, do not fall below the lower bound on the old bill. The old controller is retained.';
+      } else {
+        verdict = 'accepted'; title = 'Replacement accepted'; debit = H + K;
+        explanation = `101 ≤ ${B} and 102 ≤ ${B}: both reserves are funded. The gain condition 3 < 7 holds. The new controller is installed.`;
+      }
+      document.getElementById('balance-value').value = String(B);
+      balanceInput.setAttribute('aria-valuetext', `${B} accounting units. ${title}. Debit ${debit}. Balance left ${B - debit}.`);
+      document.getElementById('gate-result').dataset.verdict = verdict;
+      document.getElementById('gate-verdict').textContent = title;
+      document.getElementById('gate-debit').textContent = String(debit);
+      document.getElementById('gate-remaining').textContent = String(B - debit);
+      document.getElementById('gate-explanation').textContent = explanation;
+    }
+    balanceInput.disabled = false;
+    balanceInput.addEventListener('input', renderGate);
+    renderGate();
+  </script>
+</body>
+</html>
