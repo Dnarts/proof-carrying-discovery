@@ -6,6 +6,13 @@
 Aleksandr Strand · November 2026  
 [strandlex@gmail.com](mailto:strandlex@gmail.com)
 
+<details>
+<summary>Can a system change how it searches mid-run without changing what it finds?</summary>
+
+CRTT studies when a system can replace its search strategy before the search is finished. In a finite, budgeted model, a certificate checks that the replacement preserves the required results, lowers the modeled cost after verification and switching fees, and leaves enough budget to finish. These guarantees are formalized in Lean 4. The cost is measured in the model, not in seconds.
+
+</details>
+
 A Lean-verified framework for changing how a system searches while it runs. In a finite, budgeted model, a certified replacement can reduce modeled cost without changing which results the search must return.
 
 | Materials / Материалы | English | Русский |
