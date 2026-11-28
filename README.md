@@ -13,14 +13,12 @@ Aleksandr Strand · November 2026
 | Preprint PDF · 20 pages / страниц | [Read PDF](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4.pdf) | [Читать PDF](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4-ru.pdf) |
 | Single-file LaTeX / Один TEX-файл | [TEX](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4.tex) | [TEX](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4-ru.tex) |
 | Plain-language guide / Научпоп | [HTML](papers/contract-relative-transformation/v1.0-rc4/crtt-en.html) | [HTML](papers/contract-relative-transformation/v1.0-rc4/crtt.html) |
-| Complete publication package / Полный комплект | [ZIP](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4.zip) · [SHA-256](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4.zip.sha256) | [ZIP](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4-ru.zip) · [SHA-256](papers/contract-relative-transformation/v1.0-rc4/CRTT-preprint-v1.0-rc4-ru.zip.sha256) |
-| LaTeX source / Исходники LaTeX | [ZIP](papers/contract-relative-transformation/v1.0-rc4/CRTT-arxiv-source-v1.0-rc4.zip) · [Browse](papers/contract-relative-transformation/v1.0-rc4/source/en/) | [ZIP](papers/contract-relative-transformation/v1.0-rc4/CRTT-arxiv-source-v1.0-rc4-ru.zip) · [Просмотр](papers/contract-relative-transformation/v1.0-rc4/source/ru/) |
 
 **Formal artifact / Формальное приложение:** [Full archive · ZIP](papers/contract-relative-transformation/v1.0-rc4/CRTT-v1.0-FULL-ARCHITECTURE-RECONCILED.zip) · [SHA-256](papers/contract-relative-transformation/v1.0-rc4/CRTT-v1.0-FULL-ARCHITECTURE-RECONCILED.zip.sha256) · [Lean sources](papers/contract-relative-transformation/v1.0-rc4/formal/canonical/) · [Verification status](papers/contract-relative-transformation/v1.0-rc4/formal/VERIFICATION_RU.md).
 
-**[Overview / Обзор](papers/contract-relative-transformation/v1.0-rc4/README.md) · [All SHA-256 checksums / Все контрольные суммы](papers/contract-relative-transformation/v1.0-rc4/SHA256SUMS.txt) · [Response to review / Ответ на рецензию](papers/contract-relative-transformation/v1.0-rc4/publication/REVIEW.md).**
+**[Overview / Обзор](papers/contract-relative-transformation/v1.0-rc4/README.md) · [All SHA-256 checksums / Все контрольные суммы](papers/contract-relative-transformation/v1.0-rc4/SHA256SUMS.txt).**
 
-Verification evidence consists of the supplied Lean 4.36.0 logs and Python replay. A new independent Lean run and a DOI for the formal artifact remain pending; see the [verification instructions](papers/contract-relative-transformation/v1.0-rc4/publication/supplement/FRESH_VERIFICATION.md).
+**Fresh Lean 4.36.0 verification / Свежая проверка Lean:** PASS on Linux, with 542 audited declarations and 9 CLI/reference matches. [Run log and status / Журнал и статус](papers/contract-relative-transformation/v1.0-rc4/publication/supplement/CRTT-RC4-fresh-Linux-verification.zip).
 
 ---
 

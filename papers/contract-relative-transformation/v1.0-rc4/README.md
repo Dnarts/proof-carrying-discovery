@@ -9,22 +9,21 @@
 | PDF (20 pages each) | [English](CRTT-preprint-v1.0-rc4.pdf) | [Русский](CRTT-preprint-v1.0-rc4-ru.pdf) |
 | Single-file LaTeX | [TEX](CRTT-preprint-v1.0-rc4.tex) | [TEX](CRTT-preprint-v1.0-rc4-ru.tex) |
 | Plain-language guide / Научпоп | [HTML](crtt-en.html) | [HTML](crtt.html) |
-| Complete publication package | [ZIP](CRTT-preprint-v1.0-rc4.zip) | [ZIP](CRTT-preprint-v1.0-rc4-ru.zip) |
 | Clean LaTeX source | [ZIP](CRTT-arxiv-source-v1.0-rc4.zip) · [browse](source/en/) | [ZIP](CRTT-arxiv-source-v1.0-rc4-ru.zip) · [browse](source/ru/) |
 
 **Formal artifact:** [Full architecture archive](CRTT-v1.0-FULL-ARCHITECTURE-RECONCILED.zip) · [SHA-256](CRTT-v1.0-FULL-ARCHITECTURE-RECONCILED.zip.sha256) · [canonical Lean sources and runner](formal/canonical/) · [verification scope](formal/VERIFICATION_RU.md) · [supplied T32 kernel log](formal/evidence/freeze/T32-KERNEL_CHECK.log).
 
-**Publication evidence:** [response to review](publication/REVIEW.md) · [claim-to-source map A/B](publication/SOURCE_MAP_AB.md) · [map C](publication/SOURCE_MAP_C.md) · [map D](publication/SOURCE_MAP_D.md) · [companion references](publication/supplement/COMPANION_REFERENCES.pdf) · [translation audit](publication/ru/TRANSLATION_AUDIT.json).
+**Research supplements:** [claim-to-source map A/B](publication/SOURCE_MAP_AB.md) · [map C](publication/SOURCE_MAP_C.md) · [map D](publication/SOURCE_MAP_D.md) · [companion references](publication/supplement/COMPANION_REFERENCES.pdf).
 
 ## Scope
 
 CRTT studies finite, contract-relative, budgeted discovery and certified controller and meta-policy replacement. The executable closure preserves canonical result membership, exact impossibility characterization, modeled resource conservation and certified history for the declared funded input and finite schedule. It does not prove arbitrary self-rewriting, general-purpose discovery, or universal physical speedup.
 
-The supplied successful Lean 4.36.0 run records 21 source files, 542 audited declarations and nine CLI/reference scenarios. The unchanged RECONCILED archive preserves complete logs, the independent finite cross-checks, and replay evidence. RC4's clean local attempt stopped at exit 127 (compiler unavailable); no new successful independent Lean compilation or formal-artifact DOI is claimed. The manuscript is a preprint, not an assertion of peer-reviewed acceptance. Early historical numbering gaps remain documented in the full archive.
+**Fresh Lean verification (28 November 2026): PASS.** The published wrapper verified the exact RECONCILED archive and ran Lean 4.36.0 on x86-64 Linux: 21 source files, 542 audited declarations and nine CLI/reference matches. [Transcript and status (ZIP)](publication/supplement/CRTT-RC4-fresh-Linux-verification.zip) · [reproduction notes](publication/supplement/FRESH_VERIFICATION.md). This run is separate from the historical exit 127 in §8.3 and from the successful Python log replay. It is not peer review.
 
 ## Verify and build
 
-From this directory on macOS: `shasum -a 256 -c SHA256SUMS.txt` (Linux: `sha256sum -c SHA256SUMS.txt`). The original English and Russian publication ZIPs and the full formal ZIP are unchanged. The standalone English PDF here is the exact PDF in the English ZIP (the earlier standalone PDF had identical rendered pages, extracted text and link targets but different PDF bytes); the Russian standalone PDF already matched. See [packaging receipt](publication/PUBLICATION_CHECK.json).
+Check the current directory with `shasum -a 256 -c SHA256SUMS.txt` on macOS or `sha256sum -c SHA256SUMS.txt` on Linux. The PDFs and the formal archive are unchanged.
 
 For a fresh, independent Lean verification, install the pinned toolchain and run:
 
@@ -36,7 +35,7 @@ bash publication/supplement/verify_fresh.sh \
 
 Keep verification output outside the immutable archive. See [fresh verification instructions](publication/supplement/FRESH_VERIFICATION.md).
 
-Build English from `source/en/` with pdfLaTeX twice, Russian from `source/ru/` with XeLaTeX twice (FreeSerif and DejaVu Sans Mono installed locally). See the language-specific original README files in `publication/`.
+Build English from `source/en/` with pdfLaTeX twice, Russian from `source/ru/` with XeLaTeX twice (FreeSerif and DejaVu Sans Mono installed locally).
 
 The `.tex` files next to the PDFs inline all manuscript sections and bibliography from the corresponding `source/` directory. Each is a complete single-file source; standard LaTeX packages and the fonts named above are still required. Run pdfLaTeX twice on `CRTT-preprint-v1.0-rc4.tex`, or XeLaTeX twice on `CRTT-preprint-v1.0-rc4-ru.tex`.
 
@@ -44,4 +43,4 @@ The Russian [plain-language guide](crtt.html) and its [English translation](crtt
 
 ## Русский
 
-Контрактно-относительная теория преобразований: от сертифицированного открытия к замыканию метаполитик. В комплект входят английский и русский препринты, самостоятельные TEX-файлы рядом с PDF, модульные исходники LaTeX, [русская научно-популярная страница](crtt.html) и [английский перевод](crtt-en.html), формальный архив CRTT v1.0, полные журналы и SHA-256. Формальные гарантии относятся к объявленной конечной детерминированной модели. Сохранённый успешный журнал и повторный аудит не заменяют новый независимый запуск Lean. DOI формального приложения ещё не присвоен.
+Контрактно-относительная теория преобразований: от сертифицированного открытия к замыканию метаполитик. В комплект входят английский и русский препринты, самостоятельные TEX-файлы рядом с PDF, модульные исходники LaTeX, [русская научно-популярная страница](crtt.html) и [английский перевод](crtt-en.html), формальный архив CRTT v1.0, полные журналы и SHA-256. Формальные гарантии относятся к объявленной конечной детерминированной модели. [Свежий запуск Lean 4.36.0 на Linux](publication/supplement/CRTT-RC4-fresh-Linux-verification.zip) завершился успешно: 21 файл, 542 проверенные декларации и девять совпадений CLI с эталоном. Исторический `exit 127` относится к другой среде и сохранён в препринте.
