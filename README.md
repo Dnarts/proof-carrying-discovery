@@ -6,7 +6,7 @@
 Aleksandr Strand · November 2026  
 [strandlex@gmail.com](mailto:strandlex@gmail.com)
 
-**Контрактно-относительная теория преобразований: от сертифицированного открытия к замыканию метаполитик.**
+A Lean-verified framework for changing how a system searches while it runs. In a finite, budgeted model, a certified replacement can reduce modeled cost without changing which results the search must return.
 
 | Materials / Материалы | English | Русский |
 | --- | --- | --- |
